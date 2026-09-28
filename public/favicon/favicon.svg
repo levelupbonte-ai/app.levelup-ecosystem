@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 74" fill="none">
+  <g shape-rendering="geometricPrecision">
+    <polygon points="37,37 37,3 46.11,24.46" fill="#9F76ED" />
+    <polygon points="37,37 46.11,24.46 69.34,26.49" fill="#8040EB" />
+    <polygon points="37,37 69.34,26.49 51.74,41.79" fill="#6724DE" />
+    <polygon points="37,37 51.74,41.79 56.98,64.51" fill="#5015BC" />
+    <polygon points="37,37 56.98,64.51 37,52.5" fill="#3B0A9A" />
+    <polygon points="37,37 37,52.5 17.02,64.51" fill="#5517C7" />
+    <polygon points="37,37 17.02,64.51 22.26,41.79" fill="#722EE0" />
+    <polygon points="37,37 22.26,41.79 4.66,26.49" fill="#8F4CEE" />
+    <polygon points="37,37 4.66,26.49 27.89,24.46" fill="#B086F6" />
+    <polygon points="37,37 27.89,24.46 37,3" fill="#C3ADFA" />
+  </g>
+</svg>
