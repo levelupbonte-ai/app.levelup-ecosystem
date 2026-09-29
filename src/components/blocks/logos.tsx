@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import Marquee from "react-fast-marquee";
 
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
 
 type Company = {
@@ -86,27 +87,31 @@ export const Logos = () => {
   return (
     <section className="pb-28 lg:pb-32 overflow-hidden">
       <div className="container space-y-10 lg:space-y-16">
-        <div className="text-center">
-          <h2 className="mb-4 text-xl text-balance md:text-2xl lg:text-3xl">
-            Powering the world's best product teams.
-            <br className="max-md:hidden" />
-            <span className="text-muted-foreground">
-              From next-gen startups to established enterprises.
-            </span>
-          </h2>
-        </div>
+        <ScrollReveal yOffset={20} duration={0.7}>
+          <div className="text-center">
+            <h2 className="mb-4 text-xl text-balance md:text-2xl lg:text-3xl">
+              Powering the world's best product teams.
+              <br className="max-md:hidden" />
+              <span className="text-muted-foreground">
+                From next-gen startups to established enterprises.
+              </span>
+            </h2>
+          </div>
+        </ScrollReveal>
 
-        <div className="flex w-full flex-col items-center gap-8">
-          {/* Top row - 4 logos */}
-          <LogoRow companies={topRowCompanies} gridClassName="grid-cols-4" />
+        <ScrollReveal yOffset={24} duration={0.8} delay={0.15}>
+          <div className="flex w-full flex-col items-center gap-8">
+            {/* Top row - 4 logos */}
+            <LogoRow companies={topRowCompanies} gridClassName="grid-cols-4" />
 
-          {/* Bottom row - 5 logos */}
-          <LogoRow
-            companies={bottomRowCompanies}
-            gridClassName="grid-cols-5"
-            direction="right"
-          />
-        </div>
+            {/* Bottom row - 5 logos */}
+            <LogoRow
+              companies={bottomRowCompanies}
+              gridClassName="grid-cols-5"
+              direction="right"
+            />
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

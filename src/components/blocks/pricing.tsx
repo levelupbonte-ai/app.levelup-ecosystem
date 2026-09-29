@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Check } from "lucide-react";
 
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -55,27 +56,29 @@ export const Pricing = ({ className }: { className?: string }) => {
   return (
     <section className={cn("py-28 lg:py-32", className)}>
       <div className="container max-w-5xl">
-        <div className="space-y-4 text-center">
-          <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-            Pricing
-          </h2>
-          <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
-            Use Mainline for free with your whole team. Upgrade to enable
-            unlimited issues, enhanced security controls, and additional
-            features.
-          </p>
-        </div>
+        <ScrollReveal yOffset={24} duration={0.7}>
+          <div className="space-y-4 text-center">
+            <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
+              Pricing
+            </h2>
+            <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
+              Use Mainline for free with your whole team. Upgrade to enable
+              unlimited issues, enhanced security controls, and additional
+              features.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="mt-8 grid items-start gap-5 text-start md:mt-12 md:grid-cols-3 lg:mt-20">
-          {plans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={`${
-                plan.name === "Startup"
-                  ? "outline-primary origin-top outline-4"
-                  : ""
-              }`}
-            >
+          {plans.map((plan, i) => (
+            <ScrollReveal key={plan.name} yOffset={28} delay={i * 0.12} duration={0.75}>
+              <Card
+                className={`transition-all duration-300 hover:shadow-lg ${
+                  plan.name === "Startup"
+                    ? "outline-primary origin-top outline-4 shadow-md md:-translate-y-2"
+                    : "hover:-translate-y-1"
+                }`}
+              >
               <CardContent className="flex flex-col gap-7 px-6 py-5">
                 <div className="space-y-2">
                   <h3 className="text-foreground font-semibold">{plan.name}</h3>
@@ -127,6 +130,7 @@ export const Pricing = ({ className }: { className?: string }) => {
                 </Button>
               </CardContent>
             </Card>
+          </ScrollReveal>
           ))}
         </div>
       </div>

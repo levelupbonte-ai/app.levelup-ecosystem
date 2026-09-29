@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 import { DashedLine } from "../dashed-line";
-
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -85,21 +85,24 @@ export const Testimonials = ({
     <>
       <section className={cn("overflow-hidden py-28 lg:py-32", className)}>
         <div className="container">
-          <div className="space-y-4">
-            <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-              Trusted by product builders
-            </h2>
-            <p className="text-muted-foreground max-w-md leading-snug">
-              Mainline is built on the habits that make the best product teams
-              successful: staying focused, moving quickly, and always aiming for
-              high-quality work.
-            </p>
-            <Button variant="outline" className="shadow-md">
-              Read our Customer Stories <ArrowRight className="size-4" />
-            </Button>
-          </div>
+          <ScrollReveal yOffset={24} duration={0.7}>
+            <div className="space-y-4">
+              <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
+                Trusted by product builders
+              </h2>
+              <p className="text-muted-foreground max-w-md leading-snug">
+                Mainline is built on the habits that make the best product teams
+                successful: staying focused, moving quickly, and always aiming for
+                high-quality work.
+              </p>
+              <Button variant="outline" className="shadow-md">
+                Read our Customer Stories <ArrowRight className="size-4" />
+              </Button>
+            </div>
+          </ScrollReveal>
 
-          <div className="relative mt-8 -mr-[max(3rem,calc((100vw-80rem)/2+3rem))] md:mt-12 lg:mt-20">
+          <ScrollReveal yOffset={32} duration={0.8} delay={0.15}>
+            <div className="relative mt-8 -mr-[max(3rem,calc((100vw-80rem)/2+3rem))] md:mt-12 lg:mt-20">
             <Carousel
               opts={{
                 align: "start",
@@ -147,6 +150,7 @@ export const Testimonials = ({
               </div>
             </Carousel>
           </div>
+          </ScrollReveal>
         </div>
       </section>
       <DashedLine

@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { DashedLine } from "../dashed-line";
-
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
 
 const topItems = [
@@ -118,9 +118,11 @@ export const ResourceAllocation = () => {
       className="overflow-hidden pb-28 lg:pb-32"
     >
       <div className="">
-        <h2 className="container text-center text-3xl tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl">
-          Mainline your resource allocation and execution
-        </h2>
+        <ScrollReveal yOffset={24} duration={0.7}>
+          <h2 className="container text-center text-3xl tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl">
+            Mainline your resource allocation and execution
+          </h2>
+        </ScrollReveal>
 
         <div className="mt-8 md:mt-12 lg:mt-20">
           <DashedLine
@@ -131,7 +133,15 @@ export const ResourceAllocation = () => {
           {/* Top Features Grid - 2 items */}
           <div className="relative container flex max-md:flex-col">
             {topItems.map((item, i) => (
-              <Item key={i} item={item} isLast={i === topItems.length - 1} />
+              <ScrollReveal
+                key={i}
+                yOffset={28}
+                delay={i * 0.12}
+                duration={0.75}
+                className="flex-1"
+              >
+                <Item item={item} isLast={i === topItems.length - 1} />
+              </ScrollReveal>
             ))}
           </div>
           <DashedLine
@@ -142,12 +152,18 @@ export const ResourceAllocation = () => {
           {/* Bottom Features Grid - 3 items */}
           <div className="relative container grid max-w-7xl md:grid-cols-3">
             {bottomItems.map((item, i) => (
-              <Item
+              <ScrollReveal
                 key={i}
-                item={item}
-                isLast={i === bottomItems.length - 1}
-                className="md:pb-0"
-              />
+                yOffset={28}
+                delay={i * 0.1}
+                duration={0.75}
+              >
+                <Item
+                  item={item}
+                  isLast={i === bottomItems.length - 1}
+                  className="md:pb-0"
+                />
+              </ScrollReveal>
             ))}
           </div>
         </div>

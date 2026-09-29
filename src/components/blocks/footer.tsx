@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { ArrowUpRight } from "lucide-react";
 
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Button } from "@/components/ui/button";
 
 export function Footer() {
@@ -76,45 +77,47 @@ export function Footer() {
         </ul>
       </nav>
 
-      <div className="text-primary mt-10 w-full select-none overflow-hidden md:mt-14 lg:mt-20">
-        <svg
-          width="1570"
-          height="293"
-          viewBox="0 0 1570 293"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full"
-        >
-          <text
-            x="50%"
-            y="245"
-            textAnchor="middle"
-            fill="url(#paint0_linear_59_191)"
-            className="font-display font-extrabold select-none"
-            style={{
-              fontSize: "270px",
-              fontWeight: 900,
-              letterSpacing: "-0.04em",
-              fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
-            }}
+      <ScrollReveal yOffset={45} scale={0.94} duration={0.9}>
+        <div className="text-primary mt-10 w-full select-none overflow-hidden md:mt-14 lg:mt-20">
+          <svg
+            width="1570"
+            height="293"
+            viewBox="0 0 1570 293"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full"
           >
-            Ecosystem
-          </text>
-          <defs>
-            <linearGradient
-              id="paint0_linear_59_191"
-              x1="742.5"
-              y1="0"
-              x2="742.5"
-              y2="218.5"
-              gradientUnits="userSpaceOnUse"
+            <text
+              x="50%"
+              y="245"
+              textAnchor="middle"
+              fill="url(#paint0_linear_59_191)"
+              className="font-display font-extrabold select-none"
+              style={{
+                fontSize: "270px",
+                fontWeight: 900,
+                letterSpacing: "-0.04em",
+                fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
+              }}
             >
-              <stop stopColor="currentColor" />
-              <stop offset="1" stopColor="#F8F8F8" stopOpacity="0.41" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
+              Ecosystem
+            </text>
+            <defs>
+              <linearGradient
+                id="paint0_linear_59_191"
+                x1="742.5"
+                y1="0"
+                x2="742.5"
+                y2="218.5"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="currentColor" />
+                <stop offset="1" stopColor="#F8F8F8" stopOpacity="0.41" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </ScrollReveal>
     </footer>
   );
 }
