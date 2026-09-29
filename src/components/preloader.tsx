@@ -128,7 +128,7 @@ export function Preloader() {
     };
   }, [mounted, shouldPlay]);
 
-  if (!mounted || !shouldPlay || phase === "done") {
+  if (!mounted || !shouldPlay) {
     return null;
   }
 

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+
 import Link from "next/link";
+
 import { Check, Sparkles } from "lucide-react";
 
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";

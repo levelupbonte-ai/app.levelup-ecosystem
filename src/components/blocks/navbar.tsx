@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 import { ChevronRight } from "lucide-react";
 
-import { Logo } from "@/components/logo";
+import { Logo, LogoStar } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,11 +58,49 @@ const ITEMS = [
   { label: "Contact", href: "/contact" },
 ];
 
+/**
+ * Clean, neutral typography identical to the footer at the bottom of the site,
+ * but scaled down to fit perfectly in the top header.
+ */
+function FooterStyleLogo({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col justify-center leading-[0.88] select-none text-left tracking-tight group transition-transform hover:scale-[1.02]",
+        className,
+      )}
+    >
+      <span className="text-[19px] lg:text-[21px] font-black tracking-tight text-foreground font-sans">
+        LevelUp
+      </span>
+      <span className="text-[13px] lg:text-[14px] font-black tracking-tight text-foreground/60 dark:text-foreground/55 font-sans -mt-0.5">
+        Ecosystem
+      </span>
+    </div>
+  );
+}
+
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
+
+  // Monitor scroll on desktop to toggle between top transparent bar and floating pill
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close mobile menu whenever clicking or tapping outside
   useEffect(() => {
@@ -110,7 +148,7 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Full-screen backdrop: Clicking ANYWHERE outside the menu closes it immediately */}
+      {/* Full-screen backdrop for mobile menu */}
       {isMenuOpen && (
         <div
           className="fixed inset-0 z-[95] bg-black/40 backdrop-blur-xs lg:hidden transition-opacity cursor-pointer"
@@ -122,90 +160,148 @@ export const Navbar = () => {
         />
       )}
 
-      {/* Top seamless gradient fade: 100% opaque behind the header so content NEVER bleeds through, fading smoothly below */}
+      {/* Top seamless gradient fade - only visible on mobile or when scrolled on desktop */}
       <div
-        className="pointer-events-none fixed inset-x-0 top-0 z-[80] h-32 sm:h-36 bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_58%,transparent_100%)]"
+        className={cn(
+          "pointer-events-none fixed inset-x-0 top-0 z-[80] h-28 sm:h-32 bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_58%,transparent_100%)] transition-opacity duration-300",
+          !isScrolled ? "max-lg:opacity-100 lg:opacity-0" : "opacity-100",
+        )}
         aria-hidden="true"
       />
 
       <header
         ref={headerRef}
         className={cn(
-          "bg-background/85 fixed left-1/2 z-[100] w-[min(90%,720px)] -translate-x-1/2 rounded-4xl border border-border/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.35)] backdrop-blur-md transition-all duration-300",
-          "top-4 lg:top-6",
+          "fixed left-1/2 z-[100] -translate-x-1/2 transition-all duration-300 ease-out",
+          // Mobile styles: always compact floating pill
+          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-4xl max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
+          // Desktop styles:
+          // When at the very top: full-width transparent header without container box
+          // When scrolled: smoothly morphs into generous wide floating pill (not too short)
+          isScrolled
+            ? "lg:top-5 lg:w-[min(92%,1060px)] lg:rounded-full lg:border lg:border-border/80 lg:bg-background/85 lg:shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:lg:shadow-[0_8px_30px_rgb(0,0,0,0.4)] lg:backdrop-blur-md lg:py-2.5 lg:px-6"
+            : "lg:top-0 lg:w-full lg:max-w-7xl lg:rounded-none lg:border-transparent lg:bg-transparent lg:shadow-none lg:backdrop-blur-none lg:py-6 lg:px-8 xl:px-12",
         )}
       >
-        <div className="flex items-center justify-between px-6 py-3">
+        <div className="flex items-center justify-between px-6 py-3 lg:p-0">
+          {/* Brand Logo */}
           <Link
             href="/"
-            className="flex shrink-0 items-center"
+            className="flex shrink-0 items-center select-none"
             onClick={() => {
               setIsMenuOpen(false);
               setOpenDropdown(null);
             }}
           >
-            <Logo />
+            {/* Mobile Logo: Star */}
+            <div className="lg:hidden">
+              <Logo />
+            </div>
+
+            {/* Desktop Logo:
+                At the top: Clean, neutral "LevelUp Ecosystem" typography like the bottom of the site (small, no star).
+                When scrolled: "LevelUp Ecosystem" text disappears to leave room for the star icon. */}
+            <div className="max-lg:hidden flex items-center">
+              {isScrolled ? (
+                <div className="transition-all duration-200 animate-in fade-in zoom-in-95">
+                  <LogoStar iconClassName="size-8" />
+                </div>
+              ) : (
+                <div className="transition-all duration-200 animate-in fade-in">
+                  <FooterStyleLogo />
+                </div>
+              )}
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <NavigationMenu className="max-lg:hidden">
-            <NavigationMenuList>
-              {ITEMS.map((link) =>
-                link.dropdownItems ? (
-                  <NavigationMenuItem key={link.label} className="">
-                    <NavigationMenuTrigger className="data-[state=open]:bg-accent/50 bg-transparent! px-1.5">
-                      {link.label}
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="w-[400px] space-y-2 p-4">
-                        {link.dropdownItems.map((item) => (
-                          <li key={item.title}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                href={item.href}
-                                className="group hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex items-center gap-4 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none"
-                              >
-                                <div className="space-y-1.5 transition-transform duration-300 group-hover:translate-x-1">
-                                  <div className="text-sm leading-none font-medium">
-                                    {item.title}
+          {/* Desktop Navigation Links:
+              Exact same items, classification, and dropdown behavior in both top and scrolled states */}
+          <div className="max-lg:hidden flex items-center">
+            <NavigationMenu className="transition-all duration-200">
+              <NavigationMenuList
+                className={cn(
+                  "gap-1 transition-all duration-200",
+                  !isScrolled ? "gap-2" : "gap-1",
+                )}
+              >
+                {ITEMS.map((link) =>
+                  link.dropdownItems ? (
+                    <NavigationMenuItem key={link.label}>
+                      <NavigationMenuTrigger
+                        className={cn(
+                          "data-[state=open]:bg-accent/50 bg-transparent! font-medium transition-all duration-150 cursor-pointer",
+                          !isScrolled
+                            ? "px-3.5 py-2 text-sm text-foreground/90 hover:text-foreground"
+                            : "px-2.5 py-1.5 text-xs lg:text-sm text-foreground/90",
+                        )}
+                      >
+                        {link.label}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="w-[420px] space-y-2 p-4">
+                          {link.dropdownItems.map((item) => (
+                            <li key={item.title}>
+                              <NavigationMenuLink asChild>
+                                <Link
+                                  href={item.href}
+                                  className="group hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex items-center gap-4 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none"
+                                >
+                                  <div className="space-y-1.5 transition-transform duration-300 group-hover:translate-x-1">
+                                    <div className="text-sm leading-none font-medium">
+                                      {item.title}
+                                    </div>
+                                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                                      {item.description}
+                                    </p>
                                   </div>
-                                  <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                ) : (
-                  <NavigationMenuItem key={link.label} className="">
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        "relative bg-transparent px-1.5 text-sm font-medium transition-opacity hover:opacity-75",
-                        pathname === link.href && "text-muted-foreground",
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  </NavigationMenuItem>
-                ),
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  ) : (
+                    <NavigationMenuItem key={link.label}>
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          "relative bg-transparent rounded-md font-medium transition-colors select-none",
+                          !isScrolled
+                            ? "px-3.5 py-2 text-sm hover:text-foreground hover:bg-accent/40"
+                            : "px-2.5 py-1.5 text-xs lg:text-sm hover:text-foreground hover:bg-accent/30",
+                          pathname === link.href
+                            ? "text-foreground font-semibold"
+                            : "text-foreground/80",
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    </NavigationMenuItem>
+                  ),
+                )}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
 
-          {/* Auth & Theme Toggle Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Right Action: Clean ThemeToggle & Book Now only (no extra buttons) */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle />
 
-            <Link href="/login" className="max-lg:hidden">
-              <Button variant="outline">
-                <span className="relative z-10">Login</span>
-              </Button>
-            </Link>
+            {/* Desktop "Book Now" button */}
+            <div className="max-lg:hidden flex items-center">
+              <Link href="/contact">
+                <Button
+                  size="sm"
+                  className={cn(
+                    "rounded-full font-semibold bg-foreground text-background hover:opacity-90 active:scale-95 transition-all shadow-xs",
+                    !isScrolled ? "px-6 py-2.5 text-sm" : "px-4 py-1.5 text-xs",
+                  )}
+                >
+                  Book Now
+                </Button>
+              </Link>
+            </div>
 
             {/* Hamburger Menu Button (Mobile Only) */}
             <button
@@ -316,18 +412,18 @@ export const Navbar = () => {
               ),
             )}
 
-            {/* Mobile Login Link */}
+            {/* Mobile Action: Single clean Book Now button */}
             <div className="pt-4">
               <Link
-                href="/login"
+                href="/contact"
                 className="w-full block"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setOpenDropdown(null);
                 }}
               >
-                <Button variant="outline" className="w-full">
-                  Login
+                <Button className="w-full font-semibold">
+                  Book Now
                 </Button>
               </Link>
             </div>

@@ -30,6 +30,7 @@ export function SplitText({
   duration = 0.75,
   as: Component = "h1",
   once = true,
+  waitPreloader = false,
 }: SplitTextProps) {
   const isReady = true;
   const words = text.split(" ");
