@@ -11,6 +11,7 @@ export function Preloader() {
   >("travel");
   const textRef = useRef<HTMLHeadingElement>(null);
   const [textWidth, setTextWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Mount on every page load & refresh
   useEffect(() => {
@@ -20,17 +21,21 @@ export function Preloader() {
   // Measure exact text width on mount & resize
   useEffect(() => {
     if (!mounted) return;
-    const updateWidth = () => {
+    const updateMetrics = () => {
       if (textRef.current) {
         setTextWidth(textRef.current.offsetWidth);
       }
+      setIsMobile(window.innerWidth < 640);
     };
-    updateWidth();
-    const t = setTimeout(updateWidth, 120);
-    window.addEventListener("resize", updateWidth);
+
+    updateMetrics();
+    const t1 = setTimeout(updateMetrics, 40);
+    const t2 = setTimeout(updateMetrics, 120);
+    window.addEventListener("resize", updateMetrics);
     return () => {
-      clearTimeout(t);
-      window.removeEventListener("resize", updateWidth);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", updateMetrics);
     };
   }, [mounted]);
 
@@ -46,32 +51,32 @@ export function Preloader() {
     };
   }, [phase]);
 
-  // Cinematic timeline: ~3.4s of smooth brand experience before curtain lifts
+  // Cinematic timeline
   useEffect(() => {
     if (!mounted) return;
 
-    // 0s -> 1.8s: Star travels across the phrase
+    // 0s -> 1.75s: Star travels across the phrase
     const tDissolve = setTimeout(() => {
       setPhase("dissolve");
-    }, 1800);
+    }, 1750);
 
-    // 2.3s: Star has dissolved, phrase shines with radiant light
+    // 2.2s: Star dissolves cleanly, phrase shimmers with light
     const tShimmer = setTimeout(() => {
       setPhase("shimmer");
-    }, 2300);
+    }, 2200);
 
-    // 3.4s: Curtain lifts upward to reveal the fully loaded website
+    // 3.3s: Curtain lifts upward to reveal the website
     const tExit = setTimeout(() => {
       setPhase("exit");
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("site-ready"));
       }
-    }, 3400);
+    }, 3300);
 
-    // 4.25s: Complete, unmount
+    // 4.15s: Complete, unmount
     const tDone = setTimeout(() => {
       setPhase("done");
-    }, 4250);
+    }, 4150);
 
     return () => {
       clearTimeout(tDissolve);
@@ -85,8 +90,13 @@ export function Preloader() {
     return null;
   }
 
-  // Generous spacing after the period so star never crowds the phrase
-  const targetX = textWidth > 0 ? textWidth + 85 : 430;
+  // Positioning: tightly bound to the phrase so star NEVER wanders into screen corners
+  const startOffset = isMobile ? 18 : 28;
+  const gap = isMobile ? 6 : 12;
+  const rawTarget =
+    textWidth > 0 ? startOffset + textWidth + gap : isMobile ? 220 : 380;
+  // Maximum travel is strictly capped right past the measured text, never corner-bound
+  const targetX = textWidth > 0 ? Math.min(rawTarget, startOffset + textWidth + gap) : rawTarget;
 
   return (
     <AnimatePresence>
@@ -107,102 +117,106 @@ export function Preloader() {
           {/* Top spacer */}
           <div className="h-12 sm:h-20 shrink-0" />
 
-          {/* Central Phrase & Star Stage (Pure typography, clean single line) */}
-          <div className="relative inline-flex items-center justify-start py-6 px-4">
-            {/* The single straight phrase */}
-            <h1
-              ref={textRef}
-              className={`relative text-lg sm:text-2xl md:text-3xl font-semibold tracking-tight whitespace-nowrap font-sans select-none transition-colors duration-500 ${
-                phase === "shimmer" || phase === "exit"
-                  ? "text-transparent bg-clip-text bg-[linear-gradient(110deg,#18181b_35%,#9333ea_50%,#18181b_65%)] dark:bg-[linear-gradient(110deg,#ffffff_35%,#c084fc_50%,#ffffff_65%)] bg-[length:250%_100%] animate-[shimmer_1.5s_ease-in-out_infinite]"
-                  : "text-zinc-900 dark:text-white"
-              }`}
-            >
-              <motion.span
-                className="inline-block whitespace-nowrap"
-                initial={{ clipPath: "inset(0 100% 0 0)" }}
-                animate={{ clipPath: "inset(0 0% 0 0)" }}
+          {/* Central Phrase & Star Stage: Perfectly centered on mobile and desktop */}
+          <div className="relative flex items-center justify-center py-6 px-4 max-w-[94vw] mx-auto">
+            <div className="relative inline-flex items-center">
+              {/* The single straight phrase */}
+              <h1
+                ref={textRef}
+                className={`relative text-[16px] sm:text-2xl md:text-3xl font-semibold tracking-tight whitespace-nowrap font-sans select-none transition-colors duration-500 ${
+                  phase === "shimmer" || phase === "exit"
+                    ? "text-transparent bg-clip-text bg-[linear-gradient(110deg,#18181b_35%,#9333ea_50%,#18181b_65%)] dark:bg-[linear-gradient(110deg,#ffffff_35%,#c084fc_50%,#ffffff_65%)] bg-[length:250%_100%] animate-[shimmer_1.5s_ease-in-out_infinite]"
+                    : "text-zinc-900 dark:text-white"
+                }`}
+              >
+                <motion.span
+                  className="inline-block whitespace-nowrap"
+                  initial={{ clipPath: "inset(0 100% 0 0)" }}
+                  animate={{ clipPath: "inset(0 0% 0 0)" }}
+                  transition={{
+                    duration: 1.75,
+                    ease: [0.25, 1, 0.5, 1],
+                  }}
+                >
+                  Level up your online presence.
+                </motion.span>
+              </h1>
+
+              {/* The Star: spins cleanly across phrase and stops right after the period */}
+              <motion.div
+                className="absolute pointer-events-none z-20 flex items-center justify-center top-1/2 -translate-y-1/2"
+                style={{ left: `-${startOffset}px` }}
+                initial={{
+                  x: 0,
+                  rotate: 0,
+                  scale: 1,
+                  opacity: 1,
+                }}
+                animate={
+                  phase === "travel"
+                    ? {
+                        x: [0, targetX],
+                        rotate: [0, 1080],
+                        scale: [0.95, 1.05, 1],
+                        opacity: 1,
+                      }
+                    : {
+                        x: targetX,
+                        rotate: 1350,
+                        scale: [1, 0.35, 0],
+                        opacity: [1, 0.5, 0],
+                      }
+                }
                 transition={{
-                  duration: 1.75,
-                  ease: [0.25, 1, 0.5, 1],
+                  duration: phase === "travel" ? 1.75 : 0.4,
+                  ease: phase === "travel" ? [0.25, 1, 0.5, 1] : "easeOut",
                 }}
               >
-                Level up your online presence.
-              </motion.span>
-            </h1>
+                {/* Star container: clean, zero bubble, soft backlight so it passes cleanly over text */}
+                <div className="relative size-6 sm:size-8 md:size-9 flex items-center justify-center">
+                  {/* Subtle soft backdrop halo to clear dark letters smoothly with zero hard edges */}
+                  <div
+                    className="pointer-events-none absolute -inset-1 rounded-full bg-[radial-gradient(circle,rgba(250,250,253,0.85)_20%,rgba(168,85,247,0.18)_50%,transparent_75%)] dark:bg-[radial-gradient(circle,rgba(10,10,16,0.85)_20%,rgba(168,85,247,0.22)_50%,transparent_75%)]"
+                    aria-hidden="true"
+                  />
 
-            {/* The Star: spins like a pin, passes once left-to-right, stops comfortably away from text, then dissolves */}
-            <motion.div
-              className="absolute pointer-events-none z-20 flex items-center justify-center"
-              style={{ left: "-28px" }}
-              initial={{
-                x: 0,
-                rotate: 0,
-                scale: 1,
-                opacity: 1,
-                filter: "blur(0px)",
-              }}
-              animate={
-                phase === "travel"
-                  ? {
-                      x: [0, targetX],
-                      rotate: [0, 1080],
-                      scale: [0.95, 1.05, 1],
-                      opacity: 1,
-                      filter: "blur(0px)",
-                    }
-                  : {
-                      // Dissolves smoothly like stardust with generous distance from the period
-                      x: targetX,
-                      rotate: 1350,
-                      scale: [1, 0.35, 0],
-                      opacity: [1, 0.5, 0],
-                      filter: ["blur(0px)", "blur(6px)", "blur(14px)"],
-                    }
-              }
-              transition={{
-                duration: phase === "travel" ? 1.75 : 0.45,
-                ease: phase === "travel" ? [0.25, 1, 0.5, 1] : "easeOut",
-              }}
-            >
-              {/* Star graphic: 36px original clean style */}
-              <div className="relative size-9 sm:size-10 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-violet-500/25 blur-sm" />
-                <svg
-                  viewBox="0 0 74 74"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  shapeRendering="geometricPrecision"
-                  className="size-8 sm:size-9 shrink-0 drop-shadow-[0_2px_12px_rgba(147,51,234,0.45)]"
-                  aria-hidden="true"
-                >
-                  <polygon points="37,37 37,3 46.11,24.46" fill="#A855F7" />
-                  <polygon points="37,37 46.11,24.46 69.34,26.49" fill="#9333EA" />
-                  <polygon points="37,37 69.34,26.49 51.74,41.79" fill="#7E22CE" />
-                  <polygon points="37,37 51.74,41.79 56.98,64.51" fill="#6B21A8" />
-                  <polygon points="37,37 56.98,64.51 37,52.5" fill="#581C87" />
-                  <polygon points="37,37 37,52.5 17.02,64.51" fill="#6B21A8" />
-                  <polygon points="37,37 17.02,64.51 22.26,41.79" fill="#7E22CE" />
-                  <polygon points="37,37 22.26,41.79 4.66,26.49" fill="#9333EA" />
-                  <polygon points="37,37 4.66,26.49 27.89,24.46" fill="#A855F7" />
-                  <polygon points="37,37 27.89,24.46 37,3" fill="#C084FC" />
-                </svg>
-              </div>
-            </motion.div>
+                  {/* Star graphic: 5-pointed faceted LevelUp brand star */}
+                  <svg
+                    viewBox="0 0 74 74"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    shapeRendering="geometricPrecision"
+                    className="size-6 sm:size-8 md:size-9 shrink-0 relative z-10"
+                    aria-hidden="true"
+                  >
+                    <polygon points="37,37 37,3 46.11,24.46" fill="#A855F7" />
+                    <polygon points="37,37 46.11,24.46 69.34,26.49" fill="#9333EA" />
+                    <polygon points="37,37 69.34,26.49 51.74,41.79" fill="#7E22CE" />
+                    <polygon points="37,37 51.74,41.79 56.98,64.51" fill="#6B21A8" />
+                    <polygon points="37,37 56.98,64.51 37,52.5" fill="#581C87" />
+                    <polygon points="37,37 37,52.5 17.02,64.51" fill="#6B21A8" />
+                    <polygon points="37,37 17.02,64.51 22.26,41.79" fill="#7E22CE" />
+                    <polygon points="37,37 22.26,41.79 4.66,26.49" fill="#9333EA" />
+                    <polygon points="37,37 4.66,26.49 27.89,24.46" fill="#A855F7" />
+                    <polygon points="37,37 27.89,24.46 37,3" fill="#C084FC" />
+                  </svg>
+                </div>
+              </motion.div>
+            </div>
           </div>
 
-          {/* Bottom Branding: Grand LevelUp Ecosystem watermark matching footer */}
+          {/* Bottom Branding: Pro, soft-diffused LevelUp Ecosystem watermark */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 0.9, ease: "easeOut" }}
-            className="w-full select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden"
+            transition={{ delay: 1.2, duration: 0.9, ease: "easeOut" }}
+            className="w-full select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden opacity-25 dark:opacity-30 [mask-image:linear-gradient(to_bottom,black_30%,transparent_96%)]"
           >
             <svg
               viewBox="0 0 1570 420"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-auto text-foreground/80 select-none pointer-events-none block"
+              className="w-full h-auto text-foreground select-none pointer-events-none block filter blur-[1.5px]"
             >
               {/* LevelUp */}
               <text
@@ -221,7 +235,7 @@ export function Preloader() {
                 LevelUp
               </text>
 
-              {/* Ecosystem - clean letter spacing so Y, S, and T never collide */}
+              {/* Ecosystem */}
               <text
                 x="50%"
                 y="390"
@@ -246,8 +260,8 @@ export function Preloader() {
                   y2="155"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="currentColor" stopOpacity="0.88" />
-                  <stop offset="1" stopColor="currentColor" stopOpacity="0.65" />
+                  <stop stopColor="currentColor" stopOpacity="0.55" />
+                  <stop offset="1" stopColor="currentColor" stopOpacity="0.25" />
                 </linearGradient>
 
                 <linearGradient
@@ -258,8 +272,8 @@ export function Preloader() {
                   y2="400"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="currentColor" stopOpacity="0.65" />
-                  <stop offset="1" stopColor="currentColor" stopOpacity="0.38" />
+                  <stop stopColor="currentColor" stopOpacity="0.38" />
+                  <stop offset="1" stopColor="currentColor" stopOpacity="0.12" />
                 </linearGradient>
               </defs>
             </svg>

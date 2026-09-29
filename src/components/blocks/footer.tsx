@@ -68,15 +68,15 @@ export function Footer() {
         </ul>
       </nav>
 
-      {/* Massive Grand LevelUp Ecosystem Watermark spanning the entire bottom of the site */}
-      <div className="text-primary w-full select-none overflow-hidden pb-0 mb-0 -mb-2 mt-12 md:mt-18 lg:mt-24">
+      {/* Pro Soft-Diffused LevelUp Ecosystem Watermark */}
+      <div className="w-full select-none overflow-hidden pb-0 mb-0 -mb-2 mt-12 md:mt-18 lg:mt-24 pointer-events-none opacity-25 dark:opacity-30 transition-opacity [mask-image:linear-gradient(to_bottom,black_35%,transparent_96%)]">
         <svg
           viewBox="0 0 1570 420"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-auto block select-none pointer-events-none"
+          className="w-full h-auto block select-none pointer-events-none filter blur-[1.5px] sm:blur-[2px] text-foreground"
         >
-          {/* LevelUp - positioned above Ecosystem, prominent and grand */}
+          {/* LevelUp - positioned above Ecosystem, pro subtle diffused watermark */}
           <text
             x="50%"
             y="150"
@@ -93,7 +93,7 @@ export function Footer() {
             LevelUp
           </text>
 
-          {/* Ecosystem - massive foundation watermark with clean letter spacing so Y, S, and T never collide */}
+          {/* Ecosystem - massive foundation watermark with clean letter spacing */}
           <text
             x="50%"
             y="390"
@@ -120,8 +120,8 @@ export function Footer() {
               y2="155"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="currentColor" stopOpacity="0.88" />
-              <stop offset="1" stopColor="currentColor" stopOpacity="0.65" />
+              <stop stopColor="currentColor" stopOpacity="0.55" />
+              <stop offset="1" stopColor="currentColor" stopOpacity="0.25" />
             </linearGradient>
 
             {/* Ecosystem gradient */}
@@ -133,8 +133,8 @@ export function Footer() {
               y2="400"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="currentColor" stopOpacity="0.65" />
-              <stop offset="1" stopColor="currentColor" stopOpacity="0.38" />
+              <stop stopColor="currentColor" stopOpacity="0.38" />
+              <stop offset="1" stopColor="currentColor" stopOpacity="0.12" />
             </linearGradient>
           </defs>
         </svg>

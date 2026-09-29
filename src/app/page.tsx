@@ -1,5 +1,4 @@
 import { Background } from "@/components/background";
-import { CardStack } from "@/components/blocks/card-stack";
 import { FAQ } from "@/components/blocks/faq";
 import { Features } from "@/components/blocks/features";
 import { Hero } from "@/components/blocks/hero";
@@ -16,7 +15,6 @@ export default function Home() {
         <Features />
         <ResourceAllocation />
       </Background>
-      <CardStack />
       <Background variant="bottom">
         <Pricing />
         <FAQ />
