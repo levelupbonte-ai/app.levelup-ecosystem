@@ -18,14 +18,8 @@ export function Footer() {
 
   return (
     <footer className="relative flex flex-col items-center gap-14 pt-24 pb-0 mb-0 lg:pt-32 overflow-hidden w-full">
-      {/* Subtle pro ambient gradient at the bottom of the site */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-96 bg-[radial-gradient(ellipse_75%_55%_at_50%_100%,rgba(147,51,234,0.08),transparent_75%)]"
-        aria-hidden="true"
-      />
-
       <div className="container space-y-3 text-center">
-        <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
+        <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-bold">
           Start your free trial today
         </h2>
         <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
@@ -68,15 +62,15 @@ export function Footer() {
         </ul>
       </nav>
 
-      {/* Refined, crisp & clear LevelUp Ecosystem Watermark */}
-      <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto px-4 select-none overflow-hidden pb-0 mb-0 -mb-2 mt-8 md:mt-12 pointer-events-none opacity-80 dark:opacity-85 transition-opacity [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]">
+      {/* LevelUp Ecosystem - Clean, crisp, neutral, no curvature, no color glow */}
+      <div className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto px-4 select-none overflow-hidden pb-0 mb-0 -mb-2 mt-8 md:mt-12 pointer-events-none opacity-80 dark:opacity-85">
         <svg
           viewBox="0 0 1000 220"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-auto block select-none pointer-events-none text-foreground"
         >
-          {/* LevelUp - refined proportion */}
+          {/* LevelUp */}
           <text
             x="50%"
             y="85"
@@ -93,7 +87,7 @@ export function Footer() {
             LevelUp
           </text>
 
-          {/* Ecosystem - clean letter spacing */}
+          {/* Ecosystem */}
           <text
             x="50%"
             y="198"

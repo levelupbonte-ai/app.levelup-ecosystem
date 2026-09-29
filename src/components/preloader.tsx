@@ -221,7 +221,7 @@ export function Preloader() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.9, ease: "easeOut" }}
-            className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto px-4 select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden opacity-80 dark:opacity-85 [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+            className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto px-4 select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden opacity-80 dark:opacity-85"
           >
             <svg
               viewBox="0 0 1000 220"

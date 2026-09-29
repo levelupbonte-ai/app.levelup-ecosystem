@@ -99,16 +99,16 @@ export const Navbar = () => {
         />
       )}
 
-      {/* Top seamless gradient fade to softly dissolve content as it scrolls off the top (below progress bar & navbar) */}
+      {/* Top seamless gradient fade: 100% opaque behind the header so content NEVER bleeds through, fading smoothly below */}
       <div
-        className="pointer-events-none fixed inset-x-0 top-0 z-[80] h-20 bg-gradient-to-b from-background via-background/80 to-transparent"
+        className="pointer-events-none fixed inset-x-0 top-0 z-[80] h-32 sm:h-36 bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_58%,transparent_100%)]"
         aria-hidden="true"
       />
 
       <header
         ref={headerRef}
         className={cn(
-          "bg-background/85 fixed left-1/2 z-[100] w-[min(90%,720px)] -translate-x-1/2 rounded-4xl border border-border/80 shadow-xs backdrop-blur-md transition-all duration-300",
+          "bg-background/85 fixed left-1/2 z-[100] w-[min(90%,720px)] -translate-x-1/2 rounded-4xl border border-border/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.35)] backdrop-blur-md transition-all duration-300",
           "top-4 lg:top-6",
         )}
       >
