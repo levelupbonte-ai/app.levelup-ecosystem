@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
+import { SplitText } from "@/components/scroll/split-text";
 import { Card, CardContent } from "@/components/ui/card";
 
 const items = [
@@ -37,18 +38,21 @@ export const Features = () => {
         </ScrollReveal>
 
         {/* Content */}
-        <ScrollReveal yOffset={24} duration={0.7} delay={0.1}>
-          <div className="mx-auto mt-10 grid max-w-4xl items-center gap-3 md:gap-0 lg:mt-24 lg:grid-cols-2">
-            <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-              Made for modern product teams
-            </h2>
+        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-3 md:gap-0 lg:mt-24 lg:grid-cols-2">
+          <SplitText
+            text="Made for modern product teams"
+            as="h2"
+            className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-bold"
+            stagger={0.05}
+          />
+          <ScrollReveal yOffset={20} duration={0.7} delay={0.15}>
             <p className="text-muted-foreground leading-snug">
               Mainline is built on the habits that make the best product teams
               successful: staying focused, moving quickly, and always aiming for
               high-quality work.
             </p>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+        </div>
 
         {/* Features Card with Stagger */}
         <ScrollReveal yOffset={32} duration={0.8} delay={0.15}>

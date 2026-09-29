@@ -15,6 +15,7 @@ import {
   ScrollStagger,
   ScrollStaggerItem,
 } from "@/components/scroll/scroll-reveal";
+import { SplitText } from "@/components/scroll/split-text";
 import { Button } from "@/components/ui/button";
 
 const features = [
@@ -46,13 +47,15 @@ export const Hero = () => {
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
-          <ScrollReveal yOffset={28} duration={0.8} delay={0.05}>
-            <h1 className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl xl:whitespace-nowrap">
-              Mainline Next.js template
-            </h1>
-          </ScrollReveal>
+          <SplitText
+            text="Mainline Next.js template"
+            as="h1"
+            className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
+            delay={0.1}
+            stagger={0.06}
+          />
 
-          <ScrollReveal yOffset={24} duration={0.8} delay={0.15}>
+          <ScrollReveal yOffset={24} duration={0.8} delay={0.25}>
             <p className="text-muted-foreground text-1xl mt-5 md:text-3xl">
               Mainline is an open-source website template built with shadcn/ui,
               Tailwind 4 & Next.js
