@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { ArrowRight } from "lucide-react";
 
-import { DashedLine } from "../dashed-line";
+import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

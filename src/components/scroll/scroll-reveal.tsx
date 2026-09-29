@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "motion/react";
+
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
+
 import { cn } from "@/lib/utils";
 
 interface ScrollRevealProps {

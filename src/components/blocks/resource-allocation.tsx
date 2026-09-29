@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { DashedLine } from "../dashed-line";
+import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
 

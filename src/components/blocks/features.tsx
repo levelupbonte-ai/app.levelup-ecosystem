@@ -3,12 +3,8 @@ import Link from "next/link";
 
 import { ChevronRight } from "lucide-react";
 
-import { DashedLine } from "../dashed-line";
-import {
-  ScrollReveal,
-  ScrollStagger,
-  ScrollStaggerItem,
-} from "@/components/scroll/scroll-reveal";
+import { DashedLine } from "@/components/dashed-line";
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Card, CardContent } from "@/components/ui/card";
 
 const items = [
