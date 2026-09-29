@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { motion, type Variants } from "motion/react";
 
@@ -14,11 +14,13 @@ interface SplitTextProps {
   duration?: number;
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
   once?: boolean;
+  waitPreloader?: boolean;
 }
 
 /**
  * SplitText Typography Reveal:
- * Words or characters emerge from an invisible overflow mask with high-precision physics.
+ * Words emerge from an invisible overflow mask with high-precision physics.
+ * Can synchronize with the preloader curtain lift for the hero headline.
  */
 export function SplitText({
   text,
@@ -28,8 +30,31 @@ export function SplitText({
   duration = 0.75,
   as: Component = "h1",
   once = true,
+  waitPreloader = false,
 }: SplitTextProps) {
+  const [isReady, setIsReady] = useState(!waitPreloader);
   const words = text.split(" ");
+
+  useEffect(() => {
+    if (!waitPreloader) return;
+
+    const handleReady = () => {
+      // Small 150ms buffer right as the curtain lifts for visual punch
+      setTimeout(() => setIsReady(true), 150);
+    };
+
+    window.addEventListener("site-ready", handleReady);
+
+    // Fallback in case preloader already lifted or wasn't rendered
+    const fallbackTimer = setTimeout(() => {
+      setIsReady(true);
+    }, 3600);
+
+    return () => {
+      window.removeEventListener("site-ready", handleReady);
+      clearTimeout(fallbackTimer);
+    };
+  }, [waitPreloader]);
 
   const containerVariants: Variants = {
     hidden: {},
@@ -66,8 +91,9 @@ export function SplitText({
         className="inline-flex flex-wrap gap-x-[0.28em] gap-y-1"
         style={{ perspective: 1000 }}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once, margin: "-40px" }}
+        animate={waitPreloader ? (isReady ? "visible" : "hidden") : undefined}
+        whileInView={!waitPreloader ? "visible" : undefined}
+        viewport={!waitPreloader ? { once, margin: "-40px" } : undefined}
         variants={containerVariants}
       >
         {words.map((word, i) => (

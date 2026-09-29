@@ -68,6 +68,16 @@ const Login = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* LevelUp Ecosystem watermark mark at bottom of login */}
+            <div className="mt-8 flex flex-col items-center select-none pointer-events-none opacity-40 hover:opacity-60 transition-opacity">
+              <span className="text-xs font-bold tracking-tight text-foreground font-sans">
+                LevelUp
+              </span>
+              <span className="text-[9px] font-semibold tracking-[0.35em] uppercase text-muted-foreground">
+                Ecosystem
+              </span>
+            </div>
           </div>
         </div>
       </section>

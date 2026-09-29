@@ -120,7 +120,7 @@ export const ResourceAllocation = () => {
       <div className="">
         <ScrollReveal yOffset={24} duration={0.7}>
           <h2 className="container text-center text-3xl tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl">
-            Mainline your resource allocation and execution
+            LevelUp your resource allocation and execution
           </h2>
         </ScrollReveal>
 

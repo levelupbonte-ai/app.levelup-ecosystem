@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
+import { Preloader } from "@/components/preloader";
 import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -85,9 +86,9 @@ export const metadata: Metadata = {
     "mdx theme",
     "mdx starter",
   ],
-  authors: [{ name: "shadcnblocks.com" }],
-  creator: "shadcnblocks.com",
-  publisher: "shadcnblocks.com",
+  authors: [{ name: "LevelUp Ecosystem" }],
+  creator: "LevelUp Ecosystem",
+  publisher: "LevelUp Ecosystem",
   robots: {
     index: true,
     follow: true,
@@ -123,7 +124,7 @@ export const metadata: Metadata = {
     description:
       "LevelUp Ecosystem - Modern platform for project planning, resource allocation, and team collaboration.",
     images: ["/og-image.jpg"],
-    creator: "@ausrobdev",
+    creator: "@levelupecosystem",
   },
 };
 
@@ -134,13 +135,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          async
-          crossOrigin="anonymous"
-          src="https://tweakcn.com/live-preview.min.js"
-        />
-      </head>
       <body className={`${dmSans.variable} ${inter.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
@@ -149,6 +143,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <Preloader />
           <StyleGlideProvider />
           <ScrollProgressBar />
           <Navbar />

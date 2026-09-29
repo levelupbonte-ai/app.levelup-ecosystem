@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { ArrowUpRight } from "lucide-react";
 
-import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { Button } from "@/components/ui/button";
 
 export function Footer() {
@@ -15,27 +14,37 @@ export function Footer() {
   ];
 
   const social = [
-    { name: "Xwitter", href: "https://x.com/ausrobdev" },
-    { name: "LinkedIn", href: "#" },
+    { name: "X (Twitter)", href: "https://x.com/levelupecosystem" },
+    { name: "LinkedIn", href: "https://linkedin.com/company/levelupecosystem" },
+    { name: "Instagram", href: "https://instagram.com/levelupecosystem" },
   ];
 
-  const legal = [{ name: "Privacy Policy", href: "/privacy" }];
+  const legal = [
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
+  ];
 
   return (
-    <footer className="flex flex-col items-center gap-14 pt-28 lg:pt-32">
+    <footer className="relative flex flex-col items-center gap-14 pt-24 pb-0 mb-0 lg:pt-32 overflow-hidden w-full">
+      {/* Subtle pro ambient gradient at the bottom of the site */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-96 bg-[radial-gradient(ellipse_75%_55%_at_50%_100%,rgba(147,51,234,0.09),transparent_75%)]"
+        aria-hidden="true"
+      />
+
       <div className="container space-y-3 text-center">
         <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
           Start your free trial today
         </h2>
         <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
-          Mainline is the fit-for-purpose tool for planning and building modern
-          software products.
+          LevelUp Ecosystem is the fit-for-purpose platform for planning and building
+          modern software products.
         </p>
         <div>
           <Button size="lg" className="mt-4" asChild>
-            <a href="https://github.com/shadcnblocks/mainline-nextjs-template">
-              Get template
-            </a>
+            <Link href="/contact">
+              Get started
+            </Link>
           </Button>
         </div>
       </div>
@@ -77,47 +86,77 @@ export function Footer() {
         </ul>
       </nav>
 
-      <ScrollReveal yOffset={45} scale={0.94} duration={0.9}>
-        <div className="text-primary mt-10 w-full select-none overflow-hidden md:mt-14 lg:mt-20">
-          <svg
-            width="1570"
-            height="293"
-            viewBox="0 0 1570 293"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
+      {/* Massive Grand LevelUp Ecosystem Watermark spanning the entire bottom of the site */}
+      <div className="text-primary w-full select-none overflow-hidden pb-0 mb-0 -mb-2 mt-12 md:mt-18 lg:mt-24">
+        <svg
+          viewBox="0 0 1570 420"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-auto block select-none pointer-events-none"
+        >
+          {/* LevelUp - positioned above Ecosystem, prominent and grand */}
+          <text
+            x="50%"
+            y="150"
+            textAnchor="middle"
+            fill="url(#paint_levelup)"
+            className="font-display font-black select-none"
+            style={{
+              fontSize: "205px",
+              fontWeight: 900,
+              letterSpacing: "-0.01em",
+              fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
+            }}
           >
-            <text
-              x="50%"
-              y="245"
-              textAnchor="middle"
-              fill="url(#paint0_linear_59_191)"
-              className="font-display font-extrabold select-none"
-              style={{
-                fontSize: "270px",
-                fontWeight: 900,
-                letterSpacing: "-0.04em",
-                fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
-              }}
+            LevelUp
+          </text>
+
+          {/* Ecosystem - massive foundation watermark with clean letter spacing so Y, S, and T never collide */}
+          <text
+            x="50%"
+            y="390"
+            textAnchor="middle"
+            fill="url(#paint_ecosystem)"
+            className="font-display font-black select-none"
+            style={{
+              fontSize: "295px",
+              fontWeight: 900,
+              letterSpacing: "0.01em",
+              fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
+            }}
+          >
+            Ecosystem
+          </text>
+
+          <defs>
+            {/* LevelUp gradient */}
+            <linearGradient
+              id="paint_levelup"
+              x1="785"
+              y1="10"
+              x2="785"
+              y2="155"
+              gradientUnits="userSpaceOnUse"
             >
-              Ecosystem
-            </text>
-            <defs>
-              <linearGradient
-                id="paint0_linear_59_191"
-                x1="742.5"
-                y1="0"
-                x2="742.5"
-                y2="218.5"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="currentColor" />
-                <stop offset="1" stopColor="#F8F8F8" stopOpacity="0.41" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </ScrollReveal>
+              <stop stopColor="currentColor" stopOpacity="0.88" />
+              <stop offset="1" stopColor="currentColor" stopOpacity="0.65" />
+            </linearGradient>
+
+            {/* Ecosystem gradient */}
+            <linearGradient
+              id="paint_ecosystem"
+              x1="785"
+              y1="160"
+              x2="785"
+              y2="400"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="currentColor" stopOpacity="0.65" />
+              <stop offset="1" stopColor="currentColor" stopOpacity="0.38" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </footer>
   );
 }

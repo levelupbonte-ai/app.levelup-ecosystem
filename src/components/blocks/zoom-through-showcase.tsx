@@ -18,14 +18,14 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "We're misusing Mainline as a CRM and it still works!",
+    quote: "We're misusing LevelUp as a CRM and it still works!",
     author: "Amy Chase",
     role: "PM",
     company: "Mercury Finance",
     image: "/testimonials/amy-chase.webp",
   },
   {
-    quote: "I was able to replace 80% of my team with Mainline bots.",
+    quote: "I was able to replace 80% of my team with LevelUp bots.",
     author: "Jonas Kotara",
     role: "Lead Engineer",
     company: "Mercury Finance",
@@ -199,7 +199,7 @@ export function ZoomThroughShowcase() {
             className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
           />
           <p className="mt-2 text-sm md:text-base text-muted-foreground max-w-lg mx-auto">
-            Mainline is built on the habits that make high-velocity product teams successful.
+            LevelUp is built on the habits that make high-velocity product teams successful.
           </p>
         </div>
 

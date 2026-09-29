@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,12 +28,12 @@ const ITEMS = [
         title: "Modern product teams",
         href: "/#feature-modern-teams",
         description:
-          "Mainline is built on the habits that make the best product teams successful",
+          "LevelUp is built on the habits that make the best product teams successful",
       },
       {
         title: "Resource Allocation",
         href: "/#resource-allocation",
-        description: "Mainline your resource allocation and execution",
+        description: "LevelUp your resource allocation and execution",
       },
     ],
   },
@@ -47,18 +47,56 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Close mobile menu whenever clicking or tapping outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
+      if (
+        isMenuOpen &&
+        headerRef.current &&
+        !headerRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+        setOpenDropdown(null);
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
+      {/* Click-anywhere overlay when mobile menu is open */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 z-[95] bg-black/25 backdrop-blur-[1px] lg:hidden transition-opacity"
+          onClick={() => {
+            setIsMenuOpen(false);
+            setOpenDropdown(null);
+          }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Effet dégradé au-dessus du header qui dissimule le site lorsqu'il remonte */}
       <div
-        className="pointer-events-none fixed inset-x-0 top-0 z-40 h-24 bg-gradient-to-b from-background via-background/90 to-transparent backdrop-blur-[2px]"
+        className="pointer-events-none fixed inset-x-0 top-0 z-[90] h-24 bg-gradient-to-b from-background via-background/90 to-transparent backdrop-blur-[2px]"
         aria-hidden="true"
       />
 
       <header
+        ref={headerRef}
         className={cn(
-          "bg-background/85 fixed left-1/2 z-50 w-[min(90%,720px)] -translate-x-1/2 rounded-4xl border border-border/80 shadow-xs backdrop-blur-md transition-all duration-300",
+          "bg-background/85 fixed left-1/2 z-[100] w-[min(90%,720px)] -translate-x-1/2 rounded-4xl border border-border/80 shadow-xs backdrop-blur-md transition-all duration-300",
           "top-4 lg:top-6",
         )}
       >

@@ -51,7 +51,7 @@ const contactInfo = [
           <Facebook className="size-5" />
         </Link>
         <Link
-          href="https://x.com/ausrobdev"
+          href="https://x.com/levelupecosystem"
           className="text-muted-foreground hover:text-foreground"
         >
           <Twitter className="size-5" />

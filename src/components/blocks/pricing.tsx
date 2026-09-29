@@ -29,10 +29,10 @@ const plans = [
     yearlyPrice: "$6",
     features: [
       "All free plan features and...",
-      "Mainline AI",
+      "LevelUp AI",
       "Unlimited teams",
       "Unlimited issues and file uploads",
-      "Mainline Insights",
+      "LevelUp Insights",
       "Admin roles",
     ],
   },
@@ -42,7 +42,7 @@ const plans = [
     yearlyPrice: "$6",
     features: [
       "All free plan features and...",
-      "Mainline AI",
+      "LevelUp AI",
       "Supermainline AGI",
       "Free daily catered lunch",
       "random HIPPA audits",
@@ -54,7 +54,7 @@ export const Pricing = ({ className }: { className?: string }) => {
   const [isAnnual, setIsAnnual] = useState(true);
 
   return (
-    <section className={cn("py-28 lg:py-32", className)}>
+    <section className={cn("pt-10 pb-20 sm:pt-14 sm:pb-28 lg:pt-16 lg:pb-32", className)}>
       <div className="container max-w-5xl">
         <ScrollReveal yOffset={24} duration={0.7}>
           <div className="space-y-4 text-center">
@@ -62,7 +62,7 @@ export const Pricing = ({ className }: { className?: string }) => {
               Pricing
             </h2>
             <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
-              Use Mainline for free with your whole team. Upgrade to enable
+              Use LevelUp for free with your whole team. Upgrade to enable
               unlimited issues, enhanced security controls, and additional
               features.
             </p>

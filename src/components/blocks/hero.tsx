@@ -48,25 +48,26 @@ export const Hero = () => {
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
           <SplitText
-            text="Mainline Next.js template"
+            text="Level up your online presence."
             as="h1"
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
-            delay={0.1}
-            stagger={0.06}
+            delay={0.15}
+            stagger={0.065}
+            waitPreloader={true}
           />
 
-          <ScrollReveal yOffset={24} duration={0.8} delay={0.25}>
+          <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>
             <p className="text-muted-foreground text-1xl mt-5 md:text-3xl">
-              Mainline is an open-source website template built with shadcn/ui,
-              Tailwind 4 & Next.js
+              LevelUp Ecosystem is the fit-for-purpose platform built for planning,
+              designing, and launching high-performance digital products.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal yOffset={20} duration={0.8} delay={0.25}>
+          <ScrollReveal yOffset={20} duration={0.8} delay={0.45}>
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
               <Button asChild>
-                <a href="https://github.com/shadcnblocks/mainline-nextjs-template">
-                  Get template
+                <a href="/#feature-modern-teams">
+                  Explore services
                 </a>
               </Button>
               <Button
@@ -75,10 +76,10 @@ export const Hero = () => {
                 asChild
               >
                 <a
-                  href="https://shadcnblocks.com"
+                  href="/contact"
                   className="max-w-56 truncate text-start md:max-w-none"
                 >
-                  Built by shadcnblocks.com
+                  Get in touch
                   <ArrowRight className="stroke-3" />
                 </a>
               </Button>

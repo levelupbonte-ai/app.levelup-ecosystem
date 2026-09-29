@@ -47,7 +47,7 @@ export const Features = () => {
           />
           <ScrollReveal yOffset={20} duration={0.7} delay={0.15}>
             <p className="text-muted-foreground leading-snug">
-              Mainline is built on the habits that make the best product teams
+              LevelUp is built on the habits that make the best product teams
               successful: staying focused, moving quickly, and always aiming for
               high-quality work.
             </p>
