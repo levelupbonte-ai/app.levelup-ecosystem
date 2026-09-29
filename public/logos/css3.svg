@@ -1,0 +1,7 @@
+<svg width="105" height="28" viewBox="0 0 105 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2.5 2L4.5 24.5L13.5 27L22.5 24.5L24.5 2H2.5Z" fill="black" fill-opacity="0.15"/>
+  <path d="M4.5 4H22.5L20.8 22.8L13.5 24.8L6.2 22.8L4.5 4Z" fill="black"/>
+  <path d="M13.5 6V23L19.3 21.4L20.7 6H13.5Z" fill="black" fill-opacity="0.8"/>
+  <path d="M8.2 8.5H18.8L18.4 12H11.2L11.5 14.5H18.1L17.4 20L13.5 21.1L9.6 20L9.4 17.5H11.7L11.8 18.5L13.5 19L15.2 18.5L15.4 16.8H8.8L8.2 8.5Z" fill="white"/>
+  <text x="34" y="20" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="800" letter-spacing="-0.02em" fill="black">CSS3</text>
+</svg>

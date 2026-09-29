@@ -135,11 +135,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${dmSans.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${dmSans.variable} ${inter.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          forcedTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >

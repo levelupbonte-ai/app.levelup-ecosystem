@@ -1,86 +1,95 @@
-import Image from "next/image";
+import { type ComponentType } from "react";
+
 import Link from "next/link";
 
 import Marquee from "react-fast-marquee";
+import {
+  SiAnthropic,
+  SiCloudflare,
+  SiCss,
+  SiGithub,
+  SiGoogle,
+  SiGooglegemini,
+  SiHtml5,
+  SiJavascript,
+  SiNextdotjs,
+  SiReact,
+  SiReplit,
+  SiTypescript,
+} from "react-icons/si";
 
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
-import { cn } from "@/lib/utils";
 
-type Company = {
+type ToolItem = {
   name: string;
-  logo: string;
-  width: number;
-  height: number;
+  icon: ComponentType<{ className?: string }>;
   href: string;
 };
 
 export const Logos = () => {
-  const topRowCompanies = [
+  const topRowTools: ToolItem[] = [
     {
-      name: "Mercury",
-      logo: "/logos/mercury.svg",
-      width: 143,
-      height: 26,
-      href: "https://mercury.com",
+      name: "HTML5",
+      icon: SiHtml5,
+      href: "https://developer.mozilla.org/en-US/docs/Web/HTML",
     },
     {
-      name: "Watershed",
-      logo: "/logos/watershed.svg",
-      width: 154,
-      height: 31,
-      href: "https://watershed.com",
+      name: "CSS3",
+      icon: SiCss,
+      href: "https://developer.mozilla.org/en-US/docs/Web/CSS",
     },
     {
-      name: "Retool",
-      logo: "/logos/retool.svg",
-      width: 113,
-      height: 22,
-      href: "https://retool.com",
+      name: "JavaScript",
+      icon: SiJavascript,
+      href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
     },
     {
-      name: "Descript",
-      logo: "/logos/descript.svg",
-      width: 112,
-      height: 27,
-      href: "https://descript.com",
+      name: "TypeScript",
+      icon: SiTypescript,
+      href: "https://www.typescriptlang.org",
+    },
+    {
+      name: "React",
+      icon: SiReact,
+      href: "https://react.dev",
+    },
+    {
+      name: "Next.js",
+      icon: SiNextdotjs,
+      href: "https://nextjs.org",
     },
   ];
 
-  const bottomRowCompanies = [
+  const bottomRowTools: ToolItem[] = [
     {
-      name: "Perplexity",
-      logo: "/logos/perplexity.svg",
-      width: 141,
-      height: 32,
-      href: "https://perplexity.com",
+      name: "Claude",
+      icon: SiAnthropic,
+      href: "https://claude.ai",
     },
     {
-      name: "Monzo",
-      logo: "/logos/monzo.svg",
-      width: 104,
-      height: 18,
-      href: "https://monzo.com",
+      name: "Gemini",
+      icon: SiGooglegemini,
+      href: "https://gemini.google.com",
     },
     {
-      name: "Ramp",
-      logo: "/logos/ramp.svg",
-      width: 105,
-      height: 28,
-      href: "https://ramp.com",
+      name: "Replit",
+      icon: SiReplit,
+      href: "https://replit.com",
     },
     {
-      name: "Raycast",
-      logo: "/logos/raycast.svg",
-      width: 128,
-      height: 33,
-      href: "https://raycast.com",
+      name: "Google",
+      icon: SiGoogle,
+      href: "https://google.com",
     },
     {
-      name: "Arc",
-      logo: "/logos/arc.svg",
-      width: 90,
-      height: 28,
-      href: "https://arc.com",
+      name: "Cloudflare",
+      icon: SiCloudflare,
+      href: "https://cloudflare.com",
+    },
+    {
+      name: "GitHub",
+      icon: SiGithub,
+      href: "https://github.com",
     },
   ];
 
@@ -89,27 +98,23 @@ export const Logos = () => {
       <div className="container space-y-10 lg:space-y-16">
         <ScrollReveal yOffset={20} duration={0.7}>
           <div className="text-center">
-            <h2 className="mb-4 text-xl text-balance md:text-2xl lg:text-3xl">
+            <h2 className="mb-4 text-xl text-balance md:text-2xl lg:text-3xl font-semibold">
               Powering the world's best product teams.
               <br className="max-md:hidden" />
-              <span className="text-muted-foreground">
-                From next-gen startups to established enterprises.
+              <span className="text-muted-foreground font-normal">
+                {" "}From next-gen startups to established enterprises.
               </span>
             </h2>
           </div>
         </ScrollReveal>
 
         <ScrollReveal yOffset={24} duration={0.8} delay={0.15}>
-          <div className="flex w-full flex-col items-center gap-8">
-            {/* Top row - 4 logos */}
-            <LogoRow companies={topRowCompanies} gridClassName="grid-cols-4" />
+          <div className="flex w-full flex-col items-center gap-6 sm:gap-8">
+            {/* Top row - Core Frontend & Languages */}
+            <LogoRow tools={topRowTools} />
 
-            {/* Bottom row - 5 logos */}
-            <LogoRow
-              companies={bottomRowCompanies}
-              gridClassName="grid-cols-5"
-              direction="right"
-            />
+            {/* Bottom row - AI, Cloud & Developer Tools */}
+            <LogoRow tools={bottomRowTools} direction="right" />
           </div>
         </ScrollReveal>
       </div>
@@ -118,55 +123,56 @@ export const Logos = () => {
 };
 
 type LogoRowProps = {
-  companies: Company[];
-  gridClassName: string;
+  tools: ToolItem[];
   direction?: "left" | "right";
 };
 
-const LogoRow = ({ companies, gridClassName, direction }: LogoRowProps) => {
+const LogoRow = ({ tools, direction }: LogoRowProps) => {
   return (
     <>
       {/* Desktop static version */}
-      <div className="hidden md:block">
-        <div
-          className={cn(
-            "grid items-center justify-items-center gap-x-20 lg:gap-x-28",
-            gridClassName,
-          )}
-        >
-          {companies.map((company, index) => (
-            <Link href={company.href} target="_blank" key={index}>
-              <Image
-                src={company.logo}
-                alt={`${company.name} logo`}
-                width={company.width}
-                height={company.height}
-                className="dark:opacity/100 object-contain opacity-50 transition-opacity hover:opacity-70 dark:invert"
-              />
-            </Link>
-          ))}
+      <div className="hidden md:block w-full">
+        <div className="grid grid-cols-6 items-center justify-items-center gap-x-6 lg:gap-x-10 gap-y-4 w-full max-w-6xl mx-auto">
+          {tools.map((tool, index) => {
+            const Icon = tool.icon;
+            return (
+              <Link
+                href={tool.href}
+                target="_blank"
+                rel="noreferrer"
+                key={index}
+                className="group flex items-center justify-center gap-2.5 px-3 py-2 text-muted-foreground/75 transition-all duration-200 hover:text-foreground hover:scale-105"
+              >
+                <Icon className="size-5.5 shrink-0 transition-transform duration-200 group-hover:scale-110" />
+                <span className="text-[0.95rem] font-medium tracking-tight select-none">
+                  {tool.name}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
       {/* Mobile marquee version */}
-      <div className="md:hidden">
-        <Marquee direction={direction} pauseOnHover>
-          {companies.map((company, index) => (
-            <Link
-              href={company.href}
-              target="_blank"
-              key={index}
-              className="mx-8 inline-block transition-opacity hover:opacity-70"
-            >
-              <Image
-                src={company.logo}
-                alt={`${company.name} logo`}
-                width={company.width}
-                height={company.height}
-                className="object-contain"
-              />
-            </Link>
-          ))}
+      <div className="md:hidden w-full">
+        <Marquee direction={direction} pauseOnHover speed={32} className="py-2">
+          {tools.map((tool, index) => {
+            const Icon = tool.icon;
+            return (
+              <Link
+                href={tool.href}
+                target="_blank"
+                rel="noreferrer"
+                key={index}
+                className="mx-4 inline-flex items-center gap-2 text-muted-foreground/80 hover:text-foreground px-2 py-1"
+              >
+                <Icon className="size-5 shrink-0" />
+                <span className="text-sm font-medium tracking-tight select-none">
+                  {tool.name}
+                </span>
+              </Link>
+            );
+          })}
         </Marquee>
       </div>
     </>

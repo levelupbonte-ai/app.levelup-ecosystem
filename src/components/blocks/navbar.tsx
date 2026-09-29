@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -52,19 +53,27 @@ export const Navbar = () => {
   // Close mobile menu whenever clicking or tapping outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
-      if (
-        isMenuOpen &&
-        headerRef.current &&
-        !headerRef.current.contains(event.target as Node)
-      ) {
-        setIsMenuOpen(false);
-        setOpenDropdown(null);
+      try {
+        if (!isMenuOpen || !headerRef.current) return;
+        const target = event.target;
+        if (
+          target &&
+          typeof (target as Node).nodeType === "number" &&
+          !headerRef.current.contains(target as Node)
+        ) {
+          setIsMenuOpen(false);
+          setOpenDropdown(null);
+        }
+      } catch {
+        // Ignore detached element errors
       }
     }
 
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("touchstart", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside, {
+        passive: true,
+      });
     }
 
     return () => {
@@ -174,8 +183,10 @@ export const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* Auth Buttons */}
-          <div className="flex items-center gap-2.5">
+          {/* Auth & Theme Toggle Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <ThemeToggle />
+
             <Link href="/login" className="max-lg:hidden">
               <Button variant="outline">
                 <span className="relative z-10">Login</span>

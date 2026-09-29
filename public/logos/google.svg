@@ -1,0 +1,9 @@
+<svg width="105" height="28" viewBox="0 0 105 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(2, 2)">
+    <path d="M23.5 12.27C23.5 11.42 23.42 10.6 23.28 9.82H12V14.45H18.45C18.17 15.93 17.33 17.19 16.07 18.04V21.03H19.93C22.19 18.95 23.5 15.89 23.5 12.27Z" fill="black"/>
+    <path d="M12 24C15.24 24 17.96 22.92 19.93 21.03L16.07 18.04C14.99 18.76 13.62 19.19 12 19.19C8.87 19.19 6.22 17.07 5.27 14.23H1.28V17.32C3.26 21.25 7.32 24 12 24Z" fill="black"/>
+    <path d="M5.27 14.23C5.03 13.38 4.9 12.48 4.9 11.55C4.9 10.62 5.03 9.72 5.27 8.87V5.78H1.28C0.46 7.41 0 9.43 0 11.55C0 13.67 0.46 15.69 1.28 17.32L5.27 14.23Z" fill="black"/>
+    <path d="M12 3.91C13.76 3.91 15.34 4.51 16.59 5.7L20.02 2.27C17.95 0.34 15.24 0 12 0C7.32 0 3.26 2.75 1.28 6.68L5.27 9.77C6.22 6.93 8.87 3.91 12 3.91Z" fill="black"/>
+  </g>
+  <text x="34" y="20" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" letter-spacing="-0.02em" fill="black">Google</text>
+</svg>

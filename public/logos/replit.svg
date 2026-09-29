@@ -1,0 +1,6 @@
+<svg width="108" height="28" viewBox="0 0 108 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 5H12V11H4V5Z" fill="black"/>
+  <path d="M12 11H20V17H12V11Z" fill="black"/>
+  <path d="M4 17H12V23H4V17Z" fill="black"/>
+  <text x="28" y="20" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" letter-spacing="-0.02em" fill="black">Replit</text>
+</svg>
