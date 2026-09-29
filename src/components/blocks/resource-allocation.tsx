@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import Marquee from "react-fast-marquee";
-
 import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
@@ -26,57 +24,56 @@ const topItems = [
   {
     title: "Connect your essential stack.",
     description:
-      "Embed Gmail, Google Drive, Cloudflare, Stripe, maps, analytics, and custom APIs right into client sites.",
+      "Embed Google Drive, OpenAI, Resend, Gmail, WhatsApp, Stripe, and custom APIs right into client sites.",
     images: [
-      { src: "/logos/gmail.svg", alt: "Gmail integration", width: 48, height: 48 },
-      { src: "/logos/drive.svg", alt: "Google Drive integration", width: 48, height: 48 },
-      { src: "/logos/maps.svg", alt: "Google Maps integration", width: 48, height: 48 },
       {
-        src: "/logos/analytics.svg",
-        alt: "Google Analytics integration",
+        src: "/logos/drive.svg",
+        alt: "Google Drive logo",
         width: 48,
         height: 48,
       },
       {
-        src: "/logos/calendar.svg",
-        alt: "Google Calendar integration",
+        src: "/logos/openai-icon.svg",
+        alt: "OpenAI logo",
         width: 48,
         height: 48,
       },
       {
-        src: "/logos/notion.svg",
-        alt: "Notion integration",
+        src: "/logos/resend.svg",
+        alt: "Resend logo",
         width: 48,
         height: 48,
       },
       {
-        src: "/logos/jira.svg",
-        alt: "Jira integration",
+        src: "/logos/gmail.svg",
+        alt: "Gmail logo",
+        width: 48,
+        height: 48,
+      },
+      {
+        src: "/logos/whatsapp.svg",
+        alt: "WhatsApp logo",
         width: 48,
         height: 48,
       },
       {
         src: "/logos/cloudflare-icon.svg",
-        alt: "Cloudflare integration",
+        alt: "Cloudflare logo",
         width: 48,
         height: 48,
       },
-      { src: "/logos/stripe.svg", alt: "Stripe integration", width: 48, height: 48 },
       {
-        src: "/logos/supabase.svg",
-        alt: "Supabase integration",
+        src: "/logos/stripe.svg",
+        alt: "Stripe logo",
         width: 48,
         height: 48,
       },
-      { src: "/logos/openai.svg", alt: "OpenAI integration", width: 48, height: 48 },
-      { src: "/logos/github.svg", alt: "GitHub integration", width: 48, height: 48 },
       {
-        src: "/logos/monday.svg",
-        alt: "Monday integration",
+        src: "/logos/github-icon.svg",
+        alt: "GitHub logo",
         width: 48,
         height: 48,
       },
-      { src: "/logos/asana.svg", alt: "Asana integration", width: 48, height: 48 },
     ],
     className:
       "flex-1 [&>.title-container]:mb-5 md:[&>.title-container]:mb-8 md:[&>.title-container]:translate-x-2 xl:[&>.title-container]:translate-x-4 [&>.title-container]:translate-x-0",
@@ -224,62 +221,45 @@ const Item = ({ item, isLast, className }: ItemProps) => {
         <div className="from-muted/80 absolute inset-0 z-10 bg-linear-to-t via-transparent to-transparent md:hidden" />
       )}
       {item.images.length > 4 ? (
-        <div className="relative overflow-hidden w-full py-2">
-          <div className="flex flex-col gap-4">
-            {/* First row - scrolling left */}
-            <Marquee
-              direction="left"
-              pauseOnHover
-              speed={28}
-              className="py-1 overflow-hidden"
-            >
-              {item.images
-                .slice(0, Math.ceil(item.images.length / 2))
-                .map((image, j) => (
-                  <div
-                    key={j}
-                    className="mx-2 bg-background grid aspect-square size-16 lg:size-20 place-items-center rounded-2xl p-3 shadow-xs border border-border/40 transition-transform duration-200 hover:scale-105"
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={image.width}
-                      height={image.height}
-                      className="object-contain size-9 lg:size-11"
-                    />
-                  </div>
-                ))}
-            </Marquee>
-
-            {/* Second row - scrolling right */}
-            <Marquee
-              direction="right"
-              pauseOnHover
-              speed={28}
-              className="py-1 overflow-hidden"
-            >
-              {item.images
-                .slice(Math.ceil(item.images.length / 2))
-                .map((image, j) => (
-                  <div
-                    key={j}
-                    className="mx-2 bg-background grid aspect-square size-16 lg:size-20 place-items-center rounded-2xl p-3 shadow-xs border border-border/40 transition-transform duration-200 hover:scale-105"
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={image.width}
-                      height={image.height}
-                      className="object-contain size-9 lg:size-11"
-                    />
-                  </div>
-                ))}
-            </Marquee>
+        <div className="relative overflow-hidden">
+          <div className="flex flex-col gap-5">
+            {/* First row - right aligned */}
+            <div className="flex translate-x-4 justify-end gap-5">
+              {item.images.slice(0, 4).map((image, j) => (
+                <div
+                  key={j}
+                  className="bg-background grid aspect-square size-16 place-items-center rounded-2xl p-2 lg:size-20"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    className="object-contain"
+                  />
+                  <div className="from-muted/80 absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l to-transparent" />
+                </div>
+              ))}
+            </div>
+            {/* Second row - left aligned */}
+            <div className="flex -translate-x-4 gap-5">
+              {item.images.slice(4).map((image, j) => (
+                <div
+                  key={j}
+                  className="bg-background grid aspect-square size-16 place-items-center rounded-2xl p-2 lg:size-20"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    className="object-contain"
+                  />
+                  <div className="from-muted absolute inset-y-0 bottom-0 left-0 z-10 w-14 bg-linear-to-r to-transparent" />
+                </div>
+              ))}
+            </div>
           </div>
-
-          {/* Smooth side fades */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-16 bg-linear-to-r from-muted to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-16 bg-linear-to-l from-muted to-transparent z-10" />
         </div>
       ) : (
         <div className="image-container grid grid-cols-1 gap-4">
