@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import Link from "next/link";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,127 +15,165 @@ interface FeatureSection {
   category: string;
   features: {
     name: string;
-    free: true | false | null | string;
-    startup: true | false | null | string;
-    enterprise: true | false | null | string;
+    starter: true | false | null | string;
+    secure: true | false | null | string;
+    care: true | false | null | string;
   }[];
 }
 
 const pricingPlans = [
   {
-    name: "Free",
+    name: "Starter ($500)",
     button: {
-      text: "Get started",
+      text: "Get Started",
       variant: "outline" as const,
+      href: "/contact?plan=starter",
     },
   },
   {
-    name: "Startup",
+    name: "Secure ($900)",
     button: {
-      text: "Get started",
-      variant: "outline" as const,
+      text: "Get Started",
+      variant: "default" as const,
+      href: "/contact?plan=secure",
     },
   },
   {
-    name: "Enterprise",
+    name: "Secure + Care ($900 + $75/mo)",
     button: {
-      text: "Get a demo",
+      text: "Get Started",
       variant: "outline" as const,
+      href: "/contact?plan=secure-care",
     },
   },
 ];
 
 const comparisonFeatures: FeatureSection[] = [
   {
-    category: "Usage",
+    category: "Design & Performance",
     features: [
       {
-        name: "Members",
-        free: "Unlimited",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: "Custom Responsive Mobile Design",
+        starter: true,
+        secure: true,
+        care: true,
       },
       {
-        name: "Transactions",
-        free: "250",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: "Sub-2s Mobile Page Speed",
+        starter: true,
+        secure: true,
+        care: true,
       },
       {
-        name: "Teams",
-        free: "2",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: "Google Maps & Local SEO Setup",
+        starter: true,
+        secure: true,
+        care: true,
+      },
+      {
+        name: "100% Code Ownership",
+        starter: true,
+        secure: true,
+        care: true,
       },
     ],
   },
   {
-    category: "Features",
+    category: "Booking & Features",
     features: [
       {
-        name: "Reporting",
-        free: true,
-        startup: true,
-        enterprise: true,
+        name: "Contact & Lead Capture Form",
+        starter: true,
+        secure: true,
+        care: true,
       },
       {
-        name: "Analytics",
-        free: true,
-        startup: true,
-        enterprise: true,
+        name: "24/7 Automated Online Booking",
+        starter: false,
+        secure: true,
+        care: true,
       },
       {
-        name: "Import and export",
-        free: true,
-        startup: true,
-        enterprise: true,
+        name: "Live Calendar Sync (Square, Calendly, Acuity)",
+        starter: false,
+        secure: true,
+        care: true,
       },
       {
-        name: "Integrations",
-        free: true,
-        startup: true,
-        enterprise: true,
+        name: "Customer Appointment SMS/Email Confirmations",
+        starter: false,
+        secure: true,
+        care: true,
       },
       {
-        name: "LevelUp AI",
-        free: null,
-        startup: true,
-        enterprise: true,
-      },
-      {
-        name: "Admin roles",
-        free: null,
-        startup: null,
-        enterprise: true,
-      },
-      {
-        name: "Audit log",
-        free: null,
-        startup: null,
-        enterprise: true,
+        name: "Google Business Profile Sync",
+        starter: false,
+        secure: true,
+        care: true,
       },
     ],
   },
   {
-    category: "Support",
+    category: "Cybersecurity & Hardening",
     features: [
       {
-        name: "Priority Support",
-        free: true,
-        startup: true,
-        enterprise: true,
+        name: "SSL / HTTPS Encryption Standard",
+        starter: true,
+        secure: true,
+        care: true,
       },
       {
-        name: "Account Manager",
-        free: null,
-        startup: null,
-        enterprise: true,
+        name: "Anti-Spam Form Honeypot",
+        starter: true,
+        secure: true,
+        care: true,
       },
       {
-        name: "Uptime SLA",
-        free: null,
-        startup: null,
-        enterprise: true,
+        name: "2FA Admin Access Enforcement",
+        starter: false,
+        secure: true,
+        care: true,
+      },
+      {
+        name: "Database Access Rules & Security Audit",
+        starter: false,
+        secure: true,
+        care: true,
+      },
+    ],
+  },
+  {
+    category: "Ongoing Care & Peace of Mind",
+    features: [
+      {
+        name: "High-Speed Cloud Hosting Included",
+        starter: false,
+        secure: false,
+        care: true,
+      },
+      {
+        name: "Automated Daily Offsite Backups",
+        starter: false,
+        secure: false,
+        care: true,
+      },
+      {
+        name: "Continuous Uptime & Health Monitoring",
+        starter: false,
+        secure: false,
+        care: true,
+      },
+      {
+        name: "On-Demand Monthly Content Edits",
+        starter: false,
+        secure: false,
+        care: "Up to 2 hrs/mo",
+      },
+      {
+        name: "VIP Direct Developer Support",
+        starter: "Email",
+        secure: "30 days priority",
+        care: "Dedicated ongoing",
       },
     ],
   },
@@ -143,29 +181,43 @@ const comparisonFeatures: FeatureSection[] = [
 
 const renderFeatureValue = (value: true | false | null | string) => {
   if (value === true) {
-    return <Check className="size-5" />;
+    return (
+      <span className="size-5 rounded-full bg-[#ccff00] text-black flex items-center justify-center shrink-0">
+        <Check className="size-3.5 stroke-[3]" />
+      </span>
+    );
   }
   if (value === false) {
-    return <X className="size-5" />;
+    return <X className="size-5 text-muted-foreground/40" />;
   }
   if (value === null) {
     return null;
   }
-  // String value
   return (
     <div className="flex items-center gap-2">
-      <Check className="size-4" />
-      <span className="text-muted-foreground">{value}</span>
+      <span className="size-5 rounded-full bg-[#ccff00] text-black flex items-center justify-center shrink-0">
+        <Check className="size-3.5 stroke-[3]" />
+      </span>
+      <span className="text-muted-foreground text-xs sm:text-sm font-medium">{value}</span>
     </div>
   );
 };
 
 export const PricingTable = () => {
-  const [selectedPlan, setSelectedPlan] = useState(1); // Default to Startup plan
+  const [selectedPlan, setSelectedPlan] = useState(1);
 
   return (
     <section className="pb-28 lg:py-32">
-      <div className="container">
+      <div className="container max-w-6xl">
+        <div className="mb-10 text-center space-y-2">
+          <h3 className="text-2xl font-bold tracking-tight md:text-3xl">
+            Detailed Feature Comparison
+          </h3>
+          <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+            Everything you need to know about our transparent deliverables.
+          </p>
+        </div>
+
         <PlanHeaders
           selectedPlan={selectedPlan}
           onPlanChange={setSelectedPlan}
@@ -192,7 +244,7 @@ const PlanHeaders = ({
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="">
           <div className="flex items-center justify-between border-b py-4">
             <CollapsibleTrigger className="flex items-center gap-2">
-              <h3 className="text-2xl font-semibold">
+              <h3 className="text-xl font-bold">
                 {pricingPlans[selectedPlan].name}
               </h3>
               <ChevronsUpDown
@@ -201,9 +253,12 @@ const PlanHeaders = ({
             </CollapsibleTrigger>
             <Button
               variant={pricingPlans[selectedPlan].button.variant}
-              className="w-fit"
+              size="sm"
+              asChild
             >
-              {pricingPlans[selectedPlan].button.text}
+              <Link href={pricingPlans[selectedPlan].button.href}>
+                {pricingPlans[selectedPlan].button.text}
+              </Link>
             </Button>
           </div>
           <CollapsibleContent className="flex flex-col space-y-2 p-2">
@@ -228,14 +283,20 @@ const PlanHeaders = ({
       </div>
 
       {/* Desktop View */}
-      <div className="grid grid-cols-4 gap-4 max-md:hidden">
-        <div className="col-span-1 max-md:hidden"></div>
+      <div className="grid grid-cols-4 gap-4 max-md:hidden items-center border-b pb-6">
+        <div className="col-span-1">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+            Features &amp; Deliverables
+          </span>
+        </div>
 
         {pricingPlans.map((plan, index) => (
-          <div key={index} className="">
-            <h3 className="mb-3 text-2xl font-semibold">{plan.name}</h3>
-            <Button variant={plan.button.variant} className="">
-              {plan.button.text}
+          <div key={index} className="space-y-2 text-start">
+            <h3 className="text-lg font-bold tracking-tight">{plan.name}</h3>
+            <Button variant={plan.button.variant} size="sm" asChild>
+              <Link href={plan.button.href}>
+                {plan.button.text}
+              </Link>
             </Button>
           </div>
         ))}
@@ -247,23 +308,23 @@ const PlanHeaders = ({
 const FeatureSections = ({ selectedPlan }: { selectedPlan: number }) => (
   <>
     {comparisonFeatures.map((section, sectionIndex) => (
-      <div key={sectionIndex} className="">
-        <div className="border-primary/40 border-b py-4">
-          <h3 className="text-lg font-semibold">{section.category}</h3>
+      <div key={sectionIndex} className="mt-8">
+        <div className="border-b py-3">
+          <h4 className="text-base font-bold text-foreground">{section.category}</h4>
         </div>
         {section.features.map((feature, featureIndex) => (
           <div
             key={featureIndex}
-            className="text-foreground grid grid-cols-2 font-medium max-md:border-b md:grid-cols-4"
+            className="text-foreground grid grid-cols-2 font-medium max-md:border-b md:grid-cols-4 items-center"
           >
-            <span className="inline-flex items-center py-4">
+            <span className="inline-flex items-center py-3.5 text-sm">
               {feature.name}
             </span>
             {/* Mobile View - Only Selected Plan */}
             <div className="md:hidden">
-              <div className="flex items-center gap-1 py-4 md:border-b">
+              <div className="flex items-center gap-1 py-3.5">
                 {renderFeatureValue(
-                  [feature.free, feature.startup, feature.enterprise][
+                  [feature.starter, feature.secure, feature.care][
                     selectedPlan
                   ],
                 )}
@@ -271,11 +332,11 @@ const FeatureSections = ({ selectedPlan }: { selectedPlan: number }) => (
             </div>
             {/* Desktop View - All Plans */}
             <div className="hidden md:col-span-3 md:grid md:grid-cols-3 md:gap-4">
-              {[feature.free, feature.startup, feature.enterprise].map(
+              {[feature.starter, feature.secure, feature.care].map(
                 (value, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-1 border-b py-4"
+                    className="flex items-center gap-1 border-b border-border/40 py-3.5"
                   >
                     {renderFeatureValue(value)}
                   </div>

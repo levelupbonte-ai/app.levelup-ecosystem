@@ -1,6 +1,6 @@
 {
   "name": "LevelUp Ecosystem",
-  "description": "LevelUp Ecosystem - Modern platform for project planning, resource allocation, and team collaboration.",
+  "description": "LevelUp Ecosystem - Fast, secure websites with 24/7 online booking, Google Maps setup, and cybersecurity checks for local businesses in San Diego, CA.",
   "requestFramePermissions": [],
   "capabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -53,7 +53,6 @@ export const Hero = () => {
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             delay={0.15}
             stagger={0.065}
-            waitPreloader={true}
           />
 
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>

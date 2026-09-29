@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { motion, type Variants } from "motion/react";
 
@@ -30,31 +30,9 @@ export function SplitText({
   duration = 0.75,
   as: Component = "h1",
   once = true,
-  waitPreloader = false,
 }: SplitTextProps) {
-  const [isReady, setIsReady] = useState(!waitPreloader);
+  const isReady = true;
   const words = text.split(" ");
-
-  useEffect(() => {
-    if (!waitPreloader) return;
-
-    const handleReady = () => {
-      // Small 150ms buffer right as the curtain lifts for visual punch
-      setTimeout(() => setIsReady(true), 150);
-    };
-
-    window.addEventListener("site-ready", handleReady);
-
-    // Fallback in case preloader already lifted or wasn't rendered
-    const fallbackTimer = setTimeout(() => {
-      setIsReady(true);
-    }, 3600);
-
-    return () => {
-      window.removeEventListener("site-ready", handleReady);
-      clearTimeout(fallbackTimer);
-    };
-  }, [waitPreloader]);
 
   const containerVariants: Variants = {
     hidden: {},

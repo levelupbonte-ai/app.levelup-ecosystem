@@ -10,16 +10,19 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const items = [
   {
-    title: "Purpose-built for product development",
+    title: "24/7 online booking with calendar sync",
     image: "/features/triage-card.svg",
+    href: "/services#local-business",
   },
   {
-    title: "Manage projects end-to-end",
+    title: "Local SEO & Google Business integration",
     image: "/features/cycle-card.svg",
+    href: "/services#seo",
   },
   {
-    title: "Build momentum and healthy habits",
+    title: "Cybersecurity basics & automated backups",
     image: "/features/overview-card.svg",
+    href: "/services#security",
   },
 ];
 
@@ -31,25 +34,25 @@ export const Features = () => {
         <ScrollReveal yOffset={16} duration={0.6}>
           <div className="relative flex items-center justify-center">
             <DashedLine className="text-muted-foreground" />
-            <span className="bg-muted text-muted-foreground absolute px-3 font-mono text-sm font-medium tracking-wide max-md:hidden">
-              MEASURE TWICE. CUT ONCE.
+            <span className="bg-muted text-muted-foreground absolute px-3 font-mono text-xs sm:text-sm font-medium tracking-widest max-md:hidden uppercase">
+              Bespoke Web Architecture • San Diego, CA
             </span>
           </div>
         </ScrollReveal>
 
         {/* Content */}
-        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-3 md:gap-0 lg:mt-24 lg:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-3 md:gap-8 lg:mt-24 lg:grid-cols-2">
           <SplitText
-            text="Made for modern product teams"
+            text="Engineered for real-world client bookings"
             as="h2"
             className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             stagger={0.05}
           />
           <ScrollReveal yOffset={20} duration={0.7} delay={0.15}>
-            <p className="text-muted-foreground leading-snug">
-              LevelUp is built on the habits that make the best product teams
-              successful: staying focused, moving quickly, and always aiming for
-              high-quality work.
+            <p className="text-muted-foreground leading-relaxed">
+              Most agencies deliver slow, bloated template sites that cost thousands and lag on phones.
+              LevelUp builds lightweight, bespoke websites engineered for frictionless customer appointment
+              scheduling, sub-2s mobile loading, and top Google search rankings.
             </p>
           </ScrollReveal>
         </div>
@@ -72,12 +75,12 @@ export const Features = () => {
                     </div>
 
                     <Link
-                      href="#"
+                      href={item.href}
                       className={
                         "group/link flex items-center justify-between gap-4 pe-4 pt-4 md:pe-6 md:pt-6"
                       }
                     >
-                      <h3 className="font-display max-w-60 text-2xl leading-tight font-bold tracking-tight">
+                      <h3 className="font-display max-w-60 text-xl md:text-2xl leading-tight font-bold tracking-tight">
                         {item.title}
                       </h3>
                       <div className="rounded-full border p-2 transition-colors group-hover/link:bg-accent">

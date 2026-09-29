@@ -11,52 +11,62 @@ import { cn } from "@/lib/utils";
 
 const categories = [
   {
-    title: "Support",
+    title: "About LevelUp Ecosystem",
     questions: [
       {
-        question: "How do I update my account without breaking my laptop?",
+        question: "What is LevelUp Ecosystem?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "LevelUp Ecosystem is an independent web architecture and development studio based in San Diego, California. The studio builds fast, secure websites with 24/7 online booking, local SEO, and cybersecurity basics for businesses, barbershops, salons, and creators.",
       },
       {
-        question: "Is support free, or do I need to Google everything?",
+        question: "Who is Richelieu Bonte?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "Richelieu Bonte is the founder and principal engineer of LevelUp Ecosystem, an independent web design studio building secure, AI-assisted websites for local businesses and creators. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo.",
       },
       {
-        question: "Are you going to be subsumed by AI?",
+        question: "What is LevelStudio?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "LevelStudio is LevelUp Ecosystem's automated AI preview generator, allowing clients to test website concepts and interactive mobile prototypes on their phone before human engineering and deployment.",
       },
     ],
   },
   {
-    title: "Your account",
+    title: "Services & Google Ranking",
     questions: [
       {
-        question: "Is support free, or do I need to Google everything?",
+        question: "How does the free interactive preview work?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "You send us your business name, services, and any photos or ideas you have. Within 24 to 48 hours, we build a functional, interactive mobile preview of your site. You get to test it on your phone before spending a single dollar. If you approve, we move forward. If not, you owe nothing.",
       },
       {
-        question: "Are you going to be subsumed by AI?",
+        question: "Can you help our business rank higher on Google Maps in San Diego?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "Yes. Local visibility requires coordinated website data and a verified Google Business Profile. We format your name, phone number, and service areas to match your Google listing, insert local business Schema.org structured data, and optimize page load speeds so mobile searchers convert into appointments.",
+      },
+      {
+        question: "How long does a website take to build and launch?",
+        answer:
+          "Once you approve your free preview, full custom development, 24/7 online appointment booking configuration, security hardening, and domain launch typically take 7 to 10 days.",
       },
     ],
   },
   {
-    title: "Other questions",
+    title: "Security & Pricing",
     questions: [
       {
-        question: "Is support free, or do I need to Google everything?",
+        question: "What is included in the Website Security Check?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "We audit your domain registrar and DNS settings, verify SSL HTTPS certificates, audit database permissions, implement two-factor authentication (2FA) on your hosting and business email accounts, install spam bot honeypots, and test for credential leakage.",
       },
       {
-        question: "Are you going to be subsumed by AI?",
+        question: "Do I own my website, code, and domain?",
         answer:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus voluptates deserunt officia temporibus dignissimos.",
+          "Yes, 100%. Once final payment is settled, you own all rights to your domain, branding, text, and customer lists. There are no lock-in contracts or hostage fees.",
+      },
+      {
+        question: "What is included in the $49/month Care Plan?",
+        answer:
+          "High-speed cloud hosting, automated daily backups, monthly security updates, 24/7 uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
       },
     ],
   },
@@ -77,19 +87,22 @@ export const FAQ = ({
         <div className={cn("mx-auto grid gap-16 lg:grid-cols-2", className2)}>
           <ScrollReveal yOffset={24} duration={0.7}>
             <div className="space-y-4">
+              <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+                Answers & Insights
+              </span>
               {headerTag === "h1" ? (
-                <h1 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-                  Got Questions?
+                <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                  Frequently Asked Questions
                 </h1>
               ) : (
-                <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-                  Got Questions?
+                <h2 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                  Frequently Asked Questions
                 </h2>
               )}
-              <p className="text-muted-foreground max-w-md leading-snug lg:mx-auto">
-                If you can't find what you're looking for,{" "}
-                <Link href="/contact" className="underline underline-offset-4">
-                  get in touch
+              <p className="text-muted-foreground max-w-md leading-relaxed lg:mx-auto">
+                Have questions about our San Diego web design, 24/7 online booking, or cybersecurity audits?{" "}
+                <Link href="/contact" className="text-foreground underline underline-offset-4 font-semibold">
+                  Get in touch with our team
                 </Link>
                 .
               </p>
@@ -100,14 +113,16 @@ export const FAQ = ({
             <div className="grid gap-6 text-start">
               {categories.map((category, categoryIndex) => (
                 <div key={category.title} className="">
-                  <h3 className="text-muted-foreground border-b py-4 font-medium">
+                  <h3 className="text-foreground border-b py-3 font-semibold text-sm">
                     {category.title}
                   </h3>
                   <Accordion type="single" collapsible className="w-full">
                     {category.questions.map((item, i) => (
                       <AccordionItem key={i} value={`${categoryIndex}-${i}`}>
-                        <AccordionTrigger>{item.question}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">
+                        <AccordionTrigger className="text-left font-medium text-sm sm:text-base py-3.5">
+                          {item.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-sm leading-relaxed">
                           {item.answer}
                         </AccordionContent>
                       </AccordionItem>

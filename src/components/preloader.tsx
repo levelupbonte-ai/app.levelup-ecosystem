@@ -4,8 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 
+const STORAGE_KEY = "levelup_has_seen_preloader";
+const REFRESH_COUNT_KEY = "levelup_refresh_count";
+
 export function Preloader() {
   const [mounted, setMounted] = useState(false);
+  const [shouldPlay, setShouldPlay] = useState(false);
   const [phase, setPhase] = useState<
     "travel" | "dissolve" | "shimmer" | "exit" | "done"
   >("travel");
@@ -13,14 +17,43 @@ export function Preloader() {
   const [textWidth, setTextWidth] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Mount on every page load & refresh
+  // Check sessionStorage on mount: plays once per session, OR if refreshed 5 times in a row
   useEffect(() => {
+    try {
+      const hasSeen = sessionStorage.getItem(STORAGE_KEY);
+      const currentRefreshCount = parseInt(
+        sessionStorage.getItem(REFRESH_COUNT_KEY) || "0",
+        10,
+      );
+      const nextRefreshCount = currentRefreshCount + 1;
+
+      // If user refreshes 5 times in a row, show the loading animation again!
+      if (nextRefreshCount >= 5) {
+        sessionStorage.setItem(REFRESH_COUNT_KEY, "0");
+        setShouldPlay(true);
+        setMounted(true);
+        return;
+      }
+
+      sessionStorage.setItem(REFRESH_COUNT_KEY, nextRefreshCount.toString());
+
+      if (hasSeen === "true") {
+        setShouldPlay(false);
+        setPhase("done");
+        setMounted(true);
+        return;
+      }
+    } catch {
+      // Fallback
+    }
+
+    setShouldPlay(true);
     setMounted(true);
   }, []);
 
   // Measure exact text width on mount & resize
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !shouldPlay) return;
     const updateMetrics = () => {
       if (textRef.current) {
         setTextWidth(textRef.current.offsetWidth);
@@ -37,10 +70,12 @@ export function Preloader() {
       clearTimeout(t2);
       window.removeEventListener("resize", updateMetrics);
     };
-  }, [mounted]);
+  }, [mounted, shouldPlay]);
 
-  // Lock scroll while preloader is running
+  // Lock scroll while preloader is running, unlock immediately on exit
   useEffect(() => {
+    if (!shouldPlay) return;
+
     if (phase !== "done") {
       document.body.style.overflow = "hidden";
     } else {
@@ -49,11 +84,11 @@ export function Preloader() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [phase]);
+  }, [shouldPlay, phase]);
 
-  // Cinematic timeline
+  // Original Cinematic timeline
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !shouldPlay) return;
 
     // 0s -> 1.75s: Star travels across the phrase
     const tDissolve = setTimeout(() => {
@@ -68,6 +103,11 @@ export function Preloader() {
     // 3.3s: Curtain lifts upward to reveal the website
     const tExit = setTimeout(() => {
       setPhase("exit");
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "true");
+      } catch {
+        // Ignore
+      }
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("site-ready"));
       }
@@ -76,6 +116,7 @@ export function Preloader() {
     // 4.15s: Complete, unmount
     const tDone = setTimeout(() => {
       setPhase("done");
+      document.body.style.overflow = "";
     }, 4150);
 
     return () => {
@@ -83,10 +124,11 @@ export function Preloader() {
       clearTimeout(tShimmer);
       clearTimeout(tExit);
       clearTimeout(tDone);
+      document.body.style.overflow = "";
     };
-  }, [mounted]);
+  }, [mounted, shouldPlay]);
 
-  if (!mounted) {
+  if (!mounted || !shouldPlay || phase === "done") {
     return null;
   }
 

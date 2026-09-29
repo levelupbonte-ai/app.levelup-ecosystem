@@ -22,23 +22,37 @@ import { cn } from "@/lib/utils";
 
 const ITEMS = [
   {
-    label: "Features",
-    href: "#features",
+    label: "Services",
+    href: "/services",
     dropdownItems: [
       {
-        title: "Modern product teams",
-        href: "/#feature-modern-teams",
+        title: "Local Business & 24/7 Booking",
+        href: "/services#local-business",
         description:
-          "LevelUp is built on the habits that make the best product teams successful",
+          "Fast, mobile-optimized sites with automated calendar sync for barbershops, salons, and clinics.",
       },
       {
-        title: "Resource Allocation",
-        href: "/#resource-allocation",
-        description: "LevelUp your resource allocation and execution",
+        title: "Creator & Portfolio Websites",
+        href: "/services#creators",
+        description:
+          "High-converting personal branding, portfolio decks, and custom digital storefronts.",
+      },
+      {
+        title: "Website Security Check",
+        href: "/services#security",
+        description:
+          "Plain-English technical audit of database rules, HTTPS, API keys, and account 2FA.",
+      },
+      {
+        title: "Monthly Care Plans ($49/mo)",
+        href: "/services#care-plans",
+        description:
+          "Managed cloud hosting, daily automated snapshots, uptime monitoring, and quick edits.",
       },
     ],
   },
-  { label: "About Us", href: "/about" },
+  { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },

@@ -2,20 +2,20 @@ import { DashedLine } from "@/components/dashed-line";
 
 const stats = [
   {
-    value: "$150M",
-    label: "Raised",
+    value: "< 2s",
+    label: "Mobile page load speed",
   },
   {
-    value: "20K",
-    label: "Companies",
+    value: "24/7",
+    label: "Online appointment booking",
   },
   {
-    value: "1.3B",
-    label: "Monthly transactions",
+    value: "100%",
+    label: "Code & client ownership",
   },
   {
-    value: "1.5K",
-    label: "Connections per minute",
+    value: "$0",
+    label: "Bulky builder subscription lock-in",
   },
 ];
 
@@ -24,33 +24,32 @@ export function AboutHero() {
     <section className="">
       <div className="container flex max-w-5xl flex-col justify-between gap-8 md:gap-20 lg:flex-row lg:items-center lg:gap-24 xl:gap-24">
         <div className="flex-[1.5]">
-          <h1 className="text-3xl tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            Democratising quality software
+          <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
+            Independent Web & Security Studio • San Diego, CA
+          </span>
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+            Meet LevelUp Ecosystem
           </h1>
 
-          <p className="text-muted-foreground mt-5 text-2xl md:text-3xl lg:text-4xl">
-            LevelUp is bringing modern software to life with AI magic.
+          <p className="text-foreground/90 mt-5 text-xl md:text-2xl lg:text-3xl font-medium leading-snug">
+            Fast, secure digital infrastructure engineered for local businesses, barbershops, salons, and creators.
           </p>
 
-          <p className="text-muted-foreground mt-8 hidden max-w-lg space-y-6 text-lg text-balance md:block lg:mt-12">
-            At LevelUp, we are dedicated to transforming the way teams plan,
-            execute, and deliver projects. Our mission is to provide our
-            customers with an unbeatable edge over delays, inefficiencies, and
-            disorganisation through actionable insights and seamless
-            collaboration. We’ll stop at nothing to give you the tools you need
-            to get every project across the finish line.
-            <br />
-            <br />
-            We’re customer-obsessed — investing the time to understand every
-            aspect of your workflow so that we can help you operate better than
-            ever before. We’re all in this together because your success is our
-            success. In our history as a company, we’ve never lost a customer,
-            because when your projects succeed, so do we.
-          </p>
+          <div className="text-muted-foreground mt-8 hidden max-w-lg space-y-4 text-base leading-relaxed md:block lg:mt-10">
+            <p>
+              Based in San Diego, California, LevelUp Ecosystem was born out of a clear frustration:
+              local service businesses were stuck between expensive agencies charging $3,000+ for slow,
+              bloated templates, and complex DIY website builders that leaked customer data and broke on mobile devices.
+            </p>
+            <p>
+              We deliver a better alternative: clean, lightweight code engineered for effortless 24/7 customer
+              appointment booking, sub-2-second mobile load speeds, and real cybersecurity protections from day one.
+            </p>
+          </div>
         </div>
 
         <div
-          className={`relative flex flex-1 flex-col justify-center gap-3 pt-10 lg:pt-0 lg:pl-10`}
+          className={`relative flex flex-1 flex-col justify-center gap-6 pt-10 lg:pt-0 lg:pl-10`}
         >
           <DashedLine
             orientation="vertical"
@@ -62,10 +61,10 @@ export function AboutHero() {
           />
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col gap-1">
-              <div className="font-display text-4xl tracking-wide md:text-5xl">
+              <div className="font-display text-4xl font-bold tracking-tight md:text-5xl text-foreground">
                 {stat.value}
               </div>
-              <div className="text-muted-foreground">{stat.label}</div>
+              <div className="text-muted-foreground text-sm font-medium">{stat.label}</div>
             </div>
           ))}
         </div>
