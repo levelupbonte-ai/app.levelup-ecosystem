@@ -2,8 +2,6 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Facebook, Linkedin, Twitter } from "lucide-react";
-
 import { ContactForm } from "@/components/blocks/contact-form";
 import { DashedLine } from "@/components/dashed-line";
 
@@ -40,25 +38,6 @@ const contactInfo = [
             press@example.com
           </Link>
         </div>
-      </div>
-    ),
-  },
-  {
-    title: "Follow us",
-    content: (
-      <div className="mt-3 flex gap-6 lg:gap-10">
-        <Link href="#" className="text-muted-foreground hover:text-foreground">
-          <Facebook className="size-5" />
-        </Link>
-        <Link
-          href="https://x.com/levelupecosystem"
-          className="text-muted-foreground hover:text-foreground"
-        >
-          <Twitter className="size-5" />
-        </Link>
-        <Link href="#" className="text-muted-foreground hover:text-foreground">
-          <Linkedin className="size-5" />
-        </Link>
       </div>
     ),
   },
