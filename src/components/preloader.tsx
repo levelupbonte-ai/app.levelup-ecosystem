@@ -95,8 +95,8 @@ export function Preloader() {
   const gap = isMobile ? 6 : 12;
   const rawTarget =
     textWidth > 0 ? startOffset + textWidth + gap : isMobile ? 220 : 380;
-  // Maximum travel is strictly capped right past the measured text, never corner-bound
-  const targetX = textWidth > 0 ? Math.min(rawTarget, startOffset + textWidth + gap) : rawTarget;
+  const targetX =
+    textWidth > 0 ? Math.min(rawTarget, startOffset + textWidth + gap) : rawTarget;
 
   return (
     <AnimatePresence>
@@ -129,10 +129,27 @@ export function Preloader() {
                     : "text-zinc-900 dark:text-white"
                 }`}
               >
+                {/* Smooth progressive gradient mask reveal: letters fade in smoothly, never sliced */}
                 <motion.span
                   className="inline-block whitespace-nowrap"
-                  initial={{ clipPath: "inset(0 100% 0 0)" }}
-                  animate={{ clipPath: "inset(0 0% 0 0)" }}
+                  style={{
+                    WebkitMaskImage:
+                      phase === "shimmer" || phase === "exit"
+                        ? "none"
+                        : "linear-gradient(to right, #000 0%, #000 calc(50% - 28px), rgba(0,0,0,0.5) calc(50% - 8px), transparent 50%, transparent 100%)",
+                    maskImage:
+                      phase === "shimmer" || phase === "exit"
+                        ? "none"
+                        : "linear-gradient(to right, #000 0%, #000 calc(50% - 28px), rgba(0,0,0,0.5) calc(50% - 8px), transparent 50%, transparent 100%)",
+                    WebkitMaskSize: "200% 100%",
+                    maskSize: "200% 100%",
+                  }}
+                  initial={{
+                    maskPosition: "100% 0%",
+                  }}
+                  animate={{
+                    maskPosition: "0% 0%",
+                  }}
                   transition={{
                     duration: 1.75,
                     ease: [0.25, 1, 0.5, 1],
@@ -142,7 +159,7 @@ export function Preloader() {
                 </motion.span>
               </h1>
 
-              {/* The Star: spins cleanly across phrase and stops right after the period */}
+              {/* The Star: spins cleanly across phrase with soft leading gradient beam */}
               <motion.div
                 className="absolute pointer-events-none z-20 flex items-center justify-center top-1/2 -translate-y-1/2"
                 style={{ left: `-${startOffset}px` }}
@@ -172,21 +189,15 @@ export function Preloader() {
                   ease: phase === "travel" ? [0.25, 1, 0.5, 1] : "easeOut",
                 }}
               >
-                {/* Star container: clean, zero bubble, soft backlight so it passes cleanly over text */}
+                {/* Star container: completely clean, zero bubble, no exaggerated glow */}
                 <div className="relative size-6 sm:size-8 md:size-9 flex items-center justify-center">
-                  {/* Subtle soft backdrop halo to clear dark letters smoothly with zero hard edges */}
-                  <div
-                    className="pointer-events-none absolute -inset-1 rounded-full bg-[radial-gradient(circle,rgba(250,250,253,0.85)_20%,rgba(168,85,247,0.18)_50%,transparent_75%)] dark:bg-[radial-gradient(circle,rgba(10,10,16,0.85)_20%,rgba(168,85,247,0.22)_50%,transparent_75%)]"
-                    aria-hidden="true"
-                  />
-
                   {/* Star graphic: 5-pointed faceted LevelUp brand star */}
                   <svg
                     viewBox="0 0 74 74"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     shapeRendering="geometricPrecision"
-                    className="size-6 sm:size-8 md:size-9 shrink-0 relative z-10"
+                    className="size-6 sm:size-8 md:size-9 shrink-0 relative z-10 drop-shadow-[0_1px_3px_rgba(0,0,0,0.12)] dark:drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
                     aria-hidden="true"
                   >
                     <polygon points="37,37 37,3 46.11,24.46" fill="#A855F7" />
@@ -205,28 +216,28 @@ export function Preloader() {
             </div>
           </div>
 
-          {/* Bottom Branding: Pro, soft-diffused LevelUp Ecosystem watermark */}
+          {/* Bottom Branding: Crisp, clear LevelUp Ecosystem watermark */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.9, ease: "easeOut" }}
-            className="w-full select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden opacity-25 dark:opacity-30 [mask-image:linear-gradient(to_bottom,black_30%,transparent_96%)]"
+            className="w-full max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto px-4 select-none pointer-events-none pb-0 mb-0 -mb-2 overflow-hidden opacity-80 dark:opacity-85 [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
           >
             <svg
-              viewBox="0 0 1570 420"
+              viewBox="0 0 1000 220"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-auto text-foreground select-none pointer-events-none block filter blur-[1.5px]"
+              className="w-full h-auto text-foreground select-none pointer-events-none block"
             >
               {/* LevelUp */}
               <text
                 x="50%"
-                y="150"
+                y="85"
                 textAnchor="middle"
                 fill="url(#preloader_paint_levelup)"
                 className="font-display font-black select-none"
                 style={{
-                  fontSize: "205px",
+                  fontSize: "100px",
                   fontWeight: 900,
                   letterSpacing: "-0.01em",
                   fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
@@ -238,12 +249,12 @@ export function Preloader() {
               {/* Ecosystem */}
               <text
                 x="50%"
-                y="390"
+                y="198"
                 textAnchor="middle"
                 fill="url(#preloader_paint_ecosystem)"
                 className="font-display font-black select-none"
                 style={{
-                  fontSize: "295px",
+                  fontSize: "135px",
                   fontWeight: 900,
                   letterSpacing: "0.01em",
                   fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
@@ -254,26 +265,26 @@ export function Preloader() {
               <defs>
                 <linearGradient
                   id="preloader_paint_levelup"
-                  x1="785"
+                  x1="500"
                   y1="10"
-                  x2="785"
-                  y2="155"
+                  x2="500"
+                  y2="90"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="currentColor" stopOpacity="0.55" />
-                  <stop offset="1" stopColor="currentColor" stopOpacity="0.25" />
+                  <stop stopColor="currentColor" stopOpacity="0.85" />
+                  <stop offset="1" stopColor="currentColor" stopOpacity="0.45" />
                 </linearGradient>
 
                 <linearGradient
                   id="preloader_paint_ecosystem"
-                  x1="785"
-                  y1="160"
-                  x2="785"
-                  y2="400"
+                  x1="500"
+                  y1="95"
+                  x2="500"
+                  y2="205"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="currentColor" stopOpacity="0.38" />
-                  <stop offset="1" stopColor="currentColor" stopOpacity="0.12" />
+                  <stop stopColor="currentColor" stopOpacity="0.55" />
+                  <stop offset="1" stopColor="currentColor" stopOpacity="0.25" />
                 </linearGradient>
               </defs>
             </svg>

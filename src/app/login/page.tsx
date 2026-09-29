@@ -69,12 +69,12 @@ const Login = () => {
               </CardContent>
             </Card>
 
-            {/* LevelUp Ecosystem watermark mark at bottom of login */}
-            <div className="mt-8 flex flex-col items-center select-none pointer-events-none opacity-40 hover:opacity-60 transition-opacity">
-              <span className="text-xs font-bold tracking-tight text-foreground font-sans">
+            {/* LevelUp Ecosystem discreet watermark mark at bottom of login */}
+            <div className="mt-6 flex flex-col items-center select-none pointer-events-none opacity-25 hover:opacity-40 transition-opacity">
+              <span className="text-[10px] font-bold tracking-tight text-foreground font-sans">
                 LevelUp
               </span>
-              <span className="text-[9px] font-semibold tracking-[0.35em] uppercase text-muted-foreground">
+              <span className="text-[7.5px] font-semibold tracking-[0.28em] uppercase text-muted-foreground">
                 Ecosystem
               </span>
             </div>

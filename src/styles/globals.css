@@ -285,9 +285,12 @@
 html,
 body {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 body {
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Hide Next.js floating dev indicator badge */
