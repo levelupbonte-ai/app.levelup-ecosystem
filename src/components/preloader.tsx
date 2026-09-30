@@ -197,7 +197,7 @@ export function Preloader() {
                     ease: [0.25, 1, 0.5, 1],
                   }}
                 >
-                  Level up your online presence.
+                  LevelUp your online presence.
                 </motion.span>
               </h1>
 

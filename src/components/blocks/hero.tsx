@@ -48,7 +48,7 @@ export const Hero = () => {
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
           <SplitText
-            text="Level up your online presence."
+            text="LevelUp your online presence."
             as="h1"
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             delay={0.15}

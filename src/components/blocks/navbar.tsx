@@ -6,11 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
-  ArrowRight,
+  Activity,
   CalendarCheck,
   ChevronDown,
   ChevronRight,
-  LifeBuoy,
   Palette,
   ShieldCheck,
 } from "lucide-react";
@@ -24,7 +23,6 @@ const SERVICES_ITEMS = [
   {
     title: "Local Business & 24/7 Booking",
     href: "/services#local-business",
-    badge: "Most Popular",
     icon: CalendarCheck,
     description:
       "Fast, mobile-optimized sites with automated calendar sync for barbershops, salons, and clinics.",
@@ -32,7 +30,6 @@ const SERVICES_ITEMS = [
   {
     title: "Creator & Portfolio Websites",
     href: "/services#creators",
-    badge: "Custom Design",
     icon: Palette,
     description:
       "High-converting personal branding, portfolio decks, and custom digital storefronts.",
@@ -40,7 +37,6 @@ const SERVICES_ITEMS = [
   {
     title: "Website Security Check",
     href: "/services#security",
-    badge: "Plain-English",
     icon: ShieldCheck,
     description:
       "Plain-English technical audit of database rules, HTTPS, API keys, and account 2FA protection.",
@@ -48,8 +44,7 @@ const SERVICES_ITEMS = [
   {
     title: "Monthly Care Plans ($49/mo)",
     href: "/services#care-plans",
-    badge: "Peace of Mind",
-    icon: LifeBuoy,
+    icon: Activity,
     description:
       "Managed cloud hosting, daily automated snapshots, uptime monitoring, and fast edits.",
   },
@@ -64,25 +59,108 @@ const NAV_LINKS = [
 ];
 
 /**
- * Top brand logo typography:
- * Clean, neutral styling inspired by the footer, with LevelUp prominently sized,
- * Ecosystem distinctively smaller yet clearly legible, and proper breathing room.
+ * Top brand logo:
+ * Uses the exact same SVG, gradients, and font typography as the footer at the bottom of the site,
+ * scaled to small size with a sleek tilt on hover.
  */
-function HeaderLogo({ className }: { className?: string }) {
+function FooterStyleHeaderLogo({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex flex-col justify-center select-none text-left tracking-tight group transition-transform hover:scale-[1.02]",
+        "group relative select-none cursor-pointer transition-transform duration-300 ease-out hover:-rotate-2 hover:scale-[1.04] origin-bottom-left",
         className,
       )}
     >
-      <span className="text-[23px] sm:text-[25px] font-black tracking-tight text-foreground font-sans leading-tight">
-        LevelUp
-      </span>
-      <span className="text-[14px] sm:text-[15px] font-extrabold tracking-tight text-foreground/70 dark:text-foreground/60 font-sans leading-tight mt-0.5">
-        Ecosystem
-      </span>
+      <svg
+        viewBox="0 0 1000 220"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-32 sm:w-36 h-auto block select-none pointer-events-none text-foreground"
+      >
+        <text
+          x="50%"
+          y="85"
+          textAnchor="middle"
+          fill="url(#header_paint_levelup)"
+          className="font-display font-black select-none"
+          style={{
+            fontSize: "100px",
+            fontWeight: 900,
+            letterSpacing: "-0.01em",
+            fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
+          }}
+        >
+          LevelUp
+        </text>
+
+        <text
+          x="50%"
+          y="198"
+          textAnchor="middle"
+          fill="url(#header_paint_ecosystem)"
+          className="font-display font-black select-none"
+          style={{
+            fontSize: "135px",
+            fontWeight: 900,
+            letterSpacing: "0.01em",
+            fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
+          }}
+        >
+          Ecosystem
+        </text>
+
+        <defs>
+          <linearGradient
+            id="header_paint_levelup"
+            x1="500"
+            y1="10"
+            x2="500"
+            y2="90"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="currentColor" stopOpacity="0.95" />
+            <stop offset="1" stopColor="currentColor" stopOpacity="0.7" />
+          </linearGradient>
+
+          <linearGradient
+            id="header_paint_ecosystem"
+            x1="500"
+            y1="95"
+            x2="500"
+            y2="205"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="currentColor" stopOpacity="0.75" />
+            <stop offset="1" stopColor="currentColor" stopOpacity="0.45" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
+  );
+}
+
+/**
+ * Text Fill Hover Effect with Spring Physics:
+ * Physical translation on the Y-axis combined with a spring curve and refined neutral dark fill.
+ */
+function SpringNavText({ text, isActive }: { text: string; isActive?: boolean }) {
+  return (
+    <span className="relative inline-flex flex-col overflow-hidden h-[1.35em] leading-[1.35em] select-none pointer-events-none">
+      <span
+        className={cn(
+          "inline-block transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-full",
+          isActive ? "text-foreground font-semibold" : "text-foreground/80",
+        )}
+      >
+        {text}
+      </span>
+      <span
+        aria-hidden="true"
+        className="absolute top-full left-0 inline-block transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-full text-foreground font-semibold"
+      >
+        {text}
+      </span>
+    </span>
   );
 }
 
@@ -90,24 +168,63 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const lastScrollYRef = useRef(0);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
-  // Monitor scroll on desktop to toggle between top transparent bar and floating pill
+  // Monitor scroll for directional header (hides after 5s of scrolling down, shows immediately on scroll up)
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
+      const currentScrollY = window.scrollY;
+
+      // Track scroll progress along the top of the window
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = totalScroll > 0 ? (currentScrollY / totalScroll) * 100 : 0;
+      setScrollProgress(Math.min(100, Math.max(0, progress)));
+
+      if (currentScrollY <= 45) {
         setIsScrolled(false);
+        setShowHeader(true);
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current);
+          hideTimeoutRef.current = null;
+        }
+      } else {
+        setIsScrolled(true);
+
+        // If scrolling UP: immediately show the header and cancel any pending hide timer
+        if (currentScrollY < lastScrollYRef.current - 6) {
+          if (hideTimeoutRef.current) {
+            clearTimeout(hideTimeoutRef.current);
+            hideTimeoutRef.current = null;
+          }
+          setShowHeader(true);
+        }
+        // If scrolling DOWN: keep visible for 5 seconds of active scrolling before hiding
+        else if (currentScrollY > lastScrollYRef.current + 6) {
+          if (!hideTimeoutRef.current) {
+            hideTimeoutRef.current = setTimeout(() => {
+              setShowHeader(false);
+              hideTimeoutRef.current = null;
+            }, 5000); // Disappears after 5 seconds of scrolling
+          }
+        }
       }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    };
   }, []);
 
   // Handlers for desktop expanding mega-header for services
@@ -181,6 +298,14 @@ export const Navbar = () => {
 
   return (
     <>
+      {/* Discreet, subtle reading / scroll progress bar along the very top of the screen */}
+      <div className="fixed top-0 inset-x-0 z-[120] h-[1.5px] bg-transparent pointer-events-none">
+        <div
+          className="h-full bg-violet-500/35 dark:bg-violet-400/40 transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
       {/* Full-screen backdrop for mobile menu */}
       {isMenuOpen && (
         <div
@@ -193,7 +318,7 @@ export const Navbar = () => {
         />
       )}
 
-      {/* Top seamless gradient fade - visible on mobile or when scrolled on desktop */}
+      {/* Top seamless gradient fade - stays in place */}
       <div
         className={cn(
           "pointer-events-none fixed inset-x-0 top-0 z-[80] h-28 sm:h-32 bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_58%,transparent_100%)] transition-opacity duration-300",
@@ -207,20 +332,26 @@ export const Navbar = () => {
         onMouseEnter={handleHeaderEnter}
         onMouseLeave={handleHeaderLeave}
         className={cn(
-          "fixed left-1/2 z-[100] -translate-x-1/2 transition-all duration-300 ease-out",
-          // Mobile styles: compact floating pill
-          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-4xl max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
+          "fixed left-1/2 z-[100] -translate-x-1/2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          // Directional scroll behavior: hide header after 5 seconds of scrolling down, show immediately on scroll up
+          !showHeader && isScrolled && !isServicesOpen
+            ? "-translate-y-[150%] opacity-0 pointer-events-none"
+            : "translate-y-0 opacity-100",
           // Desktop Scrolled:
+          // Rounded-full when not expanded (rond comme avant)
+          // Rounded-2xl when expanded to display services (coins arrondis élégants)
           isScrolled &&
             cn(
-              "lg:top-5 lg:w-[min(94%,1100px)] lg:border lg:border-border/80 lg:bg-background/90 lg:backdrop-blur-md lg:shadow-[0_12px_36px_rgb(0,0,0,0.12)] dark:lg:shadow-[0_12px_36px_rgb(0,0,0,0.5)] lg:py-2.5 lg:px-6",
-              isServicesOpen ? "lg:rounded-3xl" : "lg:rounded-full",
+              "lg:top-5 lg:w-[min(94%,1080px)] lg:border lg:border-border/80 lg:bg-background/90 lg:backdrop-blur-md lg:shadow-[0_12px_36px_rgb(0,0,0,0.1)] dark:lg:shadow-[0_12px_36px_rgb(0,0,0,0.45)] lg:py-2.5 lg:px-6",
+              isServicesOpen ? "lg:rounded-2xl" : "lg:rounded-full",
             ),
-          // Desktop Unscrolled (at top):
+          // Desktop Unscrolled (at top of page):
           !isScrolled &&
             (isServicesOpen
-              ? "lg:top-3 lg:w-[min(94%,1100px)] lg:rounded-3xl lg:border lg:border-border/80 lg:bg-background/95 lg:backdrop-blur-md lg:shadow-[0_16px_40px_rgb(0,0,0,0.14)] dark:lg:shadow-[0_16px_40px_rgb(0,0,0,0.55)] lg:py-4 lg:px-7"
+              ? "lg:top-4 lg:w-[min(94%,1080px)] lg:rounded-2xl lg:border lg:border-border/80 lg:bg-background/95 lg:backdrop-blur-md lg:shadow-[0_16px_40px_rgb(0,0,0,0.12)] dark:lg:shadow-[0_16px_40px_rgb(0,0,0,0.5)] lg:py-3.5 lg:px-6"
               : "lg:top-0 lg:w-full lg:max-w-7xl lg:rounded-none lg:border-transparent lg:bg-transparent lg:shadow-none lg:backdrop-blur-none lg:py-6 lg:px-8 xl:px-12"),
+          // Mobile styles: rounded pill
+          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-full max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
         )}
       >
         <div className="flex items-center justify-between px-6 py-3 lg:p-0">
@@ -234,14 +365,14 @@ export const Navbar = () => {
               setIsServicesOpen(false);
             }}
           >
-            {/* Mobile Logo */}
+            {/* Mobile Logo: Star */}
             <div className="lg:hidden">
               <Logo />
             </div>
 
             {/* Desktop Logo:
-                - At top of page: clean, enlarged LevelUp Ecosystem without star.
-                - When scrolled: smoothly disappears and gives way to the star icon. */}
+                - At top of page (!isScrolled): EXACT same SVG typography as the footer at the bottom of the site.
+                - When header is active / scrolled: ALWAYS the star icon, never LevelUp Ecosystem. */}
             <div className="max-lg:hidden flex items-center">
               {isScrolled ? (
                 <div className="transition-all duration-200 animate-in fade-in zoom-in-95">
@@ -249,13 +380,13 @@ export const Navbar = () => {
                 </div>
               ) : (
                 <div className="transition-all duration-200 animate-in fade-in">
-                  <HeaderLogo />
+                  <FooterStyleHeaderLogo />
                 </div>
               )}
             </div>
           </Link>
 
-          {/* Desktop Navigation Links with Violet Hover Bubble Effect */}
+          {/* Desktop Navigation Links with Spring Physical Shift & Dark Capsule */}
           <nav className="max-lg:hidden flex items-center gap-1 xl:gap-1.5">
             {/* Services button with mega-menu expander trigger */}
             <button
@@ -263,27 +394,27 @@ export const Navbar = () => {
               onMouseEnter={handleServicesEnter}
               onClick={() => setIsServicesOpen((prev) => !prev)}
               className={cn(
-                "group relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors cursor-pointer select-none",
+                "group relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 cursor-pointer select-none",
                 isServicesOpen || pathname === "/services"
-                  ? "text-violet-600 dark:text-violet-400 font-semibold"
-                  : "text-foreground/85 hover:text-foreground",
+                  ? "text-foreground font-semibold"
+                  : "text-foreground/80 hover:text-foreground",
               )}
             >
-              {/* Violet expanding bubble */}
+              {/* Subtle dark spring capsule */}
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-0 rounded-full bg-violet-500/15 dark:bg-violet-400/20 border border-violet-500/25 dark:border-violet-400/30 transition-all duration-200 ease-out pointer-events-none -z-10",
+                  "absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10",
                   isServicesOpen || pathname === "/services"
                     ? "scale-100 opacity-100"
                     : "scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100",
                 )}
               />
-              <span>Services</span>
+              <SpringNavText text="Services" isActive={isServicesOpen || pathname === "/services"} />
               <ChevronDown
                 className={cn(
-                  "size-3.5 transition-transform duration-200 opacity-70 group-hover:opacity-100",
-                  isServicesOpen && "rotate-180 text-violet-600 dark:text-violet-400 opacity-100",
+                  "size-3.5 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] opacity-70 group-hover:opacity-100",
+                  isServicesOpen && "rotate-180 opacity-100 text-foreground",
                 )}
               />
             </button>
@@ -296,27 +427,24 @@ export const Navbar = () => {
                   key={link.label}
                   href={link.href}
                   onMouseEnter={() => {
-                    // Close services expander when hovering other items
                     setIsServicesOpen(false);
                   }}
                   className={cn(
-                    "group relative inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors select-none",
-                    isActive
-                      ? "text-violet-600 dark:text-violet-400 font-semibold"
-                      : "text-foreground/85 hover:text-foreground",
+                    "group relative inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 select-none",
+                    isActive ? "text-foreground font-semibold" : "text-foreground/80 hover:text-foreground",
                   )}
                 >
-                  {/* Violet expanding bubble on hover */}
+                  {/* Subtle dark spring capsule */}
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "absolute inset-0 rounded-full bg-violet-500/15 dark:bg-violet-400/20 border border-violet-500/25 dark:border-violet-400/30 transition-all duration-200 ease-out pointer-events-none -z-10",
+                      "absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10",
                       isActive
                         ? "scale-100 opacity-100"
                         : "scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100",
                     )}
                   />
-                  <span>{link.label}</span>
+                  <SpringNavText text={link.label} isActive={isActive} />
                 </Link>
               );
             })}
@@ -346,15 +474,15 @@ export const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "group relative rounded-full font-medium text-foreground/85 hover:text-foreground transition-all cursor-pointer",
+                    "group relative rounded-full font-medium text-foreground/80 hover:text-foreground transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 cursor-pointer",
                     !isScrolled && !isServicesOpen ? "px-4 py-2 text-sm" : "px-3 py-1.5 text-xs",
                   )}
                 >
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 rounded-full bg-violet-500/15 dark:bg-violet-400/20 border border-violet-500/25 dark:border-violet-400/30 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-200 pointer-events-none -z-10"
+                    className="absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10"
                   />
-                  <span>Login</span>
+                  <SpringNavText text="Login" />
                 </Button>
               </Link>
             </div>
@@ -390,16 +518,16 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Expanding Mega Header for Services:
-            Spreads out the header downwards smoothly with professional grid presentation */}
+            Clean presentation with rounded-2xl container when opened */}
         <div
           className={cn(
-            "overflow-hidden transition-all duration-300 ease-in-out max-lg:hidden",
+            "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] max-lg:hidden",
             isServicesOpen
-              ? "max-h-[380px] opacity-100 mt-4 pt-4 border-t border-border/50"
+              ? "max-h-[260px] opacity-100 mt-3 pt-3 border-t border-border/50"
               : "max-h-0 opacity-0 mt-0 pt-0 border-t-0 pointer-events-none",
           )}
         >
-          <div className="grid grid-cols-4 gap-4 px-2 pb-2">
+          <div className="grid grid-cols-4 gap-3 px-1 pb-1">
             {SERVICES_ITEMS.map((service) => {
               const Icon = service.icon;
               return (
@@ -407,43 +535,20 @@ export const Navbar = () => {
                   key={service.title}
                   href={service.href}
                   onClick={() => setIsServicesOpen(false)}
-                  className="group relative flex flex-col justify-between p-3.5 rounded-2xl border border-transparent hover:border-violet-500/25 hover:bg-violet-500/5 dark:hover:bg-violet-400/10 transition-all duration-200 select-none"
+                  className="group relative flex flex-col p-3.5 rounded-xl hover:bg-foreground/[0.04] dark:hover:bg-foreground/[0.06] transition-all duration-200 select-none"
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="size-9 rounded-xl bg-violet-500/15 dark:bg-violet-400/20 text-violet-600 dark:text-violet-400 flex items-center justify-center transition-transform group-hover:scale-110">
-                        <Icon className="size-4.5" />
-                      </div>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground group-hover:bg-violet-500/20 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors">
-                        {service.badge}
-                      </span>
-                    </div>
-                    <h3 className="text-sm font-semibold text-foreground group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors leading-snug">
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <Icon className="size-5 text-foreground/80 group-hover:text-foreground transition-colors shrink-0" />
+                    <h3 className="text-sm font-semibold text-foreground group-hover:translate-x-0.5 transition-transform leading-snug">
                       {service.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mt-1.5">
-                      {service.description}
-                    </p>
                   </div>
-                  <div className="flex items-center gap-1 text-[11px] font-semibold text-violet-600 dark:text-violet-400 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-1 group-hover:translate-x-0">
-                    <span>Learn more</span>
-                    <ArrowRight className="size-3" />
-                  </div>
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                    {service.description}
+                  </p>
                 </Link>
               );
             })}
-          </div>
-
-          <div className="flex items-center justify-between px-3 py-2 mt-2 border-t border-border/40 text-xs text-muted-foreground">
-            <span>Tailored web design &amp; security for San Diego businesses</span>
-            <Link
-              href="/services"
-              onClick={() => setIsServicesOpen(false)}
-              className="inline-flex items-center gap-1 font-semibold text-foreground hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-            >
-              <span>Explore all services</span>
-              <ArrowRight className="size-3" />
-            </Link>
           </div>
         </div>
 
