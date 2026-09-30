@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
+import { Preloader } from "@/components/preloader";
 import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -218,6 +219,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <Preloader />
           <StyleGlideProvider />
           <ScrollProgressBar />
           <Navbar />

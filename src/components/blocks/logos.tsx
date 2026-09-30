@@ -96,7 +96,7 @@ export const Logos = () => {
   ];
 
   return (
-    <section className="pb-28 lg:pb-32 overflow-hidden">
+    <section id="logos-section" className="pb-28 lg:pb-32 overflow-hidden">
       <div className="container space-y-10 lg:space-y-16">
         <ScrollReveal yOffset={20} duration={0.7}>
           <div className="text-center">

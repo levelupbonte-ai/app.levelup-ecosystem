@@ -172,12 +172,12 @@ export const Navbar = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const lastScrollYRef = useRef(0);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
-  // Monitor scroll for directional header (hides after 5s of scrolling down, shows immediately on scroll up)
+  // Monitor scroll: Header disappears when arriving at "Powering the world's best product teams" zone,
+  // and reappears when scrolling back up.
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -190,28 +190,27 @@ export const Navbar = () => {
       if (currentScrollY <= 45) {
         setIsScrolled(false);
         setShowHeader(true);
-        if (hideTimeoutRef.current) {
-          clearTimeout(hideTimeoutRef.current);
-          hideTimeoutRef.current = null;
-        }
       } else {
         setIsScrolled(true);
 
-        // If scrolling UP: immediately show the header and cancel any pending hide timer
+        // Check if user has reached the "Powering the world's best product teams" zone
+        const logosZone = document.getElementById("logos-section");
+        const hasArrivedAtZone = logosZone
+          ? logosZone.getBoundingClientRect().top <= 140
+          : currentScrollY > 400;
+
+        // If scrolling UP: always reveal the header fluidly
         if (currentScrollY < lastScrollYRef.current - 6) {
-          if (hideTimeoutRef.current) {
-            clearTimeout(hideTimeoutRef.current);
-            hideTimeoutRef.current = null;
-          }
           setShowHeader(true);
         }
-        // If scrolling DOWN: keep visible for 5 seconds of active scrolling before hiding
+        // If scrolling DOWN:
         else if (currentScrollY > lastScrollYRef.current + 6) {
-          if (!hideTimeoutRef.current) {
-            hideTimeoutRef.current = setTimeout(() => {
-              setShowHeader(false);
-              hideTimeoutRef.current = null;
-            }, 5000); // Disappears after 5 seconds of scrolling
+          if (hasArrivedAtZone) {
+            // Arrived at the logos section -> hide header fluidly
+            setShowHeader(false);
+          } else {
+            // Still in the hero zone -> keep header visible
+            setShowHeader(true);
           }
         }
       }
@@ -221,10 +220,7 @@ export const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Handlers for desktop expanding mega-header for services
@@ -318,11 +314,17 @@ export const Navbar = () => {
         />
       )}
 
-      {/* Top seamless gradient fade - stays in place */}
+      {/* Top seamless gradient fade:
+          - When header is hidden: keeps a short/shallow rim (h-7 sm:h-8 opacity-60) leaving full room to read
+          - When header is present: smoothly expands to normal height (h-20 sm:h-24 opacity-100) */}
       <div
         className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 z-[80] h-28 sm:h-32 bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_58%,transparent_100%)] transition-opacity duration-300",
-          !isScrolled && !isServicesOpen ? "max-lg:opacity-100 lg:opacity-0" : "opacity-100",
+          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_55%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          !showHeader && isScrolled
+            ? "h-7 sm:h-8 opacity-60 translate-y-0"
+            : !isScrolled && !isServicesOpen
+              ? "h-20 sm:h-24 max-lg:opacity-100 lg:opacity-0 translate-y-0"
+              : "h-20 sm:h-24 opacity-100 translate-y-0",
         )}
         aria-hidden="true"
       />
@@ -333,25 +335,20 @@ export const Navbar = () => {
         onMouseLeave={handleHeaderLeave}
         className={cn(
           "fixed left-1/2 z-[100] -translate-x-1/2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          // Directional scroll behavior: hide header after 5 seconds of scrolling down, show immediately on scroll up
+          // Directional scroll behavior: hide header when arriving at logos zone, show immediately on scroll up
           !showHeader && isScrolled && !isServicesOpen
             ? "-translate-y-[150%] opacity-0 pointer-events-none"
             : "translate-y-0 opacity-100",
-          // Desktop Scrolled:
-          // Rounded-full when not expanded (rond comme avant)
-          // Rounded-2xl when expanded to display services (coins arrondis élégants)
+          // Desktop Scrolled: consistent rounded-2xl to prevent any morphing or conflict
           isScrolled &&
-            cn(
-              "lg:top-5 lg:w-[min(94%,1080px)] lg:border lg:border-border/80 lg:bg-background/90 lg:backdrop-blur-md lg:shadow-[0_12px_36px_rgb(0,0,0,0.1)] dark:lg:shadow-[0_12px_36px_rgb(0,0,0,0.45)] lg:py-2.5 lg:px-6",
-              isServicesOpen ? "lg:rounded-2xl" : "lg:rounded-full",
-            ),
+            "lg:top-5 lg:w-[min(94%,1080px)] lg:rounded-2xl lg:border lg:border-border/80 lg:bg-background/90 lg:backdrop-blur-md lg:shadow-[0_12px_36px_rgb(0,0,0,0.1)] dark:lg:shadow-[0_12px_36px_rgb(0,0,0,0.45)] lg:py-2.5 lg:px-6",
           // Desktop Unscrolled (at top of page):
           !isScrolled &&
             (isServicesOpen
               ? "lg:top-4 lg:w-[min(94%,1080px)] lg:rounded-2xl lg:border lg:border-border/80 lg:bg-background/95 lg:backdrop-blur-md lg:shadow-[0_16px_40px_rgb(0,0,0,0.12)] dark:lg:shadow-[0_16px_40px_rgb(0,0,0,0.5)] lg:py-3.5 lg:px-6"
               : "lg:top-0 lg:w-full lg:max-w-7xl lg:rounded-none lg:border-transparent lg:bg-transparent lg:shadow-none lg:backdrop-blur-none lg:py-6 lg:px-8 xl:px-12"),
-          // Mobile styles: rounded pill
-          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-full max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
+          // Mobile styles: rounded-2xl
+          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-2xl max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
         )}
       >
         <div className="flex items-center justify-between px-6 py-3 lg:p-0">
