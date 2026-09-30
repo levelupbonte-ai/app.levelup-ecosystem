@@ -101,6 +101,10 @@ function ScaleOnScrollItem({
   // Upward elevation: 36px -> 0px
   const y = useTransform(smoothProgress, [0, 1], [36, 0]);
 
+  // Mobile horizontal landscape pan:
+  // Shows a large-format view of Final Stop and slides smoothly across from left to right as you scroll
+  const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-46%"]);
+
   return (
     <div
       ref={containerRef}
@@ -116,7 +120,9 @@ function ScaleOnScrollItem({
           }}
           className={cn(
             "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu will-change-transform ring-1 ring-border/40",
-            item.aspectRatio,
+            item.id === "final-stop"
+              ? "md:aspect-[639/298] max-md:h-[265px] max-md:sm:h-[310px]"
+              : item.aspectRatio,
           )}
         >
           {item.external ? (
@@ -127,15 +133,36 @@ function ScaleOnScrollItem({
               aria-label={`Visit ${item.title}`}
               className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                referrerPolicy="no-referrer"
-                className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
-                sizes="(max-width: 768px) 100vw, 1024px"
-                priority
-              />
+              {/* Desktop view (md and up): full snug landscape layout */}
+              <div className="hidden md:flex relative w-full h-full items-center justify-center">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  referrerPolicy="no-referrer"
+                  className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                  sizes="1024px"
+                  priority
+                />
+              </div>
+
+              {/* Mobile view (< md): large-format crop that pans horizontally across as user scrolls */}
+              <div className="md:hidden relative w-full h-full overflow-hidden rounded-xl flex items-center bg-muted/20">
+                <motion.div
+                  style={{ x: mobileSlideX }}
+                  className="relative h-full w-[190%] sm:w-[170%] shrink-0 will-change-transform"
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    referrerPolicy="no-referrer"
+                    className="object-cover object-left"
+                    sizes="750px"
+                    priority
+                  />
+                </motion.div>
+              </div>
             </a>
           ) : (
             <Link

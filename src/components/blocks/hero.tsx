@@ -65,20 +65,20 @@ export const Hero = () => {
           <ScrollReveal yOffset={20} duration={0.8} delay={0.45}>
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
               <Button asChild>
-                <a href="/#feature-modern-teams">
-                  Explore services
+                <a href="/contact">
+                  Book now
                 </a>
               </Button>
               <Button
                 variant="outline"
-                className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md"
+                className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md font-semibold"
                 asChild
               >
                 <a
                   href="/contact"
                   className="max-w-56 truncate text-start md:max-w-none"
                 >
-                  Get in touch
+                  Construisons ton site
                   <ArrowRight className="stroke-3" />
                 </a>
               </Button>
