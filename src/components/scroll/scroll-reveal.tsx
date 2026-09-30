@@ -25,9 +25,9 @@ export function ScrollReveal({
   className,
   delay = 0,
   duration = 0.7,
-  yOffset = 32,
+  yOffset = 24,
   xOffset = 0,
-  scale = 0.98,
+  scale = 0.99,
   once = true,
 }: ScrollRevealProps) {
   return (
@@ -44,7 +44,7 @@ export function ScrollReveal({
         x: 0,
         scale: 1,
       }}
-      viewport={{ once, margin: "-60px" }}
+      viewport={{ once, margin: "0px", amount: 0.05 }}
       transition={{
         duration,
         delay,
@@ -77,7 +77,7 @@ export function ScrollStagger({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-50px" }}
+      viewport={{ once, margin: "0px", amount: 0.05 }}
       variants={{
         hidden: {},
         visible: {
@@ -125,7 +125,7 @@ export function ScrollStaggerItem({
 
 /**
  * Interactive 3D Perspective Scroll Card (like Linear / Apple hero showcases)
- * As the user scrolls, the mockup smoothly levels out from a 3D tilted plane.
+ * Keeps full opacity and smooth tilt without breaking ancestor overflow or iframe rendering.
  */
 export function ScrollPerspectiveCard({
   children,
@@ -146,22 +146,20 @@ export function ScrollPerspectiveCard({
     restDelta: 0.001,
   });
 
-  const rotateX = useTransform(smoothProgress, [0, 1], [14, 0]);
-  const scale = useTransform(smoothProgress, [0, 1], [0.92, 1]);
-  const y = useTransform(smoothProgress, [0, 1], [50, 0]);
-  const opacity = useTransform(smoothProgress, [0, 0.3, 1], [0.4, 0.85, 1]);
+  const rotateX = useTransform(smoothProgress, [0, 1], [6, 0]);
+  const scale = useTransform(smoothProgress, [0, 1], [0.97, 1]);
+  const y = useTransform(smoothProgress, [0, 1], [20, 0]);
 
   return (
-    <div ref={ref} style={{ perspective: 1200 }} className={className}>
+    <div ref={ref} className={className}>
       <motion.div
         style={{
           rotateX,
           scale,
           y,
-          opacity,
-          transformStyle: "preserve-3d",
+          opacity: 1,
         }}
-        className="w-full"
+        className="w-full transform-gpu"
       >
         {children}
       </motion.div>

@@ -95,6 +95,7 @@ export const ResourceAllocation = () => {
                   alt={item.image.alt}
                   width={item.image.width}
                   height={item.image.height}
+                  referrerPolicy="no-referrer"
                   className="max-h-48 sm:max-h-56 w-auto object-contain rounded-lg"
                 />
               </div>

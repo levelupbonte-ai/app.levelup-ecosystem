@@ -1,5 +1,6 @@
 import React from "react";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowUpRight, ExternalLink, MapPin } from "lucide-react";
@@ -86,6 +87,19 @@ export default function ProjectsPage() {
                     </Link>
                   </Button>
                 </div>
+              </div>
+
+              {/* Project Preview Image */}
+              <div className="relative w-full aspect-[16/8] sm:aspect-[16/7] rounded-2xl overflow-hidden border border-border/70 bg-muted/30">
+                <Image
+                  src="/projects/final-stop.png"
+                  alt="Final Stop Barber Shop & Salon Website"
+                  fill
+                  className="object-contain"
+                  referrerPolicy="no-referrer"
+                  sizes="(max-width: 768px) 100vw, 1000px"
+                  priority
+                />
               </div>
 
               {/* Case Study Deep Dive */}

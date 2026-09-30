@@ -119,16 +119,18 @@ export const Hero = () => {
         </div>
       </div>
 
-      {/* 3D Perspective Scroll Card for Hero Mockup */}
-      <div className="mt-12 max-lg:ml-6 max-lg:h-[550px] max-lg:overflow-hidden md:mt-20 lg:container lg:mt-24">
+      {/* Perspective Card for Hero Mockup */}
+      <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 container max-w-7xl">
         <ScrollPerspectiveCard>
-          <div className="relative h-[793px] w-full">
+          <div className="relative h-[340px] sm:h-[480px] md:h-[620px] lg:h-[760px] w-full overflow-hidden rounded-2xl md:rounded-3xl border border-border/70 shadow-2xl bg-card">
             <Image
               src="/hero.webp"
-              alt="hero"
+              alt="LevelUp Ecosystem Platform"
               fill
               priority
-              className="rounded-2xl object-cover object-left-top shadow-2xl ring-1 ring-border/50 max-lg:rounded-tr-none"
+              sizes="(max-width: 768px) 100vw, 1280px"
+              referrerPolicy="no-referrer"
+              className="object-cover object-left-top"
             />
           </div>
         </ScrollPerspectiveCard>

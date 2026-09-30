@@ -1,35 +1,237 @@
+"use client";
+
+import React, { useRef } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 
-import { ChevronRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
 
 import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
-import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-const items = [
+interface ProjectItem {
+  id: string;
+  step: string;
+  badge: string;
+  title: string;
+  description: string;
+  image: string;
+  href: string;
+  external?: boolean;
+  aspectRatio: string;
+}
+
+const items: ProjectItem[] = [
   {
-    title: "24/7 online booking with calendar sync",
-    image: "/features/triage-card.svg",
-    href: "/services#local-business",
+    id: "final-stop",
+    step: "01",
+    badge: "Client Case Study • San Diego, CA",
+    title: "Final Stop Barber Shop & Salon",
+    description:
+      "Replacing endless phone tag with 24/7 mobile appointment booking, staff selection, and automated calendar sync for a premier San Diego barbershop and salon. Sub-1.8s mobile load speed with 100% custom code ownership.",
+    image: "/projects/final-stop.png",
+    href: "https://finalstop.org",
+    external: true,
+    aspectRatio: "aspect-[639/298]",
   },
   {
-    title: "Local SEO & Google Business integration",
-    image: "/features/cycle-card.svg",
-    href: "/services#seo",
-  },
-  {
-    title: "Cybersecurity basics & automated backups",
+    id: "concept-architecture",
+    step: "02",
+    badge: "Spatial & Creative Portfolio",
+    title: "Concept Architecture Studio",
+    description:
+      "Bespoke digital architecture firm portfolio with high-resolution imagery, subtle perspective reveals, and minimalist typography engineered to showcase architectural forms without builder bloat.",
     image: "/features/overview-card.svg",
-    href: "/services#security",
+    href: "/projects",
+    external: false,
+    aspectRatio: "aspect-[16/10]",
+  },
+  {
+    id: "concept-wellness",
+    step: "03",
+    badge: "Multi-Practitioner Scheduling",
+    title: "Concept Wellness Clinic & Spa",
+    description:
+      "24/7 automated booking engine with practitioner selection, service menus, and calendar synchronization designed for clinics and local wellness studios to convert visitors into appointments.",
+    image: "/features/cycle-card.svg",
+    href: "/projects",
+    external: false,
+    aspectRatio: "aspect-[16/10]",
   },
 ];
 
+/**
+ * Scale-on-Scroll Project Showcase Item
+ * Optimized for mobile touch & desktop:
+ * Starts visibly scaled down (~76-78%) in the viewport and expands smoothly
+ * to full width (100%) as the user scrolls through it.
+ */
+function ScaleOnScrollItem({
+  item,
+  isLast,
+}: {
+  item: ProjectItem;
+  isLast: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mobile & desktop scroll tracking:
+  // Starts when card enters 90% of screen (clearly visible to user so they see it grow)
+  // Reaches full scale at 48% (optical center of the screen)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 90%", "center 48%"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 22,
+    mass: 0.15,
+    restDelta: 0.001,
+  });
+
+  // Scale: starts visibly compact at 76% (0.76) on mobile and expands to full 100% (1.0)
+  const scale = useTransform(smoothProgress, [0, 1], [0.76, 1]);
+  // Smooth opacity: 0.65 -> 1.0
+  const opacity = useTransform(smoothProgress, [0, 0.4, 1], [0.65, 0.9, 1]);
+  // Upward elevation: 36px -> 0px
+  const y = useTransform(smoothProgress, [0, 1], [36, 0]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full max-w-4xl mx-auto px-2 sm:px-4"
+    >
+      {/* 1. Zoomable Image Showcase with tight snug bubble frame */}
+      <div className="w-full flex justify-center">
+        <motion.div
+          style={{
+            scale,
+            opacity,
+            y,
+          }}
+          className={cn(
+            "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu will-change-transform ring-1 ring-border/40",
+            item.aspectRatio,
+          )}
+        >
+          {item.external ? (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${item.title}`}
+              className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
+            >
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                referrerPolicy="no-referrer"
+                className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                sizes="(max-width: 768px) 100vw, 1024px"
+                priority
+              />
+            </a>
+          ) : (
+            <Link
+              href={item.href}
+              aria-label={`Explore ${item.title}`}
+              className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
+            >
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                referrerPolicy="no-referrer"
+                className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                sizes="(max-width: 768px) 100vw, 1024px"
+                priority
+              />
+            </Link>
+          )}
+        </motion.div>
+      </div>
+
+      {/* 2. Text description & Tilted Arrow Circular Button */}
+      <div className="mt-6 sm:mt-8 px-1 sm:px-2 flex items-end justify-between gap-4 sm:gap-6">
+        <div className="space-y-2 sm:space-y-3 flex-1 pr-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold tracking-widest text-primary uppercase">
+              {item.step}
+            </span>
+            <span className="text-muted-foreground/40">•</span>
+            <span className="text-[11px] sm:text-xs font-mono tracking-wider text-muted-foreground uppercase line-clamp-1">
+              {item.badge}
+            </span>
+          </div>
+
+          {item.external ? (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/title block"
+            >
+              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                {item.title}
+              </h3>
+            </a>
+          ) : (
+            <Link href={item.href} className="group/title block">
+              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                {item.title}
+              </h3>
+            </Link>
+          )}
+
+          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-3 sm:line-clamp-none">
+            {item.description}
+          </p>
+        </div>
+
+        {/* Tilted Arrow Circular Button */}
+        <div className="shrink-0 flex items-center mb-1">
+          {item.external ? (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${item.title}`}
+              className="size-11 sm:size-13 md:size-14 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+            >
+              <ArrowUpRight className="size-5 sm:size-6 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            </a>
+          ) : (
+            <Link
+              href={item.href}
+              aria-label={`Explore ${item.title}`}
+              className="size-11 sm:size-13 md:size-14 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+            >
+              <ArrowUpRight className="size-5 sm:size-6 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Subtle dashed divider between each item */}
+      {!isLast && (
+        <div className="mt-14 sm:mt-20 lg:mt-28">
+          <DashedLine orientation="horizontal" className="w-full opacity-60" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export const Features = () => {
   return (
-    <section id="feature-modern-teams" className="pb-28 lg:pb-32">
-      <div className="container">
+    <section id="feature-modern-teams" className="pb-28 lg:pb-36 pt-8">
+      <div className="container max-w-6xl">
         {/* Top dashed line with text */}
         <ScrollReveal yOffset={16} duration={0.6}>
           <div className="relative flex items-center justify-center">
@@ -40,69 +242,32 @@ export const Features = () => {
           </div>
         </ScrollReveal>
 
-        {/* Content */}
-        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-3 md:gap-8 lg:mt-24 lg:grid-cols-2">
+        {/* Section Heading */}
+        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-4 md:gap-8 lg:mt-20 lg:grid-cols-2 mb-16 sm:mb-20 lg:mb-28">
           <SplitText
-            text="Engineered for real-world client bookings"
+            text="Selected studio work & live projects"
             as="h2"
-            className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-bold"
+            className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-extrabold"
             stagger={0.05}
           />
           <ScrollReveal yOffset={20} duration={0.7} delay={0.15}>
-            <p className="text-muted-foreground leading-relaxed">
-              Most agencies deliver slow, bloated template sites that cost thousands and lag on phones.
-              LevelUp builds lightweight, bespoke websites engineered for frictionless customer appointment
-              scheduling, sub-2s mobile loading, and top Google search rankings.
+            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">
+              Explore our recent bespoke web projects, engineered for frictionless 24/7 customer appointment
+              scheduling, sub-2s mobile loading, and top Google search rankings in San Diego and beyond.
             </p>
           </ScrollReveal>
         </div>
 
-        {/* Features Card with Stagger */}
-        <ScrollReveal yOffset={32} duration={0.8} delay={0.15}>
-          <Card className="mt-8 rounded-3xl md:mt-12 lg:mt-20 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="flex p-0 max-md:flex-col">
-              {items.map((item, i) => (
-                <div key={i} className="flex flex-1 max-md:flex-col group">
-                  <div className="flex-1 p-4 pe-0! md:p-6">
-                    <div className="relative aspect-[1.28/1] overflow-hidden rounded-xl">
-                      <Image
-                        src={item.image}
-                        alt={`${item.title} interface`}
-                        fill
-                        className="object-cover object-left-top ps-4 pt-2 transition-transform duration-500 group-hover:scale-[1.03]"
-                      />
-                      <div className="from-background absolute inset-0 z-10 bg-linear-to-t via-transparent to-transparent" />
-                    </div>
-
-                    <Link
-                      href={item.href}
-                      className={
-                        "group/link flex items-center justify-between gap-4 pe-4 pt-4 md:pe-6 md:pt-6"
-                      }
-                    >
-                      <h3 className="font-display max-w-60 text-xl md:text-2xl leading-tight font-bold tracking-tight">
-                        {item.title}
-                      </h3>
-                      <div className="rounded-full border p-2 transition-colors group-hover/link:bg-accent">
-                        <ChevronRight className="size-6 transition-transform group-hover/link:translate-x-1 lg:size-9" />
-                      </div>
-                    </Link>
-                  </div>
-                  {i < items.length - 1 && (
-                    <div className="relative hidden md:block">
-                      <DashedLine orientation="vertical" />
-                    </div>
-                  )}
-                  {i < items.length - 1 && (
-                    <div className="relative block md:hidden">
-                      <DashedLine orientation="horizontal" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </ScrollReveal>
+        {/* Stacked Scale-on-Scroll Showcase Items */}
+        <div className="space-y-14 sm:space-y-20 lg:space-y-28">
+          {items.map((item, index) => (
+            <ScaleOnScrollItem
+              key={item.id}
+              item={item}
+              isLast={index === items.length - 1}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
