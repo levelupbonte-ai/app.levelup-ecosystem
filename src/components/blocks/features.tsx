@@ -23,6 +23,7 @@ interface ProjectItem {
   href: string;
   external?: boolean;
   aspectRatio: string;
+  ctaText: string;
 }
 
 const items: ProjectItem[] = [
@@ -32,35 +33,38 @@ const items: ProjectItem[] = [
     badge: "Client Case Study • San Diego, CA",
     title: "Final Stop Barber Shop & Salon",
     description:
-      "Replacing endless phone tag with 24/7 mobile appointment booking, staff selection, and automated calendar sync for a premier San Diego barbershop and salon. Sub-1.8s mobile load speed with 100% custom code ownership.",
+      "Engineered a high-performance booking engine that eliminates phone tag through 24/7 client self-scheduling, real-time barber calendar synchronization, and automated reminders. Built with zero third-party builder bloat to guarantee sub-1.8s mobile page speeds and top Google Local rankings.",
     image: "/projects/final-stop.png",
     href: "https://finalstop.org",
     external: true,
     aspectRatio: "aspect-[639/298]",
+    ctaText: "Visit site",
   },
   {
     id: "concept-architecture",
     step: "02",
-    badge: "Spatial & Creative Portfolio",
+    badge: "Spatial Design & Architecture",
     title: "Concept Architecture Studio",
     description:
-      "Bespoke digital architecture firm portfolio with high-resolution imagery, subtle perspective reveals, and minimalist typography engineered to showcase architectural forms without builder bloat.",
+      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
     image: "/features/overview-card.svg",
     href: "/projects",
     external: false,
     aspectRatio: "aspect-[16/10]",
+    ctaText: "Explore",
   },
   {
     id: "concept-wellness",
     step: "03",
-    badge: "Multi-Practitioner Scheduling",
+    badge: "Multi-Practitioner Booking",
     title: "Concept Wellness Clinic & Spa",
     description:
-      "24/7 automated booking engine with practitioner selection, service menus, and calendar synchronization designed for clinics and local wellness studios to convert visitors into appointments.",
+      "Streamlined patient intake and appointment platform featuring multi-staff scheduling, customized treatment selection, and synchronized calendar notifications for local medical wellness practices.",
     image: "/features/cycle-card.svg",
     href: "/projects",
     external: false,
     aspectRatio: "aspect-[16/10]",
+    ctaText: "Explore",
   },
 ];
 
@@ -94,16 +98,17 @@ function ScaleOnScrollItem({
     restDelta: 0.001,
   });
 
-  // Scale: starts visibly compact at 76% (0.76) on mobile and expands to full 100% (1.0)
-  const scale = useTransform(smoothProgress, [0, 1], [0.76, 1]);
-  // Smooth opacity: 0.65 -> 1.0
-  const opacity = useTransform(smoothProgress, [0, 0.4, 1], [0.65, 0.9, 1]);
-  // Upward elevation: 36px -> 0px
-  const y = useTransform(smoothProgress, [0, 1], [36, 0]);
+  // Scale: starts visibly compact at 82% on mobile and expands to full 100% (1.0)
+  // taking almost the entire width of the mobile phone with clean breathing room
+  const scale = useTransform(smoothProgress, [0, 1], [0.82, 1]);
+  // Smooth opacity: 0.70 -> 1.0
+  const opacity = useTransform(smoothProgress, [0, 0.4, 1], [0.7, 0.9, 1]);
+  // Upward elevation: 28px -> 0px
+  const y = useTransform(smoothProgress, [0, 1], [28, 0]);
 
   // Mobile horizontal landscape pan:
   // Shows a large-format view of Final Stop and slides smoothly across from left to right as you scroll
-  const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-46%"]);
+  const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-38%"]);
 
   return (
     <div
@@ -121,7 +126,7 @@ function ScaleOnScrollItem({
           className={cn(
             "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu will-change-transform ring-1 ring-border/40",
             item.id === "final-stop"
-              ? "md:aspect-[639/298] max-md:h-[265px] max-md:sm:h-[310px]"
+              ? "md:aspect-[639/298] max-md:h-[280px] max-md:sm:h-[320px]"
               : item.aspectRatio,
           )}
         >
@@ -150,7 +155,7 @@ function ScaleOnScrollItem({
               <div className="md:hidden relative w-full h-full overflow-hidden rounded-xl flex items-center bg-muted/20">
                 <motion.div
                   style={{ x: mobileSlideX }}
-                  className="relative h-full w-[190%] sm:w-[170%] shrink-0 will-change-transform"
+                  className="relative h-full w-[175%] sm:w-[160%] shrink-0 will-change-transform"
                 >
                   <Image
                     src={item.image}
@@ -184,9 +189,9 @@ function ScaleOnScrollItem({
         </motion.div>
       </div>
 
-      {/* 2. Text description & Tilted Arrow Circular Button */}
-      <div className="mt-6 sm:mt-8 px-1 sm:px-2 flex items-end justify-between gap-4 sm:gap-6">
-        <div className="space-y-2 sm:space-y-3 flex-1 pr-2">
+      {/* 2. Text description & Visit Button with Rising Arrow */}
+      <div className="mt-6 sm:mt-8 px-1 sm:px-2 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
+        <div className="space-y-2 sm:space-y-3 flex-1 pr-0 sm:pr-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold tracking-widest text-primary uppercase">
               {item.step}
@@ -216,30 +221,32 @@ function ScaleOnScrollItem({
             </Link>
           )}
 
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-3 sm:line-clamp-none">
+          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
             {item.description}
           </p>
         </div>
 
-        {/* Tilted Arrow Circular Button */}
-        <div className="shrink-0 flex items-center mb-1">
+        {/* Visit Button with Rising Arrow */}
+        <div className="shrink-0 flex items-center pt-2 sm:pt-0">
           {item.external ? (
             <a
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Visit ${item.title}`}
-              className="size-11 sm:size-13 md:size-14 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+              aria-label={`${item.ctaText} ${item.title}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
             >
-              <ArrowUpRight className="size-5 sm:size-6 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              <span>{item.ctaText}</span>
+              <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </a>
           ) : (
             <Link
               href={item.href}
-              aria-label={`Explore ${item.title}`}
-              className="size-11 sm:size-13 md:size-14 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background flex items-center justify-center shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+              aria-label={`${item.ctaText} ${item.title}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
             >
-              <ArrowUpRight className="size-5 sm:size-6 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              <span>{item.ctaText}</span>
+              <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </Link>
           )}
         </div>

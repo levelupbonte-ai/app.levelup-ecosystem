@@ -78,7 +78,7 @@ export const Hero = () => {
                   href="/contact"
                   className="max-w-56 truncate text-start md:max-w-none"
                 >
-                  Construisons ton site
+                  Build your website
                   <ArrowRight className="stroke-3" />
                 </a>
               </Button>
