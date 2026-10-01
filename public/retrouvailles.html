@@ -30,19 +30,95 @@
     min-height:100vh;
   }
 
+  /* STICKY HEADER */
+  .retrouvailles-header{
+    position:sticky;
+    top:0;
+    left:0;
+    right:0;
+    z-index:45;
+    background:rgba(10,9,8,0.92);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:10px 18px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  }
+  .header-inner{
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--cream);
+    opacity:0.85;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:500;
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid rgba(212,175,82,0.2);
+    background:rgba(212,175,82,0.06);
+    transition:opacity .2s, background .2s, color .2s;
+  }
+  .back-btn:hover{ opacity:1; color:var(--gold-light); background:rgba(212,175,82,0.12); }
+  .header-title-box{
+    text-align:center;
+  }
+  .header-badge{
+    font-size:8.5px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:block;
+    opacity:0.8;
+  }
+  .header-name{
+    font-family:'Anton', sans-serif;
+    color:var(--gold-light);
+    font-size:14px;
+    letter-spacing:0.8px;
+    line-height:1;
+  }
+  .header-cta{
+    display:inline-flex;
+    align-items:center;
+    background:linear-gradient(135deg, var(--gold-light), var(--gold) 60%, var(--gold-dark));
+    color:#1a1305;
+    text-decoration:none;
+    font-family:'Bebas Neue', sans-serif;
+    font-size:14px;
+    letter-spacing:1px;
+    padding:6px 14px;
+    border-radius:6px;
+    box-shadow:0 2px 10px rgba(212,175,82,0.3);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .header-cta:hover{
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(212,175,82,0.45);
+  }
+
   /* HERO */
   .hero{
     position:relative;
     width:100%;
-    height:clamp(280px, 58vw, 400px);
-    background-image:url('data:image/jpeg;base64,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');
+    height:clamp(300px, 60vw, 440px);
+    background-image:url('/projects/retrouvailles.png');
     background-size:cover;
-    background-position:center 12%;
+    background-position:center 22%;
+    background-repeat:no-repeat;
   }
   .hero::after{
     content:"";
     position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(10,9,8,0.1) 0%, rgba(10,9,8,0.55) 58%, var(--black) 100%);
+    background:linear-gradient(180deg, rgba(10,9,8,0.2) 0%, rgba(10,9,8,0.65) 60%, var(--black) 100%);
   }
   .hero-content{
     position:absolute; left:0; right:0; bottom:16px;
@@ -376,6 +452,20 @@
   <div class="intro-line"></div>
   <div class="intro-powered">Powered by <strong>LevelUp</strong></div>
 </div>
+
+<header class="retrouvailles-header" id="topNav">
+  <div class="header-inner">
+    <a href="/projects" target="_top" class="back-btn">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>LevelUp</span>
+    </a>
+    <div class="header-title-box">
+      <span class="header-badge">La 4ème CONS</span>
+      <span class="header-name">Le Dernier Retrouvailles</span>
+    </div>
+    <a href="#formCard" class="header-cta">Réserver</a>
+  </div>
+</header>
 
 <div class="hero">
   <div class="hero-content">

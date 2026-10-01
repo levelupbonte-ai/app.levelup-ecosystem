@@ -108,23 +108,41 @@ function DesktopPinnedBarberShopShowcase({
                   "aspect-[16/10] sm:aspect-[16/9] md:aspect-[639/298]",
                 )}
               >
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Visit ${item.title}`}
-                  className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    referrerPolicy="no-referrer"
-                    className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
-                    sizes="1024px"
-                    priority
-                  />
-                </a>
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${item.title}`}
+                    className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      referrerPolicy="no-referrer"
+                      className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                      sizes="1024px"
+                      priority
+                    />
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    aria-label={`Visit ${item.title}`}
+                    className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      referrerPolicy="no-referrer"
+                      className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                      sizes="1024px"
+                      priority
+                    />
+                  </Link>
+                )}
               </div>
             </motion.div>
 
@@ -376,7 +394,7 @@ function MobileScaleOnScrollItem({
                 alt={item.title}
                 fill
                 referrerPolicy="no-referrer"
-                className="object-contain"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 1024px"
                 priority
               />

@@ -8,12 +8,11 @@ export const metadata: Metadata = {
 
 export default function RetrouvaillesPage() {
   return (
-    <main className="min-h-screen w-full bg-[#0a0908]">
+    <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
       <iframe
         src="/retrouvailles.html"
         title="Le Dernier Retrouvailles — Inscription"
-        className="w-full h-screen border-0"
-        style={{ minHeight: "100vh" }}
+        className="w-full h-full border-0 block"
       />
     </main>
   );

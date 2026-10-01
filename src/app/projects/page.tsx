@@ -85,7 +85,7 @@ export default function ProjectsPage() {
             Recent Work
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Real websites engineered for conversion, automated scheduling, and sub-2-second load times.
+            Explore a selection of custom websites built to elevate brands, simplify customer journeys, and turn visitors into clients.
           </p>
         </section>
 

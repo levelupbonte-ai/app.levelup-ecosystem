@@ -175,8 +175,7 @@ export const Navbar = () => {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
-  // Monitor scroll: Header disappears when arriving at "Powering the world's best product teams" zone,
-  // and reappears when scrolling back up.
+  // Keep header visible when scrolling smoothly across all pages
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -188,31 +187,10 @@ export const Navbar = () => {
 
       if (currentScrollY <= 45) {
         setIsScrolled(false);
-        setShowHeader(true);
       } else {
         setIsScrolled(true);
-
-        // Check if user has reached the "Powering the world's best product teams" zone
-        const logosZone = document.getElementById("logos-section");
-        const hasArrivedAtZone = logosZone
-          ? logosZone.getBoundingClientRect().top <= 140
-          : currentScrollY > 400;
-
-        // If scrolling UP: always reveal the header fluidly
-        if (currentScrollY < lastScrollYRef.current - 6) {
-          setShowHeader(true);
-        }
-        // If scrolling DOWN:
-        else if (currentScrollY > lastScrollYRef.current + 6) {
-          if (hasArrivedAtZone) {
-            // Arrived at the logos section -> hide header fluidly
-            setShowHeader(false);
-          } else {
-            // Still in the hero zone -> keep header visible
-            setShowHeader(true);
-          }
-        }
       }
+      setShowHeader(true);
 
       lastScrollYRef.current = currentScrollY;
     };
@@ -221,6 +199,11 @@ export const Navbar = () => {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // On the standalone event landing page, hide the root navbar to let the dedicated sticky gold header display
+  if (pathname === "/retrouvailles") {
+    return null;
+  }
 
   // Handlers for desktop expanding mega-header for services
   const handleServicesEnter = () => {
