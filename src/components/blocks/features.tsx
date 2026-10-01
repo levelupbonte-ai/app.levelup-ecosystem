@@ -11,36 +11,12 @@ import { motion, useScroll, useSpring, useTransform, type MotionValue } from "mo
 import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
+import { allProjects, type ProjectItem } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
-interface ProjectItem {
-  id: string;
-  step: string;
-  badge: string;
-  title: string;
-  description: string;
-  image: string;
-  href: string;
-  external?: boolean;
-  aspectRatio: string;
-  ctaText: string;
-}
+export { allProjects, type ProjectItem };
 
-const items: ProjectItem[] = [
-  {
-    id: "final-stop",
-    step: "01",
-    badge: "Client Case Study • San Diego, CA",
-    title: "Final Stop Barber Shop",
-    description:
-      "A custom digital experience built to showcase the brand, simplify appointment booking, and turn local visitors into loyal clients on any device, anytime book appointments easily, and stay connected. Built with a seamless booking system.",
-    image: "/projects/final-stop.png",
-    href: "https://finalstop.org",
-    external: true,
-    aspectRatio: "aspect-[639/298]",
-    ctaText: "Visit site",
-  },
-];
+const items: ProjectItem[] = [allProjects[0]];
 
 /**
  * Desktop Pinned Sticky Scrub Showcase:
@@ -52,7 +28,13 @@ const items: ProjectItem[] = [
  * 5. Visit site button reveals on the right.
  * 6. Everything stays visible, then scrolls naturally.
  */
-function DesktopPinnedBarberShopShowcase({ item }: { item: ProjectItem }) {
+function DesktopPinnedBarberShopShowcase({
+  item,
+  showExploreButton = true,
+}: {
+  item: ProjectItem;
+  showExploreButton?: boolean;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -157,16 +139,24 @@ function DesktopPinnedBarberShopShowcase({ item }: { item: ProjectItem }) {
                 }}
                 className="will-change-transform"
               >
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/title block"
-                >
-                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
-                    {item.title}
-                  </h3>
-                </a>
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/title block"
+                  >
+                    <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+                  </a>
+                ) : (
+                  <Link href={item.href} className="group/title block">
+                    <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+                  </Link>
+                )}
               </motion.div>
 
               {/* Step 2 on right: Original Description */}
@@ -183,25 +173,46 @@ function DesktopPinnedBarberShopShowcase({ item }: { item: ProjectItem }) {
                 </p>
               </motion.div>
 
-              {/* Step 3 on right: Original Visit Button */}
+              {/* Step 3 on right: Action buttons (Visit site + Explore all projects on PC) */}
               <motion.div
                 style={{
                   opacity: buttonOpacity,
                   scale: buttonScale,
                   y: buttonY,
                 }}
-                className="pt-2 will-change-transform"
+                className="pt-2 will-change-transform flex flex-wrap items-center gap-3"
               >
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${item.ctaText} ${item.title}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
-                >
-                  <span>{item.ctaText}</span>
-                  <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                </a>
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${item.ctaText} ${item.title}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+                  >
+                    <span>{item.ctaText}</span>
+                    <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    aria-label={`${item.ctaText} ${item.title}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+                  >
+                    <span>{item.ctaText}</span>
+                    <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </Link>
+                )}
+
+                {showExploreButton && (
+                  <Link
+                    href="/projects"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/80 bg-muted/40 hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/explore"
+                  >
+                    <span>Explore all projects</span>
+                    <ArrowRight className="size-4 text-foreground group-hover/explore:text-background transition-transform duration-300 group-hover/explore:translate-x-1" />
+                  </Link>
+                )}
               </motion.div>
             </div>
           </div>
@@ -439,17 +450,25 @@ function MobileScaleOnScrollItem({
   );
 }
 
-export function BarberShopShowcase({ item = items[0] }: { item?: ProjectItem }) {
+export function BarberShopShowcase({
+  item = items[0],
+  showExploreButton = true,
+}: {
+  item?: ProjectItem;
+  showExploreButton?: boolean;
+}) {
   return (
     <div className="relative">
       {/* Desktop: Pinned scrub animation with original design */}
-      <DesktopPinnedBarberShopShowcase item={item} />
+      <DesktopPinnedBarberShopShowcase item={item} showExploreButton={showExploreButton} />
 
       {/* Mobile: Exact original scale-on-scroll layout with mobile pan */}
       <MobileScaleOnScrollItem item={item} isLast={true} />
     </div>
   );
 }
+
+export const ProjectShowcase = BarberShopShowcase;
 
 export const Features = () => {
   return (
@@ -482,11 +501,11 @@ export const Features = () => {
 
         {/* Showcase Items */}
         {items.map((item) => (
-          <BarberShopShowcase key={item.id} item={item} />
+          <BarberShopShowcase key={item.id} item={item} showExploreButton={true} />
         ))}
 
-        {/* Explore More Projects in dedicated projects page */}
-        <div className="mt-12 sm:mt-16 text-center">
+        {/* Explore More Projects in dedicated projects page (Mobile only) */}
+        <div className="mt-12 sm:mt-16 text-center md:hidden">
           <Link
             href="/projects"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/80 bg-muted/40 hover:bg-foreground hover:text-background font-medium text-xs sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95 group shadow-sm"

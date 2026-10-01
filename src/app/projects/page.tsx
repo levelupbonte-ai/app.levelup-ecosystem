@@ -1,20 +1,48 @@
 import React from "react";
 
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
 import { ArrowUpRight } from "lucide-react";
 
 import { Background } from "@/components/background";
-import { BarberShopShowcase } from "@/components/blocks/features";
+import { ProjectShowcase } from "@/components/blocks/features";
+import { allProjects } from "@/data/projects";
 import { DashedLine } from "@/components/dashed-line";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata = {
-  title: "Featured Projects & Case Studies",
+export const metadata: Metadata = {
+  title: "Featured Projects & Case Studies | LevelUp Ecosystem",
   description:
-    "See recent client work from LevelUp Ecosystem, including Final Stop Barber Shop in San Diego, CA.",
+    "See recent client work and case studies from LevelUp Ecosystem, including Final Stop Barber Shop and Le Dernier Retrouvailles. Built for conversion, automated booking, and speed.",
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: "Featured Projects & Case Studies | LevelUp Ecosystem",
+    description:
+      "Explore real web design case studies and live client sites engineered for conversion, automated scheduling, and sub-2-second load times.",
+    url: "/projects",
+    siteName: "LevelUp Ecosystem",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/projects/final-stop.png",
+        width: 1200,
+        height: 630,
+        alt: "Final Stop Barber Shop Case Study - LevelUp Ecosystem",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Featured Projects & Case Studies | LevelUp Ecosystem",
+    description:
+      "Explore real client websites and case studies engineered for conversion and online booking in San Diego, CA.",
+    images: ["/projects/final-stop.png"],
+    creator: "@levelupecosystem",
+  },
 };
 
 const concepts = [
@@ -61,69 +89,12 @@ export default function ProjectsPage() {
           </p>
         </section>
 
-        {/* Animated Barber Shop Showcase (Exact same animation from homepage) */}
-        <div className="mt-4 sm:mt-6">
-          <BarberShopShowcase />
+        {/* Animated Project Showcases (Final Stop & Le Dernier Retrouvailles with identical scroll animation) */}
+        <div className="mt-4 sm:mt-6 space-y-12">
+          {allProjects.map((project) => (
+            <ProjectShowcase key={project.id} item={project} showExploreButton={false} />
+          ))}
         </div>
-
-        {/* Case Study Deep Dive Details */}
-        <section className="container max-w-5xl mt-12">
-          <Card className="rounded-3xl border border-border/80 overflow-hidden shadow-xl bg-card">
-            <CardContent className="p-8 sm:p-12 space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div className="space-y-3">
-                  <div className="size-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center font-bold text-sm">
-                    01
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground">The Challenge</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Final Stop had continuous incoming phone calls during busy haircut hours, leading to interruptions, missed clients, and manual scheduling errors on busy weekends.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="size-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center font-bold text-sm">
-                    02
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground">The Solution</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    LevelUp engineered a clean, mobile-first web application featuring 24/7 calendar appointment booking, staff selection, service menus, and synchronized Google Maps location details.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="size-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center font-bold text-sm">
-                    03
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground">The Impact</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Clients book appointments in less than 45 seconds on their smartphones. Phone tag eliminated, sub-2s mobile loading, and zero monthly website builder platform fees.
-                  </p>
-                </div>
-              </div>
-
-              {/* Live Highlights */}
-              <div className="pt-6 border-t border-border/60 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-                  <div className="text-2xl font-black text-foreground">&lt; 1.8s</div>
-                  <div className="text-xs text-muted-foreground font-mono mt-0.5">Mobile Load Time</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-                  <div className="text-2xl font-black text-foreground">24/7</div>
-                  <div className="text-xs text-muted-foreground font-mono mt-0.5">Mobile Booking</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-                  <div className="text-2xl font-black text-foreground">100%</div>
-                  <div className="text-xs text-muted-foreground font-mono mt-0.5">Code Ownership</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-muted/40 border border-border/40 text-center">
-                  <div className="text-2xl font-black text-foreground">SSL</div>
-                  <div className="text-xs text-muted-foreground font-mono mt-0.5">HTTPS Encrypted</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
 
         {/* Additional Concepts Section */}
         <section className="container max-w-5xl mt-20 space-y-8">

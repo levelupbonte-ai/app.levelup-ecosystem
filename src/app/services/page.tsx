@@ -17,13 +17,43 @@ import {
 
 import { Background } from "@/components/background";
 import { DashedLine } from "@/components/dashed-line";
+import type { Metadata } from "next";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata = {
-  title: "Web Services & Solutions",
+export const metadata: Metadata = {
+  title: "Web Services & Solutions | LevelUp Ecosystem",
   description:
     "Fast, secure websites for San Diego businesses and creators: 24/7 online booking, Google Maps setup, security audits, and monthly care plans.",
+  alternates: {
+    canonical: "/services",
+  },
+  openGraph: {
+    title: "Web Services & Solutions | LevelUp Ecosystem",
+    description:
+      "Bespoke web architecture, 24/7 online booking, local SEO, and cybersecurity audits for businesses and creators in San Diego, CA.",
+    url: "/services",
+    siteName: "LevelUp Ecosystem",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/projects/final-stop.png",
+        width: 1200,
+        height: 630,
+        alt: "LevelUp Ecosystem - Bespoke Web Services & Systems",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Web Services & Solutions | LevelUp Ecosystem",
+    description:
+      "Bespoke web architecture, 24/7 online booking, local SEO, and cybersecurity audits for businesses in San Diego, CA.",
+    images: ["/projects/final-stop.png"],
+    creator: "@levelupecosystem",
+  },
 };
 
 export default function ServicesPage() {
