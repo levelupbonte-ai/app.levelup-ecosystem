@@ -9,11 +9,10 @@ const Page = () => {
   return (
     <Background>
       <FAQ
-        className="py-28 text-center lg:pt-44 lg:pb-32"
-        className2="max-w-xl lg:grid-cols-1"
+        className="py-28 lg:pt-44 lg:pb-32"
         headerTag="h1"
       />
-      <DashedLine className="mx-auto max-w-xl" />
+      <DashedLine className="mx-auto max-w-5xl" />
       <Testimonials dashedLineClassName="hidden" />
     </Background>
   );

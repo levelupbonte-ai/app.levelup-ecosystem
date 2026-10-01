@@ -19,18 +19,27 @@ export const metadata = {
 const concepts = [
   {
     title: "Concept Architecture Studio",
-    category: "Spatial & Creative Portfolio",
-    description: "Bespoke digital architecture firm portfolio with high-resolution imagery and minimalist typography.",
-  },
-  {
-    title: "Concept Audio & Vinyl Store",
-    category: "Specialized E-Commerce",
-    description: "Lightweight, sub-2s mobile audio showcase with instant checkout and zero bloat.",
+    badge: "Spatial Design & Architecture",
+    description:
+      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
+    image: "/features/overview-card.svg",
+    tags: ["High-Res Delivery", "Editorial Design", "Bespoke Portfolio"],
   },
   {
     title: "Concept Wellness Clinic & Spa",
-    category: "Appointment Scheduling",
-    description: "Multi-practitioner wellness scheduling flow with integrated intake questionnaire and reminder sync.",
+    badge: "Multi-Practitioner Booking",
+    description:
+      "Streamlined patient intake and appointment platform featuring multi-staff scheduling, customized treatment selection, and synchronized calendar notifications for local medical wellness practices.",
+    image: "/features/cycle-card.svg",
+    tags: ["24/7 Scheduling", "Intake Flow", "Staff Sync"],
+  },
+  {
+    title: "Concept Audio & Vinyl Store",
+    badge: "Specialized E-Commerce",
+    description:
+      "Lightweight, sub-2s mobile audio showcase with instant checkout, audio previews, and zero third-party builder bloat.",
+    image: "/features/overview-card.svg",
+    tags: ["Sub-2s Mobile", "Instant Checkout", "Custom Catalog"],
   },
 ];
 
@@ -173,18 +182,44 @@ export default function ProjectsPage() {
             {concepts.map((concept, index) => (
               <div
                 key={index}
-                className="p-6 rounded-3xl border border-border/80 bg-card/60 flex flex-col justify-between space-y-4 hover:border-foreground/40 transition-colors"
+                className="p-5 rounded-3xl border border-border/80 bg-card/60 flex flex-col justify-between space-y-4 hover:border-foreground/40 transition-all shadow-sm hover:shadow-md"
               >
-                <div className="space-y-2">
-                  <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
-                    {concept.category}
-                  </span>
-                  <h3 className="text-lg font-bold text-foreground">{concept.title}</h3>
+                <div className="space-y-3.5">
+                  {/* Visual Preview Image */}
+                  <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-border/60 bg-muted/20">
+                    <Image
+                      src={concept.image}
+                      alt={concept.title}
+                      fill
+                      className="object-cover"
+                      referrerPolicy="no-referrer"
+                      sizes="(max-width: 768px) 100vw, 350px"
+                    />
+                  </div>
+
+                  <div className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-foreground/5 border border-border text-[11px] font-mono text-muted-foreground">
+                    {concept.badge}
+                  </div>
+
+                  <h3 className="text-lg font-bold text-foreground tracking-tight">{concept.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {concept.description}
                   </p>
+
+                  {/* Feature Tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {concept.tags.map((tag, tagIdx) => (
+                      <span
+                        key={tagIdx}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted/60 text-muted-foreground border border-border/50"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div>
+
+                <div className="pt-2">
                   <Link
                     href="/contact"
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:underline"

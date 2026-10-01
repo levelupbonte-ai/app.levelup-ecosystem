@@ -40,32 +40,6 @@ const items: ProjectItem[] = [
     aspectRatio: "aspect-[639/298]",
     ctaText: "Visit site",
   },
-  {
-    id: "concept-architecture",
-    step: "02",
-    badge: "Spatial Design & Architecture",
-    title: "Concept Architecture Studio",
-    description:
-      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
-    image: "/features/overview-card.svg",
-    href: "/projects",
-    external: false,
-    aspectRatio: "aspect-[16/10]",
-    ctaText: "Explore",
-  },
-  {
-    id: "concept-wellness",
-    step: "03",
-    badge: "Multi-Practitioner Booking",
-    title: "Concept Wellness Clinic & Spa",
-    description:
-      "Streamlined patient intake and appointment platform featuring multi-staff scheduling, customized treatment selection, and synchronized calendar notifications for local medical wellness practices.",
-    image: "/features/cycle-card.svg",
-    href: "/projects",
-    external: false,
-    aspectRatio: "aspect-[16/10]",
-    ctaText: "Explore",
-  },
 ];
 
 /**
@@ -295,6 +269,17 @@ export const Features = () => {
               isLast={index === items.length - 1}
             />
           ))}
+        </div>
+
+        {/* Explore More Projects in dedicated projects page */}
+        <div className="mt-12 sm:mt-16 text-center">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/80 bg-muted/40 hover:bg-foreground hover:text-background font-medium text-xs sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95 group shadow-sm"
+          >
+            <span>Explore all projects & studio concepts</span>
+            <ArrowUpRight className="size-4 text-foreground group-hover:text-background transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
         </div>
       </div>
     </section>
