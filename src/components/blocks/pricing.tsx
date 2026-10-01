@@ -4,330 +4,275 @@ import React, { useState } from "react";
 
 import Link from "next/link";
 
-import { Check, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
 
 interface PlanItem {
+  id: string;
   name: string;
   price: string;
   period: string;
   badge?: string;
   description: string;
-  includesLabel: string;
+  includesLabel?: string;
   features: string[];
   ctaText: string;
   ctaHref: string;
-  popular?: boolean;
 }
 
 const buildPlans: PlanItem[] = [
   {
+    id: "starter",
     name: "Starter",
     price: "$500",
-    period: "one-time",
-    description: "For local businesses ready to launch a fast, modern website with built-in Google Maps SEO.",
-    includesLabel: "This Plan Includes:",
+    period: "/ one-time",
+    description: "Bespoke website with top local search rankings",
     features: [
-      "Bespoke mobile-first responsive design",
+      "Bespoke mobile-first web architecture",
       "Sub-2s mobile loading speed",
       "Google Maps & Local SEO setup",
       "SSL / HTTPS encryption standard",
-      "Contact form & anti-spam honeypot",
-      "100% code ownership (zero lock-in)",
+      "Contact form with anti-spam protection",
+      "100% full code ownership (zero lock-in)",
     ],
-    ctaText: "GET STARTED",
+    ctaText: "Get started",
     ctaHref: "/contact?plan=starter",
   },
   {
+    id: "secure",
     name: "Secure",
     price: "$900",
-    period: "one-time",
-    badge: "Popular",
-    popular: true,
-    description: "Built for businesses that want 24/7 automated booking and hardened cybersecurity.",
-    includesLabel: "This Plan Includes:",
+    period: "/ one-time",
+    badge: "Most Popular",
+    description: "24/7 automated booking & cybersecurity defense",
+    includesLabel: "Everything in Starter, plus:",
     features: [
-      "Everything in Starter",
       "24/7 automated appointment booking",
-      "Calendar sync (Square, Calendly, Acuity)",
-      "Cybersecurity audit & 2FA protection",
+      "Real-time calendar sync (Google, Square, Calendly)",
+      "Cybersecurity audit & firewall protection",
       "Database access rule hardening",
-      "Google Business Profile synchronization",
-      "30 days post-launch priority support",
+      "Google Business Profile optimization",
+      "30 days priority launch support",
     ],
-    ctaText: "GET STARTED",
+    ctaText: "Get started",
     ctaHref: "/contact?plan=secure",
   },
   {
+    id: "secure-care",
     name: "Secure + Care",
     price: "$900",
-    period: "+ $75/month",
-    description: "For founders wanting turnkey web development plus ongoing monthly management and updates.",
-    includesLabel: "This Plan Includes:",
+    period: "+ $49/month",
+    description: "Turnkey website build plus ongoing care & hosting",
+    includesLabel: "Complete build & support:",
     features: [
-      "Everything in Secure",
-      "Fast cloud hosting & DNS management",
+      "Everything in Secure build",
+      "Ultra-fast cloud hosting & global CDN",
       "Automated daily offsite backups",
-      "Continuous uptime monitoring",
-      "On-demand content edits & updates",
-      "Monthly vulnerability & patch audits",
+      "24/7 continuous uptime monitoring",
+      "On-demand content updates & edits",
       "Priority direct phone & email support",
     ],
-    ctaText: "GET STARTED",
+    ctaText: "Get started",
     ctaHref: "/contact?plan=secure-care",
   },
 ];
 
 const carePlans: PlanItem[] = [
   {
+    id: "standard-care",
     name: "Standard Care",
     price: "$49",
-    period: "per month",
-    description: "Essential cloud hosting, daily backups, and security peace of mind for any live website.",
-    includesLabel: "This Plan Includes:",
+    period: "/ month",
+    description: "Essential cloud hosting, daily backups & uptime monitoring",
     features: [
-      "High-speed cloud hosting & CDN",
+      "High-speed cloud hosting & global CDN",
       "Automated daily offsite backups",
-      "SSL certificate maintenance",
-      "24/7 uptime monitoring",
-      "Email support within 24h",
-      "No lock-in contracts (cancel anytime)",
+      "24/7 continuous uptime monitoring",
+      "SSL certificate renewals & maintenance",
+      "Minor content updates (1h/month)",
+      "Cancel anytime, zero commitment",
     ],
-    ctaText: "GET STARTED",
+    ctaText: "Get started",
     ctaHref: "/contact?plan=standard-care",
   },
   {
-    name: "Pro Care",
-    price: "$75",
-    period: "per month",
-    badge: "Popular",
-    popular: true,
-    description: "Complete hands-off peace of mind with monthly content edits and proactive security checks.",
-    includesLabel: "This Plan Includes:",
+    id: "growth-care",
+    name: "Growth Care",
+    price: "$99",
+    period: "/ month",
+    badge: "Recommended",
+    description: "Active site updates, SEO maintenance & security patches",
+    includesLabel: "Everything in Standard Care, plus:",
     features: [
       "Everything in Standard Care",
-      "Up to 2 hours of on-demand content edits",
-      "Monthly security & vulnerability audits",
-      "Google Business Profile updates",
-      "Booking system & calendar checks",
-      "Same-day priority support response",
+      "3 hours monthly on-demand content edits",
+      "Monthly Google Local SEO audit & optimization",
+      "Proactive security patching & malware scans",
+      "Monthly performance & speed optimization",
+      "Priority email & WhatsApp support",
     ],
-    ctaText: "GET STARTED",
-    ctaHref: "/contact?plan=pro-care",
+    ctaText: "Get started",
+    ctaHref: "/contact?plan=growth-care",
   },
   {
-    name: "Growth & SEO",
-    price: "$149",
-    period: "per month",
-    description: "Continuous local ranking optimization and conversion improvements for growing local businesses.",
-    includesLabel: "This Plan Includes:",
+    id: "vip-care",
+    name: "VIP Dedicated",
+    price: "$199",
+    period: "/ month",
+    description: "Unlimited support, high-availability & custom features",
+    includesLabel: "Everything in Growth Care, plus:",
     features: [
-      "Everything in Pro Care",
-      "Monthly local keyword tracking",
-      "Google Maps review strategy support",
-      "Speed & Core Web Vitals optimization",
-      "Quarterly strategy consultation",
-      "Dedicated senior developer contact",
+      "Everything in Growth Care",
+      "Unlimited minor content & graphic updates",
+      "Custom feature development (2h/month included)",
+      "Database backups every 6 hours",
+      "DDoS & advanced cyber threat mitigation",
+      "Direct dedicated phone line & emergency SLA",
     ],
-    ctaText: "GET STARTED",
-    ctaHref: "/contact?plan=growth-care",
+    ctaText: "Get started",
+    ctaHref: "/contact?plan=vip-care",
   },
 ];
 
-export const Pricing = ({ className }: { className?: string }) => {
-  const [activeTab, setActiveTab] = useState<"build" | "care">("build");
+interface PricingProps {
+  className?: string;
+}
 
-  const plans = activeTab === "build" ? buildPlans : carePlans;
+export const Pricing = ({ className }: PricingProps) => {
+  // 'build' = One-Time Website Builds (prix d'achat)
+  // 'subscription' = Monthly Care Subscriptions (abonnements)
+  const [billingType, setBillingType] = useState<"build" | "subscription">("build");
+
+  const currentPlans = billingType === "build" ? buildPlans : carePlans;
 
   return (
-    <section className={cn("pt-10 pb-20 sm:pt-14 sm:pb-28 lg:pt-16 lg:pb-32", className)}>
-      <div className="container max-w-6xl px-4 sm:px-6">
-        <ScrollReveal yOffset={24} duration={0.7}>
-          <div className="space-y-4 text-center">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
-              Transparent Investment • No Hidden Fees
-            </span>
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
-              Simple, Predictable Pricing
+    <section id="pricing" className={cn("pt-4 sm:pt-8 pb-20 md:pb-28 overflow-hidden", className)}>
+      <div className="container max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Professional Headline and Subtitle */}
+        <ScrollReveal yOffset={16} duration={0.6}>
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+              Tailored Solutions. Clear Pricing.
             </h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl leading-relaxed text-sm sm:text-base">
-              You own 100% of your website code. No hostage fees, no builder subscription traps,
-              and a free interactive preview on your phone before you pay a single dollar.
+            <p className="mt-3.5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              Select a custom turnkey website build or choose a monthly care plan to keep your platform fast, secure, and always updated.
             </p>
-
-            {/* Toggle Switch */}
-            <div className="inline-flex items-center justify-center p-1.5 rounded-full bg-zinc-200/70 dark:bg-zinc-800/80 border border-zinc-300/60 dark:border-zinc-700/60 mt-4">
-              <button
-                type="button"
-                onClick={() => setActiveTab("build")}
-                className={cn(
-                  "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer",
-                  activeTab === "build"
-                    ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-white shadow-sm"
-                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white",
-                )}
-              >
-                Website Build Packages
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("care")}
-                className={cn(
-                  "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer",
-                  activeTab === "care"
-                    ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-white shadow-sm"
-                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white",
-                )}
-              >
-                Website Care Plans
-              </button>
-            </div>
           </div>
         </ScrollReveal>
 
-        {/* 3 Pricing Cards Grid */}
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-          {plans.map((plan, i) => (
-            <ScrollReveal
-              key={`${plan.name}-${activeTab}`}
-              yOffset={24}
-              delay={i * 0.1}
-              duration={0.65}
-              className="h-full"
+        {/* Toggle Switcher between One-Time Builds and Monthly Subscriptions */}
+        <div className="flex justify-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center rounded-full p-1.5 bg-neutral-200/70 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700/80 backdrop-blur-sm shadow-inner">
+            <button
+              type="button"
+              onClick={() => setBillingType("build")}
+              className={cn(
+                "relative rounded-full px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 focus:outline-none",
+                billingType === "build"
+                  ? "bg-foreground text-background shadow-md"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
             >
-              <div
-                className={cn(
-                  "h-full rounded-[28px] p-7 sm:p-8 flex flex-col justify-between transition-all duration-300",
-                  plan.popular
-                    ? "bg-[#090A0F] text-white border-2 border-zinc-700 shadow-2xl relative md:-translate-y-2.5 z-10"
-                    : "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 shadow-md hover:shadow-xl",
-                )}
-              >
-                {/* Top content */}
-                <div>
-                  {/* Header row: Plan name & Popular Badge */}
-                  <div className="flex items-center justify-between gap-2">
-                    <h3
-                      className={cn(
-                        "text-xl sm:text-2xl font-bold tracking-tight",
-                        plan.popular ? "text-white" : "text-zinc-950 dark:text-white",
-                      )}
-                    >
-                      {plan.name}
-                    </h3>
-                    {plan.badge && (
-                      <span className="bg-[#ccff00] text-black text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
-                        {plan.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Price */}
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span
-                      className={cn(
-                        "text-4xl sm:text-5xl font-black tracking-tight",
-                        plan.popular ? "text-white" : "text-zinc-950 dark:text-white",
-                      )}
-                    >
-                      {plan.price}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-sm font-medium",
-                        plan.popular ? "text-zinc-400" : "text-zinc-500 dark:text-zinc-400",
-                      )}
-                    >
-                      /{plan.period}
-                    </span>
-                  </div>
-
-                  {/* Subtitle / Description */}
-                  <p
-                    className={cn(
-                      "mt-3 text-sm leading-relaxed min-h-[44px]",
-                      plan.popular ? "text-zinc-300" : "text-zinc-600 dark:text-zinc-400",
-                    )}
-                  >
-                    {plan.description}
-                  </p>
-
-                  {/* Includes Label */}
-                  <div className="mt-8 mb-4">
-                    <p
-                      className={cn(
-                        "text-xs font-bold uppercase tracking-wider",
-                        plan.popular ? "text-zinc-400" : "text-zinc-500 dark:text-zinc-400",
-                      )}
-                    >
-                      {plan.includesLabel}
-                    </p>
-                  </div>
-
-                  {/* Features list */}
-                  <ul className="space-y-3.5 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start gap-3">
-                        <span className="size-5 rounded-full bg-[#ccff00] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-                          <Check className="size-3.5 stroke-[3]" />
-                        </span>
-                        <span
-                          className={cn(
-                            "text-sm font-medium leading-snug",
-                            plan.popular ? "text-zinc-200" : "text-zinc-700 dark:text-zinc-300",
-                          )}
-                        >
-                          {feature}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Bottom CTA Button */}
-                <div className="pt-4 border-t border-zinc-200/50 dark:border-zinc-800/80">
-                  <Link
-                    href={plan.ctaHref}
-                    className={cn(
-                      "w-full py-4 px-6 rounded-2xl flex items-center justify-center font-extrabold uppercase tracking-wider text-xs sm:text-sm transition-all duration-200 active:scale-[0.98]",
-                      plan.popular
-                        ? "bg-[#ccff00] text-black hover:bg-[#b8e600] shadow-lg shadow-[#ccff00]/25"
-                        : "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-md",
-                    )}
-                  >
-                    {plan.ctaText}
-                  </Link>
-                </div>
-              </div>
-            </ScrollReveal>
-          ))}
+              Website Builds
+            </button>
+            <button
+              type="button"
+              onClick={() => setBillingType("subscription")}
+              className={cn(
+                "relative rounded-full px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 focus:outline-none",
+                billingType === "subscription"
+                  ? "bg-foreground text-background shadow-md"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Monthly Subscriptions
+            </button>
+          </div>
         </div>
 
-        {/* Free Preview Banner */}
-        <ScrollReveal yOffset={20} duration={0.6} delay={0.3}>
-          <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-center md:justify-start gap-2">
-                <Sparkles className="size-5 text-[#9333ea]" />
-                <h4 className="text-lg font-bold tracking-tight text-foreground">
-                  Want to test your website before deciding?
-                </h4>
-              </div>
-              <p className="text-sm text-muted-foreground max-w-xl">
-                We build an interactive preview of your site on your phone within 24-48 hours.
-                No upfront commitment, no contracts, no credit card required.
-              </p>
-            </div>
-            <Link
-              href="/contact"
-              className="shrink-0 px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm"
-            >
-              Request Free Preview
-            </Link>
-          </div>
-        </ScrollReveal>
+        {/* 3 Pricing Cards Grid with smooth animated transition */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={billingType}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch"
+          >
+            {currentPlans.map((plan, index) => (
+              <ScrollReveal
+                key={plan.id}
+                yOffset={20}
+                duration={0.55}
+                delay={index * 0.08}
+                className="flex"
+              >
+                <div className="relative w-full flex flex-col justify-between rounded-[28px] bg-neutral-100/70 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800 p-7 sm:p-8 transition-all hover:border-neutral-300 dark:hover:border-neutral-700 shadow-sm">
+                  {plan.badge && (
+                    <div className="absolute top-6 right-6">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase bg-foreground/10 text-foreground border border-foreground/15">
+                        {plan.badge}
+                      </span>
+                    </div>
+                  )}
+
+                  <div>
+                    {/* Header */}
+                    <h3 className="text-2xl font-bold tracking-tight text-foreground">
+                      {plan.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed pr-12">
+                      {plan.description}
+                    </p>
+
+                    {/* Price */}
+                    <div className="mt-8 mb-6 flex items-baseline">
+                      <span className="text-5xl font-bold tracking-tight text-foreground">
+                        {plan.price}
+                      </span>
+                      <span className="text-muted-foreground text-sm font-normal ml-2">
+                        {plan.period}
+                      </span>
+                    </div>
+
+                    {/* Subheader if present */}
+                    {plan.includesLabel && (
+                      <p className="text-xs text-muted-foreground font-medium mb-4">
+                        {plan.includesLabel}
+                      </p>
+                    )}
+
+                    {/* Features list */}
+                    <ul className="space-y-4">
+                      {plan.features.map((feature, fIndex) => (
+                        <li key={fIndex} className="flex items-start gap-3">
+                          <Check className="size-4 shrink-0 text-foreground stroke-[2.5] mt-1" />
+                          <span className="text-sm text-foreground/90 font-normal">
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="mt-10">
+                    <Link
+                      href={plan.ctaHref}
+                      className="block w-full py-3.5 px-6 rounded-full bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 font-semibold text-center text-sm transition-all duration-200 active:scale-[0.98] shadow-sm"
+                    >
+                      {plan.ctaText}
+                    </Link>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

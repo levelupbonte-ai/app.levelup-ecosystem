@@ -1,16 +1,13 @@
-import Image from "next/image";
-
 import {
   ArrowRight,
-  Blend,
-  ChartNoAxesColumn,
-  CircleDot,
-  Diamond,
+  CalendarCheck,
+  Globe,
+  Search,
+  ShieldCheck,
 } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
 import {
-  ScrollPerspectiveCard,
   ScrollReveal,
   ScrollStagger,
   ScrollStaggerItem,
@@ -20,30 +17,30 @@ import { Button } from "@/components/ui/button";
 
 const features = [
   {
-    title: "Tailored workflows",
-    description: "Track progress across custom issue flows for your team.",
-    icon: CircleDot,
+    title: "Bespoke Websites",
+    description: "Fast, modern sites built to convert.",
+    icon: Globe,
   },
   {
-    title: "Cross-team projects",
-    description: "Collaborate across teams and departments.",
-    icon: Blend,
+    title: "Search Visibility",
+    description: "Get found first on Google & Maps.",
+    icon: Search,
   },
   {
-    title: "Milestones",
-    description: "Break projects down into concrete phases.",
-    icon: Diamond,
+    title: "Cyber Protection",
+    description: "Active shield against attacks and downtime.",
+    icon: ShieldCheck,
   },
   {
-    title: "Progress insights",
-    description: "Track scope, velocity, and progress over time.",
-    icon: ChartNoAxesColumn,
+    title: "Automated Booking",
+    description: "24/7 scheduling with zero manual work.",
+    icon: CalendarCheck,
   },
 ];
 
 export const Hero = () => {
   return (
-    <section className="py-28 lg:py-32 lg:pt-44">
+    <section className="pt-28 lg:pt-40 pb-6 sm:pb-10">
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
@@ -120,23 +117,6 @@ export const Hero = () => {
             })}
           </ScrollStagger>
         </div>
-      </div>
-
-      {/* Perspective Card for Hero Mockup */}
-      <div className="mt-12 sm:mt-16 md:mt-20 lg:mt-24 container max-w-7xl">
-        <ScrollPerspectiveCard>
-          <div className="relative h-[340px] sm:h-[480px] md:h-[620px] lg:h-[760px] w-full overflow-hidden rounded-2xl md:rounded-3xl border border-border/70 shadow-2xl bg-card">
-            <Image
-              src="/hero.webp"
-              alt="LevelUp Ecosystem Platform"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 1280px"
-              referrerPolicy="no-referrer"
-              className="object-cover object-left-top"
-            />
-          </div>
-        </ScrollPerspectiveCard>
       </div>
     </section>
   );

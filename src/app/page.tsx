@@ -12,13 +12,13 @@ export default function Home() {
     <>
       <Background className="via-muted to-muted/80">
         <Hero />
+        <Pricing />
         <Logos />
         <Features />
         <ResourceAllocation />
       </Background>
       <Background variant="bottom">
         <Testimonials />
-        <Pricing />
         <FAQ />
       </Background>
     </>

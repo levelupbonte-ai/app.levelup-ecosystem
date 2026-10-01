@@ -107,15 +107,19 @@ function ScaleOnScrollItem({
   const y = useTransform(smoothProgress, [0, 1], [28, 0]);
 
   // Mobile horizontal landscape pan:
-  // Shows a large-format view of Final Stop and slides smoothly across from left to right as you scroll
-  const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-38%"]);
+  // Slides the site across horizontally as user scrolls on mobile
+  const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-35%"]);
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
-      className="relative w-full max-w-4xl mx-auto px-2 sm:px-4"
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="relative w-full max-w-4xl mx-auto px-0 sm:px-4"
     >
-      {/* 1. Zoomable Image Showcase with tight snug bubble frame */}
+      {/* 1. Zoomable Image Showcase with widened horizontal mobile frame */}
       <div className="w-full flex justify-center">
         <motion.div
           style={{
@@ -126,7 +130,7 @@ function ScaleOnScrollItem({
           className={cn(
             "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu will-change-transform ring-1 ring-border/40",
             item.id === "final-stop"
-              ? "md:aspect-[639/298] max-md:h-[280px] max-md:sm:h-[320px]"
+              ? "aspect-[16/10] sm:aspect-[16/9] md:aspect-[639/298]"
               : item.aspectRatio,
           )}
         >
@@ -151,19 +155,19 @@ function ScaleOnScrollItem({
                 />
               </div>
 
-              {/* Mobile view (< md): large-format crop that pans horizontally across as user scrolls */}
-              <div className="md:hidden relative w-full h-full overflow-hidden rounded-xl flex items-center bg-muted/20">
+              {/* Mobile view (< md): large-format crop anchored to the top that pans horizontally across as user scrolls */}
+              <div className="md:hidden relative w-full h-full overflow-hidden rounded-xl flex items-start bg-muted/20">
                 <motion.div
                   style={{ x: mobileSlideX }}
-                  className="relative h-full w-[175%] sm:w-[160%] shrink-0 will-change-transform"
+                  className="relative h-full w-[165%] sm:w-[150%] shrink-0 will-change-transform"
                 >
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     referrerPolicy="no-referrer"
-                    className="object-cover object-left"
-                    sizes="750px"
+                    className="object-cover object-left-top"
+                    sizes="800px"
                     priority
                   />
                 </motion.div>
@@ -190,18 +194,8 @@ function ScaleOnScrollItem({
       </div>
 
       {/* 2. Text description & Visit Button with Rising Arrow */}
-      <div className="mt-6 sm:mt-8 px-1 sm:px-2 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
+      <div className="mt-6 sm:mt-8 px-2 sm:px-2 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
         <div className="space-y-2 sm:space-y-3 flex-1 pr-0 sm:pr-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono font-bold tracking-widest text-primary uppercase">
-              {item.step}
-            </span>
-            <span className="text-muted-foreground/40">•</span>
-            <span className="text-[11px] sm:text-xs font-mono tracking-wider text-muted-foreground uppercase line-clamp-1">
-              {item.badge}
-            </span>
-          </div>
-
           {item.external ? (
             <a
               href={item.href}
@@ -258,7 +252,7 @@ function ScaleOnScrollItem({
           <DashedLine orientation="horizontal" className="w-full opacity-60" />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
