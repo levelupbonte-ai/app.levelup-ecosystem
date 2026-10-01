@@ -1,17 +1,8 @@
-import {
-  ArrowRight,
-  CalendarCheck,
-  Globe,
-  Search,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
-import {
-  ScrollReveal,
-  ScrollStagger,
-  ScrollStaggerItem,
-} from "@/components/scroll/scroll-reveal";
+import { PremiumServiceBlock } from "@/components/scroll/premium-reveal";
+import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
 import { Button } from "@/components/ui/button";
 
@@ -19,22 +10,22 @@ const features = [
   {
     title: "Bespoke Websites",
     description: "Fast, modern sites built to convert.",
-    icon: Globe,
+    iconName: "globe" as const,
   },
   {
     title: "Search Visibility",
     description: "Get found first on Google & Maps.",
-    icon: Search,
+    iconName: "search" as const,
   },
   {
     title: "Cyber Protection",
     description: "Active shield against attacks and downtime.",
-    icon: ShieldCheck,
+    iconName: "shield" as const,
   },
   {
     title: "Automated Booking",
     description: "24/7 scheduling with zero manual work.",
-    icon: CalendarCheck,
+    iconName: "calendar" as const,
   },
 ];
 
@@ -53,12 +44,11 @@ export const Hero = () => {
           />
 
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>
-            <p className="text-muted-foreground text-lg md:text-xl leading-relaxed mt-5 max-w-xl">
-              <span className="text-foreground font-medium">
-                Building your business together by scaling your digital impact.
-              </span>{" "}
-              We deliver fast, secure websites with automated booking and local SEO
-              designed to maximize your client conversion.
+            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mt-5 max-w-xl">
+              <span className="text-foreground font-semibold text-lg sm:text-xl md:text-2xl block mb-1.5">
+                Turn Your Business Into a Brand.
+              </span>
+              Modern websites designed to get you found, build trust, and turn visitors into customers.
             </p>
           </ScrollReveal>
 
@@ -96,26 +86,17 @@ export const Hero = () => {
             orientation="horizontal"
             className="absolute top-0 lg:hidden"
           />
-          <ScrollStagger staggerDelay={0.12}>
-            {features.map((feature) => {
-              const Icon = feature.icon;
-              return (
-                <ScrollStaggerItem key={feature.title} yOffset={16}>
-                  <div className="flex gap-2.5 lg:gap-5 mb-5 last:mb-0">
-                    <Icon className="text-foreground mt-1 size-4 shrink-0 lg:size-5" />
-                    <div>
-                      <h2 className="font-text text-foreground font-semibold">
-                        {feature.title}
-                      </h2>
-                      <p className="text-muted-foreground max-w-76 text-sm">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollStaggerItem>
-              );
-            })}
-          </ScrollStagger>
+          <div>
+            {features.map((feature, index) => (
+              <PremiumServiceBlock
+                key={feature.title}
+                title={feature.title}
+                description={feature.description}
+                iconName={feature.iconName}
+                index={index}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 
 import { DashedLine } from "@/components/dashed-line";
@@ -31,9 +31,9 @@ const items: ProjectItem[] = [
     id: "final-stop",
     step: "01",
     badge: "Client Case Study • San Diego, CA",
-    title: "Final Stop Barber Shop & Salon",
+    title: "Final Stop Barber Shop",
     description:
-      "Engineered a high-performance booking engine that eliminates phone tag through 24/7 client self-scheduling, real-time barber calendar synchronization, and automated reminders. Built with zero third-party builder bloat to guarantee sub-1.8s mobile page speeds and top Google Local rankings.",
+      "A custom digital experience built to showcase the brand, simplify appointment booking, and turn local visitors into loyal clients on any device, anytime book appointments easily, and stay connected. Built with a seamless booking system.",
     image: "/projects/final-stop.png",
     href: "https://finalstop.org",
     external: true,
@@ -468,15 +468,14 @@ export const Features = () => {
         {/* Section Heading */}
         <div className="mx-auto mt-10 grid max-w-4xl items-center gap-4 md:gap-8 lg:mt-20 lg:grid-cols-2 mb-12 sm:mb-16 lg:mb-20">
           <SplitText
-            text="Selected studio work & live projects"
+            text="Our Latest Work"
             as="h2"
             className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-extrabold"
             stagger={0.05}
           />
           <ScrollReveal yOffset={20} duration={0.7} delay={0.15}>
             <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">
-              Explore our recent bespoke web projects, engineered for frictionless 24/7 customer appointment
-              scheduling, sub-2s mobile loading, and top Google search rankings in San Diego and beyond.
+              A selection of custom websites built to elevate brands, attract more customers, and turn online traffic into real business.
             </p>
           </ScrollReveal>
         </div>
@@ -493,7 +492,7 @@ export const Features = () => {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/80 bg-muted/40 hover:bg-foreground hover:text-background font-medium text-xs sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95 group shadow-sm"
           >
             <span>Explore all projects & studio concepts</span>
-            <ArrowUpRight className="size-4 text-foreground group-hover:text-background transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowRight className="size-4 text-foreground group-hover:text-background transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

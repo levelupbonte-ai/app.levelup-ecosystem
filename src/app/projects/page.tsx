@@ -14,7 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export const metadata = {
   title: "Featured Projects & Case Studies",
   description:
-    "See recent client work from LevelUp Ecosystem, including Final Stop Barber Shop & Salon in San Diego, CA.",
+    "See recent client work from LevelUp Ecosystem, including Final Stop Barber Shop in San Diego, CA.",
 };
 
 const concepts = [

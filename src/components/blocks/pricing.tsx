@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
+import { PremiumTextSectionReveal } from "@/components/scroll/premium-reveal";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { cn } from "@/lib/utils";
 
@@ -152,16 +153,16 @@ export const Pricing = ({ className }: PricingProps) => {
     <section id="pricing" className={cn("pt-4 sm:pt-8 pb-20 md:pb-28 overflow-hidden", className)}>
       <div className="container max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Professional Headline and Subtitle */}
-        <ScrollReveal yOffset={16} duration={0.6}>
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-              Tailored Solutions. Clear Pricing.
-            </h2>
-            <p className="mt-3.5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Select a custom turnkey website build or choose a monthly care plan to keep your platform fast, secure, and always updated.
-            </p>
-          </div>
-        </ScrollReveal>
+        <div className="mb-8 sm:mb-10">
+          <PremiumTextSectionReveal
+            heading="Tailored Solutions. Clear Pricing."
+            description="Select a custom turnkey website build or choose a monthly care plan to keep your platform fast, secure, and always updated."
+            headingAs="h2"
+            headingClassName="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]"
+            descriptionClassName="mt-3.5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
+            align="center"
+          />
+        </div>
 
         {/* Toggle Switcher between One-Time Builds and Monthly Subscriptions */}
         <div className="flex justify-center mb-8 sm:mb-12">
