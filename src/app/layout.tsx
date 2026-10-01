@@ -100,14 +100,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon/favicon.ico", sizes: "48x48" },
-      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon/favicon.ico" },
     ],
-    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: [{ url: "/favicon/favicon.ico" }],
+    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "LevelUp Ecosystem | Web Design, Online Booking & Security in San Diego",
@@ -119,10 +117,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/projects/final-stop.png",
         width: 1200,
         height: 630,
-        alt: "LevelUp Ecosystem - Web Design & Security in San Diego",
+        alt: "LevelUp Ecosystem - Web Design, Online Booking & Systems",
       },
     ],
   },
@@ -131,7 +129,7 @@ export const metadata: Metadata = {
     title: "LevelUp Ecosystem | Web Design & Security in San Diego",
     description:
       "LevelUp Ecosystem builds fast, secure websites with 24/7 online booking, Google Maps setup, and security checks for local businesses in San Diego, CA. Founded by Richelieu Bonte.",
-    images: ["/og-image.jpg"],
+    images: ["/projects/final-stop.png"],
     creator: "@levelupecosystem",
   },
 };

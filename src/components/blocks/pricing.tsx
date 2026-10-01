@@ -165,12 +165,12 @@ export const Pricing = ({ className }: PricingProps) => {
 
         {/* Toggle Switcher between One-Time Builds and Monthly Subscriptions */}
         <div className="flex justify-center mb-8 sm:mb-12">
-          <div className="inline-flex items-center rounded-full p-1.5 bg-neutral-200/70 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700/80 backdrop-blur-sm shadow-inner">
+          <div className="grid grid-cols-2 p-1 w-[270px] sm:w-[310px] rounded-full bg-neutral-200/70 dark:bg-neutral-800/80 border border-neutral-300/80 dark:border-neutral-700/80 backdrop-blur-sm shadow-inner">
             <button
               type="button"
               onClick={() => setBillingType("build")}
               className={cn(
-                "relative rounded-full px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 focus:outline-none",
+                "relative flex items-center justify-center rounded-full py-1.5 px-2 text-[11.5px] sm:text-xs font-semibold transition-all duration-300 focus:outline-none w-full text-center",
                 billingType === "build"
                   ? "bg-foreground text-background shadow-md"
                   : "text-muted-foreground hover:text-foreground"
@@ -182,7 +182,7 @@ export const Pricing = ({ className }: PricingProps) => {
               type="button"
               onClick={() => setBillingType("subscription")}
               className={cn(
-                "relative rounded-full px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 focus:outline-none",
+                "relative flex items-center justify-center rounded-full py-1.5 px-2 text-[11.5px] sm:text-xs font-semibold transition-all duration-300 focus:outline-none w-full text-center",
                 billingType === "subscription"
                   ? "bg-foreground text-background shadow-md"
                   : "text-muted-foreground hover:text-foreground"
