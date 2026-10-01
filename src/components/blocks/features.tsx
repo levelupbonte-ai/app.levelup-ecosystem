@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowUpRight } from "lucide-react";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 
 import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
@@ -212,7 +212,72 @@ function DesktopPinnedBarberShopShowcase({ item }: { item: ProjectItem }) {
 }
 
 /**
- * Mobile Version: EXACT original ScaleOnScrollItem design restored 100%
+ * Mobile Scroll-driven Word-by-word Reveal:
+ * As the user scrolls down on mobile, each word smoothly illuminates from
+ * dimmed (opacity 0.22) to full crystal clarity (opacity 1.0) with zero layout shift.
+ */
+function MobileScrollWord({
+  word,
+  progress,
+  range,
+}: {
+  word: string;
+  progress: MotionValue<number>;
+  range: [number, number];
+}) {
+  const opacity = useTransform(progress, range, [0.25, 1]);
+
+  return (
+    <motion.span
+      style={{ opacity }}
+      className="will-change-[opacity] inline-block transition-colors"
+    >
+      {word}
+    </motion.span>
+  );
+}
+
+function MobileScrollTextReveal({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
+  const containerRef = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 88%", "end 48%"],
+  });
+
+  const words = text.split(" ");
+
+  return (
+    <p
+      ref={containerRef}
+      className={cn(
+        "text-muted-foreground flex flex-wrap gap-x-[0.28em] gap-y-1 select-none",
+        className
+      )}
+    >
+      {words.map((word, i) => {
+        const start = i / words.length;
+        const end = Math.min(1, start + 1.6 / words.length);
+        return (
+          <MobileScrollWord
+            key={`${word}-${i}`}
+            word={word}
+            progress={scrollYProgress}
+            range={[start, end]}
+          />
+        );
+      })}
+    </p>
+  );
+}
+
+/**
+ * Mobile Version: EXACT original ScaleOnScrollItem design with scroll-driven word illumination
  */
 function MobileScaleOnScrollItem({
   item,
@@ -331,9 +396,11 @@ function MobileScaleOnScrollItem({
             </Link>
           )}
 
-          <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
-            {item.description}
-          </p>
+          {/* Mobile-only word-by-word progressive clarity reveal on scroll */}
+          <MobileScrollTextReveal
+            text={item.description}
+            className="text-xs sm:text-sm md:text-base leading-relaxed"
+          />
         </div>
 
         {/* Visit Button with Rising Arrow */}
