@@ -3,9 +3,10 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowUpRight, ExternalLink, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { Background } from "@/components/background";
+import { BarberShopShowcase } from "@/components/blocks/features";
 import { DashedLine } from "@/components/dashed-line";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -60,58 +61,15 @@ export default function ProjectsPage() {
           </p>
         </section>
 
-        {/* Featured Case Study: Final Stop Barber Shop */}
-        <section className="container max-w-5xl mt-16">
+        {/* Animated Barber Shop Showcase (Exact same animation from homepage) */}
+        <div className="mt-4 sm:mt-6">
+          <BarberShopShowcase />
+        </div>
+
+        {/* Case Study Deep Dive Details */}
+        <section className="container max-w-5xl mt-12">
           <Card className="rounded-3xl border border-border/80 overflow-hidden shadow-xl bg-card">
             <CardContent className="p-8 sm:p-12 space-y-8">
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-border/60">
-                <div className="space-y-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-border text-xs font-mono font-medium text-foreground">
-                    <MapPin className="size-3.5" />
-                    <span>Client Case Study • San Diego, CA</span>
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                    Final Stop Barber Shop &amp; Salon
-                  </h2>
-                  <p className="text-muted-foreground max-w-xl text-base">
-                    Replacing phone tag with 24/7 mobile appointment booking and an elegant digital storefront for a premier San Diego barbershop and salon.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild size="lg">
-                    <a
-                      href="https://finalstop.org"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="gap-2"
-                    >
-                      Visit live site
-                      <ExternalLink className="size-4" />
-                    </a>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <Link href="/contact">
-                      Get shop preview
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-
-              {/* Project Preview Image */}
-              <div className="relative w-full aspect-[16/8] sm:aspect-[16/7] rounded-2xl overflow-hidden border border-border/70 bg-muted/30">
-                <Image
-                  src="/projects/final-stop.png"
-                  alt="Final Stop Barber Shop & Salon Website"
-                  fill
-                  className="object-contain"
-                  referrerPolicy="no-referrer"
-                  sizes="(max-width: 768px) 100vw, 1000px"
-                  priority
-                />
-              </div>
-
-              {/* Case Study Deep Dive */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div className="space-y-3">
                   <div className="size-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center font-bold text-sm">

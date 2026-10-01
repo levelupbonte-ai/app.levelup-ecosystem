@@ -43,12 +43,178 @@ const items: ProjectItem[] = [
 ];
 
 /**
- * Scale-on-Scroll Project Showcase Item
- * Optimized for mobile touch & desktop:
- * Starts visibly scaled down (~76-78%) in the viewport and expands smoothly
- * to full width (100%) as the user scrolls through it.
+ * Desktop Pinned Sticky Scrub Showcase:
+ * - Uses the EXACT original minimalist visual design.
+ * 1. Image zooms into the center of the screen.
+ * 2. Glides ("se bouscule") to the left.
+ * 3. Title reveals on the right.
+ * 4. Description reveals on the right.
+ * 5. Visit site button reveals on the right.
+ * 6. Everything stays visible, then scrolls naturally.
  */
-function ScaleOnScrollItem({
+function DesktopPinnedBarberShopShowcase({ item }: { item: ProjectItem }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 110,
+    damping: 24,
+    mass: 0.18,
+    restDelta: 0.001,
+  });
+
+  // 1. Image appearance: immediately visible, subtle zoom
+  const imageScale = useTransform(smoothProgress, [0, 0.18, 0.40, 1], [0.92, 1, 1, 1]);
+  const imageOpacity = useTransform(smoothProgress, [0, 0.10, 0.40, 1], [0.85, 1, 1, 1]);
+  const imageY = useTransform(smoothProgress, [0, 0.18, 0.40, 1], [15, 0, 0, 0]);
+
+  // 2. Image glide to the left:
+  // Starts centered (+35%), then shifts to left (0%)
+  const desktopImageX = useTransform(
+    smoothProgress,
+    [0, 0.20, 0.42, 1],
+    ["35%", "35%", "0%", "0%"]
+  );
+
+  // 3. Title reveal (0.38 -> 0.54)
+  const titleOpacity = useTransform(smoothProgress, [0.38, 0.54, 1], [0, 1, 1]);
+  const titleY = useTransform(smoothProgress, [0.38, 0.54, 1], [32, 0, 0]);
+  const titleFilter = useTransform(
+    smoothProgress,
+    [0.38, 0.54, 1],
+    ["blur(8px)", "blur(0px)", "blur(0px)"]
+  );
+
+  // 4. Description reveal (0.52 -> 0.70)
+  const descOpacity = useTransform(smoothProgress, [0.52, 0.70, 1], [0, 1, 1]);
+  const descY = useTransform(smoothProgress, [0.52, 0.70, 1], [32, 0, 0]);
+  const descFilter = useTransform(
+    smoothProgress,
+    [0.52, 0.70, 1],
+    ["blur(8px)", "blur(0px)", "blur(0px)"]
+  );
+
+  // 5. "Visit site" button reveal (0.72 -> 0.86)
+  const buttonOpacity = useTransform(smoothProgress, [0.72, 0.86, 1], [0, 1, 1]);
+  const buttonScale = useTransform(smoothProgress, [0.72, 0.86, 1], [0.86, 1, 1]);
+  const buttonY = useTransform(smoothProgress, [0.72, 0.86, 1], [22, 0, 0]);
+
+  return (
+    <div ref={containerRef} className="relative h-[240vh] hidden md:block pt-2">
+      {/* Sticky viewport pinned frame - tight optical spacing below header */}
+      <div className="sticky top-24 lg:top-28 w-full flex items-center justify-center overflow-hidden px-4 lg:px-8 py-4">
+        <div className="w-full max-w-5xl mx-auto">
+          {/* Main 12-column grid */}
+          <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* LEFT: Original Barber Shop Image card that glides to the left */}
+            <motion.div
+              style={{
+                x: desktopImageX,
+                scale: imageScale,
+                opacity: imageOpacity,
+                y: imageY,
+              }}
+              className="col-span-7 will-change-transform flex justify-center"
+            >
+              <div
+                className={cn(
+                  "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu ring-1 ring-border/40",
+                  "aspect-[16/10] sm:aspect-[16/9] md:aspect-[639/298]",
+                )}
+              >
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visit ${item.title}`}
+                  className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    referrerPolicy="no-referrer"
+                    className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                    sizes="1024px"
+                    priority
+                  />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* RIGHT: Original typography and Visit button */}
+            <div className="col-span-5 space-y-4 text-left pl-2">
+              {/* Step 1 on right: Original Title */}
+              <motion.div
+                style={{
+                  opacity: titleOpacity,
+                  y: titleY,
+                  filter: titleFilter,
+                }}
+                className="will-change-transform"
+              >
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/title block"
+                >
+                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                    {item.title}
+                  </h3>
+                </a>
+              </motion.div>
+
+              {/* Step 2 on right: Original Description */}
+              <motion.div
+                style={{
+                  opacity: descOpacity,
+                  y: descY,
+                  filter: descFilter,
+                }}
+                className="will-change-transform"
+              >
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
+                  {item.description}
+                </p>
+              </motion.div>
+
+              {/* Step 3 on right: Original Visit Button */}
+              <motion.div
+                style={{
+                  opacity: buttonOpacity,
+                  scale: buttonScale,
+                  y: buttonY,
+                }}
+                className="pt-2 will-change-transform"
+              >
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${item.ctaText} ${item.title}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
+                >
+                  <span>{item.ctaText}</span>
+                  <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </a>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Mobile Version: EXACT original ScaleOnScrollItem design restored 100%
+ */
+function MobileScaleOnScrollItem({
   item,
   isLast,
 }: {
@@ -57,9 +223,6 @@ function ScaleOnScrollItem({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Mobile & desktop scroll tracking:
-  // Starts when card enters 90% of screen (clearly visible to user so they see it grow)
-  // Reaches full scale at 48% (optical center of the screen)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 90%", "center 48%"],
@@ -72,16 +235,9 @@ function ScaleOnScrollItem({
     restDelta: 0.001,
   });
 
-  // Scale: starts visibly compact at 82% on mobile and expands to full 100% (1.0)
-  // taking almost the entire width of the mobile phone with clean breathing room
   const scale = useTransform(smoothProgress, [0, 1], [0.82, 1]);
-  // Smooth opacity: 0.70 -> 1.0
   const opacity = useTransform(smoothProgress, [0, 0.4, 1], [0.7, 0.9, 1]);
-  // Upward elevation: 28px -> 0px
   const y = useTransform(smoothProgress, [0, 1], [28, 0]);
-
-  // Mobile horizontal landscape pan:
-  // Slides the site across horizontally as user scrolls on mobile
   const mobileSlideX = useTransform(smoothProgress, [0, 1], ["0%", "-35%"]);
 
   return (
@@ -91,9 +247,9 @@ function ScaleOnScrollItem({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-      className="relative w-full max-w-4xl mx-auto px-0 sm:px-4"
+      className="md:hidden relative w-full max-w-4xl mx-auto px-0 sm:px-4"
     >
-      {/* 1. Zoomable Image Showcase with widened horizontal mobile frame */}
+      {/* 1. Zoomable Image Showcase with horizontal pan */}
       <div className="w-full flex justify-center">
         <motion.div
           style={{
@@ -116,21 +272,7 @@ function ScaleOnScrollItem({
               aria-label={`Visit ${item.title}`}
               className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
             >
-              {/* Desktop view (md and up): full snug landscape layout */}
-              <div className="hidden md:flex relative w-full h-full items-center justify-center">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  referrerPolicy="no-referrer"
-                  className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
-                  sizes="1024px"
-                  priority
-                />
-              </div>
-
-              {/* Mobile view (< md): large-format crop anchored to the top that pans horizontally across as user scrolls */}
-              <div className="md:hidden relative w-full h-full overflow-hidden rounded-xl flex items-start bg-muted/20">
+              <div className="relative w-full h-full overflow-hidden rounded-xl flex items-start bg-muted/20">
                 <motion.div
                   style={{ x: mobileSlideX }}
                   className="relative h-full w-[165%] sm:w-[150%] shrink-0 will-change-transform"
@@ -158,7 +300,7 @@ function ScaleOnScrollItem({
                 alt={item.title}
                 fill
                 referrerPolicy="no-referrer"
-                className="object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, 1024px"
                 priority
               />
@@ -167,7 +309,7 @@ function ScaleOnScrollItem({
         </motion.div>
       </div>
 
-      {/* 2. Text description & Visit Button with Rising Arrow */}
+      {/* 2. Text description & Visit Button */}
       <div className="mt-6 sm:mt-8 px-2 sm:px-2 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6">
         <div className="space-y-2 sm:space-y-3 flex-1 pr-0 sm:pr-2">
           {item.external ? (
@@ -230,9 +372,21 @@ function ScaleOnScrollItem({
   );
 }
 
+export function BarberShopShowcase({ item = items[0] }: { item?: ProjectItem }) {
+  return (
+    <div className="relative">
+      {/* Desktop: Pinned scrub animation with original design */}
+      <DesktopPinnedBarberShopShowcase item={item} />
+
+      {/* Mobile: Exact original scale-on-scroll layout with mobile pan */}
+      <MobileScaleOnScrollItem item={item} isLast={true} />
+    </div>
+  );
+}
+
 export const Features = () => {
   return (
-    <section id="feature-modern-teams" className="pb-28 lg:pb-36 pt-8">
+    <section id="feature-modern-teams" className="pb-20 lg:pb-32 pt-8">
       <div className="container max-w-6xl">
         {/* Top dashed line with text */}
         <ScrollReveal yOffset={16} duration={0.6}>
@@ -245,7 +399,7 @@ export const Features = () => {
         </ScrollReveal>
 
         {/* Section Heading */}
-        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-4 md:gap-8 lg:mt-20 lg:grid-cols-2 mb-16 sm:mb-20 lg:mb-28">
+        <div className="mx-auto mt-10 grid max-w-4xl items-center gap-4 md:gap-8 lg:mt-20 lg:grid-cols-2 mb-12 sm:mb-16 lg:mb-20">
           <SplitText
             text="Selected studio work & live projects"
             as="h2"
@@ -260,16 +414,10 @@ export const Features = () => {
           </ScrollReveal>
         </div>
 
-        {/* Stacked Scale-on-Scroll Showcase Items */}
-        <div className="space-y-14 sm:space-y-20 lg:space-y-28">
-          {items.map((item, index) => (
-            <ScaleOnScrollItem
-              key={item.id}
-              item={item}
-              isLast={index === items.length - 1}
-            />
-          ))}
-        </div>
+        {/* Showcase Items */}
+        {items.map((item) => (
+          <BarberShopShowcase key={item.id} item={item} />
+        ))}
 
         {/* Explore More Projects in dedicated projects page */}
         <div className="mt-12 sm:mt-16 text-center">
