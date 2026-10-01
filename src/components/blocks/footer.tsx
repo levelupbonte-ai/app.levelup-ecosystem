@@ -18,25 +18,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative flex flex-col items-center gap-14 pt-24 pb-0 mb-0 lg:pt-32 overflow-hidden w-full">
-      <div className="container space-y-3 text-center">
-        <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
-          San Diego Web Architecture &amp; Security
-        </span>
-        <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl font-bold">
-          Get your free interactive website preview
-        </h2>
-        <p className="text-muted-foreground mx-auto max-w-xl leading-relaxed text-balance text-sm sm:text-base">
-          Test a bespoke mobile-first booking experience tailored for your business within 24 to 48 hours. No upfront payment or obligation.
-        </p>
-        <div>
-          <Button size="lg" className="mt-4" asChild>
-            <Link href="/contact">
-              Request free preview
-            </Link>
-          </Button>
-        </div>
-      </div>
+    <footer className="relative flex flex-col items-center gap-10 pt-16 pb-0 mb-0 lg:pt-20 overflow-hidden w-full">
 
       <nav className="container flex flex-col items-center gap-4">
         <ul className="flex flex-wrap items-center justify-center gap-6">

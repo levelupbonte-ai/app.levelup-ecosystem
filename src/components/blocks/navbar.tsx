@@ -14,7 +14,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-import { Logo, LogoStar } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -75,7 +74,7 @@ function FooterStyleHeaderLogo({ className }: { className?: string }) {
         viewBox="0 0 1000 220"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-32 sm:w-36 h-auto block select-none pointer-events-none text-foreground"
+        className="w-28 sm:w-32 md:w-36 h-auto block select-none pointer-events-none text-foreground"
       >
         <text
           x="50%"
@@ -352,7 +351,7 @@ export const Navbar = () => {
         )}
       >
         <div className="flex items-center justify-between px-6 py-3 lg:p-0">
-          {/* Brand Logo */}
+          {/* Brand Logo - LevelUp Ecosystem */}
           <Link
             href="/"
             className="flex shrink-0 items-center select-none"
@@ -362,25 +361,7 @@ export const Navbar = () => {
               setIsServicesOpen(false);
             }}
           >
-            {/* Mobile Logo: Star */}
-            <div className="lg:hidden">
-              <Logo />
-            </div>
-
-            {/* Desktop Logo:
-                - At top of page (!isScrolled): EXACT same SVG typography as the footer at the bottom of the site.
-                - When header is active / scrolled: ALWAYS the star icon, never LevelUp Ecosystem. */}
-            <div className="max-lg:hidden flex items-center">
-              {isScrolled ? (
-                <div className="transition-all duration-200 animate-in fade-in zoom-in-95">
-                  <LogoStar iconClassName="size-8" />
-                </div>
-              ) : (
-                <div className="transition-all duration-200 animate-in fade-in">
-                  <FooterStyleHeaderLogo />
-                </div>
-              )}
-            </div>
+            <FooterStyleHeaderLogo />
           </Link>
 
           {/* Desktop Navigation Links with Spring Physical Shift & Dark Capsule */}

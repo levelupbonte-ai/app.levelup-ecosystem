@@ -48,7 +48,7 @@ export const Hero = () => {
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
           <SplitText
-            text="LevelUp your online presence."
+            text="LevelUp Your Online Presence."
             as="h1"
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             delay={0.15}
@@ -57,8 +57,10 @@ export const Hero = () => {
 
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>
             <p className="text-muted-foreground text-1xl mt-5 md:text-3xl">
-              LevelUp Ecosystem is the fit-for-purpose platform built for planning,
-              designing, and launching high-performance digital products.
+              Building your business together while boosting your online presence.
+              We engineer high-performance websites with 24/7 automated booking,
+              local SEO dominance, and ironclad security—turning visitors into
+              paying clients from day one.
             </p>
           </ScrollReveal>
 
@@ -78,7 +80,7 @@ export const Hero = () => {
                   href="/contact"
                   className="max-w-56 truncate text-start md:max-w-none"
                 >
-                  Build your website
+                  Build free preview
                   <ArrowRight className="stroke-3" />
                 </a>
               </Button>
