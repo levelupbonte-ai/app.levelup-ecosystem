@@ -56,11 +56,12 @@ export const Hero = () => {
           />
 
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>
-            <p className="text-muted-foreground text-1xl mt-5 md:text-3xl">
-              Building your business together while boosting your online presence.
-              We engineer high-performance websites with 24/7 automated booking,
-              local SEO dominance, and ironclad security—turning visitors into
-              paying clients from day one.
+            <p className="text-muted-foreground text-lg md:text-xl leading-relaxed mt-5 max-w-xl">
+              <span className="text-foreground font-medium">
+                Building your business together by scaling your digital impact.
+              </span>{" "}
+              We deliver fast, secure websites with automated booking and local SEO
+              designed to maximize your client conversion.
             </p>
           </ScrollReveal>
 
