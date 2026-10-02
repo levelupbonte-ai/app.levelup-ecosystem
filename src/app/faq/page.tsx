@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/projects/final-stop.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Frequently Asked Questions - LevelUp Ecosystem",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Frequently Asked Questions | LevelUp Ecosystem",
     description:
       "Answers to common questions about web design, free previews, local Google Maps ranking, and security care plans.",
-    images: ["/projects/final-stop.png"],
+    images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
 };

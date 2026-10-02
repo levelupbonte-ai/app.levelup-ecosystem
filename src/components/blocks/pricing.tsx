@@ -500,13 +500,13 @@ export const Pricing = ({ className }: PricingProps) => {
         </div>
 
         {/* Compact, Refined Toggle Switcher between Website Builds and Monthly Subscriptions */}
-        <div className="flex justify-center mb-8 sm:mb-10">
-          <div className="inline-flex items-center p-1 rounded-full bg-muted/60 dark:bg-neutral-800/80 border border-border/70 backdrop-blur-md shadow-xs">
+        <div className="flex justify-center mb-7 sm:mb-9">
+          <div className="inline-flex items-center p-0.5 rounded-lg bg-muted/60 dark:bg-neutral-900 border border-border/80 backdrop-blur-md shadow-xs">
             <button
               type="button"
               onClick={() => setBillingType("build")}
               className={cn(
-                "relative flex items-center justify-center rounded-full py-1.5 px-3.5 text-xs font-medium transition-all duration-200 focus:outline-none cursor-pointer",
+                "relative flex items-center justify-center rounded-md py-1 px-3 text-[11px] sm:text-xs font-medium transition-all duration-200 focus:outline-none cursor-pointer",
                 billingType === "build"
                   ? "bg-foreground text-background shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -518,7 +518,7 @@ export const Pricing = ({ className }: PricingProps) => {
               type="button"
               onClick={() => setBillingType("subscription")}
               className={cn(
-                "relative flex items-center justify-center rounded-full py-1.5 px-3.5 text-xs font-medium transition-all duration-200 focus:outline-none cursor-pointer",
+                "relative flex items-center justify-center rounded-md py-1 px-3 text-[11px] sm:text-xs font-medium transition-all duration-200 focus:outline-none cursor-pointer",
                 billingType === "subscription"
                   ? "bg-foreground text-background shadow-xs font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -529,43 +529,64 @@ export const Pricing = ({ className }: PricingProps) => {
           </div>
         </div>
 
-        {/* 4-Column Clean Layout matching reference, animated on tab change */}
+        {/* 4-Column Clean Layout with zero deformation on any viewport */}
         <AnimatePresence mode="wait">
           <motion.div
             key={billingType}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.22 }}
           >
-            <div className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border/80">
-                {activePlans.map((plan) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+              {activePlans.map((plan) => {
+                const isPopular = plan.badge === "Most Popular";
+                const isBestValue = plan.badge === "Best Value";
+                const isHighlighted = Boolean(plan.badge);
+
+                return (
                   <div
                     key={plan.id}
-                    className="min-w-0 flex flex-col justify-between p-5 sm:p-6 lg:p-7 transition-colors hover:bg-muted/15"
+                    className={cn(
+                      "relative flex flex-col justify-between rounded-2xl p-5 sm:p-6 transition-all duration-200 border",
+                      isHighlighted
+                        ? "bg-card border-foreground/30 dark:border-primary/40 shadow-sm ring-1 ring-foreground/10 dark:ring-primary/20"
+                        : "bg-card/70 border-border/80 hover:border-foreground/30 shadow-xs"
+                    )}
                   >
                     {/* Top section */}
                     <div className="min-w-0">
-                      {/* Header with Title and Sleek Neutral Badge */}
-                      <div className="flex items-center justify-between gap-2 min-h-[26px]">
-                        <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground truncate">
+                      {/* Header with Title and Luxury Accent Badge */}
+                      <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                        <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
                           {plan.name}
                         </h3>
                         {plan.badge && (
-                          <span className="shrink-0 rounded-full bg-foreground/10 border border-foreground/15 px-2 py-0.5 text-[9.5px] font-semibold text-foreground/90 uppercase tracking-wider">
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1 shrink-0 rounded-full px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wider shadow-2xs",
+                              isPopular &&
+                                "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/35",
+                              isBestValue &&
+                                "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/35",
+                              !isPopular &&
+                                !isBestValue &&
+                                "bg-foreground/5 text-foreground/80 border border-border"
+                            )}
+                          >
+                            <Sparkles className="size-2.5 shrink-0 opacity-80" />
                             {plan.badge}
                           </span>
                         )}
                       </div>
-                      <p className="mt-1 text-xs sm:text-sm text-muted-foreground truncate">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {plan.subtitle}
                       </p>
 
                       {/* Price Section with uniform vertical rhythm */}
-                      <div className="mt-5 mb-3 min-h-[52px] flex flex-col justify-center">
+                      <div className="mt-4 mb-2">
                         <div className="flex items-baseline gap-1.5 flex-wrap">
-                          <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+                          <span className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
                             {plan.price}
                           </span>
                           <span className="text-xs text-muted-foreground font-medium">
@@ -573,7 +594,7 @@ export const Pricing = ({ className }: PricingProps) => {
                           </span>
                         </div>
                         {plan.secondaryPrice ? (
-                          <p className="mt-1 text-[11px] text-muted-foreground truncate">
+                          <p className="mt-0.5 text-[11px] text-muted-foreground/90">
                             {plan.secondaryPrice}
                           </p>
                         ) : (
@@ -581,12 +602,12 @@ export const Pricing = ({ className }: PricingProps) => {
                         )}
                       </div>
 
-                      {/* Tags / Pills with dashed borders */}
-                      <div className="flex flex-wrap gap-1.5 my-4 min-h-[58px] content-start">
+                      {/* Tags / Pills with clean spacing */}
+                      <div className="flex flex-wrap gap-1.5 my-3 pt-3 border-t border-border/60">
                         {plan.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="inline-flex items-center rounded-md border border-dashed border-border/80 bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground font-medium"
+                            className="inline-flex items-center rounded-md border border-border/70 bg-muted/40 px-2 py-0.5 text-[10.5px] text-muted-foreground font-medium"
                           >
                             {tag}
                           </span>
@@ -599,14 +620,19 @@ export const Pricing = ({ className }: PricingProps) => {
                       <button
                         type="button"
                         onClick={() => setSelectedPlan(plan)}
-                        className="w-full rounded-full border border-border/80 bg-background/90 hover:bg-muted hover:border-foreground/30 py-2 px-3 text-xs sm:text-sm font-semibold text-foreground transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.98] text-center truncate"
+                        className={cn(
+                          "w-full rounded-xl py-2 px-3 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.98] text-center",
+                          isHighlighted
+                            ? "bg-foreground text-background hover:opacity-90"
+                            : "border border-border/80 bg-background hover:bg-muted text-foreground"
+                        )}
                       >
                         {plan.buttonText}
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </motion.div>
         </AnimatePresence>

@@ -199,7 +199,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     };
   }, [mounted, shouldPlay, onComplete]);
 
-  if (!mounted || !shouldPlay) {
+  if (!shouldPlay || phase === "done") {
     return null;
   }
 

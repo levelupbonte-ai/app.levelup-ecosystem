@@ -6,6 +6,9 @@
 <title>The Sacred Union — Luxury Wedding Invitation &amp; Official RSVP | LevelUp Ecosystem</title>
 <meta name="description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance, access event details, and receive your official digital pass.">
 <meta name="keywords" content="Wedding invitation San Diego, Luxury wedding website, Online wedding RSVP, Digital invitation ceremony, Mariage San Diego, Event RSVP management, LevelUp Ecosystem">
+<!-- Favicon & Icons -->
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+<link rel="apple-touch-icon" href="/icon.svg">
 <link rel="canonical" href="https://levelup-ecosystem.com/projects/wedding-invitation">
 
 <!-- OpenGraph / Facebook / WhatsApp / iMessage -->
@@ -14,14 +17,14 @@
 <meta property="og:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
 <meta property="og:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
 <meta property="og:url" content="https://levelup-ecosystem.com/projects/wedding-invitation">
-<meta property="og:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+<meta property="og:image" content="https://levelup-ecosystem.com/projects/wedding-card.jpg">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@LevelUpEcosyst">
 <meta name="twitter:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
 <meta name="twitter:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
-<meta name="twitter:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+<meta name="twitter:image" content="https://levelup-ecosystem.com/projects/wedding-card.jpg">
 
 <!-- Schema.org Structured Data (JSON-LD) for Search Engines & AI Crawlers -->
 <script type="application/ld+json">
@@ -61,7 +64,7 @@
         "availability": "https://schema.org/InStock",
         "validFrom": "2026-10-01"
       },
-      "image": "https://levelup-ecosystem.com/projects/final-stop.png"
+      "image": "https://levelup-ecosystem.com/projects/wedding-card.jpg"
     },
     {
       "@type": "BreadcrumbList",
@@ -366,7 +369,7 @@
     border:1px solid var(--gold);
     color:var(--gold-light);
     padding:10px 22px;
-    border-radius:30px;
+    border-radius:6px;
     font-size:12.5px;
     font-weight:600;
     box-shadow:0 10px 30px rgba(0,0,0,0.85);
@@ -409,7 +412,7 @@
     max-width:440px;
     background:linear-gradient(180deg, #181510 0%, #0d0c0a 100%);
     border:1px solid rgba(212,175,82,0.35);
-    border-radius:16px;
+    border-radius:12px;
     padding:28px 24px 24px;
     text-align:center;
     box-shadow:0 20px 60px rgba(0,0,0,0.8), 0 0 30px rgba(212,175,82,0.15);
@@ -428,7 +431,7 @@
     color:var(--cream);
     width:32px;
     height:32px;
-    border-radius:50%;
+    border-radius:4px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -441,10 +444,10 @@
     color:var(--gold-light);
   }
   .support-modal-icon{
-    width:56px;
-    height:56px;
+    width:52px;
+    height:52px;
     margin:0 auto 14px;
-    border-radius:50%;
+    border-radius:8px;
     background:rgba(212,175,82,0.12);
     border:1px solid rgba(212,175,82,0.35);
     display:flex;
@@ -589,35 +592,43 @@
     font-size:17px; color:var(--cream); letter-spacing:0.5px;
   }
 
+  .help-link-wrapper{
+    display:flex;
+    justify-content:center;
+    width:100%;
+    margin:0 0 24px 0;
+  }
   .help-link{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
-    margin:0 auto 24px auto;
+    gap:9px;
+    margin:0 auto;
     width:auto;
-    padding:8px 16px;
-    background:rgba(212,175,82,0.14);
-    border:1px solid rgba(212,175,82,0.45);
+    padding:10px 22px;
+    background:rgba(212,175,82,0.2);
+    border:1.5px solid #d4af52;
     border-radius:8px;
-    font-size:13px;
+    font-size:13.5px;
     font-weight:600;
-    color:var(--gold-light);
-    opacity:1;
+    color:#ffffff !important;
+    text-shadow:0 1px 4px rgba(0,0,0,0.9);
     text-decoration:none;
     cursor:pointer;
     transition:all .2s ease;
     font-family:'Poppins', sans-serif;
   }
   .help-link:hover{
-    background:rgba(212,175,82,0.25);
-    border-color:var(--gold-light);
-    color:#ffffff;
+    background:rgba(212,175,82,0.32);
+    border-color:#f0d98c;
+    color:#ffffff !important;
+    transform:translateY(-1px);
+    box-shadow:0 4px 16px rgba(212,175,82,0.25);
   }
   .help-link svg{
-    width:16px;
-    height:16px;
-    fill:var(--gold-light);
+    width:17px;
+    height:17px;
+    fill:#f0d98c;
     flex-shrink:0;
   }
 
@@ -643,16 +654,17 @@
     color:var(--gold); opacity:0.85;
     margin-bottom:6px; margin-top:16px;
   }
-  input[type=text], input[type=email]{
+  input[type=text], input[type=email], input[type=tel]{
     width:100%;
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(212,175,82,0.3);
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(212,175,82,0.35);
     border-radius:8px;
     padding:12px 14px;
     color:var(--cream);
     font-family:'Poppins', sans-serif;
     font-size:14.5px;
     outline:none;
+    box-sizing:border-box;
     transition:border-color .2s, background .2s;
   }
   input::placeholder{ color:rgba(242,234,214,0.35); }
@@ -668,27 +680,31 @@
   }
 
   .phone-row{
-    display:flex;
-    gap:8px;
-    align-items:stretch;
+    display:grid;
+    grid-template-columns:88px 1fr;
+    gap:10px;
+    align-items:center;
     width:100%;
+    box-sizing:border-box;
   }
   .phone-row select{
-    flex:0 0 86px;
-    max-width:90px;
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(212,175,82,0.3);
+    width:100%;
+    height:48px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(212,175,82,0.35);
     border-radius:8px;
-    padding:12px 6px;
+    padding:0 8px;
     color:var(--cream);
     font-family:'Poppins', sans-serif;
-    font-size:13px;
+    font-size:13.5px;
     outline:none;
+    box-sizing:border-box;
+    cursor:pointer;
   }
-  .phone-row input{
-    flex:1;
-    min-width:0;
+  .phone-row input[type=tel]{
     width:100%;
+    height:48px;
+    box-sizing:border-box;
   }
 
   .checkbox-row{
@@ -802,7 +818,7 @@
     color:var(--gold-light);
     text-decoration:none;
     padding:10px 22px;
-    border-radius:24px;
+    border-radius:6px;
     font-size:12.5px; letter-spacing:0.5px; font-weight:600;
     transition:background .2s, color .2s;
   }
@@ -1078,10 +1094,12 @@
     </div>
   </div>
 
-  <button type="button" class="help-link" id="helpWhatsapp">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.11-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-    Have a question? Contact LevelUp Support
-  </button>
+  <div class="help-link-wrapper">
+    <button type="button" class="help-link" id="helpWhatsapp">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.11-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+      Have a question? Contact LevelUp Support
+    </button>
+  </div>
 
   <!-- FORM -->
   <div class="card" id="formCard">
@@ -1324,24 +1342,48 @@
   }
 
   async function ensureAuth() {
-    if (auth.currentUser) return auth.currentUser;
-    const cred = await auth.signInAnonymously();
-    return cred.user;
+    try {
+      if (auth.currentUser) return auth.currentUser;
+      const cred = await auth.signInAnonymously();
+      return cred.user;
+    } catch (authErr) {
+      console.warn("Anonymous auth unavailable:", authErr);
+      return null;
+    }
   }
 
   async function saveInscription(data) {
-    const ref = db
-      .collection("artifacts").doc(APP_ID)
-      .collection("public").doc("data")
-      .collection("parties").doc(data.inviteCode);
-    await ref.set({
-      nom: data.nom,
-      email: data.email,
-      telephone: data.telephone,
-      inviteCode: data.inviteCode,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      evenement: "Wedding Invitation"
-    });
+    // 1. Primary write to public bookings collection
+    try {
+      await db.collection("bookings").doc(data.inviteCode).set({
+        nom: data.nom,
+        email: data.email,
+        telephone: data.telephone,
+        inviteCode: data.inviteCode,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        evenement: "Wedding Invitation"
+      });
+    } catch (bErr) {
+      console.warn("Bookings collection save fallback:", bErr);
+    }
+
+    // 2. Secondary write to artifacts parties
+    try {
+      const ref = db
+        .collection("artifacts").doc(APP_ID)
+        .collection("public").doc("data")
+        .collection("parties").doc(data.inviteCode);
+      await ref.set({
+        nom: data.nom,
+        email: data.email,
+        telephone: data.telephone,
+        inviteCode: data.inviteCode,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        evenement: "Wedding Invitation"
+      });
+    } catch (aErr) {
+      console.warn("Parties artifact save fallback:", aErr);
+    }
   }
 
   async function sendInvitationEmail(data) {

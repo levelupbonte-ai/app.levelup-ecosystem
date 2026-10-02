@@ -59,6 +59,17 @@ service cloud.firestore {
       allow read, update, delete: if isAuthenticated();
     }
 
+    // Wedding RSVP parties and artifact data
+    match /parties/{partyId} {
+      allow create: if true;
+      allow read, update: if isAuthenticated();
+    }
+
+    match /artifacts/{appId}/public/data/parties/{partyId} {
+      allow create, read: if true;
+      allow update, delete: if isAuthenticated();
+    }
+
     // Newsletter signups
     match /newsletter/{newsletterId} {
       allow create: if true;

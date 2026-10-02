@@ -4,14 +4,10 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 
 interface FeatureSection {
   category: string;
@@ -237,51 +233,42 @@ const PlanHeaders = ({
   selectedPlan: number;
   onPlanChange: (index: number) => void;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="">
       {/* Mobile View */}
-      <div className="md:hidden">
-        <Collapsible open={isOpen} onOpenChange={setIsOpen} className="">
-          <div className="flex items-center justify-between border-b py-4">
-            <CollapsibleTrigger className="flex items-center gap-2">
-              <h3 className="text-xl font-bold">
-                {pricingPlans[selectedPlan].name}
-              </h3>
-              <ChevronsUpDown
-                className={`size-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
-              />
-            </CollapsibleTrigger>
-            <Button
-              variant={pricingPlans[selectedPlan].button.variant}
-              size="sm"
-              asChild
+      <div className="md:hidden space-y-3 pb-4 border-b">
+        <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-muted/60 border border-border/80 text-center">
+          {pricingPlans.map((plan, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => onPlanChange(index)}
+              className={cn(
+                "py-1.5 px-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer truncate",
+                selectedPlan === index
+                  ? "bg-foreground text-background shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
             >
-              <Link href={pricingPlans[selectedPlan].button.href}>
-                {pricingPlans[selectedPlan].button.text}
-              </Link>
-            </Button>
-          </div>
-          <CollapsibleContent className="flex flex-col space-y-2 p-2">
-            {pricingPlans.map(
-              (plan, index) =>
-                index !== selectedPlan && (
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    key={index}
-                    onClick={() => {
-                      onPlanChange(index);
-                      setIsOpen(false);
-                    }}
-                  >
-                    {plan.name}
-                  </Button>
-                ),
-            )}
-          </CollapsibleContent>
-        </Collapsible>
+              {plan.name.split(" ")[0]}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-between gap-3 pt-1">
+          <h3 className="text-sm sm:text-base font-bold text-foreground truncate">
+            {pricingPlans[selectedPlan].name}
+          </h3>
+          <Button
+            variant={pricingPlans[selectedPlan].button.variant}
+            size="sm"
+            asChild
+            className="shrink-0 font-semibold"
+          >
+            <Link href={pricingPlans[selectedPlan].button.href}>
+              {pricingPlans[selectedPlan].button.text}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Desktop View */}

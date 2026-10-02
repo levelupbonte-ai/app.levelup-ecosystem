@@ -127,14 +127,32 @@ export async function POST(req: NextRequest) {
           });
           clientDelivered = true;
 
-          // Send internal notification to teams@levelup-ecosystem.com (auto-forwarded by Cloudflare)
-          await resend.emails.send({
-            from: "LevelUp System <system@levelup-ecosystem.com>",
-            to: ["teams@levelup-ecosystem.com"],
-            subject: `[New Lead] ${name}${company ? ` (${company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
-            html: internalAlertHtml,
-          });
-          teamAlertDelivered = true;
+          // Send internal notification to teams@levelup-ecosystem.com
+          try {
+            const systemSender = process.env.RESEND_FROM_EMAIL || "LevelUp System <system@levelup-ecosystem.com>";
+            await resend.emails.send({
+              from: systemSender,
+              to: ["teams@levelup-ecosystem.com"],
+              subject: `[New Lead] ${name}${company ? ` (${company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
+              html: internalAlertHtml,
+            });
+            teamAlertDelivered = true;
+          } catch {
+            try {
+              await resend.emails.send({
+                from: "LevelUp <onboarding@resend.dev>",
+                to: ["teams@levelup-ecosystem.com"],
+                subject: `[New Lead] ${name}${company ? ` (${company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
+                html: internalAlertHtml,
+              });
+              teamAlertDelivered = true;
+            } catch (tErr) {
+              if (process.env.NODE_ENV === "development") {
+                // eslint-disable-next-line no-console
+                console.warn("[Resend] Team alert fallback failed:", tErr);
+              }
+            }
+          }
         } catch (resendErr) {
           if (process.env.NODE_ENV === "development") {
             // eslint-disable-next-line no-console

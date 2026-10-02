@@ -28,10 +28,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/projects/final-stop.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Final Stop Barber Shop Case Study - LevelUp Ecosystem",
+        alt: "Featured Projects & Case Studies - LevelUp Ecosystem",
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Featured Projects & Case Studies | LevelUp Ecosystem",
     description:
       "Explore real client websites and case studies engineered for conversion and online booking in San Diego, CA.",
-    images: ["/projects/final-stop.png"],
+    images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
 };

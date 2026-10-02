@@ -109,12 +109,30 @@ export const serverAction = actionClient
           queuePosition,
         });
 
-        await resend.emails.send({
-          from: "LevelUp System <system@levelup-ecosystem.com>",
-          to: ["teams@levelup-ecosystem.com"],
-          subject: `[New Lead] ${parsedInput.name}${parsedInput.company ? ` (${parsedInput.company})` : ""}${isWaitlisted ? " [Priority Waitlist]" : ""}`,
-          html: teamHtml,
-        });
+        // Internal team notification
+        try {
+          const systemFrom = process.env.RESEND_FROM_EMAIL || "LevelUp System <system@levelup-ecosystem.com>";
+          await resend.emails.send({
+            from: systemFrom,
+            to: ["teams@levelup-ecosystem.com"],
+            subject: `[New Lead] ${parsedInput.name}${parsedInput.company ? ` (${parsedInput.company})` : ""}${isWaitlisted ? " [Priority Waitlist]" : ""}`,
+            html: teamHtml,
+          });
+        } catch {
+          try {
+            await resend.emails.send({
+              from: "LevelUp <onboarding@resend.dev>",
+              to: ["teams@levelup-ecosystem.com"],
+              subject: `[New Lead] ${parsedInput.name}${parsedInput.company ? ` (${parsedInput.company})` : ""}${isWaitlisted ? " [Priority Waitlist]" : ""}`,
+              html: teamHtml,
+            });
+          } catch (teamFallbackErr) {
+            if (process.env.NODE_ENV === "development") {
+              // eslint-disable-next-line no-console
+              console.warn("[Resend] Team email fallback send failed:", teamFallbackErr);
+            }
+          }
+        }
       } catch (emailErr) {
         if (process.env.NODE_ENV === "development") {
           // eslint-disable-next-line no-console

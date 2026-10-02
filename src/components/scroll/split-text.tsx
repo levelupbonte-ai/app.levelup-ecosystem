@@ -70,9 +70,8 @@ export function SplitText({
         className="inline-flex flex-wrap gap-x-[0.28em] gap-y-1"
         style={{ perspective: 1000 }}
         initial="hidden"
-        animate={waitPreloader ? (isReady ? "visible" : "hidden") : undefined}
-        whileInView={!waitPreloader ? "visible" : undefined}
-        viewport={!waitPreloader ? { once, margin: "-40px" } : undefined}
+        whileInView="visible"
+        viewport={{ once, margin: "0px", amount: 0.05 }}
         variants={containerVariants}
       >
         {words.map((word, i) => (

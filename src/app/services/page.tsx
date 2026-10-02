@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/projects/final-stop.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "LevelUp Ecosystem - Bespoke Web Services & Systems",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: "Web Services & Solutions | LevelUp Ecosystem",
     description:
       "Bespoke web architecture, 24/7 online booking, local SEO, and cybersecurity audits for businesses in San Diego, CA.",
-    images: ["/projects/final-stop.png"],
+    images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
 };
