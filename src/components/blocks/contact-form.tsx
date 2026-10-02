@@ -1,7 +1,7 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check } from "lucide-react";
-import { motion } from "motion/react";
+import { AlertCircle, Check, Clock } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -42,70 +42,19 @@ export function ContactForm() {
       agree: false,
     } as unknown as Schema,
   });
+
   const formAction = useAction(serverAction, {
     onSuccess: () => {
-      // TODO: show success message
       form.reset();
     },
-    onError: () => {
-      // TODO: show error message
-    },
   });
+
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
     formAction.execute(data);
   });
 
-  const { isExecuting, hasSucceeded, result } = formAction;
+  const { isExecuting, hasSucceeded, hasErrored, result } = formAction;
   const isWaitlisted = result.data?.isWaitlisted;
-  const queuePosition = result.data?.queuePosition || 1;
-
-  if (hasSucceeded) {
-    return (
-      <div className="w-full rounded-2xl border border-border/80 bg-card/60 p-6 sm:p-8">
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, stiffness: 300, damping: 25 }}
-          className="h-full space-y-4 text-center"
-        >
-          <motion.div
-            initial={{ scale: 0.5 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: 0.2,
-              type: "spring",
-              stiffness: 500,
-              damping: 15,
-            }}
-            className="mx-auto flex size-12 items-center justify-center rounded-xl border border-purple-500/40 bg-purple-500/10 text-purple-400"
-          >
-            <Check className="size-6" />
-          </motion.div>
-
-          <div className="space-y-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
-              {isWaitlisted ? `Priority Queue Status (#${queuePosition})` : "Preview Track Confirmed"}
-            </span>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">
-              {isWaitlisted ? "High Demand: Request Queued" : "We Received Your Request"}
-            </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
-              {isWaitlisted
-                ? `Immediate build capacity is currently filled (3 active client tracks). Your project is queued at position #${queuePosition}. Our team will review your requirements as soon as the next slot opens.`
-                : "Our team has received your submission and is reviewing your project details. We will build and deliver your functional mobile preview within 24 to 48 hours."}
-            </p>
-          </div>
-
-          <div className="pt-2">
-            <p className="text-xs text-muted-foreground/80">
-              A detailed confirmation has been sent to your email from{" "}
-              <span className="font-mono text-foreground">contact@levelup-ecosystem.com</span>.
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <Form {...form}>
@@ -129,9 +78,9 @@ export function ContactForm() {
                     field.onChange(val);
                   }}
                   placeholder="First and last name"
+                  disabled={isExecuting}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -145,16 +94,16 @@ export function ContactForm() {
               <FormLabel>Email address * </FormLabel>
               <FormControl>
                 <Input
-                  type="text"
+                  type="email"
                   value={field.value}
                   onChange={(e) => {
                     const val = e.target.value;
                     field.onChange(val);
                   }}
                   placeholder="me@company.com"
+                  disabled={isExecuting}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -175,9 +124,9 @@ export function ContactForm() {
                     field.onChange(val);
                   }}
                   placeholder="Company name"
+                  disabled={isExecuting}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -197,7 +146,11 @@ export function ContactForm() {
             return (
               <FormItem className="w-full">
                 <FormLabel>Number of employees </FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={isExecuting}
+                >
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="e.g. 11-50" />
@@ -211,7 +164,6 @@ export function ContactForm() {
                     ))}
                   </SelectContent>
                 </Select>
-
                 <FormMessage />
               </FormItem>
             );
@@ -230,9 +182,9 @@ export function ContactForm() {
                   {...field}
                   placeholder="Write your message"
                   className="resize-none"
+                  disabled={isExecuting}
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -248,21 +200,54 @@ export function ContactForm() {
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   required
+                  disabled={isExecuting}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel>I agree to the terms and conditions</FormLabel>
-
                 <FormMessage />
               </div>
             </FormItem>
           )}
         />
-        <div className="flex w-full items-center justify-end pt-3">
-          <Button className="rounded-lg" size="sm">
-            {isExecuting ? "Submitting..." : "Submit"}
+
+        <div className="flex w-full items-center justify-end pt-2">
+          <Button className="rounded-lg font-semibold" size="sm" disabled={isExecuting}>
+            {isExecuting ? "Submitting..." : "Submit request"}
           </Button>
         </div>
+
+        {/* INLINE STATUS ALERT AT THE BOTTOM OF FORM */}
+        {hasSucceeded && isWaitlisted && (
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/10 p-3.5 text-xs text-amber-200/95 transition-all">
+            <Clock className="mt-0.5 size-4 shrink-0 text-amber-400" />
+            <div className="space-y-1">
+              <p className="font-semibold text-amber-300">Priority Waitlist Active</p>
+              <p className="leading-relaxed">
+                Immediate build capacity is currently full. Your request has been placed on our priority waitlist (estimated 3 to 5 business days turnaround). Our team will review your project details as soon as a development slot opens. A confirmation email has been sent to your inbox.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {hasSucceeded && !isWaitlisted && (
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-purple-500/25 bg-purple-500/10 p-3.5 text-xs text-purple-200/95 transition-all">
+            <Check className="mt-0.5 size-4 shrink-0 text-purple-400" />
+            <div className="space-y-1">
+              <p className="font-semibold text-purple-300">Preview Request Received</p>
+              <p className="leading-relaxed">
+                Thank you! Our team has received your submission. We will prepare your functional mobile preview within 24 to 48 hours. A confirmation email has been sent to your inbox.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {hasErrored && (
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400">
+            <AlertCircle className="mt-0.5 size-4 shrink-0" />
+            <span>An error occurred while submitting your request. Please check your connection and try again.</span>
+          </div>
+        )}
       </form>
     </Form>
   );

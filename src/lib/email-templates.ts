@@ -144,15 +144,14 @@ export function getPreviewRequestEmailHtml({
   name,
   company,
   isWaitlisted,
-  queuePosition = 1,
   message,
 }: PreviewRequestEmailProps): string {
   const statusHeadline = isWaitlisted
-    ? `Priority Queue (#${queuePosition}): Your Preview Request`
+    ? `Priority Waitlist: Your Website Preview Request`
     : `We Received Your Preview Request`;
 
   const statusParagraph = isWaitlisted
-    ? `Due to high demand for our custom engineering slots, all 3 immediate build tracks are currently active. <strong>Your project has been placed in our priority queue at position #${queuePosition}.</strong> Our team will begin reviewing your requirements as soon as the next development slot opens.`
+    ? `Due to high demand for our custom engineering slots, all immediate build tracks are currently active. <strong>Your project has been placed on our priority waitlist.</strong> Due to our current build volume, waitlist review typically takes 3 to 5 business days. Our team will review your requirements as soon as a development slot opens.`
     : `Our team has received your submission and is reviewing your project details. We will build and share a <strong>functional interactive mobile prototype within 24 to 48 hours</strong> with zero financial commitment.`;
 
   return `<!DOCTYPE html>
@@ -193,7 +192,7 @@ export function getPreviewRequestEmailHtml({
 
               <!-- QUEUE STATUS OR TIMELINE BOX -->
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#181512;border:1px solid ${
-                isWaitlisted ? "#6d28d9" : "#383127"
+                isWaitlisted ? "#d97706" : "#383127"
               };border-radius:12px;margin:22px 0 24px;">
                 <tr>
                   <td style="padding:18px 20px;">
@@ -201,12 +200,12 @@ export function getPreviewRequestEmailHtml({
                       <tr>
                         <td>
                           <span style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#a09584;display:block;">
-                            ${isWaitlisted ? "Queue Position" : "Estimated Turnaround"}
+                            ${isWaitlisted ? "Status & Turnaround" : "Estimated Turnaround"}
                           </span>
                           <span style="font-size:16px;font-weight:700;color:${
-                            isWaitlisted ? "#a78bfa" : "#faf6ef"
+                            isWaitlisted ? "#fbbf24" : "#faf6ef"
                           };">
-                            ${isWaitlisted ? `Position #${queuePosition} in Priority Line` : "24 to 48 Business Hours"}
+                            ${isWaitlisted ? "Priority Waitlist (Estimated 3 to 5 business days)" : "24 to 48 Business Hours"}
                           </span>
                         </td>
                       </tr>

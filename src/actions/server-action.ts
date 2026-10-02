@@ -71,7 +71,7 @@ export const serverAction = actionClient
           from: "LevelUp Ecosystem <contact@levelup-ecosystem.com>",
           to: [parsedInput.email],
           subject: isWaitlisted
-            ? `Priority Queue (#${queuePosition}): Your Website Preview Request`
+            ? "Priority Waitlist: Your Website Preview Request — LevelUp Ecosystem"
             : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
           html: clientHtml,
         });
@@ -91,7 +91,7 @@ export const serverAction = actionClient
         await resend.emails.send({
           from: "LevelUp System <system@levelup-ecosystem.com>",
           to: ["teams@levelup-ecosystem.com"],
-          subject: `[New Lead] ${parsedInput.name}${parsedInput.company ? ` (${parsedInput.company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
+          subject: `[New Lead] ${parsedInput.name}${parsedInput.company ? ` (${parsedInput.company})` : ""}${isWaitlisted ? " [Priority Waitlist]" : ""}`,
           html: teamHtml,
         });
       } catch (emailErr) {
@@ -105,10 +105,9 @@ export const serverAction = actionClient
     return {
       success: true,
       isWaitlisted,
-      queuePosition,
       emailDelivered,
       message: isWaitlisted
-        ? `High demand: All 3 immediate build slots are currently filled. You are placed in priority queue (#${queuePosition}). Our team will review your project as soon as the next slot opens.`
+        ? "High demand notice: Immediate build capacity is currently full. Your request has been placed on our priority waitlist (estimated 3 to 5 business days turnaround). Our team will review your project details as soon as a slot opens."
         : "Thank you! Our team has received your request and will prepare your free interactive mobile preview within 24 to 48 hours.",
     };
   });

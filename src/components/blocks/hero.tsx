@@ -1,4 +1,7 @@
-import { ArrowRight } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
 import { PremiumServiceBlock } from "@/components/scroll/premium-reveal";
@@ -30,6 +33,21 @@ const features = [
 ];
 
 export const Hero = () => {
+  const [isOpeningStudio, setIsOpeningStudio] = useState(false);
+
+  const handleOpenStudio = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsOpeningStudio(true);
+
+    // Open Studio in a fresh tab
+    window.open("https://studio.levelup-ecosystem.com", "_blank", "noopener,noreferrer");
+
+    // Reset spinner smoothly after tab launch
+    setTimeout(() => {
+      setIsOpeningStudio(false);
+    }, 2000);
+  };
+
   return (
     <section className="pt-28 lg:pt-40 pb-6 sm:pb-10">
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
@@ -61,18 +79,23 @@ export const Hero = () => {
               </Button>
               <Button
                 variant="outline"
-                className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md font-semibold"
-                asChild
+                className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md font-semibold cursor-pointer transition-all duration-200"
+                onClick={handleOpenStudio}
+                disabled={isOpeningStudio}
               >
-                <a
-                  href="https://studio.levelup-ecosystem.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="max-w-56 truncate text-start md:max-w-none"
-                >
-                  Build free preview
-                  <ArrowRight className="stroke-3" />
-                </a>
+                {isOpeningStudio ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin text-purple-400 stroke-3" />
+                    <span>Opening LevelStudio...</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="max-w-56 truncate text-start md:max-w-none">
+                      Build free preview
+                    </span>
+                    <ArrowRight className="size-4 stroke-3" />
+                  </>
+                )}
               </Button>
             </div>
           </ScrollReveal>
