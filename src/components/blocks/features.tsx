@@ -111,8 +111,6 @@ function DesktopPinnedBarberShopShowcase({
                 {item.external ? (
                   <a
                     href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     aria-label={`Visit ${item.title}`}
                     className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
                   >
@@ -160,8 +158,6 @@ function DesktopPinnedBarberShopShowcase({
                 {item.external ? (
                   <a
                     href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="group/title block"
                   >
                     <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
@@ -203,8 +199,6 @@ function DesktopPinnedBarberShopShowcase({
                 {item.external ? (
                   <a
                     href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     aria-label={`${item.ctaText} ${item.title}`}
                     className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
                   >
@@ -361,8 +355,6 @@ function MobileScaleOnScrollItem({
           {item.external ? (
             <a
               href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={`Visit ${item.title}`}
               className="relative w-full h-full flex items-center justify-center cursor-pointer group overflow-hidden rounded-xl sm:rounded-2xl"
             >
@@ -409,8 +401,6 @@ function MobileScaleOnScrollItem({
           {item.external ? (
             <a
               href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group/title block"
             >
               <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
@@ -437,8 +427,6 @@ function MobileScaleOnScrollItem({
           {item.external ? (
             <a
               href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={`${item.ctaText} ${item.title}`}
               className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
             >

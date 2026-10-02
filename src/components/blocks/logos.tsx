@@ -140,8 +140,6 @@ const LogoRow = ({ tools, direction }: LogoRowProps) => {
             return (
               <Link
                 href={tool.href}
-                target="_blank"
-                rel="noreferrer"
                 key={index}
                 className="group flex items-center justify-center gap-2.5 px-3 py-2 text-muted-foreground/75 transition-all duration-200 hover:text-foreground hover:scale-105"
               >
@@ -163,8 +161,6 @@ const LogoRow = ({ tools, direction }: LogoRowProps) => {
             return (
               <Link
                 href={tool.href}
-                target="_blank"
-                rel="noreferrer"
                 key={index}
                 className="mx-4 inline-flex items-center gap-2 text-muted-foreground/80 hover:text-foreground px-2 py-1"
               >

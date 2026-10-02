@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     const rawImage =
       firestoreData.ogImage ||
       firestoreData.image ||
-      "/projects/final-stop.png";
+      "/og-image.jpg";
     const imageUrl = rawImage.startsWith("http")
       ? rawImage
       : `https://levelup-ecosystem.com${rawImage}`;

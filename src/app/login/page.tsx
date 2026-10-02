@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithCredential,
   GoogleAuthProvider,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -14,6 +16,7 @@ import { Loader2, AlertCircle } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { Background } from "@/components/background";
 import { Logo } from "@/components/logo";
+import { LevelUpTransitionOverlay } from "@/components/transition-overlay";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,12 +29,60 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleRedirectToStudio = () => {
-    // Redirect securely in the same browser tab to LevelStudio
-    window.location.href = STUDIO_URL;
+    setIsRedirecting(true);
   };
+
+  // Google One Tap automatic prompt handler
+  const handleGoogleCredentialResponse = async (response: { credential?: string }) => {
+    if (!response.credential) return;
+    try {
+      setGoogleLoading(true);
+      setError(null);
+      const credential = GoogleAuthProvider.credential(response.credential);
+      const userCredential = await signInWithCredential(auth, credential);
+      const user = userCredential.user;
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          user_id: user.uid,
+          name: user.displayName || user.email?.split("@")[0] || "Architect",
+          email: user.email || "",
+          role: "architect",
+        });
+      }
+
+      handleRedirectToStudio();
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
+      console.error("Google One Tap error:", err);
+      setGoogleLoading(false);
+    }
+  };
+
+  const initGoogleOneTap = useCallback(() => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (typeof window !== "undefined" && (window as unknown as { google?: { accounts?: { id?: { initialize: (c: unknown) => void; prompt: () => void } } } }).google?.accounts?.id && clientId) {
+      (window as unknown as { google: { accounts: { id: { initialize: (c: unknown) => void; prompt: () => void } } } }).google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      (window as unknown as { google: { accounts: { id: { prompt: () => void } } } }).google.accounts.id.prompt();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    initGoogleOneTap();
+  }, [initGoogleOneTap]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +110,7 @@ const Login = () => {
 
       handleRedirectToStudio();
     } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error("Login error:", err);
       const errCode = (err as { code?: string })?.code;
       if (
@@ -100,6 +152,7 @@ const Login = () => {
 
       handleRedirectToStudio();
     } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error("Google sign in error:", err);
       const errCode = (err as { code?: string })?.code;
       if (errCode !== "auth/popup-closed-by-user") {
@@ -111,6 +164,17 @@ const Login = () => {
 
   return (
     <Background>
+      <LevelUpTransitionOverlay
+        isActive={isRedirecting}
+        title="Login Successful"
+        subtitle="Redirecting to LevelStudio..."
+        targetUrl={STUDIO_URL}
+      />
+      <Script
+        src="https://accounts.google.com/gsi/client"
+        strategy="afterInteractive"
+        onLoad={initGoogleOneTap}
+      />
       <section className="py-28 lg:pt-44 lg:pb-32">
         <div className="container">
           <div className="flex flex-col gap-4">

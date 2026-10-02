@@ -15,6 +15,21 @@ const nextConfig: NextConfig = {
         destination: "/projects/wedding-invitation",
         permanent: true,
       },
+      {
+        source: "/retrouvailles.html",
+        destination: "/projects/wedding-invitation",
+        permanent: true,
+      },
+      {
+        source: "/wedding-invitation",
+        destination: "/projects/wedding-invitation",
+        permanent: true,
+      },
+      {
+        source: "/wedding-invitation.html",
+        destination: "/projects/wedding-invitation",
+        permanent: true,
+      },
     ];
   },
   eslint: {

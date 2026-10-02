@@ -32,7 +32,26 @@ export function SplitText({
   once = true,
   waitPreloader = false,
 }: SplitTextProps) {
-  const isReady = true;
+  const [isReady, setIsReady] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!waitPreloader || (window as unknown as { __site_ready?: boolean }).__site_ready) {
+      setIsReady(true);
+      return;
+    }
+
+    const handleReady = () => setIsReady(true);
+    window.addEventListener("site-ready", handleReady);
+    const timeout = setTimeout(() => setIsReady(true), 1200);
+
+    return () => {
+      window.removeEventListener("site-ready", handleReady);
+      clearTimeout(timeout);
+    };
+  }, [waitPreloader]);
+
   const words = text.split(" ");
 
   const containerVariants: Variants = {
@@ -70,6 +89,7 @@ export function SplitText({
         className="inline-flex flex-wrap gap-x-[0.28em] gap-y-1"
         style={{ perspective: 1000 }}
         initial="hidden"
+        animate={isReady ? "visible" : "hidden"}
         whileInView="visible"
         viewport={{ once, margin: "0px", amount: 0.05 }}
         variants={containerVariants}

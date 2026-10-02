@@ -7,6 +7,7 @@ import { DashedLine } from "@/components/dashed-line";
 import { PremiumServiceBlock } from "@/components/scroll/premium-reveal";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
+import { LevelUpTransitionOverlay } from "@/components/transition-overlay";
 import { Button } from "@/components/ui/button";
 
 const features = [
@@ -38,18 +39,19 @@ export const Hero = () => {
   const handleOpenStudio = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsOpeningStudio(true);
-
-    // Open Studio in a fresh tab
-    window.open("https://studio.levelup-ecosystem.com", "_blank", "noopener,noreferrer");
-
-    // Reset spinner smoothly after tab launch
-    setTimeout(() => {
-      setIsOpeningStudio(false);
-    }, 2000);
   };
 
   return (
     <section className="pt-28 lg:pt-40 pb-6 sm:pb-10">
+      <LevelUpTransitionOverlay
+        isActive={isOpeningStudio}
+        title="LevelStudio Workspace"
+        subtitle="Launching interactive environment..."
+        targetUrl="https://studio.levelup-ecosystem.com"
+        onComplete={() => {
+          window.location.href = "https://studio.levelup-ecosystem.com";
+        }}
+      />
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
@@ -59,6 +61,7 @@ export const Hero = () => {
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             delay={0.15}
             stagger={0.065}
+            waitPreloader={true}
           />
 
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>

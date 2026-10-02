@@ -4,9 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 
-const REFRESH_COUNT_KEY = "levelup_refresh_count_v2";
-const LAST_ACTIVE_KEY = "levelup_last_active_timestamp";
-const AWAY_THRESHOLD_MS = 10 * 60 * 1000; // 10 minutes absence ("un bon moment")
+const PRELOADER_SEEN_KEY = "levelup_preloader_intro_seen_v3";
 
 interface PreloaderProps {
   forcePlay?: boolean;
@@ -19,14 +17,10 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     if (forcePlay) return true;
     if (typeof window === "undefined") return true;
     try {
-      const lastActive = localStorage.getItem(LAST_ACTIVE_KEY);
-      const count = parseInt(localStorage.getItem(REFRESH_COUNT_KEY) || "0", 10);
-      if (!lastActive || Date.now() - parseInt(lastActive, 10) >= AWAY_THRESHOLD_MS || count + 1 >= 3) {
-        return true;
-      }
-      return false;
+      const hasSeen = localStorage.getItem(PRELOADER_SEEN_KEY);
+      return hasSeen !== "true";
     } catch {
-      return true;
+      return false;
     }
   });
   const [phase, setPhase] = useState<
@@ -36,7 +30,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
   const [textWidth, setTextWidth] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check refresh count and absence timestamp on mount
+  // Check localStorage on mount
   useEffect(() => {
     if (forcePlay) {
       setShouldPlay(true);
@@ -46,48 +40,28 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     }
 
     try {
-      const now = Date.now();
-      const lastActive = localStorage.getItem(LAST_ACTIVE_KEY);
-      const currentCount = parseInt(
-        localStorage.getItem(REFRESH_COUNT_KEY) || "0",
-        10,
-      );
-      const nextCount = currentCount + 1;
+      const hasSeen = localStorage.getItem(PRELOADER_SEEN_KEY);
 
-      let willPlay = false;
-
-      // 1. First visit or returned after being away for a good while (> 10 minutes)
-      if (lastActive) {
-        const timeAway = now - parseInt(lastActive, 10);
-        if (timeAway >= AWAY_THRESHOLD_MS) {
-          willPlay = true;
-        }
-      } else {
-        // First visit ever
-        willPlay = true;
-      }
-
-      // 2. Trigger every 3 actualisations / refreshes of the site
-      if (nextCount >= 3) {
-        willPlay = true;
-        localStorage.setItem(REFRESH_COUNT_KEY, "0");
-      } else {
-        localStorage.setItem(REFRESH_COUNT_KEY, nextCount.toString());
-      }
-
-      // Record current active timestamp
-      localStorage.setItem(LAST_ACTIVE_KEY, now.toString());
-
-      if (willPlay) {
-        setShouldPlay(true);
-        setPhase("travel");
-      } else {
+      if (hasSeen === "true") {
         setShouldPlay(false);
         setPhase("done");
+        if (typeof window !== "undefined") {
+          (window as unknown as { __site_ready?: boolean }).__site_ready = true;
+          window.dispatchEvent(new CustomEvent("site-ready"));
+        }
+      } else {
+        // Mark as seen immediately so refreshes or back navigation never replay it
+        localStorage.setItem(PRELOADER_SEEN_KEY, "true");
+        setShouldPlay(true);
+        setPhase("travel");
       }
     } catch {
-      setShouldPlay(true);
-      setPhase("travel");
+      setShouldPlay(false);
+      setPhase("done");
+      if (typeof window !== "undefined") {
+        (window as unknown as { __site_ready?: boolean }).__site_ready = true;
+        window.dispatchEvent(new CustomEvent("site-ready"));
+      }
     }
 
     setMounted(true);
@@ -170,6 +144,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     const tExit = setTimeout(() => {
       setPhase("exit");
       if (typeof window !== "undefined") {
+        (window as unknown as { __site_ready?: boolean }).__site_ready = true;
         window.dispatchEvent(new CustomEvent("site-ready"));
         window.dispatchEvent(new Event("scroll"));
         window.dispatchEvent(new Event("resize"));

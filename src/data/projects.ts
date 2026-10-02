@@ -68,7 +68,7 @@ export async function getLiveProjects(): Promise<ProjectItem[]> {
         badge: data.badge || "Client Project",
         title: data.title || "Project",
         description: data.description || "",
-        image: data.image || "/projects/final-stop.png",
+        image: data.image || "/og-image.jpg",
         href: data.href || "#",
         external: data.external ?? true,
         aspectRatio: data.aspectRatio || "aspect-[639/298]",
