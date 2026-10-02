@@ -26,14 +26,14 @@ export const allProjects: ProjectItem[] = [
     ctaText: "Visit site",
   },
   {
-    id: "retrouvailles",
+    id: "wedding-invitation",
     step: "02",
     badge: "Client Project • Digital Experience",
     title: "Wedding Invitation",
     description:
       "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and instant confirmation.",
     image: "/projects/wedding-card.jpg",
-    href: "/retrouvailles",
+    href: "/projects/wedding-invitation",
     external: false,
     aspectRatio: "aspect-[639/298]",
     ctaText: "Explore the invitation",

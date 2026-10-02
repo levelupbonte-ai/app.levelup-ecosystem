@@ -269,8 +269,12 @@ export const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  // On the standalone event landing page, hide the root navbar to let the dedicated sticky gold header display
-  if (pathname === "/retrouvailles") {
+  // On standalone digital project showcase pages, hide the root navbar to let the dedicated sticky header display
+  if (
+    pathname === "/projects/wedding-invitation" ||
+    pathname === "/project/wedding-invitation" ||
+    pathname === "/retrouvailles"
+  ) {
     return null;
   }
 

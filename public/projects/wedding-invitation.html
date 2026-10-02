@@ -3,7 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Invitation — Celebration &amp; RSVP</title>
+<title>The Sacred Union — Luxury Wedding Invitation &amp; Official RSVP | LevelUp Ecosystem</title>
+<meta name="description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance, access event details, and receive your official digital pass.">
+<meta name="keywords" content="Wedding invitation San Diego, Luxury wedding website, Online wedding RSVP, Digital invitation ceremony, Mariage San Diego, Event RSVP management, LevelUp Ecosystem">
+<link rel="canonical" href="https://levelup-ecosystem.com/projects/wedding-invitation">
+
+<!-- OpenGraph / Facebook / WhatsApp / iMessage -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="LevelUp Ecosystem">
+<meta property="og:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
+<meta property="og:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
+<meta property="og:url" content="https://levelup-ecosystem.com/projects/wedding-invitation">
+<meta property="og:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@LevelUpEcosyst">
+<meta name="twitter:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
+<meta name="twitter:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
+<meta name="twitter:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+
+<!-- Schema.org Structured Data (JSON-LD) for Search Engines & AI Crawlers -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Event",
+      "@id": "https://levelup-ecosystem.com/projects/wedding-invitation#event",
+      "name": "The Sacred Union — Wedding Ceremony & Gala Celebration",
+      "description": "Exclusive wedding celebration and sacred union. Confirm your attendance online via the official RSVP registry.",
+      "startDate": "2026-10-24T16:00:00+02:00",
+      "endDate": "2026-10-25T02:00:00+02:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Rose Estate & Gardens",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Rose Estate Grand Sanctuary",
+          "addressLocality": "San Diego",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "LevelUp Ecosystem",
+        "url": "https://levelup-ecosystem.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://levelup-ecosystem.com/projects/wedding-invitation",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2026-10-01"
+      },
+      "image": "https://levelup-ecosystem.com/projects/final-stop.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://levelup-ecosystem.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projects",
+          "item": "https://levelup-ecosystem.com/#projects"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Wedding Invitation RSVP",
+          "item": "https://levelup-ecosystem.com/projects/wedding-invitation"
+        }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -234,16 +319,17 @@
   .drawer-item{
     display:flex;
     align-items:center;
-    gap:14px;
-    padding:14px 16px;
-    border-radius:12px;
-    background:rgba(255,255,255,0.025);
+    gap:12px;
+    padding:14px 18px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.02);
     border:1px solid rgba(212,175,82,0.18);
     color:var(--cream);
     text-decoration:none;
     font-family:'Poppins', sans-serif;
     font-size:14px;
     font-weight:600;
+    letter-spacing:0.2px;
     cursor:pointer;
     transition:background .2s, border-color .2s, transform .15s, color .2s;
     text-align:left;
@@ -267,21 +353,6 @@
   .drawer-item svg{
     flex-shrink:0;
     stroke:currentColor;
-  }
-  .drawer-item-content{
-    display:flex;
-    flex-direction:column;
-  }
-  .drawer-item-title{
-    font-size:13.5px;
-    font-weight:600;
-    line-height:1.2;
-  }
-  .drawer-item-sub{
-    font-size:10px;
-    opacity:0.65;
-    font-weight:400;
-    margin-top:2px;
   }
   .share-toast{
     position:fixed;
@@ -883,8 +954,8 @@
   </div>
 </header>
 
-<!-- HAMBURGER DRAWER (EXACTEMENT 4 BOUTONS) -->
-<div class="drawer-backdrop" id="eventDrawer" role="dialog" aria-modal="true" aria-label="Menu de navigation">
+<!-- HAMBURGER DRAWER (EXACTLY 4 BUTTONS - CLEAN LUXURY) -->
+<div class="drawer-backdrop" id="eventDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
   <div class="drawer-panel">
     <div class="drawer-header">
       <a href="/" target="_top" class="brand-logo-link" title="LevelUp Ecosystem">
@@ -893,24 +964,21 @@
           <text x="50%" y="198" text-anchor="middle" fill="url(#gold_brand_paint_2)" style="font-size: 135px; font-weight: 900; letter-spacing: 0.01em; font-family: 'Poppins', sans-serif;">Ecosystem</text>
         </svg>
       </a>
-      <button type="button" class="drawer-close-btn" id="closeDrawerBtn" aria-label="Fermer le menu">
+      <button type="button" class="drawer-close-btn" id="closeDrawerBtn" aria-label="Close menu">
         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <!-- EXACTEMENT 4 BOUTONS -->
+    <!-- STRICTLY 4 BUTTONS - NO BUBBLES -->
     <nav class="drawer-nav">
-      <!-- 1. Autre Service -->
+      <!-- 1. Other Services -->
       <a href="https://levelup-ecosystem.com/#services" target="_top" class="drawer-item" id="drawerItem1">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
           <polyline points="2 17 12 22 22 17"></polyline>
           <polyline points="2 12 12 17 22 12"></polyline>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Autre Service</span>
-          <span class="drawer-item-sub">Anniversaires, galas &amp; fêtes privées</span>
-        </div>
+        <span>Other Services</span>
       </a>
 
       <!-- 2. Build an Invitation Like This -->
@@ -919,13 +987,10 @@
           <path d="M12 20h9"></path>
           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Build an Invitation Like This</span>
-          <span class="drawer-item-sub">Commander une expérience sur-mesure</span>
-        </div>
+        <span>Build an Invitation Like This</span>
       </a>
 
-      <!-- 3. Partage -->
+      <!-- 3. Share -->
       <button type="button" class="drawer-item" id="drawerShareBtn">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="18" cy="5" r="3"></circle>
@@ -934,22 +999,16 @@
           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Partager</span>
-          <span class="drawer-item-sub">Envoyer l'invitation à un proche</span>
-        </div>
+        <span>Share</span>
       </button>
 
-      <!-- 4. Accueil -->
+      <!-- 4. Home -->
       <a href="https://levelup-ecosystem.com/" target="_top" class="drawer-item" id="drawerItem4">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Accueil</span>
-          <span class="drawer-item-sub">LevelUp Ecosystem officiel</span>
-        </div>
+        <span>Home</span>
       </a>
     </nav>
   </div>
@@ -957,7 +1016,7 @@
 
 <div class="share-toast" id="shareToast">
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-  <span>Lien de l'invitation copié !</span>
+  <span>Invitation link copied to clipboard!</span>
 </div>
 
 <div class="hero">
