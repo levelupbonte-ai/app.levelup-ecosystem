@@ -1,3 +1,6 @@
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
 export interface ProjectItem {
   id: string;
   step: string;
@@ -11,7 +14,7 @@ export interface ProjectItem {
   ctaText: string;
 }
 
-export const allProjects: ProjectItem[] = [
+export const defaultProjects: ProjectItem[] = [
   {
     id: "final-stop",
     step: "01",
@@ -39,3 +42,47 @@ export const allProjects: ProjectItem[] = [
     ctaText: "Explore the invitation",
   },
 ];
+
+export const allProjects: ProjectItem[] = defaultProjects;
+
+/**
+ * Loads projects dynamically from Firebase Firestore `/projects` collection.
+ * If the collection is empty or unreachable, cleanly falls back to the default items.
+ */
+export async function getLiveProjects(): Promise<ProjectItem[]> {
+  try {
+    const projectsCol = collection(db, "projects");
+    const q = query(projectsCol, orderBy("step", "asc"));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      return defaultProjects;
+    }
+
+    const fetched: ProjectItem[] = [];
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      fetched.push({
+        id: docSnap.id,
+        step: data.step || "01",
+        badge: data.badge || "Client Project",
+        title: data.title || "Project",
+        description: data.description || "",
+        image: data.image || "/projects/final-stop.png",
+        href: data.href || "#",
+        external: data.external ?? true,
+        aspectRatio: data.aspectRatio || "aspect-[639/298]",
+        ctaText: data.ctaText || "Explore project",
+      });
+    });
+
+    return fetched.length > 0 ? fetched : defaultProjects;
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.warn("Could not fetch projects from Firestore, using defaults:", err);
+    }
+    return defaultProjects;
+  }
+}
+

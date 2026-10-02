@@ -1,6 +1,6 @@
 {
   "name": "LevelUp Ecosystem",
-  "description": "LevelUp Ecosystem - Fast, secure websites with 24/7 online booking, Google Maps setup, and cybersecurity checks for local businesses in San Diego, CA.",
+  "description": "LevelUp Ecosystem - Full-stack web engineering, secure cloud architectures, 24/7 online booking, and cybersecurity audits for global brands and local leaders. Based in San Diego, CA.",
   "requestFramePermissions": [],
   "capabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

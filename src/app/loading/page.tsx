@@ -42,7 +42,7 @@ export default function LoadingPage() {
             LevelUp Preloader
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Page dédiée de chargement du site. L'animation se lance automatiquement toutes les 3 actualisations ou après une absence prolongée.
+            Dedicated site preloader showcase. The animation triggers automatically on fresh visits, periodically, or on demand.
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export default function LoadingPage() {
             className="w-full sm:w-auto font-semibold flex items-center gap-2"
           >
             <RotateCcw className="size-4" />
-            Rejouer l'animation
+            Replay animation
           </Button>
 
           <Button
@@ -62,7 +62,7 @@ export default function LoadingPage() {
           >
             <Link href="/">
               <ArrowLeft className="size-4" />
-              Retour au site
+              Back to site
             </Link>
           </Button>
         </div>

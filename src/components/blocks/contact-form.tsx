@@ -55,35 +55,53 @@ export function ContactForm() {
     formAction.execute(data);
   });
 
-  const { isExecuting, hasSucceeded } = formAction;
+  const { isExecuting, hasSucceeded, result } = formAction;
+  const isWaitlisted = result.data?.isWaitlisted;
+  const queuePosition = result.data?.queuePosition || 1;
+
   if (hasSucceeded) {
     return (
-      <div className="w-full gap-2 rounded-md border p-2 sm:p-5 md:p-8">
+      <div className="w-full rounded-2xl border border-border/80 bg-card/60 p-6 sm:p-8">
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, stiffness: 300, damping: 25 }}
-          className="h-full px-3 py-6"
+          className="h-full space-y-4 text-center"
         >
           <motion.div
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             transition={{
-              delay: 0.3,
+              delay: 0.2,
               type: "spring",
               stiffness: 500,
               damping: 15,
             }}
-            className="mx-auto mb-4 flex w-fit justify-center rounded-full border p-2"
+            className="mx-auto flex size-12 items-center justify-center rounded-xl border border-purple-500/40 bg-purple-500/10 text-purple-400"
           >
-            <Check className="size-8" />
+            <Check className="size-6" />
           </motion.div>
-          <h2 className="mb-2 text-center text-2xl font-bold text-pretty">
-            Thank you
-          </h2>
-          <p className="text-muted-foreground text-center text-lg text-pretty">
-            Form submitted successfully, we will get back to you soon
-          </p>
+
+          <div className="space-y-2">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
+              {isWaitlisted ? `Priority Queue Status (#${queuePosition})` : "Preview Track Confirmed"}
+            </span>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+              {isWaitlisted ? "High Demand: Request Queued" : "We Received Your Request"}
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
+              {isWaitlisted
+                ? `Immediate build capacity is currently filled (3 active client tracks). Your project is queued at position #${queuePosition}. Our team will review your requirements as soon as the next slot opens.`
+                : "Our team has received your submission and is reviewing your project details. We will build and deliver your functional mobile preview within 24 to 48 hours."}
+            </p>
+          </div>
+
+          <div className="pt-2">
+            <p className="text-xs text-muted-foreground/80">
+              A detailed confirmation has been sent to your email from{" "}
+              <span className="font-mono text-foreground">contact@levelup-ecosystem.com</span>.
+            </p>
+          </div>
         </motion.div>
       </div>
     );

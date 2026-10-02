@@ -65,7 +65,9 @@ export const Hero = () => {
                 asChild
               >
                 <a
-                  href="/contact"
+                  href="https://studio.levelup-ecosystem.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="max-w-56 truncate text-start md:max-w-none"
                 >
                   Build free preview

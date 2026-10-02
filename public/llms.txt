@@ -1,19 +1,40 @@
 # LevelUp Ecosystem
-> LevelUp Ecosystem is an independent web design, software architecture, and development studio that builds fast, secure websites with 24/7 online booking, local SEO, and cybersecurity protections for local businesses, creators, and portfolios.
+> LevelUp Ecosystem is a full-stack web development, custom software architecture, and cybersecurity studio based in San Diego, California. We architect high-performance web applications, 24/7 online booking systems, bespoke digital invitations, and secure cloud infrastructure for local enterprises, national businesses, and international clients worldwide.
 
-## Founder
-> Richelieu Bonte is the founder of LevelUp Ecosystem. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo. He directs architecture, security evaluations, and human code auditing for all studio projects.
+## Founder & Principal Engineer
+> Richelieu Bonte is the founder of LevelUp Ecosystem. He is a cybersecurity student and full-stack software engineer based in San Diego, California, originally from the Democratic Republic of Congo. He directs architecture, security evaluations, human code auditing, and cloud infrastructure for all studio projects worldwide.
 
 ## Core Capabilities & Services
-- Local business websites with automated 24/7 appointment booking (barbershops, boutique hair salons, wellness clinics, personal trainers)
-- Creator, influencer, and portfolio websites
-- E-commerce and specialized online store setup
-- Website security checks, DNS hardening, HTTPS enforcement, and database access rule auditing
-- Managed monthly website care plans (hosting, automated daily offsite backups, uptime monitoring, and on-demand content edits)
-- San Diego local SEO & Google Business Profile synchronization
+- **Full-Stack Web Application Engineering**: High-speed Next.js 15, React 19, TypeScript, Tailwind CSS, API routes, and cloud microservices.
+- **Automated 24/7 Online Booking Systems**: Real-time calendar synchronization (Square, Calendly, Acuity, Stripe) for barbershops, salons, wellness practices, and service contractors.
+- **Bespoke Digital Invitations & Event Experiences**: Luxury digital wedding and gala invitation platforms with real-time online RSVP collection, itinerary countdown, and Google Maps venue navigation.
+- **Cybersecurity Checks & Non-Destructive Vulnerability Audits**: Plain-English security evaluations covering database rules, API key isolation, HTTPS certificates, DNS hardening, and two-factor authentication (2FA).
+- **Managed Website Care Plans ($49/month)**: High-speed cloud hosting, daily automated snapshots, uptime monitoring, and fast on-demand content edits.
+- **Local & Global SEO Architecture**: Structured Schema.org JSON-LD data, OpenGraph social sharing preview cards, sub-2s mobile loading speeds, and international discoverability for both human searchers and AI search engines (Perplexity, ChatGPT, Claude, Gemini).
+
+## International & Full-Stack Scope
+- **Headquarters**: San Diego, California, United States
+- **Delivery Scope**: Local San Diego County businesses, United States nationwide enterprises, and international clients across Europe, Africa, and the Americas with remote-first full-stack delivery.
+
+## Site Structure & Official Navigation Links
+- Home: https://levelup-ecosystem.com
+- Services: https://levelup-ecosystem.com/services
+- Projects & Case Studies: https://levelup-ecosystem.com/projects
+- Pricing & Care Plans: https://levelup-ecosystem.com/pricing
+- About the Studio: https://levelup-ecosystem.com/about
+- Frequently Asked Questions: https://levelup-ecosystem.com/faq
+- Request Free 24-48h Preview: https://levelup-ecosystem.com/contact
+- Client Workspace Login: https://levelup-ecosystem.com/login
 
 ## Client Case Studies
 - **Final Stop Barber Shop & Salon** (San Diego, CA — https://finalstop.org): Built a high-speed, mobile-first appointment booking platform with sub-2-second load times and Google Maps integration, replacing phone tag with automated calendar sync.
+- **Le Dernier Retrouvailles — Wedding & Private Event Digital Invitation** (San Diego, CA — https://levelup-ecosystem.com/projects/wedding-invitation): Bespoke digital wedding invitation experience with real-time RSVP submission, interactive ceremony schedule, accommodation guide, and directions for weddings and luxury events in Southern California.
+
+## Specialty: Wedding & Event Web Experiences (San Diego, CA)
+- Bespoke digital wedding invitations and interactive RSVP portals
+- Instant mobile-responsive event itinerary and Google Maps navigation
+- Real-time guest attendance tracking with Firestore database security
+- Guest photo galleries and celebration messaging boards
 
 ## Frequently Asked Questions (FAQ)
 - **Who is Richelieu Bonte?**

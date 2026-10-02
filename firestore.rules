@@ -3,7 +3,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Fonctions d'aide (Helper functions)
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -12,36 +12,60 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Utilisateurs : chacun accède à son profil
+    // User profiles: each user accesses and updates their own document
     match /users/{userId} {
       allow read, write: if isOwner(userId);
     }
 
-    // Projets et vitrine : lecture publique, écriture réservée aux utilisateurs connectés
+    // Projects and showcase: public read, authenticated writes
     match /projects/{projectId} {
       allow read: if true;
       allow write: if isAuthenticated();
     }
 
-    // Formulaire de contact et demandes de devis : tout le monde peut soumettre, lecture restreinte
+    // Dynamic media and image assets catalog: public read, authenticated uploads
+    match /media/{mediaId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Real-time client error sensor logs: write-only from public visitors, read/delete for authenticated admin
+    match /error_logs/{errorId} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    // Contact form submissions and quote inquiries: public create, restricted read
     match /contacts/{contactId} {
       allow create: if true;
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Réservations d'événements (ex: Le Dernier Retrouvailles)
+    // Preview requests and build queue: public create and read (for queue depth checks), authenticated manage
+    match /preview_requests/{requestId} {
+      allow create, read: if true;
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Email dispatch audit logs: write-only from server/client, authenticated manage
+    match /email_logs/{logId} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    // Event bookings and invitations (e.g. Wedding RSVPs)
     match /bookings/{bookingId} {
       allow create: if true;
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Inscriptions Newsletter
+    // Newsletter signups
     match /newsletter/{newsletterId} {
       allow create: if true;
       allow read, delete: if isAuthenticated();
     }
 
-    // Règle par défaut pour tout autre document non spécifié
+    // Default rule for any unspecified document
     match /{document=**} {
       allow read, write: if isAuthenticated();
     }

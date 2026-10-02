@@ -351,34 +351,24 @@ export const Navbar = () => {
             <FooterStyleHeaderLogo />
           </Link>
 
-          {/* Desktop Navigation Links with Spring Physical Shift & Dark Capsule */}
-          <nav className="max-lg:hidden flex items-center gap-1 xl:gap-1.5">
+          {/* Desktop Navigation Links: Clean Typography, No Bubble Backgrounds */}
+          <nav className="max-lg:hidden flex items-center gap-2 xl:gap-3">
             {/* Services button with mega-menu expander trigger */}
             <button
               type="button"
               onMouseEnter={handleServicesEnter}
               onClick={() => setIsServicesOpen((prev) => !prev)}
               className={cn(
-                "group relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 cursor-pointer select-none",
+                "group relative inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-colors duration-200 cursor-pointer select-none",
                 isServicesOpen || pathname === "/services"
                   ? "text-foreground font-semibold"
-                  : "text-foreground/80 hover:text-foreground",
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {/* Subtle dark spring capsule */}
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10",
-                  isServicesOpen || pathname === "/services"
-                    ? "scale-100 opacity-100"
-                    : "scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100",
-                )}
-              />
               <SpringNavText text="Services" isActive={isServicesOpen || pathname === "/services"} />
               <ChevronDown
                 className={cn(
-                  "size-3.5 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] opacity-70 group-hover:opacity-100",
+                  "size-3.5 transition-transform duration-200 opacity-70 group-hover:opacity-100",
                   isServicesOpen && "rotate-180 opacity-100 text-foreground",
                 )}
               />
@@ -395,20 +385,10 @@ export const Navbar = () => {
                     setIsServicesOpen(false);
                   }}
                   className={cn(
-                    "group relative inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 select-none",
-                    isActive ? "text-foreground font-semibold" : "text-foreground/80 hover:text-foreground",
+                    "group relative inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium transition-colors duration-200 select-none",
+                    isActive ? "text-foreground font-semibold" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {/* Subtle dark spring capsule */}
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10",
-                      isActive
-                        ? "scale-100 opacity-100"
-                        : "scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100",
-                    )}
-                  />
                   <SpringNavText text={link.label} isActive={isActive} />
                 </Link>
               );
@@ -425,7 +405,7 @@ export const Navbar = () => {
                 <Button
                   size="sm"
                   className={cn(
-                    "rounded-full font-semibold bg-foreground text-background hover:opacity-90 active:scale-95 transition-all shadow-xs",
+                    "font-semibold bg-foreground text-background hover:opacity-90 active:scale-95 transition-all shadow-xs rounded-lg",
                     !isScrolled && !isServicesOpen ? "px-5 py-2 text-sm" : "px-4 py-1.5 text-xs",
                   )}
                 >
@@ -439,41 +419,37 @@ export const Navbar = () => {
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "group relative rounded-full font-medium text-foreground/80 hover:text-foreground transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 cursor-pointer",
+                    "group relative font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 cursor-pointer rounded-lg",
                     !isScrolled && !isServicesOpen ? "px-4 py-2 text-sm" : "px-3 py-1.5 text-xs",
                   )}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 rounded-full bg-foreground/[0.06] dark:bg-foreground/[0.09] border border-foreground/10 dark:border-foreground/15 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] pointer-events-none -z-10"
-                  />
                   <SpringNavText text="Login" />
                 </Button>
               </Link>
             </div>
 
-            {/* Hamburger Menu Button (Mobile Only) */}
+            {/* Hamburger Menu Button (Mobile Only) - Crisp lines, no rounded bubble distortion */}
             <button
-              className="text-muted-foreground relative flex size-8 lg:hidden cursor-pointer items-center justify-center"
+              className="text-foreground relative flex size-9 lg:hidden cursor-pointer items-center justify-center rounded-lg hover:bg-muted/40 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
-              <div className="absolute top-1/2 left-1/2 block w-[18px] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute top-1/2 left-1/2 block w-[20px] -translate-x-1/2 -translate-y-1/2">
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${
+                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
                     isMenuOpen ? "rotate-45" : "-translate-y-1.5"
                   }`}
                 />
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${
+                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
                     isMenuOpen ? "opacity-0" : ""
                   }`}
                 />
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-0.5 w-full rounded-full bg-current transition duration-500 ease-in-out ${
+                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
                     isMenuOpen ? "-rotate-45" : "translate-y-1.5"
                   }`}
                 />
@@ -482,8 +458,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Desktop Expanding Mega Header for Services:
-            Clean presentation with rounded-2xl container when opened */}
+        {/* Desktop Expanding Mega Header for Services */}
         <div
           className={cn(
             "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] max-lg:hidden",
@@ -500,11 +475,11 @@ export const Navbar = () => {
                   key={service.title}
                   href={service.href}
                   onClick={() => setIsServicesOpen(false)}
-                  className="group relative flex flex-col p-3.5 rounded-xl hover:bg-foreground/[0.04] dark:hover:bg-foreground/[0.06] transition-all duration-200 select-none"
+                  className="group relative flex flex-col p-3 rounded-lg hover:bg-muted/40 transition-colors select-none"
                 >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <Icon className="size-5 text-foreground/80 group-hover:text-foreground transition-colors shrink-0" />
-                    <h3 className="text-sm font-semibold text-foreground group-hover:translate-x-0.5 transition-transform leading-snug">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <Icon className="size-4 text-foreground/80 group-hover:text-foreground transition-colors shrink-0" />
+                    <h3 className="text-sm font-semibold text-foreground leading-snug">
                       {service.title}
                     </h3>
                   </div>
@@ -517,61 +492,60 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Navigation Dropdown */}
+        {/* Mobile Menu Navigation Dropdown - Clean Minimal Sidebar Style, No Bubbles */}
         <div
           className={cn(
-            "bg-background absolute inset-x-0 top-[calc(100%+0.75rem)] flex flex-col rounded-2xl border border-border/80 p-6 shadow-xl max-h-[80vh] overflow-y-auto transition-all duration-300 ease-in-out lg:hidden",
+            "bg-background absolute inset-x-0 top-[calc(100%+0.5rem)] flex flex-col rounded-xl border border-border/90 p-5 shadow-xl max-h-[82vh] overflow-y-auto transition-all duration-200 ease-in-out lg:hidden",
             isMenuOpen
               ? "visible translate-y-0 opacity-100"
-              : "invisible -translate-y-4 opacity-0 pointer-events-none",
+              : "invisible -translate-y-2 opacity-0 pointer-events-none",
           )}
         >
-          <nav className="divide-border flex flex-1 flex-col divide-y">
-            {/* Services with dropdown on mobile */}
-            <div className="py-4 first:pt-0">
+          <nav className="divide-border/60 flex flex-1 flex-col divide-y">
+            {/* Services accordion in mobile menu */}
+            <div className="py-3 first:pt-0">
               <button
+                type="button"
                 onClick={() =>
                   setOpenMobileDropdown(
                     openMobileDropdown === "Services" ? null : "Services",
                   )
                 }
-                className="text-foreground flex w-full items-center justify-between text-base font-medium cursor-pointer"
+                className="text-foreground flex w-full items-center justify-between text-base font-semibold py-1 cursor-pointer"
               >
                 Services
                 <ChevronRight
                   className={cn(
-                    "size-4 transition-transform duration-200",
-                    openMobileDropdown === "Services" ? "rotate-90" : "",
+                    "size-4 text-muted-foreground transition-transform duration-200",
+                    openMobileDropdown === "Services" ? "rotate-90 text-foreground" : "",
                   )}
                 />
               </button>
               <div
                 className={cn(
-                  "overflow-hidden transition-all duration-300",
+                  "overflow-hidden transition-all duration-200",
                   openMobileDropdown === "Services"
-                    ? "mt-4 max-h-[1000px] opacity-100"
+                    ? "mt-2 max-h-[600px] opacity-100"
                     : "max-h-0 opacity-0",
                 )}
               >
-                <div className="bg-muted/50 space-y-3 rounded-lg p-4">
+                <div className="pl-2 pr-1 py-1 space-y-2.5 border-l-2 border-border/80 my-2">
                   {SERVICES_ITEMS.map((item) => (
                     <Link
                       key={item.title}
                       href={item.href}
-                      className="group hover:bg-accent block rounded-md p-2 transition-colors"
+                      className="block py-1 hover:text-foreground transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                         setOpenMobileDropdown(null);
                       }}
                     >
-                      <div className="transition-transform duration-200 group-hover:translate-x-1">
-                        <div className="text-foreground font-medium text-sm">
-                          {item.title}
-                        </div>
-                        <p className="text-muted-foreground mt-1 text-xs">
-                          {item.description}
-                        </p>
+                      <div className="text-foreground text-sm font-medium">
+                        {item.title}
                       </div>
+                      <p className="text-muted-foreground text-xs leading-relaxed mt-0.5">
+                        {item.description}
+                      </p>
                     </Link>
                   ))}
                 </div>
@@ -584,8 +558,8 @@ export const Navbar = () => {
                 key={link.label}
                 href={link.href}
                 className={cn(
-                  "text-foreground hover:text-foreground/80 py-4 text-base font-medium transition-colors last:pb-0",
-                  pathname === link.href && "text-muted-foreground",
+                  "text-foreground hover:text-foreground/80 py-3 text-base font-medium transition-colors last:pb-0",
+                  pathname === link.href && "text-muted-foreground font-semibold",
                 )}
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -597,7 +571,7 @@ export const Navbar = () => {
             ))}
 
             {/* Mobile Actions: Book Now then Login */}
-            <div className="pt-4 space-y-2">
+            <div className="pt-4 space-y-2.5">
               <Link
                 href="/contact"
                 className="w-full block"
@@ -606,7 +580,7 @@ export const Navbar = () => {
                   setOpenMobileDropdown(null);
                 }}
               >
-                <Button className="w-full font-semibold">
+                <Button className="w-full font-semibold rounded-lg">
                   Book Now
                 </Button>
               </Link>
@@ -618,8 +592,8 @@ export const Navbar = () => {
                   setOpenMobileDropdown(null);
                 }}
               >
-                <Button variant="ghost" className="w-full font-medium">
-                  Login
+                <Button variant="outline" className="w-full font-medium rounded-lg">
+                  Sign In to LevelStudio
                 </Button>
               </Link>
             </div>

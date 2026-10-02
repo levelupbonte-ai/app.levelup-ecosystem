@@ -2,4 +2,17 @@ User-agent: *
 Allow: /
 Allow: /llms.txt
 
+# Explicit AI Agent & Web Search Bot access
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://levelup-ecosystem.com/sitemap.xml

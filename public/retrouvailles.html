@@ -1304,20 +1304,38 @@
   }
 
   async function sendInvitationEmail(data) {
-    const params = {
-      to_name: data.nom,
-      to_email: data.email,
-      invitation_number: data.inviteCode,
-      event_name: "Wedding Invitation",
-      event_lieu: "ROSE ESTATE",
-      event_heure: "4:00 PM prompt",
-      event_prix: "Admission by official invitation only",
-      cp_numero: "support: contact@levelup-ecosystem.com",
-      whatsapp_link: "https://levelup-ecosystem.com/#contact",
-      org_name: "The Bride & Groom",
-      telephone: data.telephone
-    };
-    return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "wedding_rsvp",
+          nom: data.nom,
+          email: data.email,
+          inviteCode: data.inviteCode,
+          telephone: data.telephone,
+        }),
+      });
+      return await response.json();
+    } catch (err) {
+      console.warn("API email endpoint call failed, attempting fallback:", err);
+      if (typeof emailjs !== "undefined" && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
+        const params = {
+          to_name: data.nom,
+          to_email: data.email,
+          invitation_number: data.inviteCode,
+          event_name: "Wedding Invitation",
+          event_lieu: "ROSE ESTATE",
+          event_heure: "4:00 PM prompt",
+          event_prix: "Admission by official invitation only",
+          cp_numero: "support: contact@levelup-ecosystem.com",
+          whatsapp_link: "https://levelup-ecosystem.com/#contact",
+          org_name: "The Bride & Groom",
+          telephone: data.telephone
+        };
+        return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+      }
+    }
   }
 
   // ---------- CONFETTI ----------
