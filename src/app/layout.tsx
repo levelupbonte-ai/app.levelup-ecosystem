@@ -120,10 +120,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/projects/final-stop.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "LevelUp Ecosystem - Full-Stack Web Engineering & Systems",
+        alt: "LevelUp Ecosystem - Full-Stack Web Engineering, Booking Systems & Security",
       },
     ],
   },
@@ -132,7 +132,7 @@ export const metadata: Metadata = {
     title: "LevelUp Ecosystem | Full-Stack Web Development & Security",
     description:
       "Fast, secure full-stack websites with 24/7 online booking and cybersecurity checks in San Diego and worldwide. Founded by Richelieu Bonte.",
-    images: ["/projects/final-stop.png"],
+    images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
 };

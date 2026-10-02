@@ -67,15 +67,36 @@ export const serverAction = actionClient
           message: parsedInput.message,
         });
 
-        await resend.emails.send({
-          from: "LevelUp Ecosystem <contact@levelup-ecosystem.com>",
-          to: [parsedInput.email],
-          subject: isWaitlisted
-            ? "Priority Waitlist: Your Website Preview Request — LevelUp Ecosystem"
-            : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
-          html: clientHtml,
-        });
-        emailDelivered = true;
+        const primaryFrom = process.env.RESEND_FROM_EMAIL || "LevelUp Ecosystem <contact@levelup-ecosystem.com>";
+        try {
+          await resend.emails.send({
+            from: primaryFrom,
+            to: [parsedInput.email],
+            subject: isWaitlisted
+              ? "Priority Waitlist: Your Website Preview Request — LevelUp Ecosystem"
+              : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
+            html: clientHtml,
+          });
+          emailDelivered = true;
+        } catch {
+          // If custom domain is not verified yet, fallback to default Resend test sender
+          try {
+            await resend.emails.send({
+              from: "LevelUp <onboarding@resend.dev>",
+              to: [parsedInput.email],
+              subject: isWaitlisted
+                ? "Priority Waitlist: Your Website Preview Request — LevelUp Ecosystem"
+                : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
+              html: clientHtml,
+            });
+            emailDelivered = true;
+          } catch (fallbackErr) {
+            if (process.env.NODE_ENV === "development") {
+              // eslint-disable-next-line no-console
+              console.warn("[Resend] Both primary and fallback email send failed:", fallbackErr);
+            }
+          }
+        }
 
         // Internal team notification sent to teams@levelup-ecosystem.com (auto-forwarded to Gmail)
         const teamHtml = getInternalLeadAlertHtml({

@@ -32,18 +32,30 @@ export async function POST(req: NextRequest) {
       let sendSuccess = false;
 
       if (isResendConfigured() && resend) {
+        const primaryFrom = process.env.RESEND_FROM_EMAIL || "LevelStudio <studio@levelup-ecosystem.com>";
         try {
           resendResponse = await resend.emails.send({
-            from: "LevelStudio <studio@levelup-ecosystem.com>",
+            from: primaryFrom,
             to: [email],
             subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
             html: emailHtml,
           });
           sendSuccess = true;
-        } catch (resendErr) {
-          if (process.env.NODE_ENV === "development") {
-            // eslint-disable-next-line no-console
-            console.warn("[Resend] Failed to send wedding simulation email:", resendErr);
+        } catch {
+          // Fallback to onboarding@resend.dev if custom domain is not yet verified
+          try {
+            resendResponse = await resend.emails.send({
+              from: "LevelStudio <onboarding@resend.dev>",
+              to: [email],
+              subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
+              html: emailHtml,
+            });
+            sendSuccess = true;
+          } catch (fallbackErr) {
+            if (process.env.NODE_ENV === "development") {
+              // eslint-disable-next-line no-console
+              console.warn("[Resend] Both primary and fallback email send failed:", fallbackErr);
+            }
           }
         }
       }

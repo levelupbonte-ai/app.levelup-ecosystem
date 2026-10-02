@@ -3,7 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Invitation — Celebration &amp; RSVP</title>
+<title>The Sacred Union — Luxury Wedding Invitation &amp; Official RSVP | LevelUp Ecosystem</title>
+<meta name="description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance, access event details, and receive your official digital pass.">
+<meta name="keywords" content="Wedding invitation San Diego, Luxury wedding website, Online wedding RSVP, Digital invitation ceremony, Mariage San Diego, Event RSVP management, LevelUp Ecosystem">
+<link rel="canonical" href="https://levelup-ecosystem.com/projects/wedding-invitation">
+
+<!-- OpenGraph / Facebook / WhatsApp / iMessage -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="LevelUp Ecosystem">
+<meta property="og:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
+<meta property="og:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
+<meta property="og:url" content="https://levelup-ecosystem.com/projects/wedding-invitation">
+<meta property="og:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@LevelUpEcosyst">
+<meta name="twitter:title" content="The Sacred Union — Luxury Wedding Invitation &amp; RSVP">
+<meta name="twitter:description" content="Exclusive wedding celebration &amp; sacred ceremony at Rose Estate. Confirm your attendance and receive your official digital invitation pass.">
+<meta name="twitter:image" content="https://levelup-ecosystem.com/projects/final-stop.png">
+
+<!-- Schema.org Structured Data (JSON-LD) for Search Engines & AI Crawlers -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Event",
+      "@id": "https://levelup-ecosystem.com/projects/wedding-invitation#event",
+      "name": "The Sacred Union — Wedding Ceremony & Gala Celebration",
+      "description": "Exclusive wedding celebration and sacred union. Confirm your attendance online via the official RSVP registry.",
+      "startDate": "2026-10-24T16:00:00+02:00",
+      "endDate": "2026-10-25T02:00:00+02:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Rose Estate & Gardens",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Rose Estate Grand Sanctuary",
+          "addressLocality": "San Diego",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "LevelUp Ecosystem",
+        "url": "https://levelup-ecosystem.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://levelup-ecosystem.com/projects/wedding-invitation",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2026-10-01"
+      },
+      "image": "https://levelup-ecosystem.com/projects/final-stop.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://levelup-ecosystem.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Projects",
+          "item": "https://levelup-ecosystem.com/#projects"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Wedding Invitation RSVP",
+          "item": "https://levelup-ecosystem.com/projects/wedding-invitation"
+        }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -134,24 +219,25 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    width:42px;
-    height:42px;
-    border-radius:10px;
-    background:rgba(212,175,82,0.1);
-    border:1px solid rgba(212,175,82,0.4);
+    width:38px;
+    height:38px;
+    border-radius:0;
+    background:transparent;
+    border:none;
     cursor:pointer;
     padding:0;
-    transition:background .2s, border-color .2s, transform .15s;
+    transition:transform .15s, opacity .2s;
     flex-shrink:0;
   }
   .header-burger-btn:hover{
-    background:rgba(212,175,82,0.22);
-    border-color:var(--gold-light);
-    transform:translateY(-1px);
+    background:transparent;
+    border:none;
+    opacity:0.85;
+    transform:scale(1.05);
   }
   .burger-box{
-    width:20px;
-    height:14px;
+    width:22px;
+    height:15px;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -234,54 +320,42 @@
   .drawer-item{
     display:flex;
     align-items:center;
-    gap:14px;
-    padding:14px 16px;
-    border-radius:12px;
-    background:rgba(255,255,255,0.025);
-    border:1px solid rgba(212,175,82,0.18);
+    gap:12px;
+    padding:15px 4px;
+    border-radius:0;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid rgba(212,175,82,0.12);
     color:var(--cream);
     text-decoration:none;
     font-family:'Poppins', sans-serif;
     font-size:14px;
     font-weight:600;
+    letter-spacing:0.2px;
     cursor:pointer;
-    transition:background .2s, border-color .2s, transform .15s, color .2s;
+    transition:color .2s, transform .15s, border-color .2s;
     text-align:left;
     width:100%;
   }
   .drawer-item:hover{
-    background:rgba(212,175,82,0.12);
-    border-color:var(--gold-light);
+    background:transparent;
+    border-bottom-color:var(--gold);
     color:var(--gold-light);
     transform:translateX(3px);
   }
   .drawer-item.highlight{
-    background:linear-gradient(135deg, rgba(212,175,82,0.22), rgba(168,133,44,0.12));
-    border-color:var(--gold);
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--gold);
     color:var(--gold-light);
   }
   .drawer-item.highlight:hover{
-    background:linear-gradient(135deg, var(--gold-light), var(--gold));
-    color:#1a1305;
+    background:transparent;
+    color:#ffffff;
   }
   .drawer-item svg{
     flex-shrink:0;
     stroke:currentColor;
-  }
-  .drawer-item-content{
-    display:flex;
-    flex-direction:column;
-  }
-  .drawer-item-title{
-    font-size:13.5px;
-    font-weight:600;
-    line-height:1.2;
-  }
-  .drawer-item-sub{
-    font-size:10px;
-    opacity:0.65;
-    font-weight:400;
-    margin-top:2px;
   }
   .share-toast{
     position:fixed;
@@ -516,15 +590,36 @@
   }
 
   .help-link{
-    display:flex; align-items:center; justify-content:center; gap:7px;
-    text-align:center; font-size:12.5px;
-    color:var(--cream); opacity:0.65;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:0 auto 24px auto;
+    width:auto;
+    padding:8px 16px;
+    background:rgba(212,175,82,0.14);
+    border:1px solid rgba(212,175,82,0.45);
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--gold-light);
+    opacity:1;
     text-decoration:none;
-    margin-bottom:26px;
-    transition:opacity .2s;
+    cursor:pointer;
+    transition:all .2s ease;
+    font-family:'Poppins', sans-serif;
   }
-  .help-link:hover{ opacity:1; color:var(--gold-light); }
-  .help-link svg{ width:14px; height:14px; fill:var(--green); flex-shrink:0; }
+  .help-link:hover{
+    background:rgba(212,175,82,0.25);
+    border-color:var(--gold-light);
+    color:#ffffff;
+  }
+  .help-link svg{
+    width:16px;
+    height:16px;
+    fill:var(--gold-light);
+    flex-shrink:0;
+  }
 
   /* FORM CARD */
   .card{
@@ -572,19 +667,29 @@
     line-height:1.5;
   }
 
-  .phone-row{ display:flex; gap:8px; }
+  .phone-row{
+    display:flex;
+    gap:8px;
+    align-items:stretch;
+    width:100%;
+  }
   .phone-row select{
-    flex:0 0 118px;
-    background:rgba(255,255,255,0.03);
+    flex:0 0 86px;
+    max-width:90px;
+    background:rgba(255,255,255,0.04);
     border:1px solid rgba(212,175,82,0.3);
     border-radius:8px;
-    padding:12px 8px;
+    padding:12px 6px;
     color:var(--cream);
     font-family:'Poppins', sans-serif;
-    font-size:13.5px;
+    font-size:13px;
     outline:none;
   }
-  .phone-row input{ flex:1; }
+  .phone-row input{
+    flex:1;
+    min-width:0;
+    width:100%;
+  }
 
   .checkbox-row{
     display:flex; align-items:flex-start; gap:10px; margin-top:20px;
@@ -883,8 +988,8 @@
   </div>
 </header>
 
-<!-- HAMBURGER DRAWER (EXACTEMENT 4 BOUTONS) -->
-<div class="drawer-backdrop" id="eventDrawer" role="dialog" aria-modal="true" aria-label="Menu de navigation">
+<!-- HAMBURGER DRAWER (EXACTLY 4 BUTTONS - CLEAN LUXURY) -->
+<div class="drawer-backdrop" id="eventDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
   <div class="drawer-panel">
     <div class="drawer-header">
       <a href="/" target="_top" class="brand-logo-link" title="LevelUp Ecosystem">
@@ -893,24 +998,21 @@
           <text x="50%" y="198" text-anchor="middle" fill="url(#gold_brand_paint_2)" style="font-size: 135px; font-weight: 900; letter-spacing: 0.01em; font-family: 'Poppins', sans-serif;">Ecosystem</text>
         </svg>
       </a>
-      <button type="button" class="drawer-close-btn" id="closeDrawerBtn" aria-label="Fermer le menu">
+      <button type="button" class="drawer-close-btn" id="closeDrawerBtn" aria-label="Close menu">
         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <!-- EXACTEMENT 4 BOUTONS -->
+    <!-- STRICTLY 4 BUTTONS - NO BUBBLES -->
     <nav class="drawer-nav">
-      <!-- 1. Autre Service -->
+      <!-- 1. Other Services -->
       <a href="https://levelup-ecosystem.com/#services" target="_top" class="drawer-item" id="drawerItem1">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
           <polyline points="2 17 12 22 22 17"></polyline>
           <polyline points="2 12 12 17 22 12"></polyline>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Autre Service</span>
-          <span class="drawer-item-sub">Anniversaires, galas &amp; fêtes privées</span>
-        </div>
+        <span>Other Services</span>
       </a>
 
       <!-- 2. Build an Invitation Like This -->
@@ -919,13 +1021,10 @@
           <path d="M12 20h9"></path>
           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Build an Invitation Like This</span>
-          <span class="drawer-item-sub">Commander une expérience sur-mesure</span>
-        </div>
+        <span>Build an Invitation Like This</span>
       </a>
 
-      <!-- 3. Partage -->
+      <!-- 3. Share -->
       <button type="button" class="drawer-item" id="drawerShareBtn">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="18" cy="5" r="3"></circle>
@@ -934,22 +1033,16 @@
           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Partager</span>
-          <span class="drawer-item-sub">Envoyer l'invitation à un proche</span>
-        </div>
+        <span>Share</span>
       </button>
 
-      <!-- 4. Accueil -->
+      <!-- 4. Home -->
       <a href="https://levelup-ecosystem.com/" target="_top" class="drawer-item" id="drawerItem4">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-        <div class="drawer-item-content">
-          <span class="drawer-item-title">Accueil</span>
-          <span class="drawer-item-sub">LevelUp Ecosystem officiel</span>
-        </div>
+        <span>Home</span>
       </a>
     </nav>
   </div>
@@ -957,7 +1050,7 @@
 
 <div class="share-toast" id="shareToast">
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-  <span>Lien de l'invitation copié !</span>
+  <span>Invitation link copied to clipboard!</span>
 </div>
 
 <div class="hero">
@@ -1006,91 +1099,39 @@
       <label for="tel">Phone Number</label>
       <div class="phone-row">
         <select id="countryCode">
-          <!-- Populaire & Amériques -->
-          <option value="+1" selected>🇺🇸 USA (+1)</option>
-          <option value="+1">🇨🇦 Canada (+1)</option>
-          <option value="+52">🇲🇽 Mexique (+52)</option>
-          <option value="+55">🇧🇷 Brésil (+55)</option>
-          <option value="+509">🇭🇹 Haïti (+509)</option>
-          <option value="+590">🇬🇵 Guadeloupe (+590)</option>
-          <option value="+596">🇲🇶 Martinique (+596)</option>
-          <option value="+594">🇬🇫 Guyane (+594)</option>
-
-          <!-- Europe -->
-          <option value="+33">🇫🇷 France (+33)</option>
-          <option value="+32">🇧🇪 Belgique (+32)</option>
-          <option value="+41">🇨🇭 Suisse (+41)</option>
-          <option value="+44">🇬🇧 Royaume-Uni (+44)</option>
-          <option value="+49">🇩🇪 Allemagne (+49)</option>
-          <option value="+34">🇪🇸 Espagne (+34)</option>
-          <option value="+39">🇮🇹 Italie (+39)</option>
-          <option value="+351">🇵🇹 Portugal (+351)</option>
-          <option value="+31">🇳🇱 Pays-Bas (+31)</option>
-          <option value="+352">🇱🇺 Luxembourg (+352)</option>
-          <option value="+353">🇮🇪 Irlande (+353)</option>
-          <option value="+46">🇸🇪 Suède (+46)</option>
-          <option value="+47">🇳🇴 Norvège (+47)</option>
-          <option value="+45">🇩🇰 Danemark (+45)</option>
-          <option value="+43">🇦🇹 Autriche (+43)</option>
-          <option value="+48">🇵🇱 Pologne (+48)</option>
-          <option value="+40">🇷🇴 Roumanie (+40)</option>
-          <option value="+30">🇬🇷 Grèce (+30)</option>
-          <option value="+90">🇹🇷 Turquie (+90)</option>
-
-          <!-- Afrique Centrale & Ouest -->
-          <option value="+243">🇨🇩 RD Congo (+243)</option>
-          <option value="+242">🇨🇬 Congo Brazzaville (+242)</option>
-          <option value="+225">🇨🇮 Côte d'Ivoire (+225)</option>
-          <option value="+221">🇸🇳 Sénégal (+221)</option>
-          <option value="+237">🇨🇲 Cameroun (+237)</option>
-          <option value="+241">🇬🇦 Gabon (+241)</option>
-          <option value="+223">🇲🇱 Mali (+223)</option>
-          <option value="+224">🇬🇳 Guinée (+224)</option>
-          <option value="+229">🇧🇯 Bénin (+229)</option>
-          <option value="+228">🇹🇬 Togo (+228)</option>
-          <option value="+226">🇧🇫 Burkina Faso (+226)</option>
-          <option value="+227">🇳🇪 Niger (+227)</option>
-          <option value="+235">🇹🇩 Tchad (+235)</option>
-          <option value="+236">🇨🇫 Centrafrique (+236)</option>
-          <option value="+244">🇦🇴 Angola (+244)</option>
-          <option value="+234">🇳🇬 Nigeria (+234)</option>
-          <option value="+233">🇬🇭 Ghana (+233)</option>
-
-          <!-- Afrique du Nord -->
-          <option value="+212">🇲🇦 Maroc (+212)</option>
-          <option value="+213">🇩🇿 Algérie (+213)</option>
-          <option value="+216">🇹🇳 Tunisie (+216)</option>
-          <option value="+20">🇪🇬 Égypte (+20)</option>
-
-          <!-- Afrique Est & Sud -->
-          <option value="+250">🇷🇼 Rwanda (+250)</option>
-          <option value="+257">🇧🇮 Burundi (+257)</option>
-          <option value="+254">🇰🇪 Kenya (+254)</option>
-          <option value="+255">🇹🇿 Tanzanie (+255)</option>
-          <option value="+256">🇺🇬 Ouganda (+256)</option>
-          <option value="+27">🇿🇦 Afrique du Sud (+27)</option>
-          <option value="+261">🇲🇬 Madagascar (+261)</option>
-          <option value="+230">🇲🇺 Maurice (+230)</option>
-          <option value="+262">🇷🇪 La Réunion (+262)</option>
-
-          <!-- Moyen-Orient -->
-          <option value="+971">🇦🇪 Émirats Arabes Unis (+971)</option>
-          <option value="+966">🇸🇦 Arabie Saoudite (+966)</option>
-          <option value="+974">🇶🇦 Qatar (+974)</option>
-          <option value="+965">🇰🇼 Koweït (+965)</option>
-          <option value="+961">🇱🇧 Liban (+961)</option>
-          <option value="+972">🇮🇱 Israël (+972)</option>
-
-          <!-- Asie & Océanie -->
-          <option value="+91">🇮🇳 Inde (+91)</option>
-          <option value="+86">🇨🇳 Chine (+86)</option>
-          <option value="+81">🇯🇵 Japon (+81)</option>
-          <option value="+82">🇰🇷 Corée du Sud (+82)</option>
-          <option value="+65">🇸🇬 Singapour (+65)</option>
-          <option value="+61">🇦🇺 Australie (+61)</option>
-          <option value="+64">🇳🇿 Nouvelle-Zélande (+64)</option>
+          <option value="+1" selected>🇺🇸 +1</option>
+          <option value="+1">🇨🇦 +1</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+509">🇭🇹 +509</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+32">🇧🇪 +32</option>
+          <option value="+41">🇨🇭 +41</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+351">🇵🇹 +351</option>
+          <option value="+31">🇳🇱 +31</option>
+          <option value="+243">🇨🇩 +243</option>
+          <option value="+242">🇨🇬 +242</option>
+          <option value="+225">🇨🇮 +225</option>
+          <option value="+221">🇸🇳 +221</option>
+          <option value="+237">🇨🇲 +237</option>
+          <option value="+241">🇬🇦 +241</option>
+          <option value="+212">🇲🇦 +212</option>
+          <option value="+213">🇩🇿 +213</option>
+          <option value="+216">🇹🇳 +216</option>
+          <option value="+250">🇷🇼 +250</option>
+          <option value="+27">🇿🇦 +27</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+86">🇨🇳 +86</option>
+          <option value="+81">🇯🇵 +81</option>
+          <option value="+61">🇦🇺 +61</option>
         </select>
-        <input type="text" id="tel" placeholder="(555) 000-0000" required>
+        <input type="tel" id="tel" placeholder="(555) 000-0000" inputmode="tel" required>
       </div>
 
       <div class="checkbox-row">
@@ -1305,36 +1346,38 @@
 
   async function sendInvitationEmail(data) {
     try {
-      const response = await fetch("/api/send-email", {
+      await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "wedding_rsvp",
           nom: data.nom,
           email: data.email,
-          inviteCode: data.inviteCode,
           telephone: data.telephone,
-        }),
+          inviteCode: data.inviteCode
+        })
       });
-      return await response.json();
-    } catch (err) {
-      console.warn("API email endpoint call failed, attempting fallback:", err);
-      if (typeof emailjs !== "undefined" && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID) {
-        const params = {
-          to_name: data.nom,
-          to_email: data.email,
-          invitation_number: data.inviteCode,
-          event_name: "Wedding Invitation",
-          event_lieu: "ROSE ESTATE",
-          event_heure: "4:00 PM prompt",
-          event_prix: "Admission by official invitation only",
-          cp_numero: "support: contact@levelup-ecosystem.com",
-          whatsapp_link: "https://levelup-ecosystem.com/#contact",
-          org_name: "The Bride & Groom",
-          telephone: data.telephone
-        };
-        return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-      }
+    } catch (apiErr) {
+      console.warn("Backend API email dispatch fallback:", apiErr);
+    }
+
+    try {
+      const params = {
+        to_name: data.nom,
+        to_email: data.email,
+        invitation_number: data.inviteCode,
+        event_name: "Wedding Invitation",
+        event_lieu: "ROSE ESTATE",
+        event_heure: "4:00 PM prompt",
+        event_prix: "Admission by official invitation only",
+        cp_numero: "support: contact@levelup-ecosystem.com",
+        whatsapp_link: "https://levelup-ecosystem.com/#contact",
+        org_name: "The Bride & Groom",
+        telephone: data.telephone
+      };
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    } catch (ejsErr) {
+      console.warn("EmailJS send failed:", ejsErr);
     }
   }
 

@@ -15,10 +15,23 @@ interface PreloaderProps {
 
 export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
   const [mounted, setMounted] = useState(false);
-  const [shouldPlay, setShouldPlay] = useState(forcePlay);
+  const [shouldPlay, setShouldPlay] = useState<boolean>(() => {
+    if (forcePlay) return true;
+    if (typeof window === "undefined") return true;
+    try {
+      const lastActive = localStorage.getItem(LAST_ACTIVE_KEY);
+      const count = parseInt(localStorage.getItem(REFRESH_COUNT_KEY) || "0", 10);
+      if (!lastActive || Date.now() - parseInt(lastActive, 10) >= AWAY_THRESHOLD_MS || count + 1 >= 3) {
+        return true;
+      }
+      return false;
+    } catch {
+      return true;
+    }
+  });
   const [phase, setPhase] = useState<
     "travel" | "dissolve" | "shimmer" | "exit" | "done"
-  >(forcePlay ? "travel" : "done");
+  >("travel");
   const textRef = useRef<HTMLHeadingElement>(null);
   const [textWidth, setTextWidth] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -158,6 +171,8 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
       setPhase("exit");
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("site-ready"));
+        window.dispatchEvent(new Event("scroll"));
+        window.dispatchEvent(new Event("resize"));
       }
       if (onComplete) {
         onComplete();
@@ -168,6 +183,11 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     const tDone = setTimeout(() => {
       setPhase("done");
       document.body.style.overflow = "";
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("site-ready"));
+        window.dispatchEvent(new Event("scroll"));
+        window.dispatchEvent(new Event("resize"));
+      }
     }, 4150);
 
     return () => {

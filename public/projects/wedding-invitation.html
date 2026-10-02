@@ -219,24 +219,25 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    width:42px;
-    height:42px;
-    border-radius:10px;
-    background:rgba(212,175,82,0.1);
-    border:1px solid rgba(212,175,82,0.4);
+    width:38px;
+    height:38px;
+    border-radius:0;
+    background:transparent;
+    border:none;
     cursor:pointer;
     padding:0;
-    transition:background .2s, border-color .2s, transform .15s;
+    transition:transform .15s, opacity .2s;
     flex-shrink:0;
   }
   .header-burger-btn:hover{
-    background:rgba(212,175,82,0.22);
-    border-color:var(--gold-light);
-    transform:translateY(-1px);
+    background:transparent;
+    border:none;
+    opacity:0.85;
+    transform:scale(1.05);
   }
   .burger-box{
-    width:20px;
-    height:14px;
+    width:22px;
+    height:15px;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -320,10 +321,11 @@
     display:flex;
     align-items:center;
     gap:12px;
-    padding:14px 18px;
-    border-radius:10px;
-    background:rgba(255,255,255,0.02);
-    border:1px solid rgba(212,175,82,0.18);
+    padding:15px 4px;
+    border-radius:0;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid rgba(212,175,82,0.12);
     color:var(--cream);
     text-decoration:none;
     font-family:'Poppins', sans-serif;
@@ -331,24 +333,25 @@
     font-weight:600;
     letter-spacing:0.2px;
     cursor:pointer;
-    transition:background .2s, border-color .2s, transform .15s, color .2s;
+    transition:color .2s, transform .15s, border-color .2s;
     text-align:left;
     width:100%;
   }
   .drawer-item:hover{
-    background:rgba(212,175,82,0.12);
-    border-color:var(--gold-light);
+    background:transparent;
+    border-bottom-color:var(--gold);
     color:var(--gold-light);
     transform:translateX(3px);
   }
   .drawer-item.highlight{
-    background:linear-gradient(135deg, rgba(212,175,82,0.22), rgba(168,133,44,0.12));
-    border-color:var(--gold);
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--gold);
     color:var(--gold-light);
   }
   .drawer-item.highlight:hover{
-    background:linear-gradient(135deg, var(--gold-light), var(--gold));
-    color:#1a1305;
+    background:transparent;
+    color:#ffffff;
   }
   .drawer-item svg{
     flex-shrink:0;
@@ -587,15 +590,36 @@
   }
 
   .help-link{
-    display:flex; align-items:center; justify-content:center; gap:7px;
-    text-align:center; font-size:12.5px;
-    color:var(--cream); opacity:0.65;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:0 auto 24px auto;
+    width:auto;
+    padding:8px 16px;
+    background:rgba(212,175,82,0.14);
+    border:1px solid rgba(212,175,82,0.45);
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--gold-light);
+    opacity:1;
     text-decoration:none;
-    margin-bottom:26px;
-    transition:opacity .2s;
+    cursor:pointer;
+    transition:all .2s ease;
+    font-family:'Poppins', sans-serif;
   }
-  .help-link:hover{ opacity:1; color:var(--gold-light); }
-  .help-link svg{ width:14px; height:14px; fill:var(--green); flex-shrink:0; }
+  .help-link:hover{
+    background:rgba(212,175,82,0.25);
+    border-color:var(--gold-light);
+    color:#ffffff;
+  }
+  .help-link svg{
+    width:16px;
+    height:16px;
+    fill:var(--gold-light);
+    flex-shrink:0;
+  }
 
   /* FORM CARD */
   .card{
@@ -643,19 +667,29 @@
     line-height:1.5;
   }
 
-  .phone-row{ display:flex; gap:8px; }
+  .phone-row{
+    display:flex;
+    gap:8px;
+    align-items:stretch;
+    width:100%;
+  }
   .phone-row select{
-    flex:0 0 118px;
-    background:rgba(255,255,255,0.03);
+    flex:0 0 86px;
+    max-width:90px;
+    background:rgba(255,255,255,0.04);
     border:1px solid rgba(212,175,82,0.3);
     border-radius:8px;
-    padding:12px 8px;
+    padding:12px 6px;
     color:var(--cream);
     font-family:'Poppins', sans-serif;
-    font-size:13.5px;
+    font-size:13px;
     outline:none;
   }
-  .phone-row input{ flex:1; }
+  .phone-row input{
+    flex:1;
+    min-width:0;
+    width:100%;
+  }
 
   .checkbox-row{
     display:flex; align-items:flex-start; gap:10px; margin-top:20px;
@@ -1065,91 +1099,39 @@
       <label for="tel">Phone Number</label>
       <div class="phone-row">
         <select id="countryCode">
-          <!-- Populaire & Amériques -->
-          <option value="+1" selected>🇺🇸 USA (+1)</option>
-          <option value="+1">🇨🇦 Canada (+1)</option>
-          <option value="+52">🇲🇽 Mexique (+52)</option>
-          <option value="+55">🇧🇷 Brésil (+55)</option>
-          <option value="+509">🇭🇹 Haïti (+509)</option>
-          <option value="+590">🇬🇵 Guadeloupe (+590)</option>
-          <option value="+596">🇲🇶 Martinique (+596)</option>
-          <option value="+594">🇬🇫 Guyane (+594)</option>
-
-          <!-- Europe -->
-          <option value="+33">🇫🇷 France (+33)</option>
-          <option value="+32">🇧🇪 Belgique (+32)</option>
-          <option value="+41">🇨🇭 Suisse (+41)</option>
-          <option value="+44">🇬🇧 Royaume-Uni (+44)</option>
-          <option value="+49">🇩🇪 Allemagne (+49)</option>
-          <option value="+34">🇪🇸 Espagne (+34)</option>
-          <option value="+39">🇮🇹 Italie (+39)</option>
-          <option value="+351">🇵🇹 Portugal (+351)</option>
-          <option value="+31">🇳🇱 Pays-Bas (+31)</option>
-          <option value="+352">🇱🇺 Luxembourg (+352)</option>
-          <option value="+353">🇮🇪 Irlande (+353)</option>
-          <option value="+46">🇸🇪 Suède (+46)</option>
-          <option value="+47">🇳🇴 Norvège (+47)</option>
-          <option value="+45">🇩🇰 Danemark (+45)</option>
-          <option value="+43">🇦🇹 Autriche (+43)</option>
-          <option value="+48">🇵🇱 Pologne (+48)</option>
-          <option value="+40">🇷🇴 Roumanie (+40)</option>
-          <option value="+30">🇬🇷 Grèce (+30)</option>
-          <option value="+90">🇹🇷 Turquie (+90)</option>
-
-          <!-- Afrique Centrale & Ouest -->
-          <option value="+243">🇨🇩 RD Congo (+243)</option>
-          <option value="+242">🇨🇬 Congo Brazzaville (+242)</option>
-          <option value="+225">🇨🇮 Côte d'Ivoire (+225)</option>
-          <option value="+221">🇸🇳 Sénégal (+221)</option>
-          <option value="+237">🇨🇲 Cameroun (+237)</option>
-          <option value="+241">🇬🇦 Gabon (+241)</option>
-          <option value="+223">🇲🇱 Mali (+223)</option>
-          <option value="+224">🇬🇳 Guinée (+224)</option>
-          <option value="+229">🇧🇯 Bénin (+229)</option>
-          <option value="+228">🇹🇬 Togo (+228)</option>
-          <option value="+226">🇧🇫 Burkina Faso (+226)</option>
-          <option value="+227">🇳🇪 Niger (+227)</option>
-          <option value="+235">🇹🇩 Tchad (+235)</option>
-          <option value="+236">🇨🇫 Centrafrique (+236)</option>
-          <option value="+244">🇦🇴 Angola (+244)</option>
-          <option value="+234">🇳🇬 Nigeria (+234)</option>
-          <option value="+233">🇬🇭 Ghana (+233)</option>
-
-          <!-- Afrique du Nord -->
-          <option value="+212">🇲🇦 Maroc (+212)</option>
-          <option value="+213">🇩🇿 Algérie (+213)</option>
-          <option value="+216">🇹🇳 Tunisie (+216)</option>
-          <option value="+20">🇪🇬 Égypte (+20)</option>
-
-          <!-- Afrique Est & Sud -->
-          <option value="+250">🇷🇼 Rwanda (+250)</option>
-          <option value="+257">🇧🇮 Burundi (+257)</option>
-          <option value="+254">🇰🇪 Kenya (+254)</option>
-          <option value="+255">🇹🇿 Tanzanie (+255)</option>
-          <option value="+256">🇺🇬 Ouganda (+256)</option>
-          <option value="+27">🇿🇦 Afrique du Sud (+27)</option>
-          <option value="+261">🇲🇬 Madagascar (+261)</option>
-          <option value="+230">🇲🇺 Maurice (+230)</option>
-          <option value="+262">🇷🇪 La Réunion (+262)</option>
-
-          <!-- Moyen-Orient -->
-          <option value="+971">🇦🇪 Émirats Arabes Unis (+971)</option>
-          <option value="+966">🇸🇦 Arabie Saoudite (+966)</option>
-          <option value="+974">🇶🇦 Qatar (+974)</option>
-          <option value="+965">🇰🇼 Koweït (+965)</option>
-          <option value="+961">🇱🇧 Liban (+961)</option>
-          <option value="+972">🇮🇱 Israël (+972)</option>
-
-          <!-- Asie & Océanie -->
-          <option value="+91">🇮🇳 Inde (+91)</option>
-          <option value="+86">🇨🇳 Chine (+86)</option>
-          <option value="+81">🇯🇵 Japon (+81)</option>
-          <option value="+82">🇰🇷 Corée du Sud (+82)</option>
-          <option value="+65">🇸🇬 Singapour (+65)</option>
-          <option value="+61">🇦🇺 Australie (+61)</option>
-          <option value="+64">🇳🇿 Nouvelle-Zélande (+64)</option>
+          <option value="+1" selected>🇺🇸 +1</option>
+          <option value="+1">🇨🇦 +1</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+509">🇭🇹 +509</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+32">🇧🇪 +32</option>
+          <option value="+41">🇨🇭 +41</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+351">🇵🇹 +351</option>
+          <option value="+31">🇳🇱 +31</option>
+          <option value="+243">🇨🇩 +243</option>
+          <option value="+242">🇨🇬 +242</option>
+          <option value="+225">🇨🇮 +225</option>
+          <option value="+221">🇸🇳 +221</option>
+          <option value="+237">🇨🇲 +237</option>
+          <option value="+241">🇬🇦 +241</option>
+          <option value="+212">🇲🇦 +212</option>
+          <option value="+213">🇩🇿 +213</option>
+          <option value="+216">🇹🇳 +216</option>
+          <option value="+250">🇷🇼 +250</option>
+          <option value="+27">🇿🇦 +27</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+86">🇨🇳 +86</option>
+          <option value="+81">🇯🇵 +81</option>
+          <option value="+61">🇦🇺 +61</option>
         </select>
-        <input type="text" id="tel" placeholder="(555) 000-0000" required>
+        <input type="tel" id="tel" placeholder="(555) 000-0000" inputmode="tel" required>
       </div>
 
       <div class="checkbox-row">
@@ -1363,20 +1345,40 @@
   }
 
   async function sendInvitationEmail(data) {
-    const params = {
-      to_name: data.nom,
-      to_email: data.email,
-      invitation_number: data.inviteCode,
-      event_name: "Wedding Invitation",
-      event_lieu: "ROSE ESTATE",
-      event_heure: "4:00 PM prompt",
-      event_prix: "Admission by official invitation only",
-      cp_numero: "support: contact@levelup-ecosystem.com",
-      whatsapp_link: "https://levelup-ecosystem.com/#contact",
-      org_name: "The Bride & Groom",
-      telephone: data.telephone
-    };
-    return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "wedding_rsvp",
+          nom: data.nom,
+          email: data.email,
+          telephone: data.telephone,
+          inviteCode: data.inviteCode
+        })
+      });
+    } catch (apiErr) {
+      console.warn("Backend API email dispatch fallback:", apiErr);
+    }
+
+    try {
+      const params = {
+        to_name: data.nom,
+        to_email: data.email,
+        invitation_number: data.inviteCode,
+        event_name: "Wedding Invitation",
+        event_lieu: "ROSE ESTATE",
+        event_heure: "4:00 PM prompt",
+        event_prix: "Admission by official invitation only",
+        cp_numero: "support: contact@levelup-ecosystem.com",
+        whatsapp_link: "https://levelup-ecosystem.com/#contact",
+        org_name: "The Bride & Groom",
+        telephone: data.telephone
+      };
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    } catch (ejsErr) {
+      console.warn("EmailJS send failed:", ejsErr);
+    }
   }
 
   // ---------- CONFETTI ----------
