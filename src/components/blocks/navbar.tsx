@@ -200,11 +200,6 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // On the standalone event landing page, hide the root navbar to let the dedicated sticky gold header display
-  if (pathname === "/retrouvailles") {
-    return null;
-  }
-
   // Handlers for desktop expanding mega-header for services
   const handleServicesEnter = () => {
     if (closeTimeoutRef.current) {
@@ -273,6 +268,11 @@ export const Navbar = () => {
       document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
+
+  // On the standalone event landing page, hide the root navbar to let the dedicated sticky gold header display
+  if (pathname === "/retrouvailles") {
+    return null;
+  }
 
   return (
     <>

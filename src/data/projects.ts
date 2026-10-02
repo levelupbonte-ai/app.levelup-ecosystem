@@ -28,14 +28,14 @@ export const allProjects: ProjectItem[] = [
   {
     id: "retrouvailles",
     step: "02",
-    badge: "Client Project • Event Platform",
-    title: "Le Dernier Retrouvailles",
+    badge: "Client Project • Digital Experience",
+    title: "Wedding Invitation",
     description:
-      "A custom celebration and reunion portal built for the 4ème CONS class. Features interactive attendee registration, dynamic countdown timer, live ticket selection, and seamless mobile check-in.",
-    image: "/projects/retrouvailles.png",
+      "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and instant confirmation.",
+    image: "/projects/wedding-card.jpg",
     href: "/retrouvailles",
     external: false,
     aspectRatio: "aspect-[639/298]",
-    ctaText: "Visit site",
+    ctaText: "Explore the invitation",
   },
 ];

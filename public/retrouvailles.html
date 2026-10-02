@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Le Dernier Retrouvailles — Inscription</title>
+<title>Wedding Invitation — Celebration &amp; RSVP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --black: #0a0908;
@@ -19,8 +19,20 @@
     --line: rgba(212,175,82,0.22);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{
+    scroll-behavior:smooth;
+    scrollbar-width:none !important;
+    -ms-overflow-style:none !important;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar{
+    display:none !important;
+    width:0 !important;
+    height:0 !important;
+  }
   body{
+    scrollbar-width:none !important;
+    -ms-overflow-style:none !important;
     background:
       radial-gradient(circle at 15% 0%, rgba(212,175,82,0.06), transparent 40%),
       radial-gradient(circle at 90% 20%, rgba(179,38,30,0.05), transparent 45%),
@@ -28,6 +40,22 @@
     color:var(--cream);
     font-family:'Poppins', sans-serif;
     min-height:100vh;
+  }
+
+  /* TOP READING PROGRESS BAR */
+  .scroll-progress-bar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:2.5px;
+    z-index:9999;
+    background:linear-gradient(90deg, #d4af52, #f0d98c, #d4af52);
+    box-shadow:0 0 10px rgba(212,175,82,0.6);
+    transform-origin:left;
+    transform:scaleX(0);
+    pointer-events:none;
+    transition:transform 0.08s ease-out;
   }
 
   /* STICKY HEADER */
@@ -52,22 +80,25 @@
     justify-content:space-between;
     gap:10px;
   }
-  .back-btn{
-    display:inline-flex;
+  .brand-logo-link{
+    display:flex;
     align-items:center;
-    gap:6px;
-    color:var(--cream);
-    opacity:0.85;
     text-decoration:none;
-    font-size:12px;
-    font-weight:500;
-    padding:6px 10px;
-    border-radius:6px;
-    border:1px solid rgba(212,175,82,0.2);
-    background:rgba(212,175,82,0.06);
-    transition:opacity .2s, background .2s, color .2s;
+    transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin:bottom left;
+    padding:2px 0;
   }
-  .back-btn:hover{ opacity:1; color:var(--gold-light); background:rgba(212,175,82,0.12); }
+  .brand-logo-link:hover{
+    transform:scale(1.05) rotate(-2deg);
+  }
+  .header-levelup-logo{
+    width:115px;
+    height:auto;
+    display:block;
+  }
+  @media (max-width:540px){
+    .header-levelup-logo{ width:96px; }
+  }
   .header-title-box{
     text-align:center;
   }
@@ -110,9 +141,9 @@
     position:relative;
     width:100%;
     height:clamp(300px, 60vw, 440px);
-    background-image:url('/projects/retrouvailles.png');
+    background-image:url('/projects/wedding-hero.jpg');
     background-size:cover;
-    background-position:center 22%;
+    background-position:center 35%;
     background-repeat:no-repeat;
   }
   .hero::after{
@@ -390,18 +421,34 @@
     animation-delay:2.3s;
   }
   .intro-mark{
-    width:74px; height:74px;
-    border:1px solid var(--gold);
+    width:94px; height:94px;
+    border:1px solid rgba(212,175,82,0.45);
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     margin-bottom:22px;
     animation:markIn .8s ease both;
+    position:relative;
+    box-shadow:0 0 24px rgba(212,175,82,0.2), inset 0 0 16px rgba(212,175,82,0.08);
+    background:radial-gradient(circle, rgba(212,175,82,0.1) 0%, transparent 70%);
   }
-  .intro-mark svg{ width:30px; height:30px; }
-  .intro-mark path{
-    fill:none; stroke:var(--gold-light); stroke-width:1.4;
-    stroke-dasharray:140; stroke-dashoffset:140;
-    animation:draw 1.4s ease forwards .3s;
+  .intro-mark .rings-svg{ width:68px; height:50px; overflow:visible; }
+  .intro-mark .ring-stroke{
+    stroke-dasharray:180; stroke-dashoffset:180;
+    animation:draw 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards .25s;
+  }
+  .intro-mark .diamond-facet{
+    opacity:0;
+    animation:fadeUp .6s ease forwards 1.0s;
+  }
+  .intro-mark .ring-sparkle{
+    opacity:0;
+    transform-origin:32px 14px;
+    animation:sparkleIn .8s ease forwards 1.25s;
+  }
+  @keyframes sparkleIn{
+    0%{ opacity:0; transform:scale(0.3) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1.25) rotate(90deg); }
+    100%{ opacity:0.95; transform:scale(1) rotate(180deg); }
   }
   .intro-eyebrow{
     font-size:10px; letter-spacing:3px; text-transform:uppercase;
@@ -436,42 +483,104 @@
   @media (prefers-reduced-motion: reduce){
     .intro{ animation:introOut .01s linear forwards; animation-delay:0s; }
     .intro-mark, .intro-eyebrow, .intro-title, .intro-line, .intro-powered{ animation:none; opacity:1; }
-    .intro-mark path{ stroke-dashoffset:0; }
+    .intro-mark .ring-stroke{ stroke-dashoffset:0; }
+    .intro-mark .diamond-facet, .intro-mark .ring-sparkle{ opacity:1; }
     .intro-line{ width:120px; }
   }
 </style>
 </head>
 <body>
 
+<div class="scroll-progress-bar" id="scrollProgress"></div>
+
 <div class="intro" id="introScreen">
   <div class="intro-mark">
-    <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>
+    <!-- Deux vraies alliances de mariage 3D entrelacées avec solitaire diamant -->
+    <svg viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg" class="rings-svg">
+      <defs>
+        <linearGradient id="goldGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fff5d0" />
+          <stop offset="35%" stop-color="#f0d98c" />
+          <stop offset="70%" stop-color="#d4af52" />
+          <stop offset="100%" stop-color="#8a6b1f" />
+        </linearGradient>
+        <linearGradient id="goldGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fff8db" />
+          <stop offset="30%" stop-color="#f0d98c" />
+          <stop offset="75%" stop-color="#d4af52" />
+          <stop offset="100%" stop-color="#6e5214" />
+        </linearGradient>
+        <linearGradient id="diamondGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="50%" stop-color="#d9f0fc" />
+          <stop offset="100%" stop-color="#bfe3f7" />
+        </linearGradient>
+      </defs>
+
+      <!-- Alliance gauche (arrière) -->
+      <path d="M 16 42 C 16 30, 48 30, 48 42" stroke="url(#goldGrad1)" stroke-width="2.8" stroke-linecap="round" fill="none" class="ring-stroke" />
+      
+      <!-- Alliance droite (boucle entrelacée complète) -->
+      <!-- Partie arrière droite -->
+      <path d="M 52 42 C 52 30, 84 30, 84 42" stroke="url(#goldGrad2)" stroke-width="2.8" stroke-linecap="round" fill="none" class="ring-stroke" />
+      <!-- Partie avant droite -->
+      <path d="M 84 42 C 84 54, 52 54, 52 42" stroke="url(#goldGrad2)" stroke-width="3" stroke-linecap="round" fill="none" class="ring-stroke" />
+      <!-- Biseau intérieur alliance droite -->
+      <path d="M 56 42 C 56 34, 80 34, 80 42 C 80 50, 56 50, 56 42" stroke="url(#goldGrad1)" stroke-width="1.1" opacity="0.6" fill="none" class="ring-stroke" />
+
+      <!-- Alliance gauche (partie avant qui passe par-dessus) -->
+      <path d="M 16 42 C 16 54, 48 54, 48 42" stroke="url(#goldGrad1)" stroke-width="3" stroke-linecap="round" fill="none" class="ring-stroke" />
+      <!-- Biseau intérieur alliance gauche -->
+      <path d="M 20 42 C 20 34, 44 34, 44 42 C 44 50, 20 50, 20 42" stroke="url(#goldGrad2)" stroke-width="1.1" opacity="0.6" fill="none" class="ring-stroke" />
+
+      <!-- Solitaire diamant sur bague gauche -->
+      <!-- Griffes de sertissage -->
+      <path d="M 29 30 L 32 24 L 35 30" stroke="url(#goldGrad1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" class="ring-stroke" />
+      <!-- Facettes du diamant étincelant -->
+      <polygon points="27,21 37,21 32,27" fill="url(#diamondGrad)" stroke="#ffffff" stroke-width="0.7" class="diamond-facet" />
+      <polygon points="29,16 35,16 37,21 27,21" fill="url(#diamondGrad)" stroke="#ffffff" stroke-width="0.7" class="diamond-facet" />
+      <polygon points="30.5,16 33.5,16 35,21 29,21" fill="#ffffff" opacity="0.9" class="diamond-facet" />
+      <!-- Étoile d'éclat lumineux -->
+      <path d="M 32 10 L 33 13 L 36 14 L 33 15 L 32 18 L 31 15 L 28 14 L 31 13 Z" fill="#ffffff" class="ring-sparkle" />
+    </svg>
   </div>
-  <div class="intro-eyebrow">LA 4ÈME CONS</div>
-  <div class="intro-title">LE DERNIER RETROUVAILLES</div>
+  <div class="intro-eyebrow">EXCLUSIVE CELEBRATION</div>
+  <div class="intro-title">WEDDING INVITATION</div>
   <div class="intro-line"></div>
   <div class="intro-powered">Powered by <strong>LevelUp</strong></div>
 </div>
 
 <header class="retrouvailles-header" id="topNav">
   <div class="header-inner">
-    <a href="/projects" target="_top" class="back-btn">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      <span>LevelUp</span>
+    <a href="/" target="_top" class="brand-logo-link" title="LevelUp Ecosystem">
+      <svg viewBox="0 0 1000 220" fill="none" xmlns="http://www.w3.org/2000/svg" class="header-levelup-logo">
+        <text x="50%" y="85" text-anchor="middle" fill="url(#gold_brand_paint_1)" style="font-size: 100px; font-weight: 900; letter-spacing: -0.01em; font-family: 'Poppins', sans-serif;">LevelUp</text>
+        <text x="50%" y="198" text-anchor="middle" fill="url(#gold_brand_paint_2)" style="font-size: 135px; font-weight: 900; letter-spacing: 0.01em; font-family: 'Poppins', sans-serif;">Ecosystem</text>
+        <defs>
+          <linearGradient id="gold_brand_paint_1" x1="200" y1="20" x2="800" y2="90" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fff5d0" />
+            <stop offset="1" stop-color="#d4af52" />
+          </linearGradient>
+          <linearGradient id="gold_brand_paint_2" x1="100" y1="120" x2="900" y2="200" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f0d98c" />
+            <stop offset="1" stop-color="#a8852c" />
+          </linearGradient>
+        </defs>
+      </svg>
     </a>
     <div class="header-title-box">
-      <span class="header-badge">La 4ème CONS</span>
-      <span class="header-name">Le Dernier Retrouvailles</span>
+      <span class="header-badge">Sacred Union &amp; Celebration</span>
+      <span class="header-name">Wedding Invitation</span>
     </div>
-    <a href="#formCard" class="header-cta">Réserver</a>
+    <a href="/#services" target="_top" class="header-cta">Our Services →</a>
   </div>
 </header>
 
 <div class="hero">
   <div class="hero-content">
-    <div class="eyebrow">LA 4ÈME CONS <span>·</span> ORGANISE</div>
-    <h1 class="title">LE DERNIER<br>RETROUVAILLES</h1>
-    <p class="subtitle">Une dernière fête, des souvenirs pour toujours.</p>
+    <div class="eyebrow">EXCLUSIVE CELEBRATION <span>·</span> OFFICIAL RSVP</div>
+    <h1 class="title">WEDDING<br>INVITATION</h1>
+    <p class="subtitle">Two hearts united forever. Celebrate this unforgettable moment with us.</p>
   </div>
 </div>
 
@@ -479,45 +588,47 @@
 
   <div class="info-strip">
     <div class="info-item">
-      <div class="lbl">Lieu</div>
-      <div class="val">CHRISCO</div>
+      <div class="lbl">Location</div>
+      <div class="val">ROSE ESTATE</div>
     </div>
     <div class="info-item">
-      <div class="lbl">Heure</div>
-      <div class="val">14H00</div>
+      <div class="lbl">Time</div>
+      <div class="val">4:00 PM PROMPT</div>
     </div>
     <div class="info-item">
-      <div class="lbl">Participation</div>
-      <div class="val">10.000 FC</div>
+      <div class="lbl">Dress Code</div>
+      <div class="val">BLACK TIE &amp; FORMAL</div>
     </div>
   </div>
 
   <a href="#" target="_blank" class="help-link" id="helpWhatsapp">
     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.11-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-    Une question ? Écris aux organisateurs sur WhatsApp
+    Have a question? Chat with us directly on WhatsApp
   </a>
 
   <!-- FORM -->
   <div class="card" id="formCard">
-    <h2>Réserve ta place</h2>
-    <p class="hint">Remplis ce formulaire pour recevoir ton invitation officielle par email.</p>
+    <h2>Confirm Your Attendance (RSVP)</h2>
+    <p class="hint">Please complete this form to receive your official digital invitation card and table placement via email.</p>
 
     <form id="inscriptionForm">
-      <label for="nom">Nom complet</label>
-      <input type="text" id="nom" placeholder="Ex : Jean Mukendi" required>
+      <label for="nom">Full Name</label>
+      <input type="text" id="nom" placeholder="e.g. John Doe" required>
 
-      <label for="email">Adresse email</label>
-      <input type="email" id="email" placeholder="Ex : jean.mukendi@gmail.com" required>
-      <p class="email-note">⚠️ Utilise ta <strong>vraie</strong> adresse email : c'est là que tu recevras ton invitation officielle avec ton numéro. En cas d'erreur, contacte les organisateurs sur WhatsApp.</p>
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="e.g. john.doe@gmail.com" required>
+      <p class="email-note">⚠️ Please enter your <strong>primary</strong> email address: your official invitation pass and guest number will be delivered here.</p>
 
-      <label for="tel">Numéro de téléphone</label>
+      <label for="tel">Phone Number</label>
       <div class="phone-row">
         <select id="countryCode">
-          <option value="+243" selected>🇨🇩 +243</option>
+          <option value="+1" selected>🇺🇸 +1</option>
           <option value="+33">🇫🇷 +33</option>
-          <option value="+32">🇧🇪 +32</option>
-          <option value="+1">🇺🇸 +1</option>
           <option value="+44">🇬🇧 +44</option>
+          <option value="+1">🇨🇦 +1</option>
+          <option value="+32">🇧🇪 +32</option>
+          <option value="+41">🇨🇭 +41</option>
+          <option value="+243">🇨🇩 +243</option>
           <option value="+27">🇿🇦 +27</option>
           <option value="+254">🇰🇪 +254</option>
           <option value="+255">🇹🇿 +255</option>
@@ -526,20 +637,20 @@
           <option value="+225">🇨🇮 +225</option>
           <option value="+221">🇸🇳 +221</option>
         </select>
-        <input type="text" id="tel" placeholder="8xx xxx xxx" required>
+        <input type="text" id="tel" placeholder="(555) 000-0000" required>
       </div>
 
       <div class="checkbox-row">
         <input type="checkbox" id="confirm" required>
-        <label for="confirm">Je confirme ma participation à "Le Dernier Retrouvailles" et j'accepte les conditions de l'événement (tenue correcte exigée).</label>
+        <label for="confirm">I confirm my attendance at the wedding celebration and agree to the event guidelines (formal attire required).</label>
       </div>
 
       <div class="security-note">
         <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-        <p>Tes informations (nom, email, téléphone) servent uniquement à l'organisation de cet événement et à te recontacter si besoin. Elles ne sont jamais revendues ni partagées à des tiers.</p>
+        <p>Your details (name, email, phone) are strictly used for guest list coordination and seating arrangements. They will never be shared or sold to third parties.</p>
       </div>
 
-      <button type="submit" class="submit" id="submitBtn">Je m'inscris</button>
+      <button type="submit" class="submit" id="submitBtn">Confirm My Attendance</button>
       <p class="error-msg" id="errorMsg"></p>
     </form>
   </div>
@@ -550,19 +661,19 @@
     <div class="check">
       <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
     </div>
-    <h2 id="successName">Inscription confirmée !</h2>
-    <p>Ton invitation officielle arrive dans ta boîte mail <strong>(pense à vérifier tes spams)</strong>. Elle contient ton numéro d'invitation personnel, à garder précieusement jusqu'au jour J.</p>
+    <h2 id="successName">Attendance Confirmed!</h2>
+    <p>Your official invitation card has been sent to your inbox <strong>(please check your spam folder)</strong>. It contains your unique guest invitation number to present upon arrival.</p>
     <a href="#" target="_blank" class="whatsapp-btn" id="whatsappBtn">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-1.746-.873-2.888-1.559-4.036-3.535-.305-.526.305-.488.874-1.624.098-.198.05-.371-.05-.52-.099-.148-.669-1.61-.917-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.05 3.129 4.966 4.264 2.916 1.135 2.916.756 3.856.63.94-.124 1.758-.735 2.03-1.445.272-.71.272-1.317.198-1.445-.074-.129-.297-.198-.669-.372z"/><path d="M12.001 2C6.478 2 2 6.478 2 12c0 1.892.53 3.657 1.447 5.163L2.05 21.95l4.938-1.36A9.955 9.955 0 0012.001 22C17.523 22 22 17.522 22 12S17.523 2 12.001 2zm0 18.161c-1.65 0-3.203-.44-4.545-1.207l-.324-.19-3.379.93.94-3.36-.212-.34A8.14 8.14 0 013.839 12c0-4.5 3.662-8.161 8.162-8.161 4.5 0 8.161 3.661 8.161 8.161s-3.661 8.161-8.161 8.161z"/></svg>
-      Réserver ma place sur WhatsApp
+      Confirm via WhatsApp
     </a>
   </div>
 
   <div class="pub">
     <div class="brand">LEVELUP ECOSYSTEM</div>
-    <p>Vous voulez un site web ou des invitations pour votre mariage, anniversaire ou tout autre événement ?</p>
-    <a href="https://levelup-ecosystem.com" target="_blank" class="services-btn">Voir nos services →</a>
-    <p class="contact-line">Ou écrivez-nous : <a class="mail-link" href="mailto:contact@levelup-ecosystem.com">contact@levelup-ecosystem.com</a></p>
+    <p>Looking for an exceptional digital invitation or a bespoke website for your wedding, reception, or milestone event?</p>
+    <a href="https://levelup-ecosystem.com/#services" target="_top" class="services-btn">Explore Our Services →</a>
+    <p class="contact-line">Or get in touch: <a class="mail-link" href="mailto:contact@levelup-ecosystem.com">contact@levelup-ecosystem.com</a></p>
   </div>
 
 </div>
@@ -598,18 +709,18 @@
   emailjs.init(EMAILJS_PUBLIC_KEY);
 
   document.getElementById("helpWhatsapp").href =
-    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Bonjour, j'ai une question à propos de l'événement Le Dernier Retrouvailles.")}`;
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello, I have a question regarding the Wedding Invitation.")}`;
 
   // ---------- HELPERS ----------
   function generateInviteCode() {
     const n = Math.floor(1000 + Math.random() * 9000);
-    return `LVL-${n}`;
+    return `WEDDING-${n}`;
   }
 
   function buildWhatsappLink(nom, withCode) {
     const msg = withCode
-      ? `Bonjour, je m'appelle ${nom}. J'ai reçu mon invitation ${withCode} pour "Le Dernier Retrouvailles" et je souhaite réserver ma place.`
-      : `Bonjour, je m'appelle ${nom}. Je viens de m'inscrire à "Le Dernier Retrouvailles" et je souhaite réserver ma place.`;
+      ? `Hello, my name is ${nom}. I have received my invitation ${withCode} for the Wedding and would like to confirm my attendance.`
+      : `Hello, my name is ${nom}. I just RSVP'd for the Wedding and would like to confirm my attendance.`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -630,7 +741,7 @@
       telephone: data.telephone,
       inviteCode: data.inviteCode,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      evenement: "Le Dernier Retrouvailles"
+      evenement: "Wedding Invitation"
     });
   }
 
@@ -639,13 +750,13 @@
       to_name: data.nom,
       to_email: data.email,
       invitation_number: data.inviteCode,
-      event_name: "Le Dernier Retrouvailles",
-      event_lieu: "CHRISCO",
-      event_heure: "14H00 précises",
-      event_prix: "10.000 FCFA",
+      event_name: "Wedding Invitation",
+      event_lieu: "ROSE ESTATE",
+      event_heure: "4:00 PM prompt",
+      event_prix: "Admission by official invitation only",
       cp_numero: "+243 846 881 890",
       whatsapp_link: buildWhatsappLink(data.nom, data.inviteCode),
-      org_name: "LA 4ème CONS",
+      org_name: "The Bride & Groom",
       telephone: data.telephone
     };
     return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
@@ -711,7 +822,7 @@
     const confirmed = document.getElementById("confirm").checked;
 
     if (!nom || !email || !telRaw || !confirmed) {
-      errorMsg.textContent = "Merci de remplir tous les champs et de cocher la case de confirmation.";
+      errorMsg.textContent = "Please fill in all required fields and accept the confirmation checkbox.";
       errorMsg.style.display = "block";
       return;
     }
@@ -719,39 +830,52 @@
     const telephone = `${code} ${telRaw}`;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Inscription en cours...";
+    submitBtn.textContent = "Confirming attendance...";
 
     try {
       await ensureAuth();
       const inviteCode = generateInviteCode();
       const data = { nom, email, telephone, inviteCode };
 
-      // Étape critique : l'inscription doit réussir
+      // Critical step: save registration to database
       await saveInscription(data);
 
-      // Étape non-critique : l'email peut échouer sans bloquer l'utilisateur
+      // Non-critical: send email
       try {
         await sendInvitationEmail(data);
       } catch (emailErr) {
-        console.error("Inscription enregistrée, mais l'email n'a pas pu être envoyé :", emailErr);
+        console.error("Registration saved, but confirmation email could not be sent:", emailErr);
       }
 
       document.getElementById("formCard").style.display = "none";
       const successCard = document.getElementById("successCard");
       successCard.style.display = "block";
-      document.getElementById("successName").textContent = `Bienvenue, ${nom.split(" ")[0]} ! 🎉`;
+      document.getElementById("successName").textContent = `Welcome, ${nom.split(" ")[0]}! 🎉`;
       document.getElementById("whatsappBtn").href = buildWhatsappLink(nom, null);
 
       successCard.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(launchConfetti, 200);
     } catch (err) {
       console.error(err);
-      errorMsg.textContent = "Une erreur est survenue pendant l'inscription. Merci de réessayer, ou de nous contacter directement sur WhatsApp si le problème persiste.";
+      errorMsg.textContent = "An error occurred while confirming your attendance. Please try again or contact us directly on WhatsApp.";
       errorMsg.style.display = "block";
       submitBtn.disabled = false;
-      submitBtn.textContent = "Je m'inscris";
+      submitBtn.textContent = "Confirm My Attendance";
     }
   });
+
+  // ---------- TOP SCROLL PROGRESS BAR ----------
+  function updateScrollProgress() {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = total > 0 ? window.scrollY / total : 0;
+    const bar = document.getElementById("scrollProgress");
+    if (bar) {
+      bar.style.transform = `scaleX(${Math.min(Math.max(progress, 0), 1)})`;
+    }
+  }
+  window.addEventListener("scroll", updateScrollProgress, { passive: true });
+  window.addEventListener("resize", updateScrollProgress, { passive: true });
+  updateScrollProgress();
 </script>
 
 </body>

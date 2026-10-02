@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Fonctions d'aide (Helper functions)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Utilisateurs : chacun accède à son profil
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Projets et vitrine : lecture publique, écriture réservée aux utilisateurs connectés
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Formulaire de contact et demandes de devis : tout le monde peut soumettre, lecture restreinte
+    match /contacts/{contactId} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    // Réservations d'événements (ex: Le Dernier Retrouvailles)
+    match /bookings/{bookingId} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    // Inscriptions Newsletter
+    match /newsletter/{newsletterId} {
+      allow create: if true;
+      allow read, delete: if isAuthenticated();
+    }
+
+    // Règle par défaut pour tout autre document non spécifié
+    match /{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

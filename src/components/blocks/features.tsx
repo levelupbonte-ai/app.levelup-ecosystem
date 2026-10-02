@@ -218,7 +218,7 @@ function DesktopPinnedBarberShopShowcase({
                     className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
                   >
                     <span>{item.ctaText}</span>
-                    <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                    <ArrowRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-1" />
                   </Link>
                 )}
 
@@ -452,7 +452,7 @@ function MobileScaleOnScrollItem({
               className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-border/85 bg-card hover:bg-foreground hover:text-background font-semibold text-xs sm:text-sm shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 group/btn"
             >
               <span>{item.ctaText}</span>
-              <ArrowUpRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+              <ArrowRight className="size-4 sm:size-4.5 text-foreground group-hover/btn:text-background transition-transform duration-300 group-hover/btn:translate-x-1" />
             </Link>
           )}
         </div>

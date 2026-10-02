@@ -203,6 +203,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var o=JSON.stringify;JSON.stringify=function(v,r,s){try{return o(v,r,s);}catch(e){if(e instanceof TypeError&&String(e.message).indexOf("circular")!==-1){var seen=new WeakSet();return o(v,function(k,val){if(typeof Node!=="undefined"&&val instanceof Node){return val.nodeName||"Node";}if(typeof val==="object"&&val!==null){if(seen.has(val)){return"[Circular]";}seen.add(val);}return typeof r==="function"?r(k,val):val;},s);}throw e;};};}catch(_){}})();`,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
         />

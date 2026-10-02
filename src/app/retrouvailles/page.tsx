@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Le Dernier Retrouvailles — Inscription | LevelUp Ecosystem",
+  title: "Wedding Invitation — Celebration & RSVP | LevelUp Ecosystem",
   description:
-    "La 4ème CONS organise Le Dernier Retrouvailles. Une dernière fête, des souvenirs pour toujours.",
+    "Bespoke luxury wedding invitation experience. Confirm your attendance (RSVP) and discover event details.",
 };
 
 export default function RetrouvaillesPage() {
@@ -11,7 +11,7 @@ export default function RetrouvaillesPage() {
     <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
       <iframe
         src="/retrouvailles.html"
-        title="Le Dernier Retrouvailles — Inscription"
+        title="Wedding Invitation — RSVP & Celebration"
         className="w-full h-full border-0 block"
       />
     </main>
