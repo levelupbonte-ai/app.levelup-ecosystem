@@ -3,11 +3,21 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, X } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, ShieldCheck, SlidersHorizontal } from "lucide-react";
+
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 const COOKIE_CONSENT_KEY = "levelup_cookie_consent";
+const COOKIE_PREFS_KEY = "levelup_cookie_preferences";
 
-export type CookieConsentStatus = "all" | "declined" | null;
+export type CookieConsentStatus = "all" | "declined" | "custom" | null;
+
+interface CookiePreferences {
+  necessary: boolean;
+  analytics: boolean;
+  personalization: boolean;
+}
 
 /**
  * Authentic SVG Cookie Illustration matching the user's mockup:
@@ -60,37 +70,86 @@ export function CookieBanner() {
   const [consent, setConsent] = useState<CookieConsentStatus>("all"); // default hidden until verified
   const [mounted, setMounted] = useState(false);
   const [agreedToPolicy, setAgreedToPolicy] = useState(true);
+  const [isCustomizing, setIsCustomizing] = useState(false);
+
+  // Preference switches
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
+  const [personalizationEnabled, setPersonalizationEnabled] = useState(true);
 
   useEffect(() => {
     setMounted(true);
     try {
       const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
-      if (stored === "all" || stored === "declined") {
+      if (stored === "all" || stored === "declined" || stored === "custom") {
         setConsent(stored as CookieConsentStatus);
       } else {
         setConsent(null); // Show banner
+      }
+
+      const storedPrefs = localStorage.getItem(COOKIE_PREFS_KEY);
+      if (storedPrefs) {
+        const parsed = JSON.parse(storedPrefs) as CookiePreferences;
+        if (typeof parsed.analytics === "boolean") setAnalyticsEnabled(parsed.analytics);
+        if (typeof parsed.personalization === "boolean") setPersonalizationEnabled(parsed.personalization);
       }
     } catch {
       setConsent(null);
     }
   }, []);
 
-  const handleAccept = () => {
+  const handleAcceptAll = () => {
     try {
       localStorage.setItem(COOKIE_CONSENT_KEY, "all");
+      localStorage.setItem(
+        COOKIE_PREFS_KEY,
+        JSON.stringify({
+          necessary: true,
+          analytics: true,
+          personalization: true,
+        }),
+      );
     } catch {
       // ignore
     }
     setConsent("all");
   };
 
-  const handleDecline = () => {
+  const handleDeclineAll = () => {
     try {
       localStorage.setItem(COOKIE_CONSENT_KEY, "declined");
+      localStorage.setItem(
+        COOKIE_PREFS_KEY,
+        JSON.stringify({
+          necessary: true,
+          analytics: false,
+          personalization: false,
+        }),
+      );
     } catch {
       // ignore
     }
     setConsent("declined");
+  };
+
+  const handleSavePreferences = () => {
+    try {
+      const isAllOn = analyticsEnabled && personalizationEnabled;
+      const isAllOff = !analyticsEnabled && !personalizationEnabled;
+      const status: CookieConsentStatus = isAllOn ? "all" : isAllOff ? "declined" : "custom";
+
+      localStorage.setItem(COOKIE_CONSENT_KEY, status);
+      localStorage.setItem(
+        COOKIE_PREFS_KEY,
+        JSON.stringify({
+          necessary: true,
+          analytics: analyticsEnabled,
+          personalization: personalizationEnabled,
+        }),
+      );
+    } catch {
+      // ignore
+    }
+    setConsent("custom");
   };
 
   if (!mounted || consent !== null) {
@@ -101,7 +160,7 @@ export function CookieBanner() {
     <AnimatePresence>
       <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none p-3 sm:p-5 md:p-6 flex flex-col items-center justify-end">
         {/* ========================================================================= */}
-        {/* DESKTOP VIEW (md+): Sleek Horizontal Floating Bar at Bottom               */}
+        {/* DESKTOP VIEW (md+): Sleek Horizontal Floating Bar with Upward Deploy      */}
         {/* ========================================================================= */}
         <motion.div
           key="cookie-desktop-bar"
@@ -109,40 +168,176 @@ export function CookieBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 90, opacity: 0, transition: { duration: 0.25 } }}
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
-          className="hidden md:flex pointer-events-auto w-full max-w-5xl items-center justify-between gap-4 px-6 py-4 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_12px_36px_-6px_rgba(0,0,0,0.12),0_4px_16px_-4px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-md"
+          className="hidden md:flex flex-col pointer-events-auto w-full max-w-4xl rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_16px_40px_-6px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.65)] backdrop-blur-md overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
         >
-          <div className="flex items-center gap-4 min-w-0">
-            <div className="shrink-0 size-9 flex items-center justify-center">
-              <CookieIllustration className="size-9 drop-shadow-sm" />
+          {/* Deployed Customization Drawer (Expands Upward) */}
+          <div
+            className={cn(
+              "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] border-b border-neutral-200/70 dark:border-zinc-800/80 bg-neutral-50/70 dark:bg-zinc-950/40",
+              isCustomizing
+                ? "max-h-[380px] opacity-100 p-6"
+                : "max-h-0 opacity-0 p-0 pointer-events-none border-b-0",
+            )}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-200/60 dark:border-zinc-800/60">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="size-4 text-[#2563EB]" />
+                <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 tracking-tight font-sans">
+                  Cookie Preferences &amp; Permissions
+                </h4>
+              </div>
+              <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                Zero third-party advertising cookies
+              </span>
             </div>
-            <div className="flex flex-col min-w-0">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight">
-                We use cookies
-              </h3>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate sm:text-clip">
-                They help the site run faster and more conveniently for you.
-              </p>
+
+            {/* Switches List */}
+            <div className="mt-4 space-y-3.5">
+              {/* 1. Necessary (Always Active) */}
+              <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800/70">
+                <div className="space-y-0.5 max-w-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                      Strictly Necessary
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
+                      Always Active
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                    Essential for secure authentication, CSRF defense, session continuity, and theme display.
+                  </p>
+                </div>
+                <Switch checked={true} disabled className="data-[state=checked]:bg-emerald-600 cursor-not-allowed opacity-75" />
+              </div>
+
+              {/* 2. Analytics */}
+              <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800/70">
+                <div className="space-y-0.5 max-w-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                      Analytics &amp; Performance
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                    Anonymous telemetry with IP masking to measure load performance and error rates.
+                  </p>
+                </div>
+                <Switch
+                  checked={analyticsEnabled}
+                  onCheckedChange={setAnalyticsEnabled}
+                  className="data-[state=checked]:bg-[#2563EB]"
+                  aria-label="Toggle analytics cookies"
+                />
+              </div>
+
+              {/* 3. Personalization */}
+              <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800/70">
+                <div className="space-y-0.5 max-w-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                      Personalization &amp; Experiences
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                    Remembers interactive simulator states, client workspace preferences, and form inputs.
+                  </p>
+                </div>
+                <Switch
+                  checked={personalizationEnabled}
+                  onCheckedChange={setPersonalizationEnabled}
+                  className="data-[state=checked]:bg-[#2563EB]"
+                  aria-label="Toggle personalization cookies"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 pt-3 flex items-center justify-between border-t border-neutral-200/60 dark:border-zinc-800/60">
+              <Link
+                href="/cookies"
+                className="text-xs text-[#2563EB] hover:underline font-medium inline-flex items-center gap-1"
+              >
+                <ShieldCheck className="size-3.5" />
+                <span>Read Cookie Policy</span>
+              </Link>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCustomizing(false)}
+                  className="text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white px-3 py-1.5 rounded-full transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSavePreferences}
+                  className="text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-5 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
+                >
+                  Save Preferences
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={handleDecline}
-              className="text-xs sm:text-sm font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white px-3.5 py-2 rounded-full transition-colors cursor-pointer"
-            >
-              Decline
-            </button>
-            <button
-              onClick={handleAccept}
-              className="text-xs sm:text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-7 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
-            >
-              Accept
-            </button>
+          {/* Main Desktop Bar */}
+          <div className="flex items-center justify-between gap-4 px-6 py-4">
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="shrink-0 size-9 flex items-center justify-center">
+                <CookieIllustration className="size-9 drop-shadow-sm" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight">
+                  We use cookies
+                </h3>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate sm:text-clip">
+                  They help the site run faster and more conveniently for you.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 shrink-0">
+              {/* 1. Decline Button */}
+              <button
+                type="button"
+                onClick={handleDeclineAll}
+                className="text-xs sm:text-sm font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white px-3 py-2 rounded-full transition-colors cursor-pointer"
+              >
+                Decline
+              </button>
+
+              {/* 2. Customize Button (Deploys preferences upward) */}
+              <button
+                type="button"
+                onClick={() => setIsCustomizing((prev) => !prev)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-full border transition-all cursor-pointer",
+                  isCustomizing
+                    ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-900 dark:text-white border-neutral-300 dark:border-zinc-700"
+                    : "bg-transparent text-neutral-700 dark:text-neutral-200 border-neutral-300/80 dark:border-zinc-700 hover:bg-neutral-100 dark:hover:bg-zinc-800",
+                )}
+              >
+                <span>Customize</span>
+                {isCustomizing ? (
+                  <ChevronDown className="size-3.5 transition-transform" />
+                ) : (
+                  <ChevronUp className="size-3.5 transition-transform" />
+                )}
+              </button>
+
+              {/* 3. Accept Button */}
+              <button
+                type="button"
+                onClick={handleAcceptAll}
+                className="text-xs sm:text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
+              >
+                Accept All
+              </button>
+            </div>
           </div>
         </motion.div>
 
         {/* ========================================================================= */}
-        {/* MOBILE VIEW (< md): Card Modal Centered at Bottom of Screen               */}
+        {/* MOBILE VIEW (< md): Card Modal Centered with Upward Deployment Drawer    */}
         {/* ========================================================================= */}
         <motion.div
           key="cookie-mobile-card"
@@ -150,20 +345,113 @@ export function CookieBanner() {
           animate={{ y: 0, scale: 1, opacity: 1 }}
           exit={{ y: 50, scale: 0.94, opacity: 0, transition: { duration: 0.2 } }}
           transition={{ type: "spring", stiffness: 340, damping: 28 }}
-          className="md:hidden pointer-events-auto w-full max-w-sm mx-auto relative rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] p-6 text-center"
+          className="md:hidden pointer-events-auto w-full max-w-sm mx-auto rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] p-5 text-center overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
         >
-          {/* Top-Right Close Button */}
-          <button
-            onClick={handleDecline}
-            aria-label="Close cookie consent"
-            className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1 rounded-full transition-colors cursor-pointer"
+          {/* Note: Top-Right Close Button ('X') has been removed on mobile as requested (Decline button is present) */}
+
+          {/* Deployed Customization Drawer (Upward expansion on mobile) */}
+          <div
+            className={cn(
+              "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] text-left",
+              isCustomizing
+                ? "max-h-[500px] opacity-100 mb-4 pb-4 border-b border-neutral-200 dark:border-zinc-800"
+                : "max-h-0 opacity-0 mb-0 pb-0 pointer-events-none border-b-0",
+            )}
           >
-            <X className="size-4.5" />
-          </button>
+            <div className="flex items-center justify-between pb-2 mb-3 border-b border-neutral-200/70 dark:border-zinc-800/70">
+              <div className="flex items-center gap-1.5">
+                <SlidersHorizontal className="size-4 text-[#2563EB]" />
+                <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight">
+                  Customize Cookies
+                </h4>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCustomizing(false)}
+                className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Mobile Category Switches */}
+            <div className="space-y-3">
+              {/* Strictly Necessary */}
+              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                      Strictly Necessary
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-500/20">
+                      Required
+                    </span>
+                  </div>
+                  <Switch checked={true} disabled className="data-[state=checked]:bg-emerald-600 opacity-80" />
+                </div>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                  Session security, logins, and essential site features.
+                </p>
+              </div>
+
+              {/* Analytics */}
+              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                    Analytics &amp; Performance
+                  </span>
+                  <Switch
+                    checked={analyticsEnabled}
+                    onCheckedChange={setAnalyticsEnabled}
+                    className="data-[state=checked]:bg-[#2563EB]"
+                    aria-label="Toggle analytics cookies"
+                  />
+                </div>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                  Anonymized metrics to optimize speed and responsiveness.
+                </p>
+              </div>
+
+              {/* Personalization */}
+              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                    Personalization
+                  </span>
+                  <Switch
+                    checked={personalizationEnabled}
+                    onCheckedChange={setPersonalizationEnabled}
+                    className="data-[state=checked]:bg-[#2563EB]"
+                    aria-label="Toggle personalization cookies"
+                  />
+                </div>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                  Preserves interactive previews, custom options &amp; UI themes.
+                </p>
+              </div>
+            </div>
+
+            {/* Mobile Save Button */}
+            <div className="mt-3.5 pt-2 flex items-center justify-between gap-2">
+              <Link
+                href="/cookies"
+                className="text-[11px] text-[#2563EB] hover:underline font-medium"
+              >
+                Policy Details
+              </Link>
+              <button
+                type="button"
+                onClick={handleSavePreferences}
+                className="text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-4 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
+              >
+                Save My Choices
+              </button>
+            </div>
+          </div>
 
           {/* Centered Cookie Icon */}
-          <div className="flex justify-center mb-3">
-            <CookieIllustration className="size-14 drop-shadow-md" />
+          <div className="flex justify-center mb-2.5">
+            <CookieIllustration className="size-13 drop-shadow-md" />
           </div>
 
           {/* Headline */}
@@ -174,12 +462,12 @@ export function CookieBanner() {
           </h3>
 
           {/* Subtitle */}
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 leading-relaxed max-w-xs mx-auto">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1.5 leading-relaxed max-w-xs mx-auto">
             They help the site work faster and more smoothly for you.
           </p>
 
           {/* Agree to Privacy Policy Checkbox */}
-          <div className="mt-4 flex items-center justify-center gap-2">
+          <div className="mt-3.5 flex items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => setAgreedToPolicy(!agreedToPolicy)}
@@ -207,19 +495,43 @@ export function CookieBanner() {
             </label>
           </div>
 
-          {/* Action Buttons */}
-          <div className="mt-5 flex items-center justify-center gap-3">
+          {/* 3 Action Buttons on Mobile: Decline, Customize, Accept */}
+          <div className="mt-4 grid grid-cols-3 gap-2 items-center">
+            {/* 1. Decline */}
             <button
-              onClick={handleAccept}
-              className="text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-8 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
-            >
-              Accept
-            </button>
-            <button
-              onClick={handleDecline}
-              className="text-sm font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white px-4 py-2.5 transition-colors cursor-pointer"
+              type="button"
+              onClick={handleDeclineAll}
+              className="w-full text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 transition-colors cursor-pointer"
             >
               Decline
+            </button>
+
+            {/* 2. Customize (3rd button deploying options upward) */}
+            <button
+              type="button"
+              onClick={() => setIsCustomizing((prev) => !prev)}
+              className={cn(
+                "w-full inline-flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl border transition-all cursor-pointer",
+                isCustomizing
+                  ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-900 dark:text-white border-neutral-300 dark:border-zinc-700"
+                  : "bg-transparent text-neutral-700 dark:text-neutral-200 border-neutral-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-800",
+              )}
+            >
+              <span>Options</span>
+              {isCustomizing ? (
+                <ChevronDown className="size-3 transition-transform" />
+              ) : (
+                <ChevronUp className="size-3 transition-transform" />
+              )}
+            </button>
+
+            {/* 3. Accept */}
+            <button
+              type="button"
+              onClick={handleAcceptAll}
+              className="w-full text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] py-2 rounded-xl shadow-xs transition-all cursor-pointer"
+            >
+              Accept
             </button>
           </div>
         </motion.div>
@@ -227,3 +539,4 @@ export function CookieBanner() {
     </AnimatePresence>
   );
 }
+
