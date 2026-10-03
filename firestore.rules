@@ -12,9 +12,16 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // User profiles: each user accesses and updates their own document
+    // User profiles: each user accesses their own document only.
+    // Prevents privilege escalation (cannot modify 'role' or 'isAdmin' fields).
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId)
+                    && request.resource.data.user_id == userId;
+      allow update: if isOwner(userId)
+                    && request.resource.data.user_id == userId
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isAdmin', 'permissions']));
+      allow delete: if false;
     }
 
     // Projects and showcase: public read, authenticated writes
@@ -29,39 +36,50 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
 
-    // Real-time client error sensor logs: write-only from public visitors, read/delete for authenticated admin
+    // Real-time client error sensor logs: write-only from public visitors with string checks
     match /error_logs/{errorId} {
-      allow create: if true;
+      allow create: if request.resource.data.message is string;
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Contact form submissions and quote inquiries: public create, restricted read
+    // Contact form submissions: validation of input fields, write-only from public
     match /contacts/{contactId} {
-      allow create: if true;
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 150
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() > 3
+                    && request.resource.data.email.size() <= 200
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() <= 5000;
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Preview requests and build queue: public create and read (for queue depth checks), authenticated manage
+    // Preview requests and build queue: validation of required fields
     match /preview_requests/{requestId} {
-      allow create, read: if true;
+      allow create: if request.resource.data.businessName is string
+                    && request.resource.data.businessName.size() > 0
+                    && request.resource.data.email is string;
+      allow read: if true;
       allow update, delete: if isAuthenticated();
     }
 
     // Email dispatch audit logs: write-only from server/client, authenticated manage
     match /email_logs/{logId} {
-      allow create: if true;
+      allow create: if request.resource.data.to is string;
       allow read, update, delete: if isAuthenticated();
     }
 
     // Event bookings and invitations (e.g. Wedding RSVPs)
     match /bookings/{bookingId} {
-      allow create: if true;
+      allow create: if request.resource.data.name is string;
       allow read, update, delete: if isAuthenticated();
     }
 
     // Wedding RSVP parties and artifact data
     match /parties/{partyId} {
-      allow create: if true;
+      allow create: if request.resource.data.partyName is string;
       allow read, update: if isAuthenticated();
     }
 
@@ -70,15 +88,17 @@ service cloud.firestore {
       allow update, delete: if isAuthenticated();
     }
 
-    // Newsletter signups
+    // Newsletter signups: strict email string check
     match /newsletter/{newsletterId} {
-      allow create: if true;
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() > 3
+                    && request.resource.data.email.size() <= 200;
       allow read, delete: if isAuthenticated();
     }
 
-    // Default rule for any unspecified document
+    // STRICT DEFAULT: Deny all unspecified paths (Zero-Trust)
     match /{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if false;
     }
   }
 }

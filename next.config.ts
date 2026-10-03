@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/__/auth/:path*",
+        destination: "https://app-levelup-ecosystem.firebaseapp.com/__/auth/:path*",
+      },
+    ];
+  },
   async redirects() {
     return [
       {

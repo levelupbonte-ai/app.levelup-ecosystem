@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
+import { CookieBanner } from "@/components/cookie-banner";
 import { ErrorSensor } from "@/components/error-sensor";
 import { Preloader } from "@/components/preloader";
 import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
@@ -374,6 +375,7 @@ export default function RootLayout({
           <Navbar />
           <main className="">{children}</main>
           <Footer />
+          <CookieBanner />
         </ThemeProvider>
       </body>
     </html>

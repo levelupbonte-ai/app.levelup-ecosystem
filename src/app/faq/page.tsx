@@ -58,31 +58,23 @@ const faqJsonLd = {
       name: "Can you help our business rank higher on Google Maps in San Diego?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Local visibility requires coordinated website data and a verified Google Business Profile. We format your name, phone number, and service areas to match your Google listing, insert local business Schema.org structured data, and optimize page load speeds so mobile searchers convert into appointments.",
+        text: "Yes. Every website we build is configured for local search visibility: structured Schema.org markup, localized Google Business Profile linking, fast mobile speeds, and exact geographic coordinates so nearby customers find you first.",
       },
     },
     {
       "@type": "Question",
-      name: "How long does a website take to build and launch?",
+      name: "How fast is the turnaround time?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Once you approve your free preview, full custom development, 24/7 online appointment booking configuration, security hardening, and domain launch typically take 7 to 10 days.",
+        text: "Most client websites launch within 7 to 14 days of prototype approval. Because our engineering stack is built on lightweight Next.js rather than heavy templates, we build rapidly without sacrificing security or performance.",
       },
     },
     {
       "@type": "Question",
-      name: "What is included in the Website Security Check?",
+      name: "Do I actually own my website?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "We audit your domain registrar and DNS settings, verify SSL HTTPS certificates, audit database permissions, implement two-factor authentication (2FA) on your hosting and business email accounts, install spam bot honeypots, and test for credential leakage.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do I own my website, code, and domain?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, 100%. Once final payment is settled, you own all rights to your domain, branding, text, and customer lists. There are no lock-in contracts or hostage fees.",
+        text: "Yes, 100%. Unlike proprietary site builders that lock you in, you own your domain, code, and content completely. You are free to move your site at any time with zero penalty.",
       },
     },
     {
@@ -90,27 +82,26 @@ const faqJsonLd = {
       name: "What is included in the $49/month Care Plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "High-speed cloud hosting, automated daily backups, monthly security updates, 24/7 uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
+        text: "Our Care Plan covers blazing-fast cloud hosting, daily automated backups, 24/7 uptime monitoring, security patches, SSL certificate renewals, and up to 2 minor content updates per month.",
       },
     },
   ],
 };
 
-const Page = () => {
+export default function FAQPage() {
   return (
-    <Background>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <FAQ
-        className="py-28 lg:pt-44 lg:pb-32"
-        headerTag="h1"
-      />
-      <DashedLine className="mx-auto max-w-5xl" />
-      <Testimonials dashedLineClassName="hidden" />
-    </Background>
+      <Background>
+        <div className="py-28 lg:py-32 lg:pt-44">
+          <FAQ />
+          <DashedLine className="container max-w-5xl scale-x-115 my-12" />
+          <Testimonials />
+        </div>
+      </Background>
+    </>
   );
-};
-
-export default Page;
+}

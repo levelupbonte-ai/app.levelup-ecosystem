@@ -13,11 +13,11 @@ export function Footer() {
   const legal = [
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
+    { name: "Cookie Policy", href: "/cookies" },
   ];
 
   return (
     <footer className="relative flex flex-col items-center gap-10 pt-16 pb-0 mb-0 lg:pt-20 overflow-hidden w-full">
-
       <nav className="container flex flex-col items-center gap-4">
         <ul className="flex flex-wrap items-center justify-center gap-6">
           {navigation.map((item) => (

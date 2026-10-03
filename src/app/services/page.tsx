@@ -25,7 +25,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export const metadata: Metadata = {
   title: "Web Services & Solutions | LevelUp Ecosystem",
   description:
-    "Fast, secure websites for San Diego businesses and creators: 24/7 online booking, Google Maps setup, security audits, and monthly care plans.",
+    "Fast, secure websites for businesses and creators: 24/7 online booking, Google Maps setup, security audits, and monthly care plans.",
   alternates: {
     canonical: "/services",
   },
@@ -69,7 +69,7 @@ export default function ServicesPage() {
             Our Web Services
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Lightweight, high-converting digital infrastructure engineered for local businesses, service providers, and independent creators in San Diego and beyond.
+            Lightweight, high-converting digital infrastructure engineered for businesses, service providers, and independent creators in San Diego and beyond.
           </p>
         </section>
 

@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
 const PRELOADER_SEEN_KEY = "levelup_preloader_intro_seen_v3";
+const LAST_ACTIVE_KEY = "levelup_last_active_timestamp_v3";
 
 interface PreloaderProps {
   forcePlay?: boolean;
@@ -13,16 +14,7 @@ interface PreloaderProps {
 
 export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
   const [mounted, setMounted] = useState(false);
-  const [shouldPlay, setShouldPlay] = useState<boolean>(() => {
-    if (forcePlay) return true;
-    if (typeof window === "undefined") return true;
-    try {
-      const hasSeen = localStorage.getItem(PRELOADER_SEEN_KEY);
-      return hasSeen !== "true";
-    } catch {
-      return false;
-    }
-  });
+  const [shouldPlay, setShouldPlay] = useState<boolean>(false);
   const [phase, setPhase] = useState<
     "travel" | "dissolve" | "shimmer" | "exit" | "done"
   >("travel");
@@ -32,10 +24,10 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
 
   // Check localStorage on mount
   useEffect(() => {
+    setMounted(true);
     if (forcePlay) {
       setShouldPlay(true);
       setPhase("travel");
-      setMounted(true);
       return;
     }
 
@@ -63,8 +55,6 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
         window.dispatchEvent(new CustomEvent("site-ready"));
       }
     }
-
-    setMounted(true);
   }, [forcePlay]);
 
   // Track when user leaves or closes tab to calculate absence on return
@@ -174,7 +164,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     };
   }, [mounted, shouldPlay, onComplete]);
 
-  if (!shouldPlay || phase === "done") {
+  if (!mounted || !shouldPlay || phase === "done") {
     return null;
   }
 
