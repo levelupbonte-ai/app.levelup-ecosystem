@@ -2,23 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Minus, Sparkles, ArrowRight } from "lucide-react";
+import { Check, Minus, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface PlanMeta {
-  id: string;
-  name: string;
-  buildPrice: string;
-  monthlyPrice: string;
-  badge?: string;
-  isPopular?: boolean;
-  ctaText: string;
-  ctaHref: string;
-}
-
-const tablePlans: PlanMeta[] = [
+// 1. Website Build Plans
+const buildTablePlans = [
   {
     id: "starter",
     name: "Starter",
@@ -32,28 +22,57 @@ const tablePlans: PlanMeta[] = [
     name: "Secure",
     buildPrice: "$1,500",
     monthlyPrice: "No monthly fee",
-    badge: "Business",
+    badge: "Business Engine",
     ctaText: "Choose Secure",
     ctaHref: "/contact?plan=secure",
   },
   {
     id: "secure-care",
     name: "Secure + Care",
-    buildPrice: "$1,500",
-    monthlyPrice: "$99/mo",
-    badge: "Most Popular",
+    buildPrice: "$2,300",
+    monthlyPrice: "Includes 1-Yr Pro Care",
+    badge: "Turnkey Bundle",
     isPopular: true,
-    ctaText: "Choose Secure + Care",
+    ctaText: "Choose Bundle",
     ctaHref: "/contact?plan=secure-care",
   },
   {
     id: "custom",
     name: "Custom",
-    buildPrice: "Starting $3,000+",
+    buildPrice: "From $250+",
     monthlyPrice: "Custom",
-    badge: "Architecture",
+    badge: "Tailored",
     ctaText: "Request Quote",
     ctaHref: "/contact?plan=custom",
+  },
+];
+
+// 2. Monthly Care Plans
+const careTablePlans = [
+  {
+    id: "essential",
+    name: "Essential Care",
+    price: "$39/mo",
+    badge: "Maintenance",
+    ctaText: "Get Essential",
+    ctaHref: "/contact?plan=essential-care",
+  },
+  {
+    id: "pro",
+    name: "Pro Care",
+    price: "$99/mo",
+    badge: "Recommended",
+    isPopular: true,
+    ctaText: "Get Pro Care",
+    ctaHref: "/contact?plan=pro-care",
+  },
+  {
+    id: "premium",
+    name: "Premium Care",
+    price: "$199/mo",
+    badge: "High Growth",
+    ctaText: "Get Premium",
+    ctaHref: "/contact?plan=premium-care",
   },
 ];
 
@@ -65,27 +84,22 @@ interface ComparisonRow {
   custom: boolean | string;
 }
 
-interface TableCategory {
-  category: string;
-  rows: ComparisonRow[];
-}
-
-const tableData: TableCategory[] = [
+const buildComparisonData: { category: string; rows: ComparisonRow[] }[] = [
   {
-    category: "Core Deliverables & Design",
+    category: "Core Deliverables & Architecture",
     rows: [
       {
-        name: "One-Time Build Investment",
+        name: "One-Time Investment",
         starter: "$850",
         secure: "$1,500",
-        care: "$1,500",
-        custom: "$3,000+",
+        care: "$2,300",
+        custom: "From $250+",
       },
       {
-        name: "Monthly Care & Support",
-        starter: "—",
-        secure: "—",
-        care: "$99/mo",
+        name: "Monthly Care Commitment",
+        starter: "Optional ($39-$199)",
+        secure: "Optional ($39-$199)",
+        care: "1 Year Included",
         custom: "Custom",
       },
       {
@@ -103,28 +117,28 @@ const tableData: TableCategory[] = [
         custom: "Custom",
       },
       {
-        name: "Responsive (Mobile / Tablet / Desktop)",
+        name: "Mobile / Tablet / Desktop Responsive",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Contact & Lead Intake Forms",
+        name: "Contact & Lead Form",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "100% Website Code Ownership",
+        name: "100% Code Ownership",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Included Revision Rounds",
+        name: "Revisions Included",
         starter: "2 rounds",
         secure: "3 rounds",
         care: "3 rounds + 2h/mo",
@@ -133,7 +147,7 @@ const tableData: TableCategory[] = [
     ],
   },
   {
-    category: "Search Visibility & Growth",
+    category: "Search & Visibility",
     rows: [
       {
         name: "Technical SEO Foundation",
@@ -143,14 +157,14 @@ const tableData: TableCategory[] = [
         custom: true,
       },
       {
-        name: "Local SEO & Google Maps Integration",
+        name: "Local SEO & Google Maps",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Google Business Profile Setup",
+        name: "Google Business Profile Integration",
         starter: false,
         secure: true,
         care: true,
@@ -164,7 +178,7 @@ const tableData: TableCategory[] = [
         custom: true,
       },
       {
-        name: "Google Search Console & XML Sitemap",
+        name: "Google Search Console & Sitemap",
         starter: false,
         secure: true,
         care: true,
@@ -173,78 +187,64 @@ const tableData: TableCategory[] = [
     ],
   },
   {
-    category: "Automated Booking & Business System",
+    category: "Booking & Automation",
     rows: [
       {
-        name: "24/7 Online Booking System",
+        name: "24/7 Online Booking Engine",
         starter: false,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "2-Way Live Calendar Synchronization",
+        name: "Live Calendar Sync (Google, Apple, Square)",
         starter: false,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Automated Appointment Email Confirmations",
+        name: "Appointment Confirmations",
         starter: false,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Lead Capture & Notification Management",
+        name: "Lead Capture & Notification Pipeline",
         starter: false,
         secure: true,
         care: true,
-        custom: true,
-      },
-      {
-        name: "Advanced Custom Workflows & CRM Sync",
-        starter: false,
-        secure: false,
-        care: false,
         custom: true,
       },
     ],
   },
   {
-    category: "Cybersecurity & Performance",
+    category: "Security & Performance",
     rows: [
       {
-        name: "Performance & Mobile Speed Tuning",
+        name: "Sub-2s Speed Optimization",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "SSL / HTTPS Encryption Standard",
+        name: "SSL / HTTPS Encryption",
         starter: true,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Security Headers & Anti-Spam Protection",
+        name: "Anti-Spam & Security Headers",
         starter: false,
         secure: true,
         care: true,
         custom: true,
       },
       {
-        name: "Admin Authentication Hardening",
-        starter: false,
-        secure: true,
-        care: true,
-        custom: true,
-      },
-      {
-        name: "Database Security Rules & Security Audit",
+        name: "Database Security Rules & Audit",
         starter: false,
         secure: true,
         care: true,
@@ -252,46 +252,31 @@ const tableData: TableCategory[] = [
       },
     ],
   },
-  {
-    category: "Cloud Hosting & Ongoing Management",
-    rows: [
-      {
-        name: "Managed Cloud Hosting & CDN",
-        starter: false,
-        secure: false,
-        care: true,
-        custom: "Custom",
-      },
-      {
-        name: "Automated Daily Offsite Backups",
-        starter: false,
-        secure: false,
-        care: true,
-        custom: "Custom",
-      },
-      {
-        name: "24/7 Continuous Uptime Monitoring",
-        starter: false,
-        secure: false,
-        care: true,
-        custom: "Custom",
-      },
-      {
-        name: "Monthly Updates (Content, text, photos)",
-        starter: false,
-        secure: false,
-        care: "2h / month",
-        custom: "Custom",
-      },
-      {
-        name: "Priority Developer Support",
-        starter: false,
-        secure: false,
-        care: true,
-        custom: true,
-      },
-    ],
-  },
+];
+
+interface CareComparisonRow {
+  name: string;
+  essential: boolean | string;
+  pro: boolean | string;
+  premium: boolean | string;
+}
+
+const careComparisonRows: CareComparisonRow[] = [
+  { name: "Monthly Investment", essential: "$39/mo", pro: "$99/mo", premium: "$199/mo" },
+  { name: "Managed Cloud Hosting", essential: true, pro: true, premium: true },
+  { name: "SSL / HTTPS & DNS Maintenance", essential: true, pro: true, premium: true },
+  { name: "Daily Automated Offsite Backups", essential: true, pro: true, premium: true },
+  { name: "24/7 Uptime Monitoring", essential: true, pro: true, premium: true },
+  { name: "Security Monitoring", essential: "Basic", pro: "Advanced", premium: "Advanced" },
+  { name: "Included Website Updates", essential: "30 min/mo", pro: "2h/mo", premium: "5h/mo" },
+  { name: "Performance Monitoring", essential: true, pro: true, premium: true },
+  { name: "Priority Support", essential: "—", pro: true, premium: "Priority Line" },
+  { name: "SEO Maintenance", essential: "—", pro: true, premium: true },
+  { name: "Monthly SEO Improvements", essential: "—", pro: "Basic", premium: "Advanced" },
+  { name: "Analytics & Reporting", essential: "—", pro: true, premium: "Advanced" },
+  { name: "Content & Photo Updates", essential: "—", pro: true, premium: true },
+  { name: "New Sections / Pages Creation", essential: "—", pro: "—", premium: true },
+  { name: "Custom Code Development", essential: "—", pro: "—", premium: "1h/mo" },
 ];
 
 const renderCell = (val: boolean | string) => {
@@ -326,217 +311,287 @@ const renderCell = (val: boolean | string) => {
 };
 
 export const PricingTable = () => {
-  const [selectedMobileIndex, setSelectedMobileIndex] = useState(2); // Secure + Care selected by default on mobile
-
-  const selectedMobilePlan = tablePlans[selectedMobileIndex];
+  const [activeTableTab, setActiveTableTab] = useState<"builds" | "care">("builds");
+  const [selectedMobileBuildIdx, setSelectedMobileBuildIdx] = useState(1);
+  const [selectedMobileCareIdx, setSelectedMobileCareIdx] = useState(1);
 
   return (
     <section className="pb-24 pt-4 lg:py-24">
       <div className="container max-w-6xl px-4 sm:px-6">
-        {/* Table Title */}
-        <div className="mb-10 text-center space-y-2">
+        {/* Header */}
+        <div className="mb-8 text-center space-y-2">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
-            Feature Comparison Matrix
+            Detailed Deliverables Matrix
           </span>
           <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground font-sans">
-            Compare All 4 Plans Side by Side
+            Compare Features &amp; Deliverables
           </h3>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Detailed breakdown of deliverables across Starter, Secure, Secure + Care, and Custom builds.
+            Detailed breakdown of deliverables across our Website Builds and Monthly Care Plans.
           </p>
-        </div>
 
-        {/* ========================================================================= */}
-        {/* MOBILE VIEW (< md): Tab Selector for Plan Columns                        */}
-        {/* ========================================================================= */}
-        <div className="md:hidden space-y-6">
-          <div className="grid grid-cols-4 gap-1 p-1.5 rounded-2xl bg-muted/60 border border-border/80 text-center">
-            {tablePlans.map((plan, idx) => (
+          {/* Table Switcher */}
+          <div className="pt-4 flex justify-center">
+            <div className="inline-flex items-center p-1 rounded-full bg-muted/60 border border-border/80">
               <button
-                key={plan.id}
                 type="button"
-                onClick={() => setSelectedMobileIndex(idx)}
+                onClick={() => setActiveTableTab("builds")}
                 className={cn(
-                  "py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer truncate",
-                  selectedMobileIndex === idx
+                  "py-1.5 px-4 rounded-full text-xs font-semibold transition-all cursor-pointer",
+                  activeTableTab === "builds"
                     ? "bg-foreground text-background shadow-xs"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {plan.name.split(" ")[0]}
+                Website Builds Matrix
               </button>
-            ))}
-          </div>
-
-          {/* Active Mobile Plan Summary Card */}
-          <div className="p-5 rounded-2xl bg-card border border-border flex items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <h4 className="text-lg font-bold text-foreground">
-                  {selectedMobilePlan.name}
-                </h4>
-                {selectedMobilePlan.badge && (
-                  <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-500 border border-violet-500/20">
-                    {selectedMobilePlan.badge}
-                  </span>
+              <button
+                type="button"
+                onClick={() => setActiveTableTab("care")}
+                className={cn(
+                  "py-1.5 px-4 rounded-full text-xs font-semibold transition-all cursor-pointer",
+                  activeTableTab === "care"
+                    ? "bg-foreground text-background shadow-xs"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
-              </div>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-foreground">
-                  {selectedMobilePlan.buildPrice}
-                </span>
-                <span className="text-xs text-muted-foreground font-semibold">
-                  {selectedMobilePlan.monthlyPrice}
-                </span>
-              </div>
-            </div>
-
-            <Button size="sm" asChild className="shrink-0 font-bold">
-              <Link href={selectedMobilePlan.ctaHref}>
-                {selectedMobilePlan.ctaText}
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile Breakdown Rows */}
-          <div className="space-y-6">
-            {tableData.map((cat, cIdx) => (
-              <div
-                key={cIdx}
-                className="rounded-2xl border border-border/80 bg-card overflow-hidden"
               >
-                <div className="px-4 py-3 bg-muted/40 border-b border-border/60">
-                  <h5 className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
-                    {cat.category}
-                  </h5>
-                </div>
-                <div className="divide-y divide-border/50">
-                  {cat.rows.map((row, rIdx) => {
-                    const rowVals = [row.starter, row.secure, row.care, row.custom];
-                    const activeVal = rowVals[selectedMobileIndex];
-                    return (
-                      <div
-                        key={rIdx}
-                        className="px-4 py-3 flex items-center justify-between gap-4 text-xs"
-                      >
-                        <span className="text-foreground/90 font-medium">
-                          {row.name}
-                        </span>
-                        <div className="shrink-0 text-right">
-                          {renderCell(activeVal)}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+                Care Plans Matrix ($39 - $199)
+              </button>
+            </div>
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* DESKTOP VIEW (md+): Full 5-Column Side-by-Side Matrix                     */}
+        {/* TABLE 1: WEBSITE BUILDS MATRIX                                            */}
         {/* ========================================================================= */}
-        <div className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-sm">
-          {/* Header Row */}
-          <div className="grid grid-cols-5 p-6 border-b border-border/80 bg-muted/20 items-end">
-            <div className="col-span-1 pr-4">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
-                Plans &amp; Deliverables
-              </span>
-            </div>
-
-            {tablePlans.map((plan) => (
-              <div
-                key={plan.id}
-                className={cn(
-                  "col-span-1 text-center px-2 py-3 rounded-2xl transition-colors",
-                  plan.isPopular && "bg-violet-500/5 border border-violet-500/20",
-                )}
-              >
-                {plan.badge && (
-                  <span
+        {activeTableTab === "builds" && (
+          <div>
+            {/* Mobile View */}
+            <div className="md:hidden space-y-5">
+              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-muted/60 border border-border/80 text-center">
+                {buildTablePlans.map((plan, idx) => (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    onClick={() => setSelectedMobileBuildIdx(idx)}
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1.5 border",
-                      plan.isPopular
-                        ? "border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-300"
-                        : "border-border bg-muted text-muted-foreground",
+                      "py-1.5 px-1 rounded-lg text-xs font-bold transition-all cursor-pointer truncate",
+                      selectedMobileBuildIdx === idx
+                        ? "bg-foreground text-background shadow-xs"
+                        : "text-muted-foreground hover:text-foreground",
                     )}
                   >
-                    {plan.isPopular && <Sparkles className="size-2.5 shrink-0" />}
-                    {plan.badge}
-                  </span>
-                )}
-                <h4 className="text-lg font-bold text-foreground font-sans">
-                  {plan.name}
-                </h4>
-                <div className="mt-1 flex flex-col items-center">
-                  <span className="text-2xl font-black text-foreground">
-                    {plan.buildPrice}
-                  </span>
-                  <span className="text-[11px] text-muted-foreground font-semibold">
-                    {plan.monthlyPrice}
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <Button
-                    size="sm"
-                    variant={plan.isPopular ? "default" : "outline"}
-                    asChild
-                    className="w-full text-xs font-bold rounded-xl"
-                  >
-                    <Link href={plan.ctaHref}>
-                      {plan.ctaText}
-                    </Link>
-                  </Button>
-                </div>
+                    {plan.name.split(" ")[0]}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Categorized Rows */}
-          {tableData.map((category, catIdx) => (
-            <div key={catIdx} className="border-b last:border-b-0 border-border/80">
-              {/* Category Title Row */}
-              <div className="bg-muted/40 px-6 py-3 border-b border-border/50">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-foreground/80">
-                  {category.category}
-                </span>
+              {/* Active Plan Card */}
+              <div className="p-4 rounded-2xl bg-card border border-border flex items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-base font-bold text-foreground">
+                    {buildTablePlans[selectedMobileBuildIdx].name}
+                  </h4>
+                  <div className="mt-0.5 flex items-baseline gap-1.5">
+                    <span className="text-xl font-black text-foreground">
+                      {buildTablePlans[selectedMobileBuildIdx].buildPrice}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground font-semibold">
+                      {buildTablePlans[selectedMobileBuildIdx].monthlyPrice}
+                    </span>
+                  </div>
+                </div>
+                <Button size="sm" asChild className="shrink-0 font-bold">
+                  <Link href={buildTablePlans[selectedMobileBuildIdx].ctaHref}>
+                    {buildTablePlans[selectedMobileBuildIdx].ctaText}
+                  </Link>
+                </Button>
               </div>
 
               {/* Rows */}
-              <div className="divide-y divide-border/40">
-                {category.rows.map((row, rowIdx) => (
-                  <div
-                    key={rowIdx}
-                    className="grid grid-cols-5 px-6 py-3.5 items-center hover:bg-muted/20 transition-colors"
-                  >
-                    <div className="col-span-1 pr-4 text-xs sm:text-sm font-medium text-foreground/90">
-                      {row.name}
+              <div className="space-y-4">
+                {buildComparisonData.map((cat, cIdx) => (
+                  <div key={cIdx} className="rounded-2xl border border-border/80 bg-card overflow-hidden">
+                    <div className="px-4 py-2.5 bg-muted/40 border-b border-border/60">
+                      <span className="text-xs font-bold text-foreground font-mono uppercase tracking-wider">
+                        {cat.category}
+                      </span>
                     </div>
-                    <div className="col-span-1 text-center">
-                      {renderCell(row.starter)}
-                    </div>
-                    <div className="col-span-1 text-center">
-                      {renderCell(row.secure)}
-                    </div>
-                    <div className={cn("col-span-1 text-center py-1", "bg-violet-500/5 rounded-lg")}>
-                      {renderCell(row.care)}
-                    </div>
-                    <div className="col-span-1 text-center">
-                      {renderCell(row.custom)}
+                    <div className="divide-y divide-border/40">
+                      {cat.rows.map((row, rIdx) => {
+                        const vals = [row.starter, row.secure, row.care, row.custom];
+                        return (
+                          <div key={rIdx} className="px-4 py-2.5 flex items-center justify-between gap-3 text-xs">
+                            <span className="text-foreground/90 font-medium">{row.name}</span>
+                            <div className="shrink-0 text-right">{renderCell(vals[selectedMobileBuildIdx])}</div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
+              <div className="grid grid-cols-5 p-6 border-b border-border/80 bg-muted/20 items-end">
+                <div className="col-span-1 pr-4">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                    Build Deliverables
+                  </span>
+                </div>
+                {buildTablePlans.map((plan) => (
+                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-violet-500/5 border border-violet-500/20")}>
+                    {plan.badge && (
+                      <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1 border border-border bg-muted text-muted-foreground">
+                        {plan.badge}
+                      </span>
+                    )}
+                    <h4 className="text-base font-bold text-foreground font-sans">{plan.name}</h4>
+                    <div className="mt-1 flex flex-col items-center">
+                      <span className="text-xl font-black text-foreground">{plan.buildPrice}</span>
+                      <span className="text-[10px] text-muted-foreground font-semibold">{plan.monthlyPrice}</span>
+                    </div>
+                    <div className="mt-2.5">
+                      <Button size="sm" variant={plan.isPopular ? "default" : "outline"} asChild className="w-full text-xs font-bold rounded-xl">
+                        <Link href={plan.ctaHref}>{plan.ctaText}</Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {buildComparisonData.map((category, catIdx) => (
+                <div key={catIdx} className="border-b last:border-b-0 border-border/80">
+                  <div className="bg-muted/40 px-6 py-2.5 border-b border-border/50">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-foreground/80">
+                      {category.category}
+                    </span>
+                  </div>
+                  <div className="divide-y divide-border/40">
+                    {category.rows.map((row, rowIdx) => (
+                      <div key={rowIdx} className="grid grid-cols-5 px-6 py-3 items-center hover:bg-muted/15 transition-colors">
+                        <div className="col-span-1 pr-4 text-xs sm:text-sm font-medium text-foreground/90">{row.name}</div>
+                        <div className="col-span-1 text-center">{renderCell(row.starter)}</div>
+                        <div className="col-span-1 text-center">{renderCell(row.secure)}</div>
+                        <div className="col-span-1 text-center py-0.5 bg-violet-500/5 rounded-lg">{renderCell(row.care)}</div>
+                        <div className="col-span-1 text-center">{renderCell(row.custom)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TABLE 2: MONTHLY CARE PLANS MATRIX ($39 - $199)                           */}
+        {/* ========================================================================= */}
+        {activeTableTab === "care" && (
+          <div>
+            {/* Mobile View */}
+            <div className="md:hidden space-y-5">
+              <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-muted/60 border border-border/80 text-center">
+                {careTablePlans.map((plan, idx) => (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    onClick={() => setSelectedMobileCareIdx(idx)}
+                    className={cn(
+                      "py-1.5 px-1 rounded-lg text-xs font-bold transition-all cursor-pointer truncate",
+                      selectedMobileCareIdx === idx
+                        ? "bg-foreground text-background shadow-xs"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {plan.name.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Active Plan Card */}
+              <div className="p-4 rounded-2xl bg-card border border-border flex items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-base font-bold text-foreground">
+                    {careTablePlans[selectedMobileCareIdx].name}
+                  </h4>
+                  <span className="text-xl font-black text-foreground">
+                    {careTablePlans[selectedMobileCareIdx].price}
+                  </span>
+                </div>
+                <Button size="sm" asChild className="shrink-0 font-bold">
+                  <Link href={careTablePlans[selectedMobileCareIdx].ctaHref}>
+                    {careTablePlans[selectedMobileCareIdx].ctaText}
+                  </Link>
+                </Button>
+              </div>
+
+              {/* Rows */}
+              <div className="rounded-2xl border border-border/80 bg-card overflow-hidden">
+                <div className="divide-y divide-border/40">
+                  {careComparisonRows.map((row, rIdx) => {
+                    const vals = [row.essential, row.pro, row.premium];
+                    return (
+                      <div key={rIdx} className="px-4 py-2.5 flex items-center justify-between gap-3 text-xs">
+                        <span className="text-foreground/90 font-medium">{row.name}</span>
+                        <div className="shrink-0 text-right">{renderCell(vals[selectedMobileCareIdx])}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
+              <div className="grid grid-cols-4 p-6 border-b border-border/80 bg-muted/20 items-end">
+                <div className="col-span-1 pr-4">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
+                    Care Features
+                  </span>
+                </div>
+                {careTablePlans.map((plan) => (
+                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-violet-500/5 border border-violet-500/20")}>
+                    {plan.badge && (
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1 border border-border bg-muted text-muted-foreground">
+                        {plan.badge}
+                      </span>
+                    )}
+                    <h4 className="text-base font-bold text-foreground font-sans">{plan.name}</h4>
+                    <span className="text-2xl font-black text-foreground mt-1 block">{plan.price}</span>
+                    <div className="mt-2.5">
+                      <Button size="sm" variant={plan.isPopular ? "default" : "outline"} asChild className="w-full text-xs font-bold rounded-xl">
+                        <Link href={plan.ctaHref}>{plan.ctaText}</Link>
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="divide-y divide-border/40">
+                {careComparisonRows.map((row, rowIdx) => (
+                  <div key={rowIdx} className="grid grid-cols-4 px-6 py-3 items-center hover:bg-muted/15 transition-colors">
+                    <div className="col-span-1 pr-4 text-xs sm:text-sm font-medium text-foreground/90">{row.name}</div>
+                    <div className="col-span-1 text-center">{renderCell(row.essential)}</div>
+                    <div className="col-span-1 text-center py-0.5 bg-violet-500/5 rounded-lg">{renderCell(row.pro)}</div>
+                    <div className="col-span-1 text-center">{renderCell(row.premium)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="text-xs text-muted-foreground/75 text-center mt-4">
+              * Note: Unused monthly maintenance hours do not roll over. Major structural redesigns are quoted separately.
+            </p>
+          </div>
+        )}
 
         {/* Footer CTA */}
         <div className="mt-12 text-center space-y-4">
           <p className="text-sm text-muted-foreground">
-            Need a custom combination or want to discuss your project requirements?
+            Have questions about website builds or monthly care packages?
           </p>
           <Button asChild size="lg" className="font-bold">
             <Link href="/contact" className="gap-2">
