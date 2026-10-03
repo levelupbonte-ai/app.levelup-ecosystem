@@ -179,6 +179,7 @@ export const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
 
       // Track scroll progress along the top of the window
       const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -187,10 +188,17 @@ export const Navbar = () => {
 
       if (currentScrollY <= 45) {
         setIsScrolled(false);
+        setShowHeader(true);
       } else {
         setIsScrolled(true);
+
+        // Directional scroll: scroll down -> hide header; scroll up -> show header
+        if (currentScrollY > lastScrollY + 6 && currentScrollY > 90) {
+          setShowHeader(false);
+        } else if (currentScrollY < lastScrollY - 6) {
+          setShowHeader(true);
+        }
       }
-      setShowHeader(true);
 
       lastScrollYRef.current = currentScrollY;
     };
@@ -301,13 +309,12 @@ export const Navbar = () => {
       )}
 
       {/* Top seamless gradient fade:
-          - When header is hidden: keeps a short/shallow rim (h-7 sm:h-8 opacity-60) leaving full room to read
-          - When header is present: smoothly expands to normal height (h-20 sm:h-24 opacity-100) */}
+          When header is hidden: provides an elegant gradient veil (h-14 sm:h-20 opacity-100) that gently dissolves text scrolling under the top edge */}
       <div
         className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_55%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_65%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           !showHeader && isScrolled
-            ? "h-7 sm:h-8 opacity-60 translate-y-0"
+            ? "h-14 sm:h-20 opacity-100 translate-y-0"
             : !isScrolled && !isServicesOpen
               ? "h-20 sm:h-24 max-lg:opacity-100 lg:opacity-0 translate-y-0"
               : "h-20 sm:h-24 opacity-100 translate-y-0",

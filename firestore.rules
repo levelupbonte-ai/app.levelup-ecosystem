@@ -56,13 +56,15 @@ service cloud.firestore {
       allow read, update, delete: if isAuthenticated();
     }
 
-    // Preview requests and build queue: validation of required fields
+    // Preview requests and build queue: validation of required fields, private read
     match /preview_requests/{requestId} {
       allow create: if request.resource.data.businessName is string
                     && request.resource.data.businessName.size() > 0
-                    && request.resource.data.email is string;
-      allow read: if true;
-      allow update, delete: if isAuthenticated();
+                    && request.resource.data.businessName.size() <= 150
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() > 3
+                    && request.resource.data.email.size() <= 200;
+      allow read, update, delete: if isAuthenticated();
     }
 
     // Email dispatch audit logs: write-only from server/client, authenticated manage

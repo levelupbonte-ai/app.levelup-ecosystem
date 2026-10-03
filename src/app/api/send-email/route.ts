@@ -9,23 +9,47 @@ import {
 import { db } from "@/lib/firebase";
 import { isResendConfigured, resend } from "@/lib/resend";
 
+// Standard RFC 5322 email validation regex
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+/**
+ * Sanitizes text to prevent HTML injection and XSS inside rendered emails
+ */
+function sanitize(input: unknown, maxLength = 500): string {
+  if (typeof input !== "string") return "";
+  return input
+    .replace(/[<>]/g, "") // Strip raw HTML tag brackets
+    .trim()
+    .slice(0, maxLength);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { type } = body;
+    const { type, botTrap, honeypot } = body;
+
+    // Anti-bot honeypot check: reject automated bot submissions silently
+    if (botTrap || honeypot) {
+      return NextResponse.json({ success: true, filtered: true });
+    }
 
     // 1. Simulation RSVP for Wedding Demo
     if (type === "wedding_rsvp") {
       const { nom, email, inviteCode, telephone } = body;
 
-      if (!email) {
-        return NextResponse.json({ error: "Missing email address" }, { status: 400 });
+      const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+      if (!cleanEmail || !EMAIL_REGEX.test(cleanEmail) || cleanEmail.length > 150) {
+        return NextResponse.json({ error: "Invalid email address format" }, { status: 400 });
       }
 
+      const cleanNom = sanitize(nom, 100) || "Valued Guest";
+      const cleanInviteCode = sanitize(inviteCode, 50) || "WEDDING-SAMPLE";
+      const cleanTelephone = sanitize(telephone, 30);
+
       const emailHtml = getWeddingSimulationEmailHtml({
-        name: nom || "Valued Guest",
-        inviteCode: inviteCode || "WEDDING-SAMPLE",
-        telephone,
+        name: cleanNom,
+        inviteCode: cleanInviteCode,
+        telephone: cleanTelephone,
       });
 
       let resendResponse = null;
@@ -36,17 +60,16 @@ export async function POST(req: NextRequest) {
         try {
           resendResponse = await resend.emails.send({
             from: primaryFrom,
-            to: [email],
+            to: [cleanEmail],
             subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
             html: emailHtml,
           });
           sendSuccess = true;
         } catch {
-          // Fallback to onboarding@resend.dev if custom domain is not yet verified
           try {
             resendResponse = await resend.emails.send({
               from: "LevelStudio <onboarding@resend.dev>",
-              to: [email],
+              to: [cleanEmail],
               subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
               html: emailHtml,
             });
@@ -60,13 +83,13 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Log dispatch to Firestore
+      // Log dispatch to Firestore with sanitized payload
       try {
         await addDoc(collection(db, "email_logs"), {
           type: "wedding_rsvp",
-          to: email,
+          to: cleanEmail,
           from: "studio@levelup-ecosystem.com",
-          inviteCode: inviteCode || "",
+          inviteCode: cleanInviteCode,
           delivered: sendSuccess,
           resendId: resendResponse?.data?.id || null,
           createdAt: serverTimestamp(),
@@ -89,26 +112,33 @@ export async function POST(req: NextRequest) {
     if (type === "preview_request") {
       const { name, email, company, employees, message, isWaitlisted, queuePosition } = body;
 
-      if (!email) {
-        return NextResponse.json({ error: "Missing email address" }, { status: 400 });
+      const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+      if (!cleanEmail || !EMAIL_REGEX.test(cleanEmail) || cleanEmail.length > 150) {
+        return NextResponse.json({ error: "Invalid email address format" }, { status: 400 });
       }
 
+      const cleanName = sanitize(name, 100) || "Friend";
+      const cleanCompany = sanitize(company, 120);
+      const cleanEmployees = sanitize(employees, 50);
+      const cleanMessage = sanitize(message, 3000);
+      const sanitizedQueuePosition = typeof queuePosition === "number" ? Math.max(1, queuePosition) : 1;
+
       const clientEmailHtml = getPreviewRequestEmailHtml({
-        name: name || "Friend",
-        company,
+        name: cleanName,
+        company: cleanCompany,
         isWaitlisted: Boolean(isWaitlisted),
-        queuePosition: queuePosition || 1,
-        message,
+        queuePosition: sanitizedQueuePosition,
+        message: cleanMessage,
       });
 
       const internalAlertHtml = getInternalLeadAlertHtml({
-        name: name || "Anonymous",
-        email,
-        company,
-        employees,
-        message,
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany,
+        employees: cleanEmployees,
+        message: cleanMessage,
         isWaitlisted: Boolean(isWaitlisted),
-        queuePosition,
+        queuePosition: sanitizedQueuePosition,
       });
 
       let clientDelivered = false;
@@ -116,24 +146,22 @@ export async function POST(req: NextRequest) {
 
       if (isResendConfigured() && resend) {
         try {
-          // Send confirmation to prospect
           await resend.emails.send({
             from: "LevelUp Ecosystem <contact@levelup-ecosystem.com>",
-            to: [email],
+            to: [cleanEmail],
             subject: isWaitlisted
-              ? `Priority Queue (#${queuePosition}): Your Website Preview Request`
+              ? `Priority Queue (#${sanitizedQueuePosition}): Your Website Preview Request`
               : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
             html: clientEmailHtml,
           });
           clientDelivered = true;
 
-          // Send internal notification to teams@levelup-ecosystem.com
           try {
             const systemSender = process.env.RESEND_FROM_EMAIL || "LevelUp System <system@levelup-ecosystem.com>";
             await resend.emails.send({
               from: systemSender,
               to: ["teams@levelup-ecosystem.com"],
-              subject: `[New Lead] ${name}${company ? ` (${company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
+              subject: `[New Lead] ${cleanName}${cleanCompany ? ` (${cleanCompany})` : ""}${isWaitlisted ? ` [Queue #${sanitizedQueuePosition}]` : ""}`,
               html: internalAlertHtml,
             });
             teamAlertDelivered = true;
@@ -142,7 +170,7 @@ export async function POST(req: NextRequest) {
               await resend.emails.send({
                 from: "LevelUp <onboarding@resend.dev>",
                 to: ["teams@levelup-ecosystem.com"],
-                subject: `[New Lead] ${name}${company ? ` (${company})` : ""}${isWaitlisted ? ` [Queue #${queuePosition}]` : ""}`,
+                subject: `[New Lead] ${cleanName}${cleanCompany ? ` (${cleanCompany})` : ""}${isWaitlisted ? ` [Queue #${sanitizedQueuePosition}]` : ""}`,
                 html: internalAlertHtml,
               });
               teamAlertDelivered = true;
@@ -165,10 +193,10 @@ export async function POST(req: NextRequest) {
       try {
         await addDoc(collection(db, "email_logs"), {
           type: "preview_request",
-          to: email,
+          to: cleanEmail,
           from: "contact@levelup-ecosystem.com",
           isWaitlisted: Boolean(isWaitlisted),
-          queuePosition: queuePosition || 1,
+          queuePosition: sanitizedQueuePosition,
           delivered: clientDelivered,
           teamAlertDelivered,
           createdAt: serverTimestamp(),
@@ -184,8 +212,8 @@ export async function POST(req: NextRequest) {
         success: true,
         delivered: clientDelivered,
         teamAlertDelivered,
-        isWaitlisted,
-        queuePosition,
+        isWaitlisted: Boolean(isWaitlisted),
+        queuePosition: sanitizedQueuePosition,
       });
     }
 

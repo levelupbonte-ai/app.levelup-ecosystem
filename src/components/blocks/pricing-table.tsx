@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Minus, ArrowRight } from "lucide-react";
+import { Check, X, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -97,8 +97,8 @@ const buildComparisonData: { category: string; rows: ComparisonRow[] }[] = [
       },
       {
         name: "Monthly Care Commitment",
-        starter: "Optional ($39-$199)",
-        secure: "Optional ($39-$199)",
+        starter: "Optional Care",
+        secure: "Optional Care",
         care: "1 Year Included",
         custom: "Custom",
       },
@@ -270,15 +270,19 @@ const careComparisonRows: CareComparisonRow[] = [
   { name: "Security Monitoring", essential: "Basic", pro: "Advanced", premium: "Advanced" },
   { name: "Included Website Updates", essential: "30 min/mo", pro: "2h/mo", premium: "5h/mo" },
   { name: "Performance Monitoring", essential: true, pro: true, premium: true },
-  { name: "Priority Support", essential: "—", pro: true, premium: "Priority Line" },
-  { name: "SEO Maintenance", essential: "—", pro: true, premium: true },
-  { name: "Monthly SEO Improvements", essential: "—", pro: "Basic", premium: "Advanced" },
-  { name: "Analytics & Reporting", essential: "—", pro: true, premium: "Advanced" },
-  { name: "Content & Photo Updates", essential: "—", pro: true, premium: true },
-  { name: "New Sections / Pages Creation", essential: "—", pro: "—", premium: true },
-  { name: "Custom Code Development", essential: "—", pro: "—", premium: "1h/mo" },
+  { name: "Priority Support", essential: false, pro: true, premium: "Priority Line" },
+  { name: "SEO Maintenance", essential: false, pro: true, premium: true },
+  { name: "Monthly SEO Improvements", essential: false, pro: "Basic", premium: "Advanced" },
+  { name: "Analytics & Reporting", essential: false, pro: true, premium: "Advanced" },
+  { name: "Content & Photo Updates", essential: false, pro: true, premium: true },
+  { name: "New Sections / Pages Creation", essential: false, pro: false, premium: true },
+  { name: "Custom Code Development", essential: false, pro: false, premium: "1h/mo" },
 ];
 
+/**
+ * Renders a cell value with green checkmark for true, gray cross (X) for false or unsupported,
+ * or text value for specifications.
+ */
 const renderCell = (val: boolean | string) => {
   if (typeof val === "boolean") {
     if (val) {
@@ -288,17 +292,18 @@ const renderCell = (val: boolean | string) => {
         </span>
       );
     }
+    // Gray cross (X) for unsupported features
     return (
-      <span className="size-6 flex items-center justify-center mx-auto text-muted-foreground/35">
-        <Minus className="size-4" />
+      <span className="size-6 flex items-center justify-center mx-auto text-muted-foreground/45">
+        <X className="size-4 stroke-[2.5]" />
       </span>
     );
   }
 
-  if (val === "—") {
+  if (val === "—" || val === false) {
     return (
-      <span className="size-6 flex items-center justify-center mx-auto text-muted-foreground/35">
-        <Minus className="size-4" />
+      <span className="size-6 flex items-center justify-center mx-auto text-muted-foreground/45">
+        <X className="size-4 stroke-[2.5]" />
       </span>
     );
   }
@@ -355,7 +360,7 @@ export const PricingTable = () => {
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                Care Plans Matrix ($39 - $199)
+                Care Plans Matrix
               </button>
             </div>
           </div>
@@ -528,7 +533,7 @@ export const PricingTable = () => {
                 </Button>
               </div>
 
-              {/* Rows */}
+              {/* Rows with Gray Cross X for unsupported features */}
               <div className="rounded-2xl border border-border/80 bg-card overflow-hidden">
                 <div className="divide-y divide-border/40">
                   {careComparisonRows.map((row, rIdx) => {
@@ -570,6 +575,7 @@ export const PricingTable = () => {
                 ))}
               </div>
 
+              {/* Rows with Gray Cross X */}
               <div className="divide-y divide-border/40">
                 {careComparisonRows.map((row, rowIdx) => (
                   <div key={rowIdx} className="grid grid-cols-4 px-6 py-3 items-center hover:bg-muted/15 transition-colors">

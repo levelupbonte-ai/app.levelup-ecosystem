@@ -30,9 +30,29 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [targetStudioUrl, setTargetStudioUrl] = useState(STUDIO_URL);
   const [error, setError] = useState<string | null>(null);
 
-  const handleRedirectToStudio = () => {
+  const handleRedirectToStudio = async (user?: import("firebase/auth").User) => {
+    try {
+      if (user) {
+        const idToken = await user.getIdToken();
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("levelup_auth_token", idToken);
+          sessionStorage.setItem("levelup_user_uid", user.uid);
+          sessionStorage.setItem("levelup_user_email", user.email || "");
+        }
+        // Securely pass token via client-side URL hash fragment (RFC 6749 Section 4.2)
+        // Hash fragments are never sent in HTTP request headers or logged by intermediate proxies
+        setTargetStudioUrl(
+          `${STUDIO_URL}/#auth_token=${encodeURIComponent(idToken)}&uid=${encodeURIComponent(user.uid)}&email=${encodeURIComponent(user.email || "")}`
+        );
+      } else {
+        setTargetStudioUrl(STUDIO_URL);
+      }
+    } catch {
+      setTargetStudioUrl(STUDIO_URL);
+    }
     setIsRedirecting(true);
   };
 
@@ -58,7 +78,7 @@ const Login = () => {
         });
       }
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Google One Tap error:", err);
@@ -108,7 +128,7 @@ const Login = () => {
         });
       }
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Login error:", err);
@@ -150,7 +170,7 @@ const Login = () => {
         });
       }
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Google sign in error:", err);
@@ -167,8 +187,8 @@ const Login = () => {
       <LevelUpTransitionOverlay
         isActive={isRedirecting}
         title="Login Successful"
-        subtitle="Redirecting to LevelStudio..."
-        targetUrl={STUDIO_URL}
+        subtitle="Redirecting securely to LevelStudio..."
+        targetUrl={targetStudioUrl}
       />
       <Script
         src="https://accounts.google.com/gsi/client"

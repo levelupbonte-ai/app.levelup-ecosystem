@@ -2,12 +2,18 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, X } from "lucide-react";
+import { ArrowRight, Check, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { PremiumTextSectionReveal } from "@/components/scroll/premium-reveal";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+
+export interface FeatureItem {
+  text: string;
+  included: boolean;
+}
 
 export interface PlanItem {
   id: string;
@@ -22,7 +28,7 @@ export interface PlanItem {
   shortPoints: string[];
   fullFeatures: {
     category: string;
-    items: string[];
+    items: FeatureItem[];
   }[];
   ctaText: string;
   ctaHref: string;
@@ -47,32 +53,33 @@ const buildPlans: PlanItem[] = [
     ],
     fullFeatures: [
       {
-        category: "Included Services & Deliverables",
+        category: "Included Deliverables",
         items: [
-          "Custom website design (no generic pre-made templates)",
-          "Up to 5 custom-crafted pages",
-          "Responsive design: mobile, tablet & desktop",
-          "Contact and lead capture form",
-          "Google Maps integration with interactive directions",
-          "Basic technical SEO architecture",
-          "Local SEO foundation targeting your area",
-          "Optimized meta titles & descriptions",
-          "Image & asset optimization",
-          "Performance optimization (sub-2s loading speed target)",
-          "SSL / HTTPS security encryption",
-          "Google Analytics setup",
-          "Basic accessibility (WCAG compliant)",
-          "2 rounds of revisions included",
-          "Official website launch & verification",
-          "100% full website and code ownership",
+          { text: "Custom website design (no generic templates)", included: true },
+          { text: "Up to 5 custom-crafted pages", included: true },
+          { text: "Responsive design: mobile, tablet & desktop", included: true },
+          { text: "Contact and lead capture form", included: true },
+          { text: "Google Maps integration with interactive directions", included: true },
+          { text: "Basic technical SEO architecture", included: true },
+          { text: "Local SEO foundation targeting your service area", included: true },
+          { text: "Optimized meta titles & descriptions", included: true },
+          { text: "Image & asset optimization (sub-2s loading speed target)", included: true },
+          { text: "SSL / HTTPS security encryption standard", included: true },
+          { text: "Google Analytics setup", included: true },
+          { text: "Basic accessibility (WCAG compliant)", included: true },
+          { text: "2 rounds of revisions included", included: true },
+          { text: "Website launch & verification", included: true },
+          { text: "100% full website and code ownership", included: true },
         ],
       },
       {
-        category: "Scope Boundary",
+        category: "Features Not Included (Available in Secure)",
         items: [
-          "No online booking engine included (available in Secure)",
-          "No automated calendar synchronization",
-          "No monthly maintenance included (optional Care available)",
+          { text: "24/7 online booking engine", included: false },
+          { text: "Live 2-way calendar sync (Google, Apple, Square)", included: false },
+          { text: "Automated SMS/Email appointment confirmations", included: false },
+          { text: "Database security audit & access hardening", included: false },
+          { text: "Included monthly website updates (Care optional)", included: false },
         ],
       },
     ],
@@ -99,40 +106,38 @@ const buildPlans: PlanItem[] = [
       {
         category: "Business & Booking System",
         items: [
-          "Everything in Starter included",
-          "Online booking system for customer self-scheduling",
-          "Live 2-way calendar integration (Google, Apple, Square, Calendly)",
-          "Automated appointment email confirmations to minimize no-shows",
-          "Lead capture & notification pipeline",
-          "Instant email notifications for new bookings",
-          "Google Business Profile setup and integration",
-          "Advanced interactive contact/lead intake forms",
+          { text: "Everything in Starter included", included: true },
+          { text: "Online booking system for customer self-scheduling", included: true },
+          { text: "Live 2-way calendar integration (Google, Apple, Square, Calendly)", included: true },
+          { text: "Automated appointment email confirmations to reduce no-shows", included: true },
+          { text: "Lead capture & notification pipeline", included: true },
+          { text: "Instant email notifications for new bookings", included: true },
+          { text: "Google Business Profile setup & integration assistance", included: true },
+          { text: "Advanced interactive contact/lead intake forms", included: true },
         ],
       },
       {
-        category: "Search Visibility & Authority",
+        category: "Search Visibility & Security",
         items: [
-          "Advanced on-page SEO targeting high-intent buyer searches",
-          "Search-friendly site architecture",
-          "Local SEO optimization with geo-coordinates",
-          "Structured data & Schema.org markup",
-          "Google Search Console configuration",
-          "XML Sitemap & robots.txt configuration",
+          { text: "Advanced on-page SEO targeting high-intent buyer searches", included: true },
+          { text: "Search-friendly site architecture", included: true },
+          { text: "Local SEO optimization with geo-coordinates", included: true },
+          { text: "Structured data & Schema.org markup", included: true },
+          { text: "Google Search Console setup & sitemap submission", included: true },
+          { text: "SSL / HTTPS encryption with security headers", included: true },
+          { text: "Anti-spam protection & honeypot filtering", included: true },
+          { text: "Admin authentication hardening & access review", included: true },
+          { text: "Database security rules where applicable", included: true },
+          { text: "Mobile speed optimization & Core Web Vitals tuning", included: true },
+          { text: "3 rounds of revisions included", included: true },
         ],
       },
       {
-        category: "Security & Performance",
+        category: "Features Not Included (Available in Bundle / Care)",
         items: [
-          "SSL / HTTPS encryption with security headers",
-          "Anti-spam protection & honeypot filtering",
-          "Admin authentication hardening",
-          "Access-control & role-based permissions review",
-          "Database security rules where applicable",
-          "Dependency & security review",
-          "Basic security audit report",
-          "Mobile speed optimization & Core Web Vitals tuning",
-          "Lossless image optimization pipeline",
-          "3 rounds of revisions included",
+          { text: "Managed cloud hosting & CDN (Care optional)", included: false },
+          { text: "Automated daily offsite backups (Care optional)", included: false },
+          { text: "Monthly on-demand website edits (Care optional)", included: false },
         ],
       },
     ],
@@ -160,23 +165,23 @@ const buildPlans: PlanItem[] = [
       {
         category: "Complete Website Build",
         items: [
-          "Everything included in the $1,500 Secure build",
-          "24/7 online booking engine & live calendar sync",
-          "Full cybersecurity audit and hardening",
-          "Advanced local SEO & Google Business Profile setup",
-          "3 rounds of build revisions included",
+          { text: "Everything included in the $1,500 Secure build", included: true },
+          { text: "24/7 online booking engine & live calendar sync", included: true },
+          { text: "Full cybersecurity audit and hardening", included: true },
+          { text: "Advanced local SEO & Google Business Profile setup", included: true },
+          { text: "3 rounds of build revisions included", included: true },
         ],
       },
       {
         category: "Included 1-Year Care Management",
         items: [
-          "Managed ultra-fast cloud hosting on edge infrastructure",
-          "Global Content Delivery Network (CDN)",
-          "Automated daily offsite backups with instant recovery",
-          "24/7 continuous uptime monitoring & health checks",
-          "Up to 2 hours of monthly website updates (text, photos, prices)",
-          "Continuous SSL renewal & DNS management",
-          "Priority developer support",
+          { text: "Managed ultra-fast cloud hosting on edge infrastructure", included: true },
+          { text: "Global Content Delivery Network (CDN)", included: true },
+          { text: "Automated daily offsite backups with instant recovery", included: true },
+          { text: "24/7 continuous uptime monitoring & health checks", included: true },
+          { text: "Up to 2 hours of monthly website updates (text, photos, prices)", included: true },
+          { text: "Continuous SSL renewal & DNS management", included: true },
+          { text: "Priority developer support", included: true },
         ],
       },
     ],
@@ -204,27 +209,27 @@ const buildPlans: PlanItem[] = [
       {
         category: "Build Exactly What You Need",
         items: [
-          "Event & luxury digital wedding invitations with RSVP tracking (from $250)",
-          "Birthday invitations & private celebration websites",
-          "Creator portfolios, personal branding & landing pages",
-          "Restaurant websites with interactive digital menus",
-          "Custom 24/7 booking platforms for barbershops, salons & clinics",
-          "E-commerce stores with instant Stripe checkouts",
-          "Client portals & SaaS dashboards",
-          "AI-powered websites & smart interactive tools",
-          "Full-stack custom web applications",
-          "Custom business systems & workflow automation",
-          "Third-party API, CRM and ERP integrations",
-          "Custom database architecture (Cloud SQL, Firestore, Redis)",
+          { text: "Event & luxury digital wedding invitations with RSVP tracking (from $250)", included: true },
+          { text: "Birthday invitations & private celebration websites", included: true },
+          { text: "Creator portfolios, personal branding & landing pages", included: true },
+          { text: "Restaurant websites with interactive digital menus", included: true },
+          { text: "Custom 24/7 booking platforms for barbershops, salons & clinics", included: true },
+          { text: "E-commerce stores with instant Stripe checkouts", included: true },
+          { text: "Client portals & SaaS dashboards", included: true },
+          { text: "AI-powered websites & smart interactive tools", included: true },
+          { text: "Full-stack custom web applications", included: true },
+          { text: "Custom business systems & workflow automation", included: true },
+          { text: "Third-party API, CRM and ERP integrations", included: true },
+          { text: "Custom database architecture (Cloud SQL, Firestore, Redis)", included: true },
         ],
       },
       {
         category: "Tailored Engagement",
         items: [
-          "Transparent quote based on your exact specifications",
-          "Pay only for the features you actually need",
-          "Milestone-based delivery & dedicated engineering review",
-          "100% full source code ownership",
+          { text: "Transparent quote based on your exact specifications", included: true },
+          { text: "Pay only for the features you actually need", included: true },
+          { text: "Milestone-based delivery & dedicated engineering review", included: true },
+          { text: "100% full source code ownership", included: true },
         ],
       },
     ],
@@ -233,7 +238,7 @@ const buildPlans: PlanItem[] = [
   },
 ];
 
-// 2. Optional Monthly Care Plans (Essential $39, Pro $99, Premium $199)
+// 2. Monthly Care Plans
 const carePlans: PlanItem[] = [
   {
     id: "care-essential",
@@ -254,21 +259,23 @@ const carePlans: PlanItem[] = [
       {
         category: "Infrastructure & Security",
         items: [
-          "High-speed cloud hosting on global edge network",
-          "Continuous SSL certificate auto-renewals",
-          "Automated daily offsite backups",
-          "24/7 uptime monitoring & health checks",
-          "Basic security monitoring & patch updates",
-          "Performance & speed monitoring",
-          "Up to 30 minutes of monthly updates (text, hours, contact)",
+          { text: "High-speed cloud hosting on global edge network", included: true },
+          { text: "Continuous SSL certificate auto-renewals", included: true },
+          { text: "Automated daily offsite backups", included: true },
+          { text: "24/7 uptime monitoring & health checks", included: true },
+          { text: "Basic security monitoring & patch updates", included: true },
+          { text: "Performance & speed monitoring", included: true },
+          { text: "Up to 30 minutes of monthly updates (text, hours, contact)", included: true },
+          { text: "SEO maintenance & reporting", included: false },
+          { text: "Custom code development", included: false },
         ],
       },
       {
         category: "Terms & Guidelines",
         items: [
-          "Unused monthly hours do not roll over to the next month",
-          "Major redesigns or feature additions quoted separately",
-          "Cancel anytime with zero long-term contract",
+          { text: "Unused monthly hours do not roll over to the next month", included: true },
+          { text: "Major redesigns or feature additions quoted separately", included: true },
+          { text: "Cancel anytime with zero long-term contract", included: true },
         ],
       },
     ],
@@ -296,21 +303,23 @@ const carePlans: PlanItem[] = [
       {
         category: "Complete Care & Growth",
         items: [
-          "Everything in Essential Care included",
-          "Advanced continuous security monitoring",
-          "Up to 2 hours of website updates included every month",
-          "Content updates, text tweaks, photo swaps & price changes",
-          "Ongoing SEO maintenance & basic monthly SEO tuning",
-          "Monthly traffic & performance analytics reporting",
-          "Priority developer support via WhatsApp and email",
+          { text: "Everything in Essential Care included", included: true },
+          { text: "Advanced continuous security monitoring", included: true },
+          { text: "Up to 2 hours of website updates included every month", included: true },
+          { text: "Content updates, text tweaks, photo swaps & price changes", included: true },
+          { text: "Ongoing SEO maintenance & basic monthly SEO tuning", included: true },
+          { text: "Monthly traffic & performance analytics reporting", included: true },
+          { text: "Priority developer support via WhatsApp and email", included: true },
+          { text: "New sections / custom page creation", included: false },
+          { text: "Custom code development", included: false },
         ],
       },
       {
         category: "Terms & Guidelines",
         items: [
-          "Unused monthly hours do not roll over to the next month",
-          "Major custom developments or redesigns quoted separately",
-          "No lock-in: cancel anytime with 30 days notice",
+          { text: "Unused monthly hours do not roll over to the next month", included: true },
+          { text: "Major custom developments or redesigns quoted separately", included: true },
+          { text: "No lock-in: cancel anytime with 30 days notice", included: true },
         ],
       },
     ],
@@ -337,21 +346,21 @@ const carePlans: PlanItem[] = [
       {
         category: "VIP Engineering & Expansion",
         items: [
-          "Everything in Pro Care included",
-          "Up to 5 hours of monthly website updates & content maintenance",
-          "1 hour per month of dedicated custom feature development",
-          "Creation of new sections or landing pages as needed",
-          "Advanced monthly SEO improvements & rank tracking",
-          "Deep analytics & conversion reporting",
-          "Highest priority VIP developer support (direct line)",
+          { text: "Everything in Pro Care included", included: true },
+          { text: "Up to 5 hours of monthly website updates & content maintenance", included: true },
+          { text: "1 hour per month of dedicated custom feature development", included: true },
+          { text: "Creation of new sections or landing pages as needed", included: true },
+          { text: "Advanced monthly SEO improvements & rank tracking", included: true },
+          { text: "Deep analytics & conversion reporting", included: true },
+          { text: "Highest priority VIP developer support (direct line)", included: true },
         ],
       },
       {
         category: "Terms & Guidelines",
         items: [
-          "Unused monthly hours do not roll over to the next month",
-          "Major multi-week system builds quoted separately",
-          "Cancel anytime with zero penalty",
+          { text: "Unused monthly hours do not roll over to the next month", included: true },
+          { text: "Major multi-week system builds quoted separately", included: true },
+          { text: "Cancel anytime with zero penalty", included: true },
         ],
       },
     ],
@@ -369,8 +378,10 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
   const [billingTab, setBillingTab] = useState<"build" | "care">("build");
   const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
 
-  // Optional Care add-on selector for builds
-  const [selectedCareAddon, setSelectedCareAddon] = useState<"none" | "essential" | "pro" | "premium">("none");
+  // In-card Care Switch & Modal State
+  const [isCareActive, setIsCareActive] = useState(false);
+  const [selectedCareTier, setSelectedCareTier] = useState<"essential" | "pro" | "premium">("pro");
+  const [isCareModalOpen, setIsCareModalOpen] = useState(false);
 
   const activePlans = billingTab === "build" ? buildPlans : carePlans;
   const activeExpandedPlan = activePlans.find((p) => p.id === expandedPlanId) || null;
@@ -378,10 +389,14 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
   const handleTabChange = (tab: "build" | "care") => {
     setBillingTab(tab);
     setExpandedPlanId(null);
+    setIsCareActive(false);
+    setIsCareModalOpen(false);
   };
 
   const handleSelectPlan = (planId: string) => {
     setExpandedPlanId((prev) => (prev === planId ? null : planId));
+    setIsCareActive(false);
+    setIsCareModalOpen(false);
     const element = document.getElementById("pricing-plans-container");
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -390,9 +405,21 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
 
   const handleCloseExpanded = () => {
     setExpandedPlanId(null);
+    setIsCareActive(false);
+    setIsCareModalOpen(false);
     const element = document.getElementById("pricing-plans-container");
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  // Toggle switch handler for care
+  const handleToggleCareSwitch = (checked: boolean) => {
+    setIsCareActive(checked);
+    if (checked) {
+      setIsCareModalOpen(true);
+    } else {
+      setIsCareModalOpen(false);
     }
   };
 
@@ -445,67 +472,9 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
             </button>
           </div>
 
-          {/* Interactive Care Addon Selector for Builds Tab */}
-          {billingTab === "build" && (
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground pt-1">
-              <span className="font-medium text-foreground">Optional Monthly Care:</span>
-              <div className="inline-flex items-center gap-1 p-0.5 rounded-lg bg-muted/50 border border-border/70">
-                <button
-                  type="button"
-                  onClick={() => setSelectedCareAddon("none")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-md transition-all font-semibold cursor-pointer",
-                    selectedCareAddon === "none"
-                      ? "bg-background text-foreground shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  OFF ($0/mo)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCareAddon("essential")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-md transition-all font-semibold cursor-pointer",
-                    selectedCareAddon === "essential"
-                      ? "bg-background text-foreground shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  Essential ($39/mo)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCareAddon("pro")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-md transition-all font-semibold cursor-pointer",
-                    selectedCareAddon === "pro"
-                      ? "bg-background text-foreground shadow-2xs text-violet-500 font-bold"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  Pro ($99/mo)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCareAddon("premium")}
-                  className={cn(
-                    "px-2.5 py-1 rounded-md transition-all font-semibold cursor-pointer",
-                    selectedCareAddon === "premium"
-                      ? "bg-background text-foreground shadow-2xs"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  Premium ($199/mo)
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Important note regarding monthly hours */}
           {billingTab === "care" && (
             <p className="text-[11px] text-muted-foreground/80 max-w-lg text-center">
-              * Monthly maintenance hours do not roll over to subsequent months. Major structural redesigns are quoted separately.
+              * Monthly maintenance hours do not roll over. Major custom developments or redesigns are quoted separately.
             </p>
           )}
         </div>
@@ -531,15 +500,6 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
               >
                 {activePlans.map((plan) => {
                   const isRecommended = plan.isRecommended;
-
-                  // Dynamic calculated price if Care Addon is selected in Build tab
-                  const displayedPrice = plan.price;
-                  let displayedPeriod = plan.pricePeriod;
-
-                  if (billingTab === "build" && selectedCareAddon !== "none" && plan.id !== "custom" && plan.id !== "secure-care") {
-                    const careAmount = selectedCareAddon === "essential" ? "$39/mo" : selectedCareAddon === "pro" ? "$99/mo" : "$199/mo";
-                    displayedPeriod = `+ ${careAmount}`;
-                  }
 
                   return (
                     <div
@@ -584,10 +544,10 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                         <div className="mt-3.5 mb-2.5 pt-3 border-t border-border/50">
                           <div className="flex items-baseline gap-1.5 flex-wrap">
                             <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-                              {displayedPrice}
+                              {plan.price}
                             </span>
                             <span className="text-xs text-muted-foreground font-medium">
-                              {displayedPeriod}
+                              {plan.pricePeriod}
                             </span>
                           </div>
                           {plan.secondaryNote ? (
@@ -647,8 +607,8 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                     : "bg-card border-border/90 shadow-md",
                 )}
               >
-                {/* Header Row: Title, Price, and sleek Close Button */}
-                <div className="flex items-start justify-between gap-4 pb-6 border-b border-border/70">
+                {/* Header Row: Title, Price, Care Switch (Interrupteur), and Close Button */}
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-border/70">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground font-sans">
@@ -670,26 +630,157 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                     <p className="text-xs sm:text-sm text-muted-foreground">
                       {activeExpandedPlan.subtitle}
                     </p>
+
+                    {/* Dynamic Price Display (Adjusts if Care is switched on) */}
                     <div className="pt-2 flex items-baseline gap-2">
                       <span className="text-3xl sm:text-4xl font-black text-foreground">
                         {activeExpandedPlan.price}
                       </span>
                       <span className="text-xs sm:text-sm font-semibold text-muted-foreground">
-                        {activeExpandedPlan.pricePeriod}
+                        {isCareActive && activeExpandedPlan.id !== "custom" && activeExpandedPlan.id !== "secure-care"
+                          ? `+ ${selectedCareTier === "essential" ? "$39" : selectedCareTier === "pro" ? "$99" : "$199"}/mo`
+                          : activeExpandedPlan.pricePeriod}
                       </span>
                     </div>
                   </div>
 
-                  {/* Clean Close Button */}
-                  <button
-                    type="button"
-                    onClick={handleCloseExpanded}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-border/80 bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                    aria-label="Close details"
-                  >
-                    <X className="size-4" />
-                    <span>Close</span>
-                  </button>
+                  {/* Top-Right Action Controls: Care Switch */}
+                  <div className="flex items-center gap-3 self-end sm:self-start">
+                    {/* Interrupteur Care Switch (only shown for website builds) */}
+                    {billingTab === "build" && activeExpandedPlan.id !== "custom" && activeExpandedPlan.id !== "secure-care" && (
+                      <div className="relative">
+                        <div className="flex items-center gap-2 p-1 px-3 rounded-full border border-border/80 bg-muted/40">
+                          <span className="text-xs font-semibold text-foreground select-none">
+                            Care Plan
+                          </span>
+                          <Switch
+                            checked={isCareActive}
+                            onCheckedChange={handleToggleCareSwitch}
+                            aria-label="Toggle Care Plan"
+                          />
+                          {isCareActive && (
+                            <button
+                              type="button"
+                              onClick={() => setIsCareModalOpen((prev) => !prev)}
+                              className="text-[11px] font-bold text-violet-500 hover:underline flex items-center gap-0.5 cursor-pointer"
+                            >
+                              <span>
+                                {selectedCareTier === "essential"
+                                  ? "$39/mo"
+                                  : selectedCareTier === "pro"
+                                    ? "$99/mo"
+                                    : "$199/mo"}
+                              </span>
+                              <ChevronDown className="size-3" />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Interactive Care Selector Pop-up */}
+                        {isCareModalOpen && (
+                          <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 rounded-2xl bg-card border border-border/90 shadow-2xl p-4 z-40">
+                            <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/60">
+                              <span className="text-xs font-bold text-foreground">
+                                Choose Care Level
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => setIsCareModalOpen(false)}
+                                className="text-muted-foreground hover:text-foreground p-0.5 cursor-pointer"
+                              >
+                                <X className="size-3.5" />
+                              </button>
+                            </div>
+                            <div className="space-y-2">
+                              {/* Essential Care */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedCareTier("essential");
+                                  setIsCareModalOpen(false);
+                                }}
+                                className={cn(
+                                  "w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between",
+                                  selectedCareTier === "essential"
+                                    ? "bg-muted border-foreground/30 shadow-2xs"
+                                    : "border-border/60 hover:bg-muted/40",
+                                )}
+                              >
+                                <div>
+                                  <div className="text-xs font-bold text-foreground">
+                                    Essential Care
+                                  </div>
+                                  <div className="text-[10px] text-muted-foreground">
+                                    Hosting, backups, 30 min updates
+                                  </div>
+                                </div>
+                                <span className="text-xs font-black text-foreground">
+                                  $39/mo
+                                </span>
+                              </button>
+
+                              {/* Pro Care */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedCareTier("pro");
+                                  setIsCareModalOpen(false);
+                                }}
+                                className={cn(
+                                  "w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between",
+                                  selectedCareTier === "pro"
+                                    ? "bg-violet-500/10 border-violet-500/40 shadow-2xs"
+                                    : "border-border/60 hover:bg-muted/40",
+                                )}
+                              >
+                                <div>
+                                  <div className="text-xs font-bold text-foreground flex items-center gap-1">
+                                    <span>Pro Care</span>
+                                    <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-full bg-violet-500/20 text-violet-500">
+                                      Recommended
+                                    </span>
+                                  </div>
+                                  <div className="text-[10px] text-muted-foreground">
+                                    2h updates, SEO tuning, priority support
+                                  </div>
+                                </div>
+                                <span className="text-xs font-black text-violet-600 dark:text-violet-400">
+                                  $99/mo
+                                </span>
+                              </button>
+
+                              {/* Premium Care */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedCareTier("premium");
+                                  setIsCareModalOpen(false);
+                                }}
+                                className={cn(
+                                  "w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between",
+                                  selectedCareTier === "premium"
+                                    ? "bg-muted border-foreground/30 shadow-2xs"
+                                    : "border-border/60 hover:bg-muted/40",
+                                )}
+                              >
+                                <div>
+                                  <div className="text-xs font-bold text-foreground">
+                                    Premium Care
+                                  </div>
+                                  <div className="text-[10px] text-muted-foreground">
+                                    5h updates, 1h custom dev, new sections
+                                  </div>
+                                </div>
+                                <span className="text-xs font-black text-foreground">
+                                  $199/mo
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Description */}
@@ -697,7 +788,7 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                   {activeExpandedPlan.description}
                 </p>
 
-                {/* Checklist of Included Services & Features */}
+                {/* Checklist of Included Services & Features with Green Check / Gray Cross */}
                 <div className="space-y-6">
                   {activeExpandedPlan.fullFeatures.map((group, idx) => (
                     <div
@@ -711,10 +802,19 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                         {group.items.map((item, iIdx) => (
                           <div
                             key={iIdx}
-                            className="flex items-start gap-2.5 text-xs sm:text-sm text-foreground/90 font-medium"
+                            className="flex items-start gap-2.5 text-xs sm:text-sm font-medium"
                           >
-                            <Check className="size-4 text-emerald-500 shrink-0 mt-0.5" />
-                            <span className="leading-snug">{item}</span>
+                            {item.included ? (
+                              <>
+                                <Check className="size-4 text-emerald-500 shrink-0 mt-0.5" />
+                                <span className="leading-snug text-foreground/90">{item.text}</span>
+                              </>
+                            ) : (
+                              <>
+                                <X className="size-4 text-muted-foreground/45 shrink-0 mt-0.5" />
+                                <span className="leading-snug text-muted-foreground/70">{item.text}</span>
+                              </>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -722,19 +822,30 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
                   ))}
                 </div>
 
-                {/* Action Footer: Close + Get this plan */}
+                {/* Action Footer: Close button WITHOUT arrow, and Main CTA */}
                 <div className="mt-8 pt-6 border-t border-border/70 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <button
                     type="button"
                     onClick={handleCloseExpanded}
-                    className="w-full sm:w-auto text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground py-2 px-3 transition-colors cursor-pointer text-center"
+                    className="w-full sm:w-auto text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground py-2 px-4 rounded-xl border border-border/60 hover:bg-muted/40 transition-colors cursor-pointer text-center"
                   >
-                    ← Close
+                    Close
                   </button>
 
                   <Button asChild size="lg" className="w-full sm:w-auto font-bold">
-                    <Link href={activeExpandedPlan.ctaHref} className="gap-2">
-                      <span>{activeExpandedPlan.ctaText}</span>
+                    <Link
+                      href={
+                        isCareActive && activeExpandedPlan.id !== "custom" && activeExpandedPlan.id !== "secure-care"
+                          ? `${activeExpandedPlan.ctaHref}&care=${selectedCareTier}`
+                          : activeExpandedPlan.ctaHref
+                      }
+                      className="gap-2"
+                    >
+                      <span>
+                        {isCareActive && activeExpandedPlan.id !== "custom" && activeExpandedPlan.id !== "secure-care"
+                          ? `Get ${activeExpandedPlan.name} + ${selectedCareTier.charAt(0).toUpperCase() + selectedCareTier.slice(1)} Care`
+                          : activeExpandedPlan.ctaText}
+                      </span>
                       <ArrowRight className="size-4" />
                     </Link>
                   </Button>

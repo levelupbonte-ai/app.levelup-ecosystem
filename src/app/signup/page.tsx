@@ -31,10 +31,27 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [targetStudioUrl, setTargetStudioUrl] = useState(STUDIO_URL);
   const [error, setError] = useState<string | null>(null);
 
-  const handleRedirectToStudio = () => {
-    // Activate the fluid transition overlay before redirecting in the same tab
+  const handleRedirectToStudio = async (user?: import("firebase/auth").User) => {
+    try {
+      if (user) {
+        const idToken = await user.getIdToken();
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("levelup_auth_token", idToken);
+          sessionStorage.setItem("levelup_user_uid", user.uid);
+          sessionStorage.setItem("levelup_user_email", user.email || "");
+        }
+        setTargetStudioUrl(
+          `${STUDIO_URL}/#auth_token=${encodeURIComponent(idToken)}&uid=${encodeURIComponent(user.uid)}&email=${encodeURIComponent(user.email || "")}`
+        );
+      } else {
+        setTargetStudioUrl(STUDIO_URL);
+      }
+    } catch {
+      setTargetStudioUrl(STUDIO_URL);
+    }
     setIsRedirecting(true);
   };
 
@@ -59,7 +76,7 @@ const Signup = () => {
         });
       }
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Google One Tap error:", err);
@@ -123,7 +140,7 @@ const Signup = () => {
         role: "architect",
       });
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Signup error:", err);
@@ -162,7 +179,7 @@ const Signup = () => {
         });
       }
 
-      handleRedirectToStudio();
+      handleRedirectToStudio(user);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Google sign up error:", err);
@@ -179,8 +196,8 @@ const Signup = () => {
       <LevelUpTransitionOverlay
         isActive={isRedirecting}
         title="Account Created Successfully"
-        subtitle="Redirecting to LevelStudio..."
-        targetUrl={STUDIO_URL}
+        subtitle="Redirecting securely to LevelStudio..."
+        targetUrl={targetStudioUrl}
       />
       <Script
         src="https://accounts.google.com/gsi/client"
