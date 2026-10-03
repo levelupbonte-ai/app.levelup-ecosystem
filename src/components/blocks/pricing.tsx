@@ -1,809 +1,619 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Check,
-  X,
+  ArrowLeft,
   ArrowRight,
+  Check,
   Sparkles,
-  ExternalLink,
+  Shield,
+  Zap,
+  Info,
+  ChevronDown,
+  Layers,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+
 import { cn } from "@/lib/utils";
 import { PremiumTextSectionReveal } from "@/components/scroll/premium-reveal";
 import { Button } from "@/components/ui/button";
 
-interface PlanItem {
+export interface PricingPlan {
   id: string;
   name: string;
+  badge?: string;
+  isPopular?: boolean;
   subtitle: string;
   price: string;
   pricePeriod: string;
-  secondaryPrice?: string;
-  tags: string[];
-  buttonText: string;
-  badge?: string;
+  secondaryNote?: string;
   description: string;
-  ctaHref: string;
+  summaryTags: string[];
+  revisions: string;
   ctaText: string;
-  highlights: string[];
-  specs: {
-    label: string;
-    value: string;
-  }[];
-  detailedFeatures: {
-    category: string;
+  ctaHref: string;
+  notIncludedNote?: string;
+  categories: {
+    name: string;
     items: string[];
   }[];
 }
 
-// 1. One-time Website Builds (Turnkey bespoke web creation)
-const buildPlans: PlanItem[] = [
+export const PRICING_PLANS: PricingPlan[] = [
   {
-    id: "starter-build",
+    id: "starter",
     name: "Starter",
-    subtitle: "for local businesses",
-    price: "$500",
-    pricePeriod: "/one-time",
-    tags: ["Custom design", "Local SEO setup", "Fast mobile speed"],
-    buttonText: "See Starter plan",
+    subtitle: "For small businesses that need a clean, professional web presence",
+    price: "$850",
+    pricePeriod: "one-time",
     description:
-      "A bespoke high-conversion showcase website. Built from scratch with sub-2s mobile loading speed, local Google ranking, and complete ownership.",
-    highlights: [
-      "Bespoke mobile-first web architecture",
-      "Sub-2s mobile loading speed (100% PageSpeed target)",
-      "100% full code ownership with zero monthly lock-in",
+      "A bespoke high-converting showcase website built from scratch. Includes mobile-first responsive architecture, Google Maps integration, technical and local SEO foundations, and 100% full ownership with zero platform lock-in.",
+    summaryTags: [
+      "Custom Design",
+      "Up to 5 Pages",
+      "Google Maps & Local SEO",
+      "100% Code Ownership",
     ],
-    specs: [
-      { label: "Turnaround", value: "3 - 5 Business Days" },
-      { label: "Pages Included", value: "Up to 5 Pages" },
-      { label: "SEO Setup", value: "Local SEO & Google Maps" },
-      { label: "Code Ownership", value: "100% Yours (No lock-in)" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Bespoke Web Architecture",
-        items: [
-          "Bespoke mobile-first Next.js web build crafted for your brand",
-          "Sub-2s mobile loading speed optimized for Google Core Web Vitals",
-          "SSL / HTTPS encryption standard and clean semantic markup",
-        ],
-      },
-      {
-        category: "Local Growth & Visibility",
-        items: [
-          "Google Maps and Local Business schema markup integration",
-          "Contact and inquiry form with anti-spam security protection",
-          "Optimized social media share cards (OpenGraph & Twitter previews)",
-        ],
-      },
-      {
-        category: "Ownership & Guarantees",
-        items: [
-          "100% full source code ownership with zero recurring platform tax",
-          "14-day post-launch warranty with complimentary bug fixes",
-        ],
-      },
-    ],
+    revisions: "2 rounds of revisions included",
+    notIncludedNote:
+      "No online booking engine, no calendar automation, and no monthly maintenance included.",
+    ctaText: "Get Started with Starter ($850)",
     ctaHref: "/contact?plan=starter",
-    ctaText: "Get started with Starter",
+    categories: [
+      {
+        name: "Design & Core Build",
+        items: [
+          "Custom bespoke website design (no generic pre-made templates)",
+          "Up to 5 custom-crafted pages",
+          "Responsive design: mobile, tablet, and desktop optimized",
+          "Contact and lead capture form",
+          "Website launch & deployment verification",
+          "100% full website and code ownership",
+        ],
+      },
+      {
+        name: "Search Visibility & Local SEO",
+        items: [
+          "Google Maps integration with interactive directions",
+          "Basic technical SEO architecture & semantic HTML5",
+          "Local SEO foundation targeting your service area",
+          "Custom meta titles & meta descriptions",
+          "Google Analytics setup with privacy-conscious tracking",
+        ],
+      },
+      {
+        name: "Speed & Accessibility",
+        items: [
+          "Image compression & asset optimization",
+          "Performance optimization (sub-2s loading speed target)",
+          "SSL / HTTPS encryption standard",
+          "Basic accessibility (WCAG compliance)",
+          "2 rounds of revisions included before final launch",
+        ],
+      },
+    ],
   },
   {
-    id: "secure-build",
+    id: "secure",
     name: "Secure",
-    subtitle: "for growing businesses",
-    price: "$900",
-    pricePeriod: "/one-time",
-    badge: "Most Popular",
-    tags: ["24/7 Booking engine", "Calendar sync", "Cyber defense"],
-    buttonText: "See Secure plan",
+    badge: "Business Engine",
+    subtitle: "A complete business engine — not just a pretty website",
+    price: "$1,500",
+    pricePeriod: "one-time",
     description:
-      "An automated appointment booking powerhouse equipped with cybersecurity defense, real-time calendar synchronization, and Google profile domination.",
-    highlights: [
-      "24/7 automated appointment booking & calendar sync",
-      "Real-time sync with Google Calendar, Apple, or Square",
-      "Cybersecurity audit, firewall defense & database hardening",
+      "An automated appointment booking and customer acquisition powerhouse. Includes self-service scheduling, 2-way calendar synchronization, cybersecurity audit and database hardening, and advanced local SEO.",
+    summaryTags: [
+      "24/7 Online Booking",
+      "Calendar Sync",
+      "Cybersecurity Hardening",
+      "Advanced Local SEO",
     ],
-    specs: [
-      { label: "Turnaround", value: "5 - 7 Business Days" },
-      { label: "Booking Engine", value: "24/7 Automated Sync" },
-      { label: "Security", value: "Firewall & RLS Hardening" },
-      { label: "Launch Support", value: "30 Days Priority" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Automated Booking Engine",
-        items: [
-          "Self-service appointment scheduler with client timezone detection",
-          "Real-time 2-way sync with Google Calendar, Square, or Calendly",
-          "Automated SMS & email booking confirmations to minimize no-shows",
-        ],
-      },
-      {
-        category: "Cybersecurity & Hardening",
-        items: [
-          "Comprehensive cybersecurity audit & custom firewall setup",
-          "Database access rules (RLS) & API endpoint hardening",
-          "DDoS mitigation & intelligent anti-scraping protection",
-        ],
-      },
-      {
-        category: "Local SEO & Support",
-        items: [
-          "Google Business Profile complete audit & local ranking boost",
-          "Speed tuning for top mobile search conversion",
-          "30 days priority launch support & administrative walkthrough",
-        ],
-      },
-    ],
+    revisions: "3 rounds of revisions included",
+    ctaText: "Get Started with Secure ($1,500)",
     ctaHref: "/contact?plan=secure",
-    ctaText: "Get started with Secure",
+    categories: [
+      {
+        name: "Business & Booking System",
+        items: [
+          "24/7 online booking system for customer self-scheduling",
+          "Real-time calendar integration (Google, Apple, Square, Calendly)",
+          "Automated appointment email confirmations to reduce no-shows",
+          "Lead capture & management pipeline",
+          "Automated email notifications for new inquiries",
+          "Google Business Profile integration & setup assistance",
+          "Advanced interactive contact/lead intake forms",
+        ],
+      },
+      {
+        name: "Search Visibility & Authority",
+        items: [
+          "Advanced on-page SEO targeting high-intent buyer searches",
+          "Search-friendly site architecture & breadcrumb structure",
+          "Local SEO optimization with geo-coordinates and NAP consistency",
+          "Structured data & Schema.org markup where appropriate",
+          "Google Search Console setup and automated XML sitemap submission",
+          "Sitemap & robots.txt configuration",
+        ],
+      },
+      {
+        name: "Security & Hardening",
+        items: [
+          "SSL / HTTPS encryption with strict security headers",
+          "Anti-spam protection & honeypot filtering",
+          "Admin authentication hardening",
+          "Access-control and role-based permissions review",
+          "Database security rules where applicable (Firestore / Cloud SQL)",
+          "Dependency & package vulnerability review",
+          "Foundational cybersecurity audit report",
+        ],
+      },
+      {
+        name: "Performance & Revisions",
+        items: [
+          "Comprehensive mobile speed optimization",
+          "Lossless WebP/AVIF image pipeline",
+          "Core Web Vitals-oriented optimization",
+          "Cross-browser and cross-device performance testing",
+          "3 rounds of revisions included",
+        ],
+      },
+    ],
   },
   {
-    id: "secure-care-build",
+    id: "secure-care",
     name: "Secure + Care",
-    subtitle: "for turnkey ease",
-    price: "$900",
-    pricePeriod: "+ $49/month",
-    badge: "Best Value",
-    tags: ["Full build included", "Cloud hosting & CDN", "Daily backups"],
-    buttonText: "See Secure+Care plan",
+    badge: "Recommended • Best Value",
+    isPopular: true,
+    subtitle: "Build once, then LevelUp handles all hosting, backups & monthly updates",
+    price: "$1,500",
+    pricePeriod: "+ $99/mo",
+    secondaryNote: "One-time build ($1,500) + full ongoing management ($99/mo)",
     description:
-      "Complete bespoke website creation plus turnkey ultra-fast cloud hosting, daily offsite backups, continuous uptime defense, and on-demand content edits.",
-    highlights: [
-      "Complete Secure website build included ($900 value)",
-      "High-speed global cloud hosting across 300+ cities",
-      "Automated daily offsite backups & on-demand edits",
+      "Our most requested plan. You get the complete Secure business website build, and LevelUp takes full responsibility for high-speed cloud hosting, continuous uptime monitoring, daily backups, and up to 2 hours of monthly updates.",
+    summaryTags: [
+      "Full Secure Build Included",
+      "Managed Cloud Hosting",
+      "Daily Automated Backups",
+      "Up to 2h/mo Updates",
     ],
-    specs: [
-      { label: "Build Turnaround", value: "5 - 7 Business Days" },
-      { label: "Cloud Hosting", value: "Edge CDN Included" },
-      { label: "Backups", value: "Daily Automated Offsite" },
-      { label: "Care & Edits", value: "Monthly Updates Included" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Complete Website Build",
-        items: [
-          "Everything in the Secure build included ($900 value)",
-          "24/7 automated booking engine & calendar synchronization",
-          "Bespoke design custom-tailored to your exact brand identity",
-        ],
-      },
-      {
-        category: "Turnkey Cloud Hosting & CDN",
-        items: [
-          "High-speed cloud hosting across 300+ global edge locations",
-          "Automated daily offsite backups with instant 1-click restore",
-          "24/7 continuous uptime monitoring & automated health checks",
-        ],
-      },
-      {
-        category: "Continuous Care & Support",
-        items: [
-          "On-demand monthly content, copy, and layout adjustments",
-          "SSL renewals, DNS management & security patches",
-          "Priority direct phone, WhatsApp, and email support",
-        ],
-      },
-    ],
+    revisions: "3 build revision rounds + up to 2 hours of monthly updates",
+    ctaText: "Choose Secure + Care ($1,500 + $99/mo)",
     ctaHref: "/contact?plan=secure-care",
-    ctaText: "Get started with Secure + Care",
+    categories: [
+      {
+        name: "Complete Secure Build Included",
+        items: [
+          "Everything in the $1,500 Secure plan included from day one",
+          "24/7 online booking engine & 2-way calendar sync",
+          "Full cybersecurity hardening & access control review",
+          "Advanced local SEO & Google Business Profile setup",
+          "3 rounds of build revisions included",
+        ],
+      },
+      {
+        name: "Hosting & Cloud Infrastructure",
+        items: [
+          "Managed ultra-fast cloud hosting on edge infrastructure",
+          "Global Content Delivery Network (CDN) distribution",
+          "Continuous SSL management and automatic certificate renewal",
+          "Domain and DNS configuration assistance",
+          "CI/CD deployment management & zero-downtime updates",
+        ],
+      },
+      {
+        name: "Protection & Reliability",
+        items: [
+          "Automated daily offsite backups with instant recovery assistance",
+          "24/7 continuous uptime monitoring & health checks",
+          "Proactive security monitoring & threat mitigation",
+          "Regular dependency & security patch maintenance",
+          "Disaster recovery assistance",
+        ],
+      },
+      {
+        name: "Ongoing Monthly Support",
+        items: [
+          "Up to 2 hours of website updates included every month",
+          "Small content changes, staff changes & price adjustments",
+          "Text, copy, and photo/portfolio updates",
+          "Minor layout adjustments and seasonal announcements",
+          "Priority developer support via email, phone, and WhatsApp",
+        ],
+      },
+    ],
   },
   {
-    id: "custom-build",
-    name: "Enterprise",
-    subtitle: "for mission-critical systems",
-    price: "Custom",
-    pricePeriod: "one-time quote",
-    tags: ["Custom architecture", "API & ERP integrations", "Dedicated team"],
-    buttonText: "See Enterprise plan",
+    id: "custom",
+    name: "Custom Build",
+    badge: "Advanced Architecture",
+    subtitle: "For companies requiring advanced web applications, custom workflows & AI",
+    price: "Starting at $3,000+",
+    pricePeriod: "based on scope",
+    secondaryNote: "Tailored quote based on your technical requirements",
     description:
-      "Bespoke engineering for high-volume platforms, multi-location businesses, custom web applications, and systems requiring enterprise integrations and custom SLAs.",
-    highlights: [
-      "Tailored multi-page web platform or client portal",
-      "Custom CRM, ERP, and API third-party integrations",
-      "Dedicated solutions architect & custom SLA",
+      "Engineered for ambitious companies, SaaS platforms, multi-location brands, and web applications that require custom databases, third-party API/CRM integrations, custom workflows, or AI capabilities.",
+    summaryTags: [
+      "Custom Architecture",
+      "Web Apps & APIs",
+      "E-Commerce & Dashboards",
+      "AI & Automation",
     ],
-    specs: [
-      { label: "Architecture", value: "Custom Bespoke" },
-      { label: "Integrations", value: "API, ERP, CRM, Stripe" },
-      { label: "Team", value: "Dedicated Lead Engineer" },
-      { label: "Warranty", value: "Extended SLA & Training" },
-    ],
-    detailedFeatures: [
+    revisions: "Milestone-based reviews with dedicated lead architect",
+    ctaText: "Request Custom Proposal (From $3,000+)",
+    ctaHref: "/contact?plan=custom",
+    categories: [
       {
-        category: "Bespoke Engineering",
+        name: "Custom Web Applications",
         items: [
-          "Custom multi-page web platform, client portal, or SaaS application",
-          "Complex business workflow automation & database schema design",
-          "Third-party API integrations, Stripe payment workflows, and CRM sync",
+          "Bespoke system architecture engineered for scale",
+          "Advanced full-stack web applications and portals",
+          "Custom dashboards and internal business tools",
+          "E-commerce & custom payment checkout pipelines",
+          "Advanced multi-location booking or resource systems",
         ],
       },
       {
-        category: "Enterprise Security & Compliance",
+        name: "Integrations & Automation",
         items: [
-          "SOC2 / HIPAA / GDPR compliance hardening and auditing",
-          "Penetration testing & vulnerability assessment",
-          "Automated multi-region failover and disaster recovery",
+          "Third-party API integrations (Stripe, Twilio, SendGrid, etc.)",
+          "CRM and ERP business integrations",
+          "Business automation and data synchronization pipelines",
+          "AI integrations & intelligent backend features",
+          "Advanced SEO architecture for large dynamic catalogs",
         ],
       },
       {
-        category: "VIP Incident Response & SLA",
+        name: "Databases, Security & Governance",
         items: [
-          "Designated senior software engineer & solution architect",
-          "Comprehensive staff training & technical documentation",
-          "Custom service-level agreement (SLA) with emergency turnaround",
+          "Custom relational or NoSQL databases (Cloud SQL, Firestore, Redis)",
+          "Advanced authentication, SSO, and role-based access control (RBAC)",
+          "Custom workflows tailored to company operations",
+          "Dedicated solutions engineer & milestone reviews",
+          "Custom Service Level Agreements (SLA) available",
         ],
       },
     ],
-    ctaHref: "/contact?plan=custom-enterprise",
-    ctaText: "Request Custom Proposal",
-  },
-];
-
-// 2. Monthly Subscriptions (Abonnements mensuels - matching reference image)
-const subscriptionPlans: PlanItem[] = [
-  {
-    id: "free-sub",
-    name: "Free",
-    subtitle: "for hobby projects",
-    price: "$0",
-    pricePeriod: "/month",
-    tags: ["Unmetered DDoS", "Universal SSL", "Global CDN"],
-    buttonText: "See Free plan",
-    description:
-      "Get started with zero cost. Perfect for prototypes, personal experiments, or previewing our next-generation architecture.",
-    highlights: [
-      "$0 forever, no credit card required",
-      "Instant setup in our interactive studio",
-      "Sub-second global edge network",
-    ],
-    specs: [
-      { label: "Bandwidth", value: "10 GB / month" },
-      { label: "Uptime SLA", value: "99.9% standard" },
-      { label: "SSL Protocol", value: "Automated HTTPS / TLS 1.3" },
-      { label: "Support", value: "Community & Documentation" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Infrastructure & Speed",
-        items: [
-          "Global CDN edge caching across 300+ points of presence",
-          "Next.js 15 modern framework architecture",
-          "Automated Brotli and Gzip asset compression",
-        ],
-      },
-      {
-        category: "Security & Protection",
-        items: [
-          "Unmetered Layer 3/4 DDoS protection",
-          "Universal wildcard SSL certificate auto-renewed",
-          "Automatic HTTP/3 and IPv6 protocol support",
-        ],
-      },
-      {
-        category: "Support & Resources",
-        items: [
-          "Full access to LevelUp documentation",
-          "Community Discord and public knowledge base",
-        ],
-      },
-    ],
-    ctaHref: "https://studio.levelup-ecosystem.com",
-    ctaText: "Launch free preview",
-  },
-  {
-    id: "pro-sub",
-    name: "Pro",
-    subtitle: "for pro websites",
-    price: "$20",
-    pricePeriod: "/mo billed annually",
-    secondaryPrice: "or $25/mo billed monthly",
-    badge: "Most Popular",
-    tags: ["Image optimization", "Bot protection", "Ticket support"],
-    buttonText: "See Pro plan",
-    description:
-      "Engineered for freelancers, independent professionals, and emerging brands that need high speed, custom domain power, and active defense.",
-    highlights: [
-      "Custom domain connection with automated DNS setup",
-      "Next-generation WebP/AVIF image pipeline",
-      "Intelligent anti-scraping and bot mitigation",
-    ],
-    specs: [
-      { label: "Bandwidth", value: "100 GB / month" },
-      { label: "Uptime SLA", value: "99.95% high availability" },
-      { label: "Backups", value: "Weekly automated offsite snapshots" },
-      { label: "Support", value: "Direct ticket support (under 24h)" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Performance & Optimization",
-        items: [
-          "Real-time on-the-fly image & asset optimization (WebP/AVIF)",
-          "Google Core Web Vitals optimization (sub-1.5s load times)",
-          "Dynamic edge caching and global asset distribution",
-        ],
-      },
-      {
-        category: "Defense & Reliability",
-        items: [
-          "Intelligent AI bot shield and rate limiting",
-          "Contact form anti-spam shield and captcha bypass prevention",
-          "Continuous uptime and SSL expiration monitoring",
-        ],
-      },
-      {
-        category: "Support & Maintenance",
-        items: [
-          "1 hour monthly included content, copy, and layout adjustments",
-          "Direct email ticket support with guaranteed 24h response",
-          "Full code export capability with zero vendor lock-in",
-        ],
-      },
-    ],
-    ctaHref: "/contact?plan=pro",
-    ctaText: "Get started with Pro",
-  },
-  {
-    id: "business-sub",
-    name: "Business",
-    subtitle: "for small business",
-    price: "$200",
-    pricePeriod: "/mo billed annually",
-    secondaryPrice: "or $250/mo billed monthly",
-    badge: "Recommended",
-    tags: ["PCI DSS 4.0", "100% uptime SLA", "Chat support"],
-    buttonText: "See Business plan",
-    description:
-      "A complete turnkey digital headquarters. Includes 24/7 automated booking, bank-grade payment security compliance, and direct live chat.",
-    highlights: [
-      "24/7 automated appointment booking & live calendar sync",
-      "PCI DSS 4.0 compliance & hardened database security",
-      "100% uptime SLA with dedicated edge routing",
-    ],
-    specs: [
-      { label: "Bandwidth", value: "1 TB / month" },
-      { label: "Uptime SLA", value: "100% financially-backed SLA" },
-      { label: "Backups", value: "Daily offsite snapshots (30-day retention)" },
-      { label: "Support", value: "Live Chat & Priority WhatsApp" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Conversion & Booking Engine",
-        items: [
-          "24/7 automated appointment scheduling system",
-          "Bi-directional calendar sync (Google, Apple, Square, Calendly)",
-          "Automated SMS & email booking reminders to reduce no-shows",
-        ],
-      },
-      {
-        category: "Security & Compliance",
-        items: [
-          "PCI DSS 4.0 payment gateway protection standards",
-          "Database row-level security (RLS) and access hardening",
-          "Continuous malware scanning and vulnerability monitoring",
-        ],
-      },
-      {
-        category: "Dedicated Growth & Care",
-        items: [
-          "3 hours monthly on-demand custom edits and new sections",
-          "Monthly Google Local SEO & Business Profile rank audits",
-          "Direct priority WhatsApp and live chat with engineering team",
-        ],
-      },
-    ],
-    ctaHref: "/contact?plan=business",
-    ctaText: "Get started with Business",
-  },
-  {
-    id: "contract-sub",
-    name: "Contract",
-    subtitle: "for mission-critical",
-    price: "Custom",
-    pricePeriod: "Billed annually",
-    tags: ["Network priority", "24/7 support", "Custom contracts"],
-    buttonText: "See Contract plan",
-    description:
-      "Bespoke engineering for high-volume enterprises, multi-location businesses, and mission-critical systems requiring strict compliance and 15-minute emergency SLA.",
-    highlights: [
-      "Dedicated network route with tier-1 edge priority",
-      "24/7/365 dedicated phone line with 15-minute response SLA",
-      "Custom enterprise agreements (BAA, SOC2, HIPAA, GDPR)",
-    ],
-    specs: [
-      { label: "Bandwidth", value: "Unlimited unmetered" },
-      { label: "Uptime SLA", value: "100% mission-critical guaranteed SLA" },
-      { label: "Backups", value: "Every 6 hours with multi-region replicas" },
-      { label: "Support", value: "24/7 Dedicated phone + designated engineer" },
-    ],
-    detailedFeatures: [
-      {
-        category: "Bespoke Architecture",
-        items: [
-          "Custom API, ERP, CRM, and internal system integrations",
-          "Multi-tenant & multi-location architecture support",
-          "Designated lead solutions architect and code reviews",
-        ],
-      },
-      {
-        category: "Enterprise Security & Governance",
-        items: [
-          "Advanced threat intelligence and customized WAF rules",
-          "SOC2 Type II, HIPAA, and GDPR compliance agreements",
-          "Annual third-party penetration testing and reports",
-        ],
-      },
-      {
-        category: "VIP Incident Response & SLA",
-        items: [
-          "Private Slack / Microsoft Teams channel with senior staff",
-          "15-minute incident response SLA for critical priority",
-          "Quarterly strategic roadmap & architectural consultations",
-        ],
-      },
-    ],
-    ctaHref: "/contact?plan=contract",
-    ctaText: "Request Enterprise Proposal",
   },
 ];
 
 interface PricingProps {
   className?: string;
+  showSectionTitle?: boolean;
 }
 
-export const Pricing = ({ className }: PricingProps) => {
-  // 'build' = Website Builds (One-time turnkey website development)
-  // 'subscription' = Monthly Subscriptions (Managed hosting, cybersecurity & proactive support)
-  const [billingType, setBillingType] = useState<"build" | "subscription">("build");
-  const [selectedPlan, setSelectedPlan] = useState<PlanItem | null>(null);
+export const Pricing = ({ className, showSectionTitle = true }: PricingProps) => {
+  const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
 
-  const activePlans = billingType === "build" ? buildPlans : subscriptionPlans;
+  const activeExpandedPlan = PRICING_PLANS.find((p) => p.id === expandedPlanId) || null;
 
-  // Close modal on Escape key press & handle body scroll
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedPlan(null);
-      }
-    };
-    if (selectedPlan) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "unset";
+  const handleSelectPlan = (planId: string) => {
+    setExpandedPlanId((prev) => (prev === planId ? null : planId));
+    // Scroll into view smoothly if user is deep
+    const element = document.getElementById("pricing-plans-container");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    return () => {
-      document.body.style.overflow = "unset";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedPlan]);
+  };
+
+  const handleBackToAll = () => {
+    setExpandedPlanId(null);
+    const element = document.getElementById("pricing-plans-container");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <section
       id="pricing"
-      className={cn("pt-6 sm:pt-10 pb-20 md:pb-28 overflow-hidden", className)}
+      className={cn("pt-8 sm:pt-12 pb-20 md:pb-28 overflow-hidden", className)}
     >
       <div className="container max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8 sm:mb-10">
-          <PremiumTextSectionReveal
-            heading="Transparent Plans. Tailored for Growth."
-            description="Select a turnkey website build or choose a monthly care plan. Inspect complete plan specifications and features with a single click."
-            headingAs="h2"
-            headingClassName="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]"
-            descriptionClassName="mt-3.5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
-            align="center"
-          />
-        </div>
-
-        {/* Compact, Sleek Toggle Switcher */}
-        <div className="flex justify-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center p-1 rounded-full bg-muted/60 dark:bg-neutral-900/90 border border-border/70 backdrop-blur-md shadow-2xs">
-            <button
-              type="button"
-              onClick={() => setBillingType("build")}
-              className={cn(
-                "rounded-full py-1 px-3.5 text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer",
-                billingType === "build"
-                  ? "bg-foreground text-background shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Website Builds
-            </button>
-            <button
-              type="button"
-              onClick={() => setBillingType("subscription")}
-              className={cn(
-                "rounded-full py-1 px-3.5 text-[11px] sm:text-xs font-medium transition-all duration-200 cursor-pointer",
-                billingType === "subscription"
-                  ? "bg-foreground text-background shadow-xs font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Monthly Subscriptions
-            </button>
-          </div>
-        </div>
-
-        {/* 4-Column Clean Layout with zero deformation on any viewport */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={billingType}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.22 }}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-              {activePlans.map((plan) => {
-                const isHighlighted = Boolean(plan.badge);
-
-                return (
-                  <div
-                    key={plan.id}
-                    className={cn(
-                      "relative flex flex-col justify-between rounded-2xl p-5 sm:p-6 transition-all duration-200 border",
-                      isHighlighted
-                        ? "bg-card border-violet-500/40 dark:border-violet-500/30 shadow-sm ring-1 ring-violet-500/20"
-                        : "bg-card/70 border-border/80 hover:border-foreground/30 shadow-xs"
-                    )}
-                  >
-                    {/* Top section */}
-                    <div className="min-w-0">
-                      {/* Eyebrow & Badge row with fixed height so cards are identical */}
-                      <div className="flex items-center justify-between h-5 mb-1.5">
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/75">
-                          {billingType === "build" ? "Turnkey Build" : "Care Plan"}
-                        </span>
-                        {plan.badge && (
-                          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider border border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-300">
-                            <Sparkles className="size-2.5 shrink-0" />
-                            {plan.badge}
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground truncate">
-                        {plan.name}
-                      </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-1 mt-0.5">
-                        {plan.subtitle}
-                      </p>
-
-                      {/* Price Section with uniform vertical rhythm */}
-                      <div className="mt-3 mb-1 pt-2.5 border-t border-border/50">
-                        <div className="flex items-baseline gap-1.5 flex-wrap">
-                          <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-                            {plan.price}
-                          </span>
-                          <span className="text-xs text-muted-foreground font-medium">
-                            {plan.pricePeriod}
-                          </span>
-                        </div>
-                        <div className="h-4 mt-0.5">
-                          {plan.secondaryPrice ? (
-                            <p className="text-[10.5px] text-muted-foreground/80 truncate">
-                              {plan.secondaryPrice}
-                            </p>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      {/* Tags with fixed min-height for uniform alignment */}
-                      <div className="flex flex-wrap gap-1.5 my-2.5 min-h-[48px] pt-1">
-                        {plan.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-[10px] text-muted-foreground font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Bottom Action Button pinned to bottom */}
-                    <div className="pt-3 mt-auto">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedPlan(plan)}
-                        className={cn(
-                          "w-full rounded-xl py-2 px-3 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.98] text-center",
-                          isHighlighted
-                            ? "bg-foreground text-background hover:opacity-90"
-                            : "border border-border/80 bg-background hover:bg-muted text-foreground"
-                        )}
-                      >
-                        {plan.buttonText}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Plan Details Interactive Modal / Drawer */}
-      <AnimatePresence>
-        {selectedPlan && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setSelectedPlan(null)}
-              className="fixed inset-0 bg-black/75 backdrop-blur-md"
+        {/* Section Header */}
+        {showSectionTitle && (
+          <div className="mb-10 sm:mb-12">
+            <PremiumTextSectionReveal
+              heading="Transparent Offers. Built to Scale."
+              description="From high-speed local business showcase sites to full automated booking systems and managed care plans. Choose an offer below to inspect all included deliverables."
+              headingAs="h2"
+              headingClassName="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]"
+              descriptionClassName="mt-3.5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
+              align="center"
             />
-
-            {/* Modal Dialog Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              transition={{ type: "spring", damping: 25, stiffness: 350 }}
-              className="relative w-full max-w-2xl rounded-2xl border border-border/90 bg-card p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto"
-            >
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setSelectedPlan(null)}
-                className="absolute top-5 right-5 flex size-8 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer"
-                aria-label="Close modal"
-              >
-                <X className="size-4" />
-              </button>
-
-              {/* Modal Header */}
-              <div className="border-b border-border/60 pb-6 pr-8">
-                <div className="flex items-center gap-2.5">
-                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                    {selectedPlan.name} Plan
-                  </h3>
-                  {selectedPlan.badge && (
-                    <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 text-xs font-semibold text-purple-400">
-                      {selectedPlan.badge}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {selectedPlan.subtitle}
-                </p>
-
-                {/* Price Summary */}
-                <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-3xl sm:text-4xl font-extrabold text-foreground">
-                    {selectedPlan.price}
-                  </span>
-                  <span className="text-sm text-muted-foreground font-medium">
-                    {selectedPlan.pricePeriod}
-                  </span>
-                  {selectedPlan.secondaryPrice && (
-                    <span className="text-xs text-muted-foreground/80 pl-2">
-                      ({selectedPlan.secondaryPrice})
-                    </span>
-                  )}
-                </div>
-
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                  {selectedPlan.description}
-                </p>
-              </div>
-
-              {/* Key Highlights */}
-              <div className="py-5 border-b border-border/60">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
-                  Key Highlights
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {selectedPlan.highlights.map((highlight, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-start gap-2 text-xs text-foreground/90"
-                    >
-                      <Sparkles className="size-3.5 text-purple-400 shrink-0 mt-0.5" />
-                      <span>{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Specs Grid */}
-              <div className="py-5 border-b border-border/60">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">
-                  Technical Specifications
-                </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {selectedPlan.specs.map((spec, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-lg border border-border/70 bg-muted/20 p-2.5 text-start"
-                    >
-                      <span className="text-[10px] uppercase font-mono text-muted-foreground block">
-                        {spec.label}
-                      </span>
-                      <span className="text-xs font-semibold text-foreground mt-0.5 block">
-                        {spec.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Categorized Detailed Features */}
-              <div className="py-5 space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Included Features &amp; Deliverables
-                </h4>
-                <div className="space-y-4">
-                  {selectedPlan.detailedFeatures.map((group, gIdx) => (
-                    <div
-                      key={gIdx}
-                      className="rounded-xl border border-border/60 bg-muted/15 p-4"
-                    >
-                      <p className="text-xs font-bold text-foreground mb-2.5">
-                        {group.category}
-                      </p>
-                      <ul className="space-y-2">
-                        {group.items.map((item, itemIdx) => (
-                          <li
-                            key={itemIdx}
-                            className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed"
-                          >
-                            <Check className="size-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                            <span className="text-foreground/90">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Modal Footer / CTAs */}
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/60">
-                <button
-                  type="button"
-                  onClick={() => setSelectedPlan(null)}
-                  className="w-full sm:w-auto text-xs font-medium text-muted-foreground hover:text-foreground py-2 px-3 transition-colors text-center cursor-pointer"
-                >
-                  Close details
-                </button>
-
-                {selectedPlan.ctaHref.startsWith("http") ? (
-                  <Button asChild className="w-full sm:w-auto font-semibold">
-                    <a
-                      href={selectedPlan.ctaHref}
-                      className="gap-2"
-                    >
-                      {selectedPlan.ctaText}
-                      <ExternalLink className="size-3.5" />
-                    </a>
-                  </Button>
-                ) : (
-                  <Button asChild className="w-full sm:w-auto font-semibold">
-                    <Link
-                      href={selectedPlan.ctaHref}
-                      onClick={() => setSelectedPlan(null)}
-                      className="gap-2"
-                    >
-                      {selectedPlan.ctaText}
-                      <ArrowRight className="size-3.5" />
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </motion.div>
           </div>
         )}
-      </AnimatePresence>
+
+        <div id="pricing-plans-container" className="scroll-mt-28">
+          <AnimatePresence mode="wait">
+            {!activeExpandedPlan ? (
+              /* ========================================================================= */
+              /* 4-CARD OVERVIEW GRID: Clean, compact summary cards                        */
+              /* ========================================================================= */
+              <motion.div
+                key="all-cards-grid"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.28, ease: "easeInOut" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6"
+              >
+                {PRICING_PLANS.map((plan) => {
+                  const isHighlighted = plan.isPopular;
+
+                  return (
+                    <div
+                      key={plan.id}
+                      className={cn(
+                        "relative flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 border text-start",
+                        isHighlighted
+                          ? "bg-card border-violet-500/50 dark:border-violet-500/40 shadow-lg ring-1 ring-violet-500/25"
+                          : "bg-card/70 border-border/80 hover:border-foreground/30 shadow-xs hover:shadow-md",
+                      )}
+                    >
+                      {/* Top Content */}
+                      <div>
+                        {/* Header Badges */}
+                        <div className="flex items-center justify-between min-h-[26px] mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+                            Plan 0{PRICING_PLANS.findIndex((p) => p.id === plan.id) + 1}
+                          </span>
+                          {plan.badge && (
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border",
+                                isHighlighted
+                                  ? "border-violet-500/40 bg-violet-500/15 text-violet-600 dark:text-violet-300"
+                                  : "border-border/80 bg-muted/60 text-foreground/80",
+                              )}
+                            >
+                              {isHighlighted && <Sparkles className="size-2.5 shrink-0" />}
+                              {plan.badge}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title & Subtitle */}
+                        <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground font-sans">
+                          {plan.name}
+                        </h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-1 line-clamp-2 min-h-[34px]">
+                          {plan.subtitle}
+                        </p>
+
+                        {/* Price Section */}
+                        <div className="mt-4 mb-3 pt-3 border-t border-border/60">
+                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                            <span className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">
+                              {plan.price}
+                            </span>
+                            <span className="text-xs font-semibold text-muted-foreground">
+                              {plan.pricePeriod}
+                            </span>
+                          </div>
+                          {plan.secondaryNote ? (
+                            <p className="text-[11px] text-muted-foreground/85 mt-1 leading-snug">
+                              {plan.secondaryNote}
+                            </p>
+                          ) : (
+                            <p className="text-[11px] text-muted-foreground/60 mt-1">
+                              {plan.revisions}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Feature Summary Pills */}
+                        <div className="space-y-1.5 my-4 pt-1 border-t border-border/40">
+                          {plan.summaryTags.map((tag) => (
+                            <div
+                              key={tag}
+                              className="flex items-center gap-2 text-xs text-foreground/90 font-medium"
+                            >
+                              <Check className="size-3.5 text-emerald-500 shrink-0" />
+                              <span>{tag}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Button: Expands this card downward & hides others */}
+                      <div className="pt-4 mt-auto border-t border-border/40">
+                        <button
+                          type="button"
+                          onClick={() => handleSelectPlan(plan.id)}
+                          className={cn(
+                            "w-full rounded-2xl py-3 px-4 text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.98] text-center flex items-center justify-center gap-2 group",
+                            isHighlighted
+                              ? "bg-foreground text-background hover:opacity-90 shadow-md"
+                              : "border border-border/90 bg-muted/30 hover:bg-muted text-foreground",
+                          )}
+                        >
+                          <span>See {plan.name} plan</span>
+                          <ChevronDown className="size-4 transition-transform group-hover:translate-y-0.5" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              /* ========================================================================= */
+              /* EXPANDED SINGLE CARD VIEW: The other 3 disappear, this card enlarges      */
+              /* downwards showing all detailed categories and features                   */
+              /* ========================================================================= */
+              <motion.div
+                key={`expanded-${activeExpandedPlan.id}`}
+                initial={{ opacity: 0, scale: 0.98, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, y: -20 }}
+                transition={{ duration: 0.32, ease: "easeOut" }}
+                className={cn(
+                  "relative w-full rounded-3xl p-6 sm:p-8 lg:p-10 border transition-all shadow-xl text-start",
+                  activeExpandedPlan.isPopular
+                    ? "bg-card border-violet-500/50 dark:border-violet-500/40 ring-1 ring-violet-500/30"
+                    : "bg-card border-border/90 shadow-lg",
+                )}
+              >
+                {/* Back to all 4 plans navigation bar */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-border/70">
+                  <button
+                    type="button"
+                    onClick={handleBackToAll}
+                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-foreground/80 hover:text-foreground px-3.5 py-1.5 rounded-full border border-border/80 bg-muted/40 hover:bg-muted transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="size-3.5" />
+                    <span>Back to all 4 plans</span>
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground font-mono">
+                      Showing detailed specifications for:
+                    </span>
+                    <span className="text-xs font-bold text-foreground bg-muted px-2.5 py-1 rounded-md">
+                      {activeExpandedPlan.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Plan Main Presentation Banner */}
+                <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 pb-8 border-b border-border/70">
+                  <div className="lg:col-span-2 space-y-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground font-bold">
+                        Offer Breakdown
+                      </span>
+                      {activeExpandedPlan.badge && (
+                        <span className="inline-flex items-center gap-1 rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-wider border border-violet-500/40 bg-violet-500/15 text-violet-600 dark:text-violet-300">
+                          <Sparkles className="size-3 shrink-0" />
+                          {activeExpandedPlan.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground font-sans">
+                      {activeExpandedPlan.name} Plan
+                    </h3>
+
+                    <p className="text-base sm:text-lg font-semibold text-foreground/90">
+                      {activeExpandedPlan.subtitle}
+                    </p>
+
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl">
+                      {activeExpandedPlan.description}
+                    </p>
+
+                    {activeExpandedPlan.notIncludedNote && (
+                      <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-xs sm:text-sm text-amber-700 dark:text-amber-300 flex items-start gap-2.5">
+                        <Info className="size-4 shrink-0 mt-0.5" />
+                        <span>
+                          <strong>Scope boundary:</strong> {activeExpandedPlan.notIncludedNote}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pricing Callout Card */}
+                  <div className="p-6 rounded-2xl bg-muted/30 border border-border/80 flex flex-col justify-between space-y-4">
+                    <div>
+                      <span className="text-[11px] font-mono uppercase text-muted-foreground font-bold">
+                        Investment
+                      </span>
+                      <div className="mt-1 flex items-baseline gap-2 flex-wrap">
+                        <span className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">
+                          {activeExpandedPlan.price}
+                        </span>
+                        <span className="text-sm font-semibold text-muted-foreground">
+                          {activeExpandedPlan.pricePeriod}
+                        </span>
+                      </div>
+                      {activeExpandedPlan.secondaryNote && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {activeExpandedPlan.secondaryNote}
+                        </p>
+                      )}
+                      <div className="mt-3 pt-3 border-t border-border/60 text-xs text-foreground/80 space-y-1">
+                        <p>✓ {activeExpandedPlan.revisions}</p>
+                        <p>✓ 100% Full Code Ownership</p>
+                      </div>
+                    </div>
+
+                    <Button size="lg" asChild className="w-full font-bold">
+                      <Link href={activeExpandedPlan.ctaHref} className="gap-2">
+                        <span>Get this plan</span>
+                        <ArrowRight className="size-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Categorized Inclusions (Detailed breakdown that spreads downward) */}
+                <div className="mt-8 space-y-6">
+                  <div className="flex items-center gap-2">
+                    <Layers className="size-5 text-foreground" />
+                    <h4 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                      Everything Included in {activeExpandedPlan.name}
+                    </h4>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {activeExpandedPlan.categories.map((cat, cIdx) => (
+                      <div
+                        key={cIdx}
+                        className="p-5 rounded-2xl border border-border/70 bg-card/60 space-y-3.5"
+                      >
+                        <div className="flex items-center gap-2 pb-2 border-b border-border/60">
+                          {cIdx === 0 && <Zap className="size-4 text-amber-500" />}
+                          {cIdx === 1 && <Sparkles className="size-4 text-violet-500" />}
+                          {cIdx >= 2 && <Shield className="size-4 text-emerald-500" />}
+                          <h5 className="text-sm font-bold text-foreground tracking-tight">
+                            {cat.name}
+                          </h5>
+                        </div>
+
+                        <ul className="space-y-2.5">
+                          {cat.items.map((item, iIdx) => (
+                            <li
+                              key={iIdx}
+                              className="flex items-start gap-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                            >
+                              <Check className="size-4 text-emerald-500 shrink-0 mt-0.5" />
+                              <span className="text-foreground/90">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom Action Footer with Return Button */}
+                <div className="mt-10 pt-6 border-t border-border/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <button
+                    type="button"
+                    onClick={handleBackToAll}
+                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="size-4" />
+                    <span>View all 4 plans</span>
+                  </button>
+
+                  <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                    <Button variant="outline" asChild className="w-full sm:w-auto">
+                      <Link href="/faq">Have questions? Read FAQ</Link>
+                    </Button>
+                    <Button asChild className="w-full sm:w-auto font-bold">
+                      <Link href={activeExpandedPlan.ctaHref} className="gap-2">
+                        <span>{activeExpandedPlan.ctaText}</span>
+                        <ArrowRight className="size-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </section>
   );
 };
