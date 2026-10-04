@@ -1,14 +1,11 @@
 import type { MetadataRoute } from "next";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 import { defaultProjects } from "@/data/projects";
-import { db } from "@/lib/firebase";
-import { getEntities } from "@/lib/supabase";
+import { getProjects } from "@/lib/supabase";
 
 /**
  * Dynamic Sitemap Generator for Next.js App Router:
- * Fetches all active client and showcase project records directly from Firebase Firestore,
- * merges them with core service and landing pages, and returns high-priority Google crawl directives.
+ * Merges high-authority static pages and client projects from Supabase.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://levelup-ecosystem.com";
@@ -32,12 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/projects`,
       lastModified: now,
       changeFrequency: "weekly",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/entities`,
-      lastModified: now,
-      changeFrequency: "daily",
       priority: 0.95,
     },
     {
@@ -84,41 +75,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // 2. Dynamic project routes from Firestore
+  // 2. Dynamic project routes from Supabase
   const dynamicProjectRoutes: MetadataRoute.Sitemap = [];
   const processedProjectIds = new Set<string>();
 
   try {
-    const projectsCol = collection(db, "projects");
-    const q = query(projectsCol, orderBy("step", "asc"));
-    const snapshot = await getDocs(q);
-
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const slug = data.slug || docSnap.id;
-
-      if (slug && !processedProjectIds.has(slug)) {
-        processedProjectIds.add(slug);
-
-        let lastModifiedDate = now;
-        if (data.updatedAt?.toDate) {
-          lastModifiedDate = data.updatedAt.toDate();
-        } else if (data.createdAt?.toDate) {
-          lastModifiedDate = data.createdAt.toDate();
+    const projects = await getProjects();
+    if (Array.isArray(projects)) {
+      for (const item of projects) {
+        const slug = item.id;
+        if (slug && !processedProjectIds.has(slug)) {
+          processedProjectIds.add(slug);
+          const lastModifiedDate = item.updated_at ? new Date(item.updated_at) : now;
+          dynamicProjectRoutes.push({
+            url: `${baseUrl}/projects/${slug}`,
+            lastModified: lastModifiedDate,
+            changeFrequency: "weekly",
+            priority: 0.85,
+          });
         }
-
-        dynamicProjectRoutes.push({
-          url: `${baseUrl}/projects/${slug}`,
-          lastModified: lastModifiedDate,
-          changeFrequency: "weekly",
-          priority: 0.85,
-        });
       }
-    });
+    }
   } catch (err) {
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
-      console.warn("[Sitemap] Could not retrieve live projects from Firestore, using fallbacks:", err);
+      console.warn("[Sitemap] Could not retrieve live projects from Supabase, using fallbacks:", err);
     }
   }
 
@@ -135,31 +116,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // 4. Dynamic entity profiles from Supabase (Programmatic SEO)
-  const dynamicEntityRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const entities = await getEntities();
-    for (const entity of entities) {
-      let lastMod = now;
-      if (entity.updated_at) {
-        lastMod = new Date(entity.updated_at);
-      } else if (entity.created_at) {
-        lastMod = new Date(entity.created_at);
-      }
-
-      dynamicEntityRoutes.push({
-        url: `${baseUrl}/entities/${entity.slug}`,
-        lastModified: lastMod,
-        changeFrequency: "weekly",
-        priority: 0.9,
-      });
-    }
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.warn("[Sitemap] Could not retrieve entities for sitemap:", err);
-    }
-  }
-
-  return [...staticRoutes, ...dynamicProjectRoutes, ...dynamicEntityRoutes];
+  return [...staticRoutes, ...dynamicProjectRoutes];
 }

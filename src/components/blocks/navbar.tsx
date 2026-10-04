@@ -51,7 +51,6 @@ const SERVICES_ITEMS = [
 
 const NAV_LINKS = [
   { label: "Projects", href: "/projects" },
-  { label: "Annuaire", href: "/entities" },
   { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },
@@ -278,13 +277,19 @@ export const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  // On standalone digital project showcase pages, hide the root navbar to let the dedicated sticky header display
+  // On standalone digital project showcase pages (e.g. /projects/blackpater, /projects/wedding-invitation),
+  // hide the root navbar completely so the project retains 100% control of its own interface.
   if (
-    pathname === "/projects/wedding-invitation" ||
-    pathname === "/project/wedding-invitation" ||
-    pathname === "/retrouvailles"
+    pathname &&
+    (pathname.startsWith("/projects/") ||
+      pathname.startsWith("/project/") ||
+      pathname === "/retrouvailles")
   ) {
-    return null;
+    const segments = pathname.split("/").filter(Boolean);
+    // If there is an ID/slug after "projects" or "project", it is a project space
+    if (segments.length >= 2 || pathname === "/retrouvailles") {
+      return null;
+    }
   }
 
   return (
@@ -310,15 +315,15 @@ export const Navbar = () => {
       )}
 
       {/* Top seamless gradient fade:
-          When header is hidden: provides an elegant gradient veil (h-14 sm:h-20 opacity-100) that gently dissolves text scrolling under the top edge */}
+          Refined compact veil that softens content scrolling under top edge without hiding text or headers */}
       <div
         className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,var(--background)_65%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           !showHeader && isScrolled
-            ? "h-14 sm:h-20 opacity-100 translate-y-0"
+            ? "h-6 sm:h-8 opacity-60 translate-y-0"
             : !isScrolled && !isServicesOpen
-              ? "h-20 sm:h-24 max-lg:opacity-100 lg:opacity-0 translate-y-0"
-              : "h-20 sm:h-24 opacity-100 translate-y-0",
+              ? "h-6 sm:h-8 max-lg:opacity-60 lg:opacity-0 translate-y-0"
+              : "h-8 sm:h-10 opacity-70 translate-y-0",
         )}
         aria-hidden="true"
       />

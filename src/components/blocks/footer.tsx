@@ -1,10 +1,27 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer completely inside standalone project interfaces
+  if (
+    pathname &&
+    (pathname.startsWith("/projects/") ||
+      pathname.startsWith("/project/") ||
+      pathname === "/retrouvailles")
+  ) {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length >= 2 || pathname === "/retrouvailles") {
+      return null;
+    }
+  }
+
   const navigation = [
     { name: "Services", href: "/services" },
     { name: "Projects", href: "/projects" },
-    { name: "Annuaire", href: "/entities" },
     { name: "About Us", href: "/about" },
     { name: "Pricing", href: "/pricing" },
     { name: "FAQ", href: "/faq" },

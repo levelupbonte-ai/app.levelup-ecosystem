@@ -1,111 +1,30 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { ArrowLeft } from "lucide-react";
 
 import { allProjects } from "@/data/projects";
-import { db } from "@/lib/firebase";
+import { getProjects } from "@/lib/supabase";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
 }
 
-interface FirestoreProjectData {
-  title?: string;
-  shareTitle?: string;
-  description?: string;
-  shareDescription?: string;
-  image?: string;
-  ogImage?: string;
-  href?: string;
-  badge?: string;
-  external?: boolean;
-}
-
-/**
- * Reads project details dynamically from Firestore:
- * 1. Checks direct document ID: `doc(db, "projects", id)`
- * 2. Checks slug field query: `where("slug", "==", id)`
- */
-async function fetchProjectFromFirestore(id: string): Promise<FirestoreProjectData | null> {
-  try {
-    // 1. Direct document ID lookup
-    const docRef = doc(db, "projects", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data() as FirestoreProjectData;
-    }
-
-    // 2. Query by slug if ID does not match document ID directly
-    const projectsCol = collection(db, "projects");
-    const slugQuery = query(projectsCol, where("slug", "==", id));
-    const slugSnap = await getDocs(slugQuery);
-    if (!slugSnap.empty) {
-      return slugSnap.docs[0].data() as FirestoreProjectData;
-    }
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.warn(`[Firestore OpenGraph] Could not fetch project "${id}":`, err);
-    }
-  }
-  return null;
+function BackToLevelUpButton() {
+  return (
+    <Link
+      href="/projects"
+      className="fixed top-4 left-4 z-[999] inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 hover:bg-black text-white/90 hover:text-white backdrop-blur-md border border-white/20 text-xs font-semibold tracking-wide transition-all duration-200 shadow-xl hover:scale-105 select-none"
+    >
+      <ArrowLeft className="w-3.5 h-3.5" />
+      <span>LevelUp</span>
+    </Link>
+  );
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { id } = await params;
 
-  // 1. Dynamic Firestore OpenGraph metadata lookup
-  const firestoreData = await fetchProjectFromFirestore(id);
-  if (firestoreData) {
-    const title =
-      firestoreData.shareTitle ||
-      firestoreData.title ||
-      "Client Project | LevelUp Ecosystem";
-    const description =
-      firestoreData.shareDescription ||
-      firestoreData.description ||
-      "Explore this custom web project engineered by LevelUp Ecosystem.";
-    const rawImage =
-      firestoreData.ogImage ||
-      firestoreData.image ||
-      "/og-image.jpg";
-    const imageUrl = rawImage.startsWith("http")
-      ? rawImage
-      : `https://levelup-ecosystem.com${rawImage}`;
-
-    return {
-      title: `${title} | LevelUp Ecosystem`,
-      description,
-      alternates: {
-        canonical: `/projects/${id}`,
-      },
-      openGraph: {
-        title,
-        description,
-        url: `https://levelup-ecosystem.com/projects/${id}`,
-        siteName: "LevelUp Ecosystem",
-        locale: "en_US",
-        type: "article",
-        images: [
-          {
-            url: imageUrl,
-            width: 1200,
-            height: 630,
-            alt: title,
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title,
-        description,
-        images: [imageUrl],
-        creator: "@levelupecosystem",
-      },
-    };
-  }
-
-  // 2. Known presets & fallbacks
   if (id === "wedding-invitation" || id === "retrouvailles" || id === "02") {
     const title = "Wedding & Private Event Digital Invitation | San Diego RSVP Experience";
     const description =
@@ -178,7 +97,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       twitter: {
         card: "summary_large_image",
         title: "Final Stop Barber Shop Case Study | LevelUp Ecosystem",
-        description,
+        description:
+          "Custom digital platform with real-time haircut scheduling and local business SEO.",
         images: [imageUrl],
         creator: "@levelupecosystem",
       },
@@ -186,9 +106,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   if (id === "blackpater" || id === "black-pater" || id === "03") {
-    const title = "Black_Pater — Jean-Pierre Lofumbwa · Le Prof | Digital Portfolio";
+    const title = "BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof | Cinematic Portfolio";
     const description =
-      "Bespoke digital editorial portfolio for Jean-Pierre Lofumbwa (« Le Prof »), Congolese educator, entrepreneur, and cultural ambassador in the United States.";
+      "Bespoke digital experience for Congolese educator, entrepreneur, and cultural ambassador Jean-Pierre Lofumbwa (Le Prof). Engineered by LevelUp Ecosystem.";
     const imageUrl = "https://levelup-ecosystem.com/projects/blackpater-card.jpg";
 
     return {
@@ -277,6 +197,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   if (id === "wedding-invitation" || id === "02") {
     return (
       <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
+        <BackToLevelUpButton />
         <iframe
           src="/projects/wedding-invitation.html"
           title="Wedding & Event Digital Invitation — RSVP & Celebration"
@@ -289,6 +210,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   if (id === "blackpater" || id === "black-pater" || id === "03") {
     return (
       <main className="fixed inset-0 w-full h-full bg-[#0c0a09] z-30 overflow-hidden">
+        <BackToLevelUpButton />
         <iframe
           src="/projects/blackpater-portofolio.html"
           title="BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof"
@@ -302,21 +224,30 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     redirect("https://finalstop.org");
   }
 
-  // Check Firestore live data first
-  const liveProject = await fetchProjectFromFirestore(id);
-  if (liveProject && liveProject.href) {
-    if (liveProject.external) {
-      redirect(liveProject.href);
+  // Check Supabase dynamic projects
+  try {
+    const liveProjects = await getProjects();
+    const liveProject = Array.isArray(liveProjects) ? liveProjects.find((p: { id: string }) => p.id === id) : null;
+    if (liveProject && liveProject.href) {
+      if (liveProject.external) {
+        redirect(liveProject.href);
+      }
+      return (
+        <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
+          <BackToLevelUpButton />
+          <iframe
+            src={liveProject.href}
+            title={liveProject.title || "Project Showcase"}
+            className="w-full h-full border-0 block"
+          />
+        </main>
+      );
     }
-    return (
-      <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
-        <iframe
-          src={liveProject.href}
-          title={liveProject.title || "Project Showcase"}
-          className="w-full h-full border-0 block"
-        />
-      </main>
-    );
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.warn("Could not query project from Supabase:", err);
+    }
   }
 
   const project = allProjects.find((p) => p.id === id);
@@ -326,6 +257,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
+      <BackToLevelUpButton />
       <iframe
         src={project.href}
         title={project.title}
