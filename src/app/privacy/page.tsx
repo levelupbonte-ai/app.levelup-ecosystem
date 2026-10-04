@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck, CheckCircle2, XCircle, Lock } from "lucide-react";
+import { getLegalDocument } from "@/lib/supabase";
 
 export const metadata = {
   title: "Privacy Policy | LevelUp Ecosystem",
@@ -7,7 +8,9 @@ export const metadata = {
     "Privacy Policy for LevelUp Ecosystem. How we handle client contact information, Google user data, security, and data protection.",
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const dynamicDoc = await getLegalDocument("privacy");
+
   return (
     <section className="mx-auto max-w-4xl px-4 py-28 lg:pt-40 lg:pb-32 overflow-x-hidden">
       <div className="mb-8">
@@ -28,11 +31,17 @@ export default function PrivacyPage() {
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3">
-          Privacy Policy
+          {dynamicDoc?.title || "Privacy Policy"}
         </h1>
         <p className="text-sm text-muted-foreground mb-8">
-          Last updated: October 2, 2026 • Operated by Richelieu Bonte (LevelUp Ecosystem)
+          Last updated: {dynamicDoc?.last_updated || "October 2, 2026"} • Operated by Richelieu Bonte (LevelUp Ecosystem)
         </p>
+
+        {dynamicDoc?.content_markdown ? (
+          <div className="space-y-6 text-foreground/90 leading-relaxed text-sm sm:text-base whitespace-pre-line">
+            {dynamicDoc.content_markdown}
+          </div>
+        ) : (
 
         <div className="space-y-10 text-foreground/90 leading-relaxed text-sm sm:text-base">
           <div>
@@ -228,6 +237,7 @@ export default function PrivacyPage() {
             </div>
           </div>
         </div>
+        )}
       </article>
     </section>
   );

@@ -372,9 +372,14 @@ const carePlans: PlanItem[] = [
 interface PricingProps {
   className?: string;
   showSectionTitle?: boolean;
+  initialPlans?: PlanItem[];
 }
 
-export const Pricing = ({ className, showSectionTitle = true }: PricingProps) => {
+export const Pricing = ({
+  className,
+  showSectionTitle = true,
+  initialPlans,
+}: PricingProps) => {
   const [billingTab, setBillingTab] = useState<"build" | "care">("build");
   const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
 
@@ -383,7 +388,8 @@ export const Pricing = ({ className, showSectionTitle = true }: PricingProps) =>
   const [selectedCareTier, setSelectedCareTier] = useState<"essential" | "pro" | "premium">("pro");
   const [isCareModalOpen, setIsCareModalOpen] = useState(false);
 
-  const activePlans = billingTab === "build" ? buildPlans : carePlans;
+  const effectiveBuildPlans = initialPlans && initialPlans.length > 0 ? initialPlans : buildPlans;
+  const activePlans = billingTab === "build" ? effectiveBuildPlans : carePlans;
   const activeExpandedPlan = activePlans.find((p) => p.id === expandedPlanId) || null;
 
   const handleTabChange = (tab: "build" | "care") => {

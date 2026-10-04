@@ -4,6 +4,7 @@ export function Footer() {
   const navigation = [
     { name: "Services", href: "/services" },
     { name: "Projects", href: "/projects" },
+    { name: "Annuaire", href: "/entities" },
     { name: "About Us", href: "/about" },
     { name: "Pricing", href: "/pricing" },
     { name: "FAQ", href: "/faq" },

@@ -51,6 +51,7 @@ const SERVICES_ITEMS = [
 
 const NAV_LINKS = [
   { label: "Projects", href: "/projects" },
+  { label: "Annuaire", href: "/entities" },
   { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },

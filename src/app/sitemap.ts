@@ -3,6 +3,7 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 import { defaultProjects } from "@/data/projects";
 import { db } from "@/lib/firebase";
+import { getEntities } from "@/lib/supabase";
 
 /**
  * Dynamic Sitemap Generator for Next.js App Router:
@@ -31,6 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/projects`,
       lastModified: now,
       changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/entities`,
+      lastModified: now,
+      changeFrequency: "daily",
       priority: 0.95,
     },
     {
@@ -128,5 +135,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...staticRoutes, ...dynamicProjectRoutes];
+  // 4. Dynamic entity profiles from Supabase (Programmatic SEO)
+  const dynamicEntityRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const entities = await getEntities();
+    for (const entity of entities) {
+      let lastMod = now;
+      if (entity.updated_at) {
+        lastMod = new Date(entity.updated_at);
+      } else if (entity.created_at) {
+        lastMod = new Date(entity.created_at);
+      }
+
+      dynamicEntityRoutes.push({
+        url: `${baseUrl}/entities/${entity.slug}`,
+        lastModified: lastMod,
+        changeFrequency: "weekly",
+        priority: 0.9,
+      });
+    }
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.warn("[Sitemap] Could not retrieve entities for sitemap:", err);
+    }
+  }
+
+  return [...staticRoutes, ...dynamicProjectRoutes, ...dynamicEntityRoutes];
 }
