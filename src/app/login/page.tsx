@@ -1,19 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Script from "next/script";
-import {
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signInWithCredential,
-  GoogleAuthProvider,
-} from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FcGoogle } from "react-icons/fc";
 import { Loader2, AlertCircle } from "lucide-react";
 
-import { auth, db } from "@/lib/firebase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase-client";
 import { Background } from "@/components/background";
 import { Logo } from "@/components/logo";
 import { LevelUpTransitionOverlay } from "@/components/transition-overlay";
@@ -33,19 +25,16 @@ const Login = () => {
   const [targetStudioUrl, setTargetStudioUrl] = useState(STUDIO_URL);
   const [error, setError] = useState<string | null>(null);
 
-  const handleRedirectToStudio = async (user?: import("firebase/auth").User) => {
+  const handleRedirectToStudio = (session?: { access_token?: string; user?: { id: string; email?: string } }) => {
     try {
-      if (user) {
-        const idToken = await user.getIdToken();
+      if (session?.access_token && session.user) {
         if (typeof window !== "undefined") {
-          sessionStorage.setItem("levelup_auth_token", idToken);
-          sessionStorage.setItem("levelup_user_uid", user.uid);
-          sessionStorage.setItem("levelup_user_email", user.email || "");
+          sessionStorage.setItem("levelup_auth_token", session.access_token);
+          sessionStorage.setItem("levelup_user_uid", session.user.id);
+          sessionStorage.setItem("levelup_user_email", session.user.email || "");
         }
-        // Securely pass token via client-side URL hash fragment (RFC 6749 Section 4.2)
-        // Hash fragments are never sent in HTTP request headers or logged by intermediate proxies
         setTargetStudioUrl(
-          `${STUDIO_URL}/#auth_token=${encodeURIComponent(idToken)}&uid=${encodeURIComponent(user.uid)}&email=${encodeURIComponent(user.email || "")}`
+          `${STUDIO_URL}/#auth_token=${encodeURIComponent(session.access_token)}&uid=${encodeURIComponent(session.user.id)}&email=${encodeURIComponent(session.user.email || "")}`
         );
       } else {
         setTargetStudioUrl(STUDIO_URL);
@@ -56,53 +45,15 @@ const Login = () => {
     setIsRedirecting(true);
   };
 
-  // Google One Tap automatic prompt handler
-  const handleGoogleCredentialResponse = async (response: { credential?: string }) => {
-    if (!response.credential) return;
-    try {
-      setGoogleLoading(true);
-      setError(null);
-      const credential = GoogleAuthProvider.credential(response.credential);
-      const userCredential = await signInWithCredential(auth, credential);
-      const user = userCredential.user;
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          user_id: user.uid,
-          name: user.displayName || user.email?.split("@")[0] || "Architect",
-          email: user.email || "",
-          role: "architect",
-        });
-      }
-
-      handleRedirectToStudio(user);
-    } catch (err: unknown) {
-      // eslint-disable-next-line no-console
-      console.error("Google One Tap error:", err);
-      setGoogleLoading(false);
-    }
-  };
-
-  const initGoogleOneTap = useCallback(() => {
-    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    if (typeof window !== "undefined" && (window as unknown as { google?: { accounts?: { id?: { initialize: (c: unknown) => void; prompt: () => void } } } }).google?.accounts?.id && clientId) {
-      (window as unknown as { google: { accounts: { id: { initialize: (c: unknown) => void; prompt: () => void } } } }).google.accounts.id.initialize({
-        client_id: clientId,
-        callback: handleGoogleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-      (window as unknown as { google: { accounts: { id: { prompt: () => void } } } }).google.accounts.id.prompt();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  // Check active Supabase session on initial mount
   useEffect(() => {
-    initGoogleOneTap();
-  }, [initGoogleOneTap]);
+    if (!isSupabaseConfigured) return;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        handleRedirectToStudio({ access_token: session.access_token, user: session.user });
+      }
+    });
+  }, []);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,38 +63,28 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
-      const user = userCredential.user;
-
-      // Ensure user profile document exists in Firestore /users/{uid}
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          user_id: user.uid,
-          name: user.displayName || user.email?.split("@")[0] || "Architect",
-          email: user.email || email.trim(),
-          role: "architect",
-        });
+      if (!isSupabaseConfigured) {
+        // Dev fallback if keys aren't set yet
+        handleRedirectToStudio();
+        return;
       }
 
-      handleRedirectToStudio(user);
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message || "Invalid email address or password. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      handleRedirectToStudio(data.session ? { access_token: data.session.access_token, user: data.session.user } : undefined);
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Login error:", err);
-      const errCode = (err as { code?: string })?.code;
-      if (
-        errCode === "auth/invalid-credential" ||
-        errCode === "auth/wrong-password" ||
-        errCode === "auth/user-not-found"
-      ) {
-        setError("Invalid email address or password. Please try again.");
-      } else if (errCode === "auth/too-many-requests") {
-        setError("Too many failed attempts. Please reset your password or try again later.");
-      } else {
-        setError("An error occurred while signing in. Please check your connection and try again.");
-      }
+      setError("An error occurred while signing in. Please check your connection and try again.");
       setLoading(false);
     }
   };
@@ -153,31 +94,26 @@ const Login = () => {
     setGoogleLoading(true);
 
     try {
-      const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      const user = userCredential.user;
-
-      // Check or create Firestore document in /users/{uid}
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          user_id: user.uid,
-          name: user.displayName || user.email?.split("@")[0] || "Architect",
-          email: user.email || "",
-          role: "architect",
-        });
+      if (!isSupabaseConfigured) {
+        handleRedirectToStudio();
+        return;
       }
 
-      handleRedirectToStudio(user);
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: typeof window !== "undefined" ? `${window.location.origin}/login` : undefined,
+        },
+      });
+
+      if (authError) {
+        setError(authError.message || "Could not complete Google sign-in. Please try again.");
+        setGoogleLoading(false);
+      }
     } catch (err: unknown) {
       // eslint-disable-next-line no-console
       console.error("Google sign in error:", err);
-      const errCode = (err as { code?: string })?.code;
-      if (errCode !== "auth/popup-closed-by-user") {
-        setError("Could not complete Google sign-in. Please try again or use email.");
-      }
+      setError("Could not complete Google sign-in. Please try again.");
       setGoogleLoading(false);
     }
   };
@@ -189,11 +125,6 @@ const Login = () => {
         title="Login Successful"
         subtitle="Redirecting securely to LevelStudio..."
         targetUrl={targetStudioUrl}
-      />
-      <Script
-        src="https://accounts.google.com/gsi/client"
-        strategy="afterInteractive"
-        onLoad={initGoogleOneTap}
       />
       <section className="py-28 lg:pt-44 lg:pb-32">
         <div className="container">

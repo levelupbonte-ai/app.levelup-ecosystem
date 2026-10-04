@@ -528,3 +528,167 @@ export async function getLegalDocument(slug: string): Promise<{
   }
 }
 
+/**
+ * Fetch published projects/case-studies from Supabase
+ */
+export async function getProjects() {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/projects?status=eq.published&order=order_index.asc`,
+      {
+        headers: {
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
+        },
+        next: { revalidate: 60 },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching projects from Supabase:", err);
+    return null;
+  }
+}
+
+/**
+ * Fetch FAQs from Supabase
+ */
+export async function getFaqs() {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/faqs?status=eq.published&order=order_index.asc`,
+      {
+        headers: {
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching FAQs from Supabase:", err);
+    return null;
+  }
+}
+
+/**
+ * Fetch Testimonials from Supabase
+ */
+export async function getTestimonials() {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/testimonials?status=eq.published&order=order_index.asc`,
+      {
+        headers: {
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching testimonials from Supabase:", err);
+    return null;
+  }
+}
+
+/**
+ * Record a new lead/inquiry into Supabase
+ */
+export async function recordLead(lead: {
+  name: string;
+  email: string;
+  company?: string;
+  employees?: string;
+  message?: string;
+  isWaitlisted?: boolean;
+  queuePosition?: number;
+  source?: string;
+}) {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: EFFECTIVE_SERVER_KEY!,
+        Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({
+        name: lead.name,
+        email: lead.email,
+        company: lead.company || null,
+        employees: lead.employees || null,
+        message: lead.message || null,
+        is_waitlisted: Boolean(lead.isWaitlisted),
+        queue_position: lead.queuePosition || 1,
+        source: lead.source || "website_contact",
+      }),
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.warn("Supabase recordLead error:", errText);
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.warn("Failed to record lead in Supabase:", err);
+    return null;
+  }
+}
+
+/**
+ * Record a booking / RSVP into Supabase
+ */
+export async function recordBooking(booking: {
+  type: "consultation" | "wedding_rsvp" | "preview_call";
+  name: string;
+  email: string;
+  phone?: string;
+  inviteCode?: string;
+  slotTime?: string;
+  status?: "pending" | "confirmed" | "cancelled";
+  meta?: Record<string, unknown>;
+}) {
+  if (!isConfigured()) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: EFFECTIVE_SERVER_KEY!,
+        Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({
+        type: booking.type,
+        name: booking.name,
+        email: booking.email,
+        phone: booking.phone || null,
+        invite_code: booking.inviteCode || null,
+        slot_time: booking.slotTime || null,
+        status: booking.status || "confirmed",
+        meta: booking.meta || {},
+      }),
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.warn("Supabase recordBooking error:", errText);
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.warn("Failed to record booking in Supabase:", err);
+    return null;
+  }
+}
+

@@ -1,5 +1,4 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getProjects } from "@/lib/supabase";
 
 export interface ProjectItem {
   id: string;
@@ -59,41 +58,43 @@ export const defaultProjects: ProjectItem[] = [
 export const allProjects: ProjectItem[] = defaultProjects;
 
 /**
- * Loads projects dynamically from Firebase Firestore `/projects` collection.
- * If the collection is empty or unreachable, cleanly falls back to the default items.
+ * Loads projects dynamically from Supabase PostgreSQL `projects` table.
+ * If Supabase is empty or unreachable, cleanly falls back to default projects.
  */
 export async function getLiveProjects(): Promise<ProjectItem[]> {
   try {
-    const projectsCol = collection(db, "projects");
-    const q = query(projectsCol, orderBy("step", "asc"));
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
+    const data = await getProjects();
+    if (!data || !Array.isArray(data) || data.length === 0) {
       return defaultProjects;
     }
 
-    const fetched: ProjectItem[] = [];
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      fetched.push({
-        id: docSnap.id,
-        step: data.step || "01",
-        badge: data.badge || "Client Project",
-        title: data.title || "Project",
-        description: data.description || "",
-        image: data.image || "/og-image.jpg",
-        href: data.href || "#",
-        external: data.external ?? true,
-        aspectRatio: data.aspectRatio || "aspect-[639/298]",
-        ctaText: data.ctaText || "Explore project",
-      });
-    });
-
-    return fetched.length > 0 ? fetched : defaultProjects;
+    return data.map((item: {
+      id: string;
+      step?: string;
+      badge?: string;
+      title?: string;
+      description?: string;
+      image?: string;
+      href?: string;
+      external?: boolean;
+      aspect_ratio?: string;
+      cta_text?: string;
+    }) => ({
+      id: item.id,
+      step: item.step || "01",
+      badge: item.badge || "Client Project",
+      title: item.title || "Project",
+      description: item.description || "",
+      image: item.image || "/og-image.jpg",
+      href: item.href || "#",
+      external: item.external ?? true,
+      aspectRatio: item.aspect_ratio || "aspect-[639/298]",
+      ctaText: item.cta_text || "Explore project",
+    }));
   } catch (err) {
     if (process.env.NODE_ENV === "development") {
       // eslint-disable-next-line no-console
-      console.warn("Could not fetch projects from Firestore, using defaults:", err);
+      console.warn("Could not fetch projects from Supabase, using defaults:", err);
     }
     return defaultProjects;
   }

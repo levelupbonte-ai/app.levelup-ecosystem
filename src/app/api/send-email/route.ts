@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 import {
   getInternalLeadAlertHtml,
   getPreviewRequestEmailHtml,
   getWeddingSimulationEmailHtml,
 } from "@/lib/email-templates";
-import { db } from "@/lib/firebase";
 import { isResendConfigured, resend } from "@/lib/resend";
+import { recordBooking, recordLead } from "@/lib/supabase";
 
 // Standard RFC 5322 email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -83,23 +82,20 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Log dispatch to Firestore with sanitized payload (only if configured)
-      if (db) {
-        try {
-          await addDoc(collection(db, "email_logs"), {
-            type: "wedding_rsvp",
-            to: cleanEmail,
-            from: "studio@levelup-ecosystem.com",
-            inviteCode: cleanInviteCode,
-            delivered: sendSuccess,
-            resendId: resendResponse?.data?.id || null,
-            createdAt: serverTimestamp(),
-          });
-        } catch (logErr) {
-          if (process.env.NODE_ENV === "development") {
-            // eslint-disable-next-line no-console
-            console.warn("[Firestore] Failed to log email record:", logErr);
-          }
+      // Persist RSVP booking into Supabase
+      try {
+        await recordBooking({
+          type: "wedding_rsvp",
+          name: cleanNom,
+          email: cleanEmail,
+          phone: cleanTelephone,
+          inviteCode: cleanInviteCode,
+          meta: { delivered: sendSuccess, resendId: resendResponse?.data?.id || null },
+        });
+      } catch (logErr) {
+        if (process.env.NODE_ENV === "development") {
+          // eslint-disable-next-line no-console
+          console.warn("[Supabase] Failed to persist wedding RSVP:", logErr);
         }
       }
 
@@ -191,24 +187,22 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Log dispatch in Firestore (only if configured)
-      if (db) {
-        try {
-          await addDoc(collection(db, "email_logs"), {
-            type: "preview_request",
-            to: cleanEmail,
-            from: "contact@levelup-ecosystem.com",
-            isWaitlisted: Boolean(isWaitlisted),
-            queuePosition: sanitizedQueuePosition,
-            delivered: clientDelivered,
-            teamAlertDelivered,
-            createdAt: serverTimestamp(),
-          });
-        } catch (logErr) {
-          if (process.env.NODE_ENV === "development") {
-            // eslint-disable-next-line no-console
-            console.warn("[Firestore] Failed to log preview request email:", logErr);
-          }
+      // Persist new client lead directly into Supabase
+      try {
+        await recordLead({
+          name: cleanName,
+          email: cleanEmail,
+          company: cleanCompany,
+          employees: cleanEmployees,
+          message: cleanMessage,
+          isWaitlisted: Boolean(isWaitlisted),
+          queuePosition: sanitizedQueuePosition,
+          source: "contact_preview_request",
+        });
+      } catch (logErr) {
+        if (process.env.NODE_ENV === "development") {
+          // eslint-disable-next-line no-console
+          console.warn("[Supabase] Failed to persist client lead:", logErr);
         }
       }
 

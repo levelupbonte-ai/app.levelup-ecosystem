@@ -107,11 +107,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon.svg" },
     ],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    shortcut: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
     title: "LevelUp Ecosystem | Full-Stack Web Engineering, Booking Systems & Security",
@@ -273,6 +275,8 @@ const jsonLdGraph = {
       "@id": "https://levelup-ecosystem.com/#org",
       name: "LevelUp Ecosystem",
       url: "https://levelup-ecosystem.com",
+      logo: "https://levelup-ecosystem.com/logo.svg",
+      image: "https://levelup-ecosystem.com/og-image.jpg",
       description:
         "LevelUp Ecosystem is a full-stack web development and cybersecurity engineering studio based in San Diego, California. We build high-speed websites, 24/7 online booking systems, bespoke digital invitations, and secure cloud architectures for local businesses, nationwide brands, and international clients.",
       address: {
