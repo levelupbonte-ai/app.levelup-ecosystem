@@ -83,21 +83,23 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Log dispatch to Firestore with sanitized payload
-      try {
-        await addDoc(collection(db, "email_logs"), {
-          type: "wedding_rsvp",
-          to: cleanEmail,
-          from: "studio@levelup-ecosystem.com",
-          inviteCode: cleanInviteCode,
-          delivered: sendSuccess,
-          resendId: resendResponse?.data?.id || null,
-          createdAt: serverTimestamp(),
-        });
-      } catch (logErr) {
-        if (process.env.NODE_ENV === "development") {
-          // eslint-disable-next-line no-console
-          console.warn("[Firestore] Failed to log email record:", logErr);
+      // Log dispatch to Firestore with sanitized payload (only if configured)
+      if (db) {
+        try {
+          await addDoc(collection(db, "email_logs"), {
+            type: "wedding_rsvp",
+            to: cleanEmail,
+            from: "studio@levelup-ecosystem.com",
+            inviteCode: cleanInviteCode,
+            delivered: sendSuccess,
+            resendId: resendResponse?.data?.id || null,
+            createdAt: serverTimestamp(),
+          });
+        } catch (logErr) {
+          if (process.env.NODE_ENV === "development") {
+            // eslint-disable-next-line no-console
+            console.warn("[Firestore] Failed to log email record:", logErr);
+          }
         }
       }
 
@@ -189,22 +191,24 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      // Log dispatch in Firestore
-      try {
-        await addDoc(collection(db, "email_logs"), {
-          type: "preview_request",
-          to: cleanEmail,
-          from: "contact@levelup-ecosystem.com",
-          isWaitlisted: Boolean(isWaitlisted),
-          queuePosition: sanitizedQueuePosition,
-          delivered: clientDelivered,
-          teamAlertDelivered,
-          createdAt: serverTimestamp(),
-        });
-      } catch (logErr) {
-        if (process.env.NODE_ENV === "development") {
-          // eslint-disable-next-line no-console
-          console.warn("[Firestore] Failed to log preview request email:", logErr);
+      // Log dispatch in Firestore (only if configured)
+      if (db) {
+        try {
+          await addDoc(collection(db, "email_logs"), {
+            type: "preview_request",
+            to: cleanEmail,
+            from: "contact@levelup-ecosystem.com",
+            isWaitlisted: Boolean(isWaitlisted),
+            queuePosition: sanitizedQueuePosition,
+            delivered: clientDelivered,
+            teamAlertDelivered,
+            createdAt: serverTimestamp(),
+          });
+        } catch (logErr) {
+          if (process.env.NODE_ENV === "development") {
+            // eslint-disable-next-line no-console
+            console.warn("[Firestore] Failed to log preview request email:", logErr);
+          }
         }
       }
 

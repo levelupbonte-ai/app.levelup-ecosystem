@@ -1,14 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 74 74" fill="none">
-  <g shape-rendering="geometricPrecision">
-    <polygon points="37,37 37,3 46.11,24.46" fill="#9F76ED" />
-    <polygon points="37,37 46.11,24.46 69.34,26.49" fill="#8040EB" />
-    <polygon points="37,37 69.34,26.49 51.74,41.79" fill="#6724DE" />
-    <polygon points="37,37 51.74,41.79 56.98,64.51" fill="#5015BC" />
-    <polygon points="37,37 56.98,64.51 37,52.5" fill="#3B0A9A" />
-    <polygon points="37,37 37,52.5 17.02,64.51" fill="#5517C7" />
-    <polygon points="37,37 17.02,64.51 22.26,41.79" fill="#722EE0" />
-    <polygon points="37,37 22.26,41.79 4.66,26.49" fill="#8F4CEE" />
-    <polygon points="37,37 4.66,26.49 27.89,24.46" fill="#B086F6" />
-    <polygon points="37,37 27.89,24.46 37,3" fill="#C3ADFA" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="lu_bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#0B0F17"/>
+      <stop offset="100%" stopColor="#1E1B4B"/>
+    </linearGradient>
+    <linearGradient id="lu_gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#818CF8"/>
+      <stop offset="50%" stopColor="#A78BFA"/>
+      <stop offset="100%" stopColor="#C084FC"/>
+    </linearGradient>
+    <linearGradient id="lu_glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#FFFFFF"/>
+      <stop offset="100%" stopColor="#E2E8F0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded squircle (Guarantees visibility on both light Google SERP and dark modes) -->
+  <rect width="512" height="512" rx="112" fill="url(#lu_bg)"/>
+  <rect x="8" y="8" width="496" height="496" rx="104" stroke="url(#lu_gold)" stroke-width="6" stroke-opacity="0.4"/>
+
+  <!-- Stylized Geometric LevelUp Apex Emblem -->
+  <!-- Ascending Level Chevron -->
+  <path d="M128 356 L256 160 L384 356 L312 356 L256 264 L200 356 Z" fill="url(#lu_glow)"/>
+  <path d="M256 160 L320 256 L256 220 L192 256 Z" fill="url(#lu_gold)"/>
+  
+  <!-- Subtle Horizon Dot -->
+  <circle cx="256" cy="116" r="18" fill="#FFFFFF"/>
 </svg>

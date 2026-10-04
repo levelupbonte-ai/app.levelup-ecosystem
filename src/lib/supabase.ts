@@ -107,15 +107,31 @@ Momon Samuel défend une culture d'excellence et d'indépendance créative, en c
   },
 ];
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+
+// Support both new Supabase format (sb_publishable_...) and legacy JWT anon format
+const SUPABASE_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.SUPABASE_PUBLISHABLE_KEY ||
+  process.env.SUPABASE_ANON_KEY;
+
+// Server-side secret key (sb_secret_... or legacy service_role)
+const SUPABASE_SECRET_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SECRET_KEY;
+
+// Use secret key on server if available, otherwise fall back to publishable key
+const EFFECTIVE_SERVER_KEY = SUPABASE_SECRET_KEY || SUPABASE_KEY;
 
 function isConfigured(): boolean {
   return Boolean(
     SUPABASE_URL &&
       !SUPABASE_URL.includes("your-project-id") &&
-      SUPABASE_ANON_KEY &&
-      !SUPABASE_ANON_KEY.includes("your-anon-public-key")
+      EFFECTIVE_SERVER_KEY &&
+      !EFFECTIVE_SERVER_KEY.includes("your-anon-public-key") &&
+      !EFFECTIVE_SERVER_KEY.includes("your-service-role")
   );
 }
 
@@ -177,8 +193,8 @@ export async function getEntities(options?: {
 
     const res = await fetch(`${SUPABASE_URL}/rest/v1/entities?${params.toString()}`, {
       headers: {
-        apikey: SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: EFFECTIVE_SERVER_KEY!,
+        Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
       },
       next: { revalidate: 60 }, // Incremental Static Regeneration (ISR) - 60s cache
     });
@@ -210,8 +226,8 @@ export async function getEntityBySlug(slug: string): Promise<Entity | null> {
       `${SUPABASE_URL}/rest/v1/entities?slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
       {
         headers: {
-          apikey: SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
         },
         next: { revalidate: 60 },
       }
@@ -437,8 +453,8 @@ export async function getPricingPlans(): Promise<PricingPlan[]> {
       `${SUPABASE_URL}/rest/v1/pricing_plans?status=eq.published&order=order_index.asc`,
       {
         headers: {
-          apikey: SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
         },
         next: { revalidate: 300 }, // 5 min cache
       }
@@ -464,8 +480,8 @@ export async function getSiteSettings(key = "general"): Promise<SiteSettings> {
       `${SUPABASE_URL}/rest/v1/site_settings?key=eq.${encodeURIComponent(key)}&limit=1`,
       {
         headers: {
-          apikey: SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
         },
         next: { revalidate: 300 },
       }
@@ -497,8 +513,8 @@ export async function getLegalDocument(slug: string): Promise<{
       `${SUPABASE_URL}/rest/v1/legal_documents?slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
       {
         headers: {
-          apikey: SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: EFFECTIVE_SERVER_KEY!,
+          Authorization: `Bearer ${EFFECTIVE_SERVER_KEY}`,
         },
         next: { revalidate: 300 },
       }

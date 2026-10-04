@@ -98,16 +98,16 @@ CREATE POLICY "Public read entities" ON public.entities FOR SELECT USING (status
 
 -- Write policies: Locked exclusively to Service Role (Admin Backend)
 DROP POLICY IF EXISTS "Admin write settings" ON public.site_settings;
-CREATE POLICY "Admin write settings" ON public.site_settings FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY "Admin write settings" ON public.site_settings FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Admin write pricing" ON public.pricing_plans;
-CREATE POLICY "Admin write pricing" ON public.pricing_plans FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY "Admin write pricing" ON public.pricing_plans FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Admin write legal" ON public.legal_documents;
-CREATE POLICY "Admin write legal" ON public.legal_documents FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY "Admin write legal" ON public.legal_documents FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Admin write entities" ON public.entities;
-CREATE POLICY "Admin write entities" ON public.entities FOR ALL USING (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY "Admin write entities" ON public.entities FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- ==============================================================================
 -- INITIAL SEED DATA

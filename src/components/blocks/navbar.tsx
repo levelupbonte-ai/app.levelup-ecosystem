@@ -118,8 +118,8 @@ function FooterStyleHeaderLogo({ className }: { className?: string }) {
             y2="90"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="currentColor" stopOpacity="0.95" />
-            <stop offset="1" stopColor="currentColor" stopOpacity="0.7" />
+            <stop stopColor="#FFFFFF" stopOpacity="1" />
+            <stop offset="1" stopColor="#E2E8F0" stopOpacity="0.9" />
           </linearGradient>
 
           <linearGradient
@@ -130,8 +130,8 @@ function FooterStyleHeaderLogo({ className }: { className?: string }) {
             y2="205"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="currentColor" stopOpacity="0.75" />
-            <stop offset="1" stopColor="currentColor" stopOpacity="0.45" />
+            <stop stopColor="#CBD5E1" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#94A3B8" stopOpacity="0.75" />
           </linearGradient>
         </defs>
       </svg>
