@@ -2,6 +2,7 @@ import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   devIndicators: false,
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
@@ -37,6 +38,21 @@ const nextConfig: NextConfig = {
         destination: "/projects/wedding-invitation",
         permanent: true,
       },
+      {
+        source: "/blackpater",
+        destination: "/projects/blackpater",
+        permanent: true,
+      },
+      {
+        source: "/blackpater.html",
+        destination: "/projects/blackpater",
+        permanent: true,
+      },
+      {
+        source: "/projects/blackpater-portofolio",
+        destination: "/projects/blackpater",
+        permanent: true,
+      },
     ];
   },
   async headers() {
@@ -49,10 +65,6 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
             key: "X-XSS-Protection",
             value: "1; mode=block",
           },
@@ -63,10 +75,6 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
-          },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
           },
         ],
       },

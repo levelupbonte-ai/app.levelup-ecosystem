@@ -78,12 +78,16 @@ export function CookieBanner() {
 
   useEffect(() => {
     setMounted(true);
+    let timer: NodeJS.Timeout | undefined;
     try {
       const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
       if (stored === "all" || stored === "declined" || stored === "custom") {
         setConsent(stored as CookieConsentStatus);
       } else {
-        setConsent(null); // Show banner
+        // Pop-up cookie appears exactly 6 seconds after arriving on the site
+        timer = setTimeout(() => {
+          setConsent(null);
+        }, 6000);
       }
 
       const storedPrefs = localStorage.getItem(COOKIE_PREFS_KEY);
@@ -93,8 +97,14 @@ export function CookieBanner() {
         if (typeof parsed.personalization === "boolean") setPersonalizationEnabled(parsed.personalization);
       }
     } catch {
-      setConsent(null);
+      timer = setTimeout(() => {
+        setConsent(null);
+      }, 6000);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   const handleAcceptAll = () => {

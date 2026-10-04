@@ -185,6 +185,44 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     };
   }
 
+  if (id === "blackpater" || id === "black-pater" || id === "03") {
+    const title = "Black_Pater — Jean-Pierre Lofumbwa · Le Prof | Digital Portfolio";
+    const description =
+      "Bespoke digital editorial portfolio for Jean-Pierre Lofumbwa (« Le Prof »), Congolese educator, entrepreneur, and cultural ambassador in the United States.";
+    const imageUrl = "https://levelup-ecosystem.com/projects/blackpater-card.jpg";
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: `/projects/blackpater`,
+      },
+      openGraph: {
+        title: "BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof",
+        description,
+        url: `https://levelup-ecosystem.com/projects/blackpater`,
+        siteName: "LevelUp Ecosystem",
+        locale: "en_US",
+        type: "article",
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: "Black_Pater — Jean-Pierre Lofumbwa Portfolio",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof",
+        description,
+        images: [imageUrl],
+        creator: "@levelupecosystem",
+      },
+    };
+  }
+
   const project = allProjects.find((p) => p.id === id);
   if (!project) {
     return {
@@ -242,6 +280,18 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         <iframe
           src="/projects/wedding-invitation.html"
           title="Wedding & Event Digital Invitation — RSVP & Celebration"
+          className="w-full h-full border-0 block"
+        />
+      </main>
+    );
+  }
+
+  if (id === "blackpater" || id === "black-pater" || id === "03") {
+    return (
+      <main className="fixed inset-0 w-full h-full bg-[#0c0a09] z-30 overflow-hidden">
+        <iframe
+          src="/projects/blackpater-portofolio.html"
+          title="BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof"
           className="w-full h-full border-0 block"
         />
       </main>

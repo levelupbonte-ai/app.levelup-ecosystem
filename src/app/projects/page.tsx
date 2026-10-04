@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Featured Projects & Case Studies | LevelUp Ecosystem",
   description:
-    "See recent client work and case studies from LevelUp Ecosystem, including Final Stop Barber Shop and Wedding Invitation. Built for conversion, automated booking, and speed.",
+    "See recent client work and case studies from LevelUp Ecosystem, including Final Stop Barber Shop, Wedding Invitation, and Black_Pater. Built for conversion, automated booking, and speed.",
   alternates: {
     canonical: "/projects",
   },
