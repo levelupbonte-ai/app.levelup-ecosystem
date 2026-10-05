@@ -84,10 +84,10 @@ export function CookieBanner() {
       if (stored === "all" || stored === "declined" || stored === "custom") {
         setConsent(stored as CookieConsentStatus);
       } else {
-        // Pop-up cookie appears exactly 6 seconds after arriving on the site
+        // Pop-up cookie appears exactly 10 seconds after arriving on the site
         timer = setTimeout(() => {
           setConsent(null);
-        }, 6000);
+        }, 10000);
       }
 
       const storedPrefs = localStorage.getItem(COOKIE_PREFS_KEY);
@@ -99,10 +99,18 @@ export function CookieBanner() {
     } catch {
       timer = setTimeout(() => {
         setConsent(null);
-      }, 6000);
+      }, 10000);
     }
 
+    // Support opening cookie preferences directly from /cookies page
+    const handleOpenSettings = () => {
+      setConsent(null);
+      setIsCustomizing(true);
+    };
+    window.addEventListener("levelup_open_cookie_settings", handleOpenSettings);
+
     return () => {
+      window.removeEventListener("levelup_open_cookie_settings", handleOpenSettings);
       if (timer) clearTimeout(timer);
     };
   }, []);

@@ -59,14 +59,14 @@ const NAV_LINKS = [
 
 /**
  * Top brand logo:
- * Uses the exact same SVG, gradients, and font typography as the footer at the bottom of the site,
- * scaled to small size with a sleek tilt on hover.
+ * Uses the exact SVG wordmark from the footer at the bottom of the site (without the star),
+ * rendered with high-contrast currentColor so it stays crisp in both light and dark modes.
  */
 function FooterStyleHeaderLogo({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "group relative select-none cursor-pointer transition-transform duration-300 ease-out hover:-rotate-2 hover:scale-[1.04] origin-bottom-left",
+        "group relative select-none cursor-pointer transition-transform duration-300 ease-out hover:-rotate-1 hover:scale-[1.03] origin-bottom-left",
         className,
       )}
     >
@@ -117,8 +117,8 @@ function FooterStyleHeaderLogo({ className }: { className?: string }) {
             y2="90"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#FFFFFF" stopOpacity="1" />
-            <stop offset="1" stopColor="#E2E8F0" stopOpacity="0.9" />
+            <stop stopColor="currentColor" stopOpacity="0.95" />
+            <stop offset="1" stopColor="currentColor" stopOpacity="0.80" />
           </linearGradient>
 
           <linearGradient
@@ -129,8 +129,8 @@ function FooterStyleHeaderLogo({ className }: { className?: string }) {
             y2="205"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#CBD5E1" stopOpacity="0.9" />
-            <stop offset="1" stopColor="#94A3B8" stopOpacity="0.75" />
+            <stop stopColor="currentColor" stopOpacity="0.75" />
+            <stop offset="1" stopColor="currentColor" stopOpacity="0.45" />
           </linearGradient>
         </defs>
       </svg>
@@ -168,34 +168,28 @@ export const Navbar = () => {
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const lastScrollYRef = useRef(0);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
-  // Keep header visible when scrolling smoothly across all pages
+  // Keep header visible and only hide gracefully after deep scroll (> 380px)
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const lastScrollY = lastScrollYRef.current;
 
-      // Track scroll progress along the top of the window
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalScroll > 0 ? (currentScrollY / totalScroll) * 100 : 0;
-      setScrollProgress(Math.min(100, Math.max(0, progress)));
-
-      if (currentScrollY <= 45) {
+      if (currentScrollY <= 60) {
         setIsScrolled(false);
         setShowHeader(true);
       } else {
         setIsScrolled(true);
 
-        // Directional scroll: scroll down -> hide header; scroll up -> show header
-        if (currentScrollY > lastScrollY + 6 && currentScrollY > 90) {
+        // Directional scroll: only hide when scrolled well past hero (> 380px) and scrolling downwards decisively
+        if (currentScrollY > 380 && currentScrollY > lastScrollY + 16) {
           setShowHeader(false);
-        } else if (currentScrollY < lastScrollY - 6) {
+        } else if (currentScrollY < lastScrollY - 8) {
           setShowHeader(true);
         }
       }
@@ -294,14 +288,6 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* Discreet, subtle reading / scroll progress bar along the very top of the screen */}
-      <div className="fixed top-0 inset-x-0 z-[120] h-[1.5px] bg-transparent pointer-events-none">
-        <div
-          className="h-full bg-violet-500/35 dark:bg-violet-400/40 transition-all duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
       {/* Full-screen backdrop for mobile menu */}
       {isMenuOpen && (
         <div
@@ -313,20 +299,6 @@ export const Navbar = () => {
           aria-hidden="true"
         />
       )}
-
-      {/* Top seamless gradient fade:
-          Refined compact veil that softens content scrolling under top edge without hiding text or headers */}
-      <div
-        className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 z-[80] bg-[linear-gradient(to_bottom,var(--background)_0%,transparent_100%)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          !showHeader && isScrolled
-            ? "h-6 sm:h-8 opacity-60 translate-y-0"
-            : !isScrolled && !isServicesOpen
-              ? "h-6 sm:h-8 max-lg:opacity-60 lg:opacity-0 translate-y-0"
-              : "h-8 sm:h-10 opacity-70 translate-y-0",
-        )}
-        aria-hidden="true"
-      />
 
       <header
         ref={headerRef}
@@ -412,9 +384,9 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-2.5">
             <ThemeToggle />
 
-            {/* Desktop Action Buttons: Book Now then Login */}
+            {/* Desktop Action Buttons: Start a Project then Login */}
             <div className="max-lg:hidden flex items-center gap-2">
-              <Link href="/contact" onClick={() => setIsServicesOpen(false)}>
+              <Link href="/start-project" onClick={() => setIsServicesOpen(false)}>
                 <Button
                   size="sm"
                   className={cn(
@@ -422,11 +394,11 @@ export const Navbar = () => {
                     !isScrolled && !isServicesOpen ? "px-5 py-2 text-sm" : "px-4 py-1.5 text-xs",
                   )}
                 >
-                  Book Now
+                  Start a Project
                 </Button>
               </Link>
 
-              {/* Login button right after Book Now */}
+              {/* Login button right after Start a Project */}
               <Link href="/login" onClick={() => setIsServicesOpen(false)}>
                 <Button
                   variant="ghost"
@@ -583,10 +555,10 @@ export const Navbar = () => {
               </Link>
             ))}
 
-            {/* Mobile Actions: Book Now then Login */}
+            {/* Mobile Actions: Start a Project then Login */}
             <div className="pt-4 space-y-2.5">
               <Link
-                href="/contact"
+                href="/start-project"
                 className="w-full block"
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -594,7 +566,7 @@ export const Navbar = () => {
                 }}
               >
                 <Button className="w-full font-semibold rounded-lg">
-                  Book Now
+                  Start a Project
                 </Button>
               </Link>
               <Link

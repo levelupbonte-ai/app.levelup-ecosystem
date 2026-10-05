@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 
 import { Background } from "@/components/background";
-import { Pricing } from "@/components/blocks/pricing";
+import { Pricing, type PlanItem } from "@/components/blocks/pricing";
 import { PricingTable } from "@/components/blocks/pricing-table";
 import { DashedLine } from "@/components/dashed-line";
 import { getPricingPlans } from "@/lib/supabase";
@@ -48,7 +48,7 @@ const Page = async () => {
     secondaryNote: sp.secondary_note || undefined,
     description: sp.description,
     shortPoints: sp.short_points || [],
-    fullFeatures: (sp.full_features as any) || [],
+    fullFeatures: (sp.full_features as PlanItem["fullFeatures"]) || [],
     ctaText: sp.cta_text || "Choose Plan",
     ctaHref: sp.cta_href || "/book",
   }));

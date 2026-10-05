@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 
 export { allProjects, type ProjectItem };
 
-const items: ProjectItem[] = [allProjects[0]];
+const items: ProjectItem[] = allProjects;
 
 /**
  * Desktop Pinned Sticky Scrub Showcase:
@@ -347,9 +347,7 @@ function MobileScaleOnScrollItem({
           }}
           className={cn(
             "relative w-full rounded-2xl sm:rounded-3xl border border-border/85 bg-card/90 shadow-xl hover:shadow-2xl transition-shadow overflow-hidden flex items-center justify-center p-1 sm:p-1.5 md:p-2 transform-gpu will-change-transform ring-1 ring-border/40",
-            item.id === "final-stop"
-              ? "aspect-[16/10] sm:aspect-[16/9] md:aspect-[639/298]"
-              : item.aspectRatio,
+            "aspect-[16/10] sm:aspect-[16/9] md:aspect-[639/298]",
           )}
         >
           {item.external ? (
@@ -506,8 +504,12 @@ export const Features = () => {
         </div>
 
         {/* Showcase Items */}
-        {items.map((item) => (
-          <BarberShopShowcase key={item.id} item={item} showExploreButton={true} />
+        {items.map((item, index) => (
+          <BarberShopShowcase
+            key={item.id}
+            item={item}
+            showExploreButton={index === items.length - 1}
+          />
         ))}
 
         {/* Explore More Projects in dedicated projects page (Mobile only) */}

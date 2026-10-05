@@ -208,16 +208,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   }
 
   if (id === "blackpater" || id === "black-pater" || id === "03") {
-    return (
-      <main className="fixed inset-0 w-full h-full bg-[#0c0a09] z-30 overflow-hidden">
-        <BackToLevelUpButton />
-        <iframe
-          src="/projects/blackpater-portofolio.html"
-          title="BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof"
-          className="w-full h-full border-0 block"
-        />
-      </main>
-    );
+    redirect("https://blackpater.com");
   }
 
   if (id === "final-stop") {

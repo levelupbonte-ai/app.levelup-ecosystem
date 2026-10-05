@@ -23,11 +23,11 @@ export default async function TermsPage() {
       </div>
 
       <article className="prose prose-lg dark:prose-invert max-w-none">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium border border-primary/30 bg-primary/10 text-primary">
-            <ShieldCheck className="size-3.5" />
-            Official Agreement
-          </span>
+        <div className="flex flex-wrap items-center gap-2 mb-3 text-xs font-mono text-muted-foreground uppercase tracking-wider">
+          <ShieldCheck className="size-3.5 text-violet-500" />
+          <span>Official Agreement &amp; Terms</span>
+          <span aria-hidden="true" className="text-border">·</span>
+          <span>LevelUp Ecosystem</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3">

@@ -43,15 +43,15 @@ export const defaultProjects: ProjectItem[] = [
   {
     id: "blackpater",
     step: "03",
-    badge: "Client Project • Digital Experience",
-    title: "Black_Pater — Jean-Pierre Lofumbwa",
+    badge: "Client Case Study • Personal Brand & Portfolio",
+    title: "Black_Pater — Portfolio",
     description:
       "A bespoke cinematic digital portfolio engineered for Jean-Pierre Lofumbwa (« Le Prof »), Congolese educator, entrepreneur, and cultural ambassador in the US. Features custom typography, interactive timeline journey, cover flow showcase, and multi-language support.",
-    image: "/projects/blackpater-card.jpg",
-    href: "/projects/blackpater",
-    external: false,
+    image: "https://i.ibb.co/S4XSRHVc/IMG-8467.jpg",
+    href: "https://blackpater.com",
+    external: true,
     aspectRatio: "aspect-[639/298]",
-    ctaText: "Explore the portfolio",
+    ctaText: "Visit site",
   },
 ];
 

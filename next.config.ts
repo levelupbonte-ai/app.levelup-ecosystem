@@ -2,11 +2,21 @@ import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: process.env.NODE_ENV === "production" ? "standalone" : undefined,
   devIndicators: false,
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+      },
+      {
+        protocol: "https",
+        hostname: "**.ibb.co",
+      },
+    ],
   },
   async rewrites() {
     return [
@@ -40,17 +50,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/blackpater",
-        destination: "/projects/blackpater",
+        destination: "https://blackpater.com",
         permanent: true,
       },
       {
         source: "/blackpater.html",
-        destination: "/projects/blackpater",
+        destination: "https://blackpater.com",
         permanent: true,
       },
       {
         source: "/projects/blackpater-portofolio",
-        destination: "/projects/blackpater",
+        destination: "https://blackpater.com",
         permanent: true,
       },
     ];

@@ -39,7 +39,7 @@ const About = () => {
             "1. Direct Studio Partnership: No account reps, no ticket queues, no call centers. You work directly with our engineering team from concept through deployment and maintenance.",
             "2. Security Built In by Default: Every client project at LevelUp Ecosystem is AI-assisted, human-directed, and security-verified. AI tools accelerate initial layout prototyping, while every line of shipped production code, calendar synchronization logic, and database access rule is reviewed, verified, and secured by hand.",
             "3. Zero Monthly Builder Traps: Traditional website builders charge $30-$80 every month while delivering slow, cluttered code that hurts your Google rankings. We build clean, lightweight bespoke code that you own 100% with no lock-in fees.",
-            "4. Local San Diego Commitment: While we serve clients across the United States and internationally, we are proud to be based in San Diego, regularly meeting local business owners in person to review prototypes and optimize their Google Maps presence.",
+            "4. California Roots, Global Delivery: Headquartered in California, we engineer and deploy high-performance web platforms for companies, founders, and creators across the United States and worldwide with direct communication and precision delivery.",
           ]}
           ctaButton={{
             href: "/projects",

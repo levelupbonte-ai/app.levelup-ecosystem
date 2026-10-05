@@ -13,8 +13,8 @@ const contactInfo = [
     title: "Studio Location",
     content: (
       <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        <p className="font-semibold text-foreground">San Diego, California</p>
-        <p>Serving Downtown, North Park, Pacific Beach, La Jolla, Chula Vista, and clients nationwide.</p>
+        <p className="font-semibold text-foreground">San Diego, California · Worldwide</p>
+        <p>Partnering with ambitious businesses, founders, and creators across the United States and globally.</p>
       </div>
     ),
   },
@@ -24,13 +24,13 @@ const contactInfo = [
     content: (
       <div className="mt-2 text-sm">
         <Link
-          href="mailto:hello@levelup-ecosystem.com"
+          href="mailto:contact@levelup-ecosystem.com"
           className="font-medium text-foreground hover:underline"
         >
-          hello@levelup-ecosystem.com
+          contact@levelup-ecosystem.com
         </Link>
         <p className="text-muted-foreground text-xs mt-1">
-          Support &amp; client inquiries
+          Direct engineering &amp; project inquiries
         </p>
       </div>
     ),

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Loader2 } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
@@ -76,9 +77,9 @@ export const Hero = () => {
           <ScrollReveal yOffset={20} duration={0.8} delay={0.45}>
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
               <Button asChild>
-                <a href="/contact">
-                  Book now
-                </a>
+                <Link href="/start-project">
+                  Start a Project
+                </Link>
               </Button>
               <Button
                 variant="outline"

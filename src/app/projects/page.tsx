@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Featured Projects & Case Studies | LevelUp Ecosystem",
     description:
-      "Explore real client websites and case studies engineered for conversion and online booking in San Diego, CA.",
+      "Explore real client websites and case studies engineered for conversion, automated scheduling, and performance nationwide and worldwide.",
     images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },

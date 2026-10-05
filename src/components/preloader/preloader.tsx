@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
 
-const PRELOADER_SEEN_KEY = "levelup_preloader_intro_seen_v3";
-const LAST_ACTIVE_KEY = "levelup_last_active_timestamp_v3";
+const PRELOADER_SEEN_KEY = "levelup_preloader_intro_seen_v4";
+const LAST_ACTIVE_KEY = "levelup_last_active_timestamp_v4";
 
 interface PreloaderProps {
   forcePlay?: boolean;
@@ -22,7 +22,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
   const [textWidth, setTextWidth] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check localStorage on mount
+  // Check sessionStorage on mount so the user experiences the intro in every session
   useEffect(() => {
     setMounted(true);
     if (forcePlay) {
@@ -32,9 +32,15 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     }
 
     try {
-      const hasSeen = localStorage.getItem(PRELOADER_SEEN_KEY);
+      // Clear legacy blocking localStorage if present
+      localStorage.removeItem("levelup_preloader_intro_seen_v3");
+      localStorage.removeItem("levelup_preloader_intro_seen_v2");
+      localStorage.removeItem("levelup_preloader_intro_seen");
 
-      if (hasSeen === "true") {
+      const hasSeenSession = sessionStorage.getItem(PRELOADER_SEEN_KEY);
+      const urlHasIntro = typeof window !== "undefined" && window.location.search.includes("intro");
+
+      if (hasSeenSession === "true" && !urlHasIntro) {
         setShouldPlay(false);
         setPhase("done");
         if (typeof window !== "undefined") {
@@ -42,18 +48,13 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
           window.dispatchEvent(new CustomEvent("site-ready"));
         }
       } else {
-        // Mark as seen immediately so refreshes or back navigation never replay it
-        localStorage.setItem(PRELOADER_SEEN_KEY, "true");
+        sessionStorage.setItem(PRELOADER_SEEN_KEY, "true");
         setShouldPlay(true);
         setPhase("travel");
       }
     } catch {
-      setShouldPlay(false);
-      setPhase("done");
-      if (typeof window !== "undefined") {
-        (window as unknown as { __site_ready?: boolean }).__site_ready = true;
-        window.dispatchEvent(new CustomEvent("site-ready"));
-      }
+      setShouldPlay(true);
+      setPhase("travel");
     }
   }, [forcePlay]);
 
@@ -120,17 +121,17 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
   useEffect(() => {
     if (!mounted || !shouldPlay) return;
 
-    // 0s -> 1.75s: Star travels across the phrase
+    // 0s -> 1.1s: Star travels across the phrase
     const tDissolve = setTimeout(() => {
       setPhase("dissolve");
-    }, 1750);
+    }, 1100);
 
-    // 2.2s: Star dissolves cleanly, phrase shimmers with light
+    // 1.35s: Star dissolves cleanly, phrase shimmers with light
     const tShimmer = setTimeout(() => {
       setPhase("shimmer");
-    }, 2200);
+    }, 1350);
 
-    // 3.3s: Curtain lifts upward to reveal the website
+    // 1.85s: Curtain lifts upward to reveal the website
     const tExit = setTimeout(() => {
       setPhase("exit");
       if (typeof window !== "undefined") {
@@ -142,9 +143,9 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
       if (onComplete) {
         onComplete();
       }
-    }, 3300);
+    }, 1850);
 
-    // 4.15s: Complete, unmount
+    // 2.45s: Complete, unmount
     const tDone = setTimeout(() => {
       setPhase("done");
       document.body.style.overflow = "";
@@ -153,7 +154,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
         window.dispatchEvent(new Event("scroll"));
         window.dispatchEvent(new Event("resize"));
       }
-    }, 4150);
+    }, 2450);
 
     return () => {
       clearTimeout(tDissolve);
@@ -229,7 +230,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
                     maskPosition: "0% 0%",
                   }}
                   transition={{
-                    duration: 1.75,
+                    duration: 1.1,
                     ease: [0.25, 1, 0.5, 1],
                   }}
                 >
@@ -263,7 +264,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
                       }
                 }
                 transition={{
-                  duration: phase === "travel" ? 1.75 : 0.4,
+                  duration: phase === "travel" ? 1.1 : 0.4,
                   ease: phase === "travel" ? [0.25, 1, 0.5, 1] : "easeOut",
                 }}
               >

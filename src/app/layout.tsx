@@ -7,8 +7,10 @@ import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
 import { CookieBanner } from "@/components/cookie-banner";
 import { ErrorSensor } from "@/components/error-sensor";
+import { NavigationTransition } from "@/components/navigation-transition";
 import { Preloader } from "@/components/preloader";
 import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
+import { TopScrollDissolver } from "@/components/scroll/top-scroll-dissolver";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/styles/globals.css";
@@ -72,19 +74,19 @@ export const metadata: Metadata = {
     template: "%s | LevelUp Ecosystem",
   },
   description:
-    "LevelUp Ecosystem builds high-speed, secure full-stack web applications, 24/7 online booking systems, bespoke digital invitations, and cybersecurity audits for businesses in San Diego and worldwide.",
+    "LevelUp Ecosystem engineers high-speed, secure full-stack web applications, 24/7 online booking systems, bespoke digital experiences, and cybersecurity audits for ambitious brands, companies, and creators nationwide and worldwide.",
   keywords: [
-    "Full-stack web development San Diego",
-    "International web design studio",
-    "Next.js web development",
+    "Full-stack web engineering studio",
+    "International web development",
+    "Next.js web applications",
     "Websites with 24/7 online booking",
-    "Websites for barbershops and salons",
-    "Bespoke wedding invitation website San Diego",
+    "Bespoke digital platforms",
+    "Luxury wedding invitation website",
     "Digital event invitation and RSVP",
     "Website security audit and hardening",
     "Richelieu Bonte",
     "LevelUp Ecosystem",
-    "San Diego local SEO",
+    "Global & national SEO architecture",
     "Cloud infrastructure care plans",
     "LevelStudio",
   ],
@@ -118,7 +120,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "LevelUp Ecosystem | Full-Stack Web Engineering, Booking Systems & Security",
     description:
-      "LevelUp Ecosystem builds fast, secure full-stack websites with 24/7 online booking, bespoke digital invitations, and security checks for brands in San Diego and globally.",
+      "LevelUp Ecosystem engineers high-speed, secure full-stack web platforms with 24/7 online booking, bespoke digital invitations, and cybersecurity audits for clients nationwide and worldwide.",
     siteName: "LevelUp Ecosystem",
     url: "https://levelup-ecosystem.com",
     locale: "en_US",
@@ -136,7 +138,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "LevelUp Ecosystem | Full-Stack Web Development & Security",
     description:
-      "Fast, secure full-stack websites with 24/7 online booking and cybersecurity checks in San Diego and worldwide. Founded by Richelieu Bonte.",
+      "Fast, secure full-stack websites with 24/7 online booking and cybersecurity audits for clients nationwide and worldwide. Founded by Richelieu Bonte.",
     images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
@@ -278,7 +280,7 @@ const jsonLdGraph = {
       logo: "https://levelup-ecosystem.com/logo.svg",
       image: "https://levelup-ecosystem.com/og-image.jpg",
       description:
-        "LevelUp Ecosystem is a full-stack web development and cybersecurity engineering studio based in San Diego, California. We build high-speed websites, 24/7 online booking systems, bespoke digital invitations, and secure cloud architectures for local businesses, nationwide brands, and international clients.",
+        "LevelUp Ecosystem is an international full-stack web engineering and cybersecurity studio. We build high-speed websites, 24/7 online booking systems, bespoke digital invitations, and secure cloud architectures for businesses, brands, and creators nationwide and worldwide.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "San Diego",
@@ -286,10 +288,10 @@ const jsonLdGraph = {
         addressCountry: "US",
       },
       areaServed: [
-        { "@type": "City", name: "San Diego" },
-        { "@type": "AdministrativeArea", name: "California" },
+        { "@type": "Place", name: "Global / Worldwide" },
         { "@type": "Country", name: "United States" },
-        { "@type": "Place", name: "Global / Worldwide (International Remote Architecture)" },
+        { "@type": "AdministrativeArea", name: "California" },
+        { "@type": "City", name: "San Diego" },
       ],
       serviceType: [
         "Full-Stack Web Development",
@@ -307,7 +309,7 @@ const jsonLdGraph = {
         jobTitle: "Founder & Principal Engineer",
         url: "https://levelup-ecosystem.com/about/richelieu-bonte",
       },
-      email: "hello@levelup-ecosystem.com",
+      email: "contact@levelup-ecosystem.com",
       priceRange: "$$",
       openingHoursSpecification: [
         {
@@ -374,8 +376,11 @@ export default function RootLayout({
         >
           <ErrorSensor />
           <Preloader />
+          <NavigationTransition />
           <StyleGlideProvider />
           <ScrollProgressBar />
+          {/* Subtle top dissolution gradient mask that only reveals once scrolled */}
+          <TopScrollDissolver />
           <Navbar />
           <main className="">{children}</main>
           <Footer />

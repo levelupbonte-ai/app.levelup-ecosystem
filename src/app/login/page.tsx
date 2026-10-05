@@ -14,16 +14,20 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 
-const STUDIO_URL = "https://studio.levelup-ecosystem.com";
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [targetStudioUrl, setTargetStudioUrl] = useState(STUDIO_URL);
+  const [targetStudioUrl, setTargetStudioUrl] = useState("/dashboard/overview");
   const [error, setError] = useState<string | null>(null);
+
+  const getTargetUrl = () => {
+    if (typeof window === "undefined") return "/dashboard/overview";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("redirect_url") || "/dashboard/overview";
+  };
 
   const handleRedirectToStudio = (session?: { access_token?: string; user?: { id: string; email?: string } }) => {
     try {
@@ -33,14 +37,10 @@ const Login = () => {
           sessionStorage.setItem("levelup_user_uid", session.user.id);
           sessionStorage.setItem("levelup_user_email", session.user.email || "");
         }
-        setTargetStudioUrl(
-          `${STUDIO_URL}/#auth_token=${encodeURIComponent(session.access_token)}&uid=${encodeURIComponent(session.user.id)}&email=${encodeURIComponent(session.user.email || "")}`
-        );
-      } else {
-        setTargetStudioUrl(STUDIO_URL);
       }
+      setTargetStudioUrl(getTargetUrl());
     } catch {
-      setTargetStudioUrl(STUDIO_URL);
+      setTargetStudioUrl("/dashboard/overview");
     }
     setIsRedirecting(true);
   };
@@ -218,6 +218,21 @@ const Login = () => {
                         Sign in with Google
                       </>
                     )}
+                  </Button>
+
+                  <div className="relative my-2 text-center text-xs after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                    <span className="relative z-10 bg-card px-2 text-muted-foreground font-mono">
+                      or preview client dashboard
+                    </span>
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full font-semibold rounded-lg"
+                    onClick={() => handleRedirectToStudio()}
+                  >
+                    Explore Dashboard as Demo Client
                   </Button>
                 </form>
                 <div className="text-muted-foreground mx-auto mt-8 flex justify-center gap-1 text-sm">

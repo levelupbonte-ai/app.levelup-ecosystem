@@ -1,23 +1,14 @@
 "use server";
 
-import {
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
-
 import { actionClient } from "./safe-action";
 
 import {
   getInternalLeadAlertHtml,
   getPreviewRequestEmailHtml,
 } from "@/lib/email-templates";
-import { db } from "@/lib/firebase";
 import { formSchema } from "@/lib/form-schema";
 import { isResendConfigured, resend } from "@/lib/resend";
+import { recordLead } from "@/lib/supabase";
 
 export const serverAction = actionClient
   .inputSchema(formSchema)
@@ -26,32 +17,20 @@ export const serverAction = actionClient
     let queuePosition = 1;
 
     try {
-      // 1. Check pending build queue in Firestore
-      const previewCol = collection(db, "preview_requests");
-      const pendingQuery = query(previewCol, where("status", "==", "pending"));
-      const snapshot = await getDocs(pendingQuery);
-
-      const pendingCount = snapshot.size;
-      // If there are 3 or more requests pending, place in priority queue
-      isWaitlisted = pendingCount >= 3;
-      queuePosition = pendingCount + 1;
-
-      // 2. Persist new lead into Firestore
-      await addDoc(previewCol, {
+      await recordLead({
         name: parsedInput.name,
         email: parsedInput.email,
         company: parsedInput.company || "",
         employees: parsedInput.employees || "",
         message: parsedInput.message,
-        status: "pending",
         isWaitlisted,
-        queuePosition: isWaitlisted ? queuePosition : 1,
-        createdAt: serverTimestamp(),
+        queuePosition,
+        source: "contact_form_server_action",
       });
     } catch (dbErr) {
       if (process.env.NODE_ENV === "development") {
         // eslint-disable-next-line no-console
-        console.warn("[Firestore] Failed to persist preview request:", dbErr);
+        console.warn("[Database] Failed to persist preview request:", dbErr);
       }
     }
 

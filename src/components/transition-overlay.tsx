@@ -1,87 +1,42 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { LogoStar } from "@/components/logo";
-import { cn } from "@/lib/utils";
+import { OfficialTransitionSpinner } from "@/components/official-loader";
 
 interface TransitionOverlayProps {
   isActive: boolean;
   title?: string;
   subtitle?: string;
+  steps?: string[];
   onComplete?: () => void;
   targetUrl?: string;
   delayMs?: number;
-  className?: string;
-}
-
-/**
- * 8-Dot Circular Pulse Spinner:
- * Faithfully mirrors the luxury loading-14 pulse animation provided by the user.
- */
-function CircularPulseDots({ className }: { className?: string }) {
-  // 8 dots arranged at 45 degree intervals
-  const dots = [
-    { x: 0, y: -22, delay: 0 },
-    { x: 15.5, y: -15.5, delay: 0.125 },
-    { x: 22, y: 0, delay: 0.25 },
-    { x: 15.5, y: 15.5, delay: 0.375 },
-    { x: 0, y: 22, delay: 0.5 },
-    { x: -15.5, y: 15.5, delay: 0.625 },
-    { x: -22, y: 0, delay: 0.75 },
-    { x: -15.5, y: -15.5, delay: 0.875 },
-  ];
-
-  return (
-    <div className={cn("relative size-16 flex items-center justify-center select-none", className)}>
-      {/* Center glowing LevelUp star */}
-      <motion.div
-        animate={{ scale: [0.92, 1.06, 0.92], opacity: [0.85, 1, 0.85] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        className="relative z-10 flex items-center justify-center"
-      >
-        <LogoStar iconClassName="size-6" />
-      </motion.div>
-
-      {/* 8 pulsing dots */}
-      {dots.map((dot, index) => (
-        <motion.span
-          key={index}
-          className="absolute size-2 rounded-full bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
-          style={{
-            transform: `translate(${dot.x}px, ${dot.y}px)`,
-          }}
-          animate={{
-            scale: [0.65, 1.25, 0.65],
-            opacity: [0.25, 1, 0.25],
-          }}
-          transition={{
-            duration: 1,
-            repeat: Infinity,
-            delay: dot.delay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
 }
 
 /**
  * LevelUpTransitionOverlay:
- * Elegant backdrop blur overlay keeping the site visible in the background,
- * presenting a refined floating card with the LevelUp circular loading animation.
+ * Elegant backdrop blur overlay presenting the official 8-dot transition spinner
+ * with clean, unboxed typography and calm waiting status words.
  */
 export function LevelUpTransitionOverlay({
   isActive,
-  title = "Redirecting...",
-  subtitle = "Loading your workspace",
+  title = "Starting project",
+  subtitle = "Preparing workspace...",
+  steps = ["Connecting...", "Loading intake...", "Almost ready..."],
   onComplete,
   targetUrl,
-  delayMs = 1100,
+  delayMs = 1200,
 }: TransitionOverlayProps) {
+  const [stepIndex, setStepIndex] = useState(0);
+
   useEffect(() => {
     if (!isActive) return;
+
+    setStepIndex(0);
+    const interval = setInterval(() => {
+      setStepIndex((prev) => (prev + 1) % steps.length);
+    }, 1200);
 
     const timer = setTimeout(() => {
       if (onComplete) {
@@ -91,10 +46,15 @@ export function LevelUpTransitionOverlay({
       }
     }, delayMs);
 
-    return () => clearTimeout(timer);
-  }, [isActive, delayMs, onComplete, targetUrl]);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
+  }, [isActive, delayMs, onComplete, targetUrl, steps.length]);
 
   if (!isActive) return null;
+
+  const currentStep = steps[stepIndex] || subtitle;
 
   return (
     <AnimatePresence>
@@ -103,27 +63,38 @@ export function LevelUpTransitionOverlay({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.22 }}
-        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-background/50 backdrop-blur-md select-none"
+        className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-background/60 backdrop-blur-md select-none"
       >
-        {/* Floating Luxury Glass Card */}
+        {/* Floating Luxury Glass Card - No pill, no blinking dot */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94, y: 8 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 8 }}
+          exit={{ opacity: 0, scale: 0.96, y: 6 }}
           transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-          className="relative flex flex-col items-center gap-4 px-8 py-7 rounded-2xl bg-card/90 border border-border/80 shadow-2xl backdrop-blur-xl text-center max-w-xs w-full ring-1 ring-violet-500/20"
+          className="relative flex flex-col items-center gap-3.5 px-8 py-6 rounded-2xl bg-card/90 border border-border/75 shadow-2xl backdrop-blur-xl text-center min-w-[240px] max-w-xs"
         >
-          {/* Circular 8-Dot Pulse Animation */}
-          <CircularPulseDots />
+          {/* Official 8-Dot Pulse Animation */}
+          <OfficialTransitionSpinner size={44} />
 
-          {/* Texts */}
-          <div className="space-y-1">
-            <h4 className="text-base font-bold tracking-tight text-foreground">
+          {/* Clean, free, uncluttered typography */}
+          <div className="space-y-0.5 select-none text-center">
+            <h4 className="text-sm font-semibold tracking-tight text-foreground">
               {title}
             </h4>
-            <p className="text-xs text-muted-foreground font-medium">
-              {subtitle}
-            </p>
+            <div className="h-5 flex items-center justify-center overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={currentStep}
+                  initial={{ opacity: 0, y: 2 }}
+                  animate={{ opacity: 0.75, y: 0 }}
+                  exit={{ opacity: 0, y: -2 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="text-xs text-muted-foreground font-mono"
+                >
+                  {currentStep}
+                </motion.p>
+              </AnimatePresence>
+            </div>
           </div>
         </motion.div>
       </motion.div>
