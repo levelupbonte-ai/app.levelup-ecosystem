@@ -2,8 +2,32 @@ import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: process.env.NODE_ENV === "production" ? "standalone" : undefined,
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
+  output: "standalone",
   devIndicators: false,
+  experimental: {
+    webpackMemoryOptimizations: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "motion",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-checkbox",
+      "@radix-ui/react-collapsible",
+      "@radix-ui/react-label",
+      "@radix-ui/react-navigation-menu",
+      "@radix-ui/react-select",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-switch",
+    ],
+  },
+  webpack: (config) => {
+    config.output = {
+      ...config.output,
+      chunkLoadTimeout: 300000,
+    };
+    return config;
+  },
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
     unoptimized: true,

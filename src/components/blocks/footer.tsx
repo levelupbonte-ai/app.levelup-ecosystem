@@ -6,15 +6,20 @@ import { usePathname } from "next/navigation";
 export function Footer() {
   const pathname = usePathname();
 
-  // Hide footer completely inside standalone project interfaces
+  // Hide footer completely inside standalone project interfaces and Project Studio
   if (
     pathname &&
     (pathname.startsWith("/projects/") ||
       pathname.startsWith("/project/") ||
-      pathname === "/retrouvailles")
+      pathname === "/retrouvailles" ||
+      pathname.startsWith("/start-project"))
   ) {
     const segments = pathname.split("/").filter(Boolean);
-    if (segments.length >= 2 || pathname === "/retrouvailles") {
+    if (
+      segments.length >= 2 ||
+      pathname === "/retrouvailles" ||
+      pathname.startsWith("/start-project")
+    ) {
       return null;
     }
   }

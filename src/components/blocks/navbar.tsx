@@ -13,6 +13,7 @@ import {
   Palette,
   ShieldCheck,
 } from "lucide-react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -163,6 +164,98 @@ function SpringNavText({ text, isActive }: { text: string; isActive?: boolean })
   );
 }
 
+// Smooth editorial cubic-bezier curve
+const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+const mobileNavListVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.06,
+      staggerChildren: 0.065,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const mobileWordItemVariants: Variants = {
+  hidden: {
+    y: "115%",
+    opacity: 0,
+    rotateZ: 1.5,
+  },
+  visible: {
+    y: "0%",
+    opacity: 1,
+    rotateZ: 0,
+    transition: {
+      duration: 0.52,
+      ease: EASE_OUT_EXPO,
+    },
+  },
+  exit: {
+    y: "60%",
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+      ease: [0.4, 0, 1, 1],
+    },
+  },
+};
+
+const mobileDividerVariants: Variants = {
+  hidden: {
+    scaleX: 0,
+    opacity: 0,
+  },
+  visible: {
+    scaleX: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.45,
+      ease: EASE_OUT_EXPO,
+    },
+  },
+  exit: {
+    scaleX: 0,
+    opacity: 0,
+    transition: {
+      duration: 0.15,
+    },
+  },
+};
+
+const mobileActionsVariants: Variants = {
+  hidden: {
+    y: 16,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.48,
+      ease: EASE_OUT_EXPO,
+    },
+  },
+  exit: {
+    y: 10,
+    opacity: 0,
+    transition: {
+      duration: 0.18,
+    },
+  },
+};
+
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
@@ -271,17 +364,22 @@ export const Navbar = () => {
     };
   }, [isMenuOpen]);
 
-  // On standalone digital project showcase pages (e.g. /projects/blackpater, /projects/wedding-invitation),
+  // On standalone digital project showcase pages (e.g. /projects/blackpater, /projects/wedding-invitation, /start-project),
   // hide the root navbar completely so the project retains 100% control of its own interface.
   if (
     pathname &&
     (pathname.startsWith("/projects/") ||
       pathname.startsWith("/project/") ||
-      pathname === "/retrouvailles")
+      pathname === "/retrouvailles" ||
+      pathname.startsWith("/start-project"))
   ) {
     const segments = pathname.split("/").filter(Boolean);
-    // If there is an ID/slug after "projects" or "project", it is a project space
-    if (segments.length >= 2 || pathname === "/retrouvailles") {
+    // If there is an ID/slug after "projects" or "project", or if it's /start-project, it is a dedicated space
+    if (
+      segments.length >= 2 ||
+      pathname === "/retrouvailles" ||
+      pathname.startsWith("/start-project")
+    ) {
       return null;
     }
   }
@@ -289,16 +387,22 @@ export const Navbar = () => {
   return (
     <>
       {/* Full-screen backdrop for mobile menu */}
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-[95] bg-black/40 backdrop-blur-xs lg:hidden transition-opacity cursor-pointer"
-          onClick={() => {
-            setIsMenuOpen(false);
-            setOpenMobileDropdown(null);
-          }}
-          aria-hidden="true"
-        />
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: EASE_OUT_EXPO }}
+            className="fixed inset-0 z-[95] bg-black/45 backdrop-blur-xs lg:hidden cursor-pointer"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setOpenMobileDropdown(null);
+            }}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
 
       <header
         ref={headerRef}
@@ -306,8 +410,8 @@ export const Navbar = () => {
         onMouseLeave={handleHeaderLeave}
         className={cn(
           "fixed left-1/2 z-[100] -translate-x-1/2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          // Directional scroll behavior: hide header when arriving at logos zone, show immediately on scroll up
-          !showHeader && isScrolled && !isServicesOpen
+          // Directional scroll behavior: keep visible when mobile menu or services menu is open
+          !showHeader && isScrolled && !isServicesOpen && !isMenuOpen
             ? "-translate-y-[150%] opacity-0 pointer-events-none"
             : "translate-y-0 opacity-100",
           // Desktop Scrolled: consistent rounded-2xl to prevent any morphing or conflict
@@ -318,11 +422,14 @@ export const Navbar = () => {
             (isServicesOpen
               ? "lg:top-4 lg:w-[min(94%,1080px)] lg:rounded-2xl lg:border lg:border-border/80 lg:bg-background/95 lg:backdrop-blur-md lg:shadow-[0_16px_40px_rgb(0,0,0,0.12)] dark:lg:shadow-[0_16px_40px_rgb(0,0,0,0.5)] lg:py-3.5 lg:px-6"
               : "lg:top-0 lg:w-full lg:max-w-7xl lg:rounded-none lg:border-transparent lg:bg-transparent lg:shadow-none lg:backdrop-blur-none lg:py-6 lg:px-8 xl:px-12"),
-          // Mobile styles: rounded-2xl
-          "max-lg:top-4 max-lg:w-[min(90%,720px)] max-lg:rounded-2xl max-lg:border max-lg:border-border/80 max-lg:bg-background/85 max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)] max-lg:backdrop-blur-md",
+          // Mobile styles: unified header island that seamlessly expands when hamburger is clicked
+          "max-lg:top-3.5 max-lg:w-[min(92%,720px)] max-lg:rounded-2xl max-lg:border max-lg:overflow-hidden",
+          isMenuOpen
+            ? "max-lg:border-border max-lg:bg-background/95 max-lg:backdrop-blur-2xl max-lg:shadow-[0_24px_64px_rgb(0,0,0,0.22)] dark:max-lg:shadow-[0_24px_64px_rgb(0,0,0,0.65)]"
+            : "max-lg:border-border/80 max-lg:bg-background/85 max-lg:backdrop-blur-md max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:max-lg:shadow-[0_8px_30px_rgb(0,0,0,0.35)]",
         )}
       >
-        <div className="flex items-center justify-between px-6 py-3 lg:p-0">
+        <div className="flex items-center justify-between px-5 py-3 lg:p-0">
           {/* Brand Logo - LevelUp Ecosystem */}
           <Link
             href="/"
@@ -394,7 +501,7 @@ export const Navbar = () => {
                     !isScrolled && !isServicesOpen ? "px-5 py-2 text-sm" : "px-4 py-1.5 text-xs",
                   )}
                 >
-                  Start a Project
+                  Build a Project
                 </Button>
               </Link>
 
@@ -413,30 +520,41 @@ export const Navbar = () => {
               </Link>
             </div>
 
-            {/* Hamburger Menu Button (Mobile Only) - Crisp lines, no rounded bubble distortion */}
+            {/* Hamburger Menu Button (Mobile Only) - Clean lines, no background bubble */}
             <button
-              className="text-foreground relative flex size-9 lg:hidden cursor-pointer items-center justify-center rounded-lg hover:bg-muted/40 transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              type="button"
+              className="text-foreground relative flex size-9 lg:hidden cursor-pointer items-center justify-center bg-transparent hover:opacity-80 transition-opacity duration-200"
+              onClick={() => {
+                setIsMenuOpen((prev) => {
+                  const next = !prev;
+                  if (!next) setOpenMobileDropdown(null);
+                  return next;
+                });
+              }}
+              aria-expanded={isMenuOpen}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
-              <div className="absolute top-1/2 left-1/2 block w-[20px] -translate-x-1/2 -translate-y-1/2">
+              <div className="relative w-[18px] h-[14px]">
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
-                    isMenuOpen ? "rotate-45" : "-translate-y-1.5"
-                  }`}
+                  className={cn(
+                    "absolute left-0 block h-[1.5px] w-full bg-current rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isMenuOpen ? "top-[6px] rotate-45" : "top-0 rotate-0",
+                  )}
                 />
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
-                    isMenuOpen ? "opacity-0" : ""
-                  }`}
+                  className={cn(
+                    "absolute left-0 top-[6px] block h-[1.5px] bg-current rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isMenuOpen ? "w-0 opacity-0 translate-x-2" : "w-full opacity-100 translate-x-0",
+                  )}
                 />
                 <span
                   aria-hidden="true"
-                  className={`absolute block h-[1.5px] w-full bg-current transition duration-300 ease-in-out ${
-                    isMenuOpen ? "-rotate-45" : "translate-y-1.5"
-                  }`}
+                  className={cn(
+                    "absolute left-0 block h-[1.5px] w-full bg-current rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isMenuOpen ? "top-[6px] -rotate-45" : "top-[12px] rotate-0",
+                  )}
                 />
               </div>
             </button>
@@ -477,113 +595,230 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Navigation Dropdown - Clean Minimal Sidebar Style, No Bubbles */}
-        <div
-          className={cn(
-            "bg-background absolute inset-x-0 top-[calc(100%+0.5rem)] flex flex-col rounded-xl border border-border/90 p-5 shadow-xl max-h-[82vh] overflow-y-auto transition-all duration-200 ease-in-out lg:hidden",
-            isMenuOpen
-              ? "visible translate-y-0 opacity-100"
-              : "invisible -translate-y-2 opacity-0 pointer-events-none",
-          )}
-        >
-          <nav className="divide-border/60 flex flex-1 flex-col divide-y">
-            {/* Services accordion in mobile menu */}
-            <div className="py-3 first:pt-0">
-              <button
-                type="button"
-                onClick={() =>
-                  setOpenMobileDropdown(
-                    openMobileDropdown === "Services" ? null : "Services",
-                  )
-                }
-                className="text-foreground flex w-full items-center justify-between text-base font-semibold py-1 cursor-pointer"
-              >
-                Services
-                <ChevronRight
-                  className={cn(
-                    "size-4 text-muted-foreground transition-transform duration-200",
-                    openMobileDropdown === "Services" ? "rotate-90 text-foreground" : "",
-                  )}
+        {/* Unified Mobile Navigation Panel - Merged inside the same <header> container, no scrollbar, no numbers */}
+        <AnimatePresence initial={false}>
+          {isMenuOpen && (
+            <motion.div
+              key="unified-mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: "auto",
+                opacity: 1,
+                transition: {
+                  height: { duration: 0.42, ease: EASE_OUT_EXPO },
+                  opacity: { duration: 0.25, ease: "easeOut" },
+                },
+              }}
+              exit={{
+                height: 0,
+                opacity: 0,
+                transition: {
+                  height: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                  opacity: { duration: 0.18, ease: "easeIn" },
+                },
+              }}
+              className="lg:hidden overflow-hidden"
+            >
+              <div className="px-5 pb-5 pt-1 max-h-[calc(100dvh-5.5rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                {/* Animated top separator blending header bar & nav items */}
+                <motion.div
+                  variants={mobileDividerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="h-px w-full bg-border/60 origin-left mb-1.5"
                 />
-              </button>
-              <div
-                className={cn(
-                  "overflow-hidden transition-all duration-200",
-                  openMobileDropdown === "Services"
-                    ? "mt-2 max-h-[600px] opacity-100"
-                    : "max-h-0 opacity-0",
-                )}
-              >
-                <div className="pl-2 pr-1 py-1 space-y-2.5 border-l-2 border-border/80 my-2">
-                  {SERVICES_ITEMS.map((item) => (
+
+                <motion.nav
+                  variants={mobileNavListVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="flex flex-col"
+                >
+                  {/* Services Item (with expandable sub-items) */}
+                  <div className="border-b border-border/50 py-0.5">
+                    <div className="overflow-hidden">
+                      <motion.div variants={mobileWordItemVariants}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setOpenMobileDropdown(
+                              openMobileDropdown === "Services" ? null : "Services",
+                            )
+                          }
+                          className="group flex w-full items-center justify-between py-2 text-left cursor-pointer select-none"
+                        >
+                          <span className="text-lg font-bold tracking-tight text-foreground group-hover:translate-x-1 transition-transform duration-200">
+                            Services
+                          </span>
+                          <ChevronRight
+                            className={cn(
+                              "size-4 text-muted-foreground transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                              openMobileDropdown === "Services"
+                                ? "rotate-90 text-foreground"
+                                : "",
+                            )}
+                          />
+                        </button>
+                      </motion.div>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {openMobileDropdown === "Services" && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{
+                            height: "auto",
+                            opacity: 1,
+                            transition: {
+                              height: { duration: 0.34, ease: EASE_OUT_EXPO },
+                              opacity: { duration: 0.24 },
+                            },
+                          }}
+                          exit={{
+                            height: 0,
+                            opacity: 0,
+                            transition: {
+                              height: { duration: 0.22, ease: [0.4, 0, 0.2, 1] },
+                              opacity: { duration: 0.15 },
+                            },
+                          }}
+                          className="overflow-hidden"
+                        >
+                          <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            exit="hidden"
+                            variants={{
+                              hidden: {},
+                              visible: {
+                                transition: {
+                                  staggerChildren: 0.045,
+                                  delayChildren: 0.03,
+                                },
+                              },
+                            }}
+                            className="pl-3.5 pr-1 pb-2.5 pt-1 space-y-1.5 border-l border-border/70 ml-1 my-1"
+                          >
+                            {SERVICES_ITEMS.map((item) => {
+                              const Icon = item.icon;
+                              return (
+                                <motion.div
+                                  key={item.title}
+                                  variants={{
+                                    hidden: { y: 10, opacity: 0 },
+                                    visible: {
+                                      y: 0,
+                                      opacity: 1,
+                                      transition: {
+                                        duration: 0.35,
+                                        ease: EASE_OUT_EXPO,
+                                      },
+                                    },
+                                  }}
+                                >
+                                  <Link
+                                    href={item.href}
+                                    className="group block py-1 rounded-lg transition-colors"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      setOpenMobileDropdown(null);
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-2 text-foreground text-sm font-semibold group-hover:translate-x-0.5 transition-transform">
+                                      <Icon className="size-3.5 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+                                      <span>{item.title}</span>
+                                    </div>
+                                    <p className="text-muted-foreground text-xs leading-snug mt-0.5 pl-5.5 line-clamp-1">
+                                      {item.description}
+                                    </p>
+                                  </Link>
+                                </motion.div>
+                              );
+                            })}
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* One-by-one Staggered Navigation Words (Projects, About, Pricing, FAQ, Contact) */}
+                  {NAV_LINKS.map((link) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <div
+                        key={link.label}
+                        className="border-b border-border/50 py-0.5 last:border-b-0"
+                      >
+                        <div className="overflow-hidden">
+                          <motion.div variants={mobileWordItemVariants}>
+                            <Link
+                              href={link.href}
+                              className={cn(
+                                "group flex items-center justify-between py-2 transition-colors select-none",
+                                isActive
+                                  ? "text-foreground"
+                                  : "text-foreground/90 hover:text-foreground",
+                              )}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                setOpenMobileDropdown(null);
+                              }}
+                            >
+                              <span
+                                className={cn(
+                                  "text-lg tracking-tight transition-transform duration-200 group-hover:translate-x-1",
+                                  isActive ? "font-extrabold" : "font-bold",
+                                )}
+                              >
+                                {link.label}
+                              </span>
+                            </Link>
+                          </motion.div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Staggered Bottom CTA Buttons */}
+                  <motion.div
+                    variants={mobileActionsVariants}
+                    className="pt-3.5 mt-1 grid grid-cols-1 sm:grid-cols-2 gap-2 border-t border-border/50"
+                  >
                     <Link
-                      key={item.title}
-                      href={item.href}
-                      className="block py-1 hover:text-foreground transition-colors"
+                      href="/start-project"
+                      className="w-full block"
                       onClick={() => {
                         setIsMenuOpen(false);
                         setOpenMobileDropdown(null);
                       }}
                     >
-                      <div className="text-foreground text-sm font-medium">
-                        {item.title}
-                      </div>
-                      <p className="text-muted-foreground text-xs leading-relaxed mt-0.5">
-                        {item.description}
-                      </p>
+                      <Button className="w-full font-semibold rounded-xl h-10">
+                        Build a Project
+                      </Button>
                     </Link>
-                  ))}
-                </div>
+                    <Link
+                      href="/login"
+                      className="w-full block"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setOpenMobileDropdown(null);
+                      }}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full font-medium rounded-xl h-10"
+                      >
+                        Sign In to LevelStudio
+                      </Button>
+                    </Link>
+                  </motion.div>
+                </motion.nav>
               </div>
-            </div>
-
-            {/* Standard Nav links */}
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  "text-foreground hover:text-foreground/80 py-3 text-base font-medium transition-colors last:pb-0",
-                  pathname === link.href && "text-muted-foreground font-semibold",
-                )}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setOpenMobileDropdown(null);
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
-
-            {/* Mobile Actions: Start a Project then Login */}
-            <div className="pt-4 space-y-2.5">
-              <Link
-                href="/start-project"
-                className="w-full block"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setOpenMobileDropdown(null);
-                }}
-              >
-                <Button className="w-full font-semibold rounded-lg">
-                  Start a Project
-                </Button>
-              </Link>
-              <Link
-                href="/login"
-                className="w-full block"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setOpenMobileDropdown(null);
-                }}
-              >
-                <Button variant="outline" className="w-full font-medium rounded-lg">
-                  Sign In to LevelStudio
-                </Button>
-              </Link>
-            </div>
-          </nav>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

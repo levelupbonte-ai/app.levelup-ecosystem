@@ -46,11 +46,11 @@ export const Hero = () => {
     <section className="pt-28 lg:pt-40 pb-6 sm:pb-10">
       <LevelUpTransitionOverlay
         isActive={isOpeningStudio}
-        title="LevelStudio Workspace"
+        title="LevelUp Project Studio"
         subtitle="Launching interactive environment..."
-        targetUrl="https://studio.levelup-ecosystem.com"
+        targetUrl="/start-project"
         onComplete={() => {
-          window.location.href = "https://studio.levelup-ecosystem.com";
+          window.location.href = "/start-project";
         }}
       />
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
@@ -78,28 +78,20 @@ export const Hero = () => {
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
               <Button asChild>
                 <Link href="/start-project">
-                  Start a Project
+                  Build a Project
                 </Link>
               </Button>
               <Button
                 variant="outline"
                 className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md font-semibold cursor-pointer transition-all duration-200"
-                onClick={handleOpenStudio}
-                disabled={isOpeningStudio}
+                asChild
               >
-                {isOpeningStudio ? (
-                  <>
-                    <Loader2 className="size-4 animate-spin text-purple-400 stroke-3" />
-                    <span>Opening LevelStudio...</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="max-w-56 truncate text-start md:max-w-none">
-                      Build free preview
-                    </span>
-                    <ArrowRight className="size-4 stroke-3" />
-                  </>
-                )}
+                <Link href="/start-project">
+                  <span className="max-w-56 truncate text-start md:max-w-none">
+                    Build free preview
+                  </span>
+                  <ArrowRight className="size-4 stroke-3" />
+                </Link>
               </Button>
             </div>
           </ScrollReveal>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown, ChevronUp, ShieldCheck, SlidersHorizontal } from "lucide-react";
 
@@ -67,6 +68,7 @@ function CookieIllustration({ className = "size-8" }: { className?: string }) {
 }
 
 export function CookieBanner() {
+  const pathname = usePathname();
   const [consent, setConsent] = useState<CookieConsentStatus>("all"); // default hidden until verified
   const [mounted, setMounted] = useState(false);
   const [agreedToPolicy, setAgreedToPolicy] = useState(true);
@@ -170,7 +172,7 @@ export function CookieBanner() {
     setConsent("custom");
   };
 
-  if (!mounted || consent !== null) {
+  if (!mounted || consent !== null || pathname?.startsWith("/start-project")) {
     return null;
   }
 
@@ -191,9 +193,9 @@ export function CookieBanner() {
           {/* Deployed Customization Drawer (Expands Upward) */}
           <div
             className={cn(
-              "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] border-b border-neutral-200/70 dark:border-zinc-800/80 bg-neutral-50/70 dark:bg-zinc-950/40",
+              "overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] border-b border-neutral-200/70 dark:border-zinc-800/80 bg-neutral-50/70 dark:bg-zinc-950/40",
               isCustomizing
-                ? "max-h-[380px] opacity-100 p-6"
+                ? "max-h-[55vh] opacity-100 p-5"
                 : "max-h-0 opacity-0 p-0 pointer-events-none border-b-0",
             )}
           >
@@ -363,20 +365,18 @@ export function CookieBanner() {
           animate={{ y: 0, scale: 1, opacity: 1 }}
           exit={{ y: 50, scale: 0.94, opacity: 0, transition: { duration: 0.2 } }}
           transition={{ type: "spring", stiffness: 340, damping: 28 }}
-          className="md:hidden pointer-events-auto w-full max-w-sm mx-auto rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] p-5 text-center overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="md:hidden pointer-events-auto w-full max-w-sm mx-auto max-h-[calc(100dvh-5.5rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 shadow-[0_16px_48px_-8px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] p-4 sm:p-5 text-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
         >
-          {/* Note: Top-Right Close Button ('X') has been removed on mobile as requested (Decline button is present) */}
-
           {/* Deployed Customization Drawer (Upward expansion on mobile) */}
           <div
             className={cn(
               "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] text-left",
               isCustomizing
-                ? "max-h-[500px] opacity-100 mb-4 pb-4 border-b border-neutral-200 dark:border-zinc-800"
+                ? "max-h-[420px] opacity-100 mb-3 pb-3 border-b border-neutral-200 dark:border-zinc-800"
                 : "max-h-0 opacity-0 mb-0 pb-0 pointer-events-none border-b-0",
             )}
           >
-            <div className="flex items-center justify-between pb-2 mb-3 border-b border-neutral-200/70 dark:border-zinc-800/70">
+            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-neutral-200/70 dark:border-zinc-800/70">
               <div className="flex items-center gap-1.5">
                 <SlidersHorizontal className="size-4 text-[#2563EB]" />
                 <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight">
@@ -393,9 +393,9 @@ export function CookieBanner() {
             </div>
 
             {/* Mobile Category Switches */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {/* Strictly Necessary */}
-              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+              <div className="p-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
@@ -413,7 +413,7 @@ export function CookieBanner() {
               </div>
 
               {/* Analytics */}
-              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+              <div className="p-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
                     Analytics &amp; Performance
@@ -431,7 +431,7 @@ export function CookieBanner() {
               </div>
 
               {/* Personalization */}
-              <div className="p-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-2">
+              <div className="p-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200/80 dark:border-zinc-800 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
                     Personalization
@@ -450,7 +450,7 @@ export function CookieBanner() {
             </div>
 
             {/* Mobile Save Button */}
-            <div className="mt-3.5 pt-2 flex items-center justify-between gap-2">
+            <div className="mt-3 pt-2 flex items-center justify-between gap-2">
               <Link
                 href="/cookies"
                 className="text-[11px] text-[#2563EB] hover:underline font-medium"
@@ -467,22 +467,24 @@ export function CookieBanner() {
             </div>
           </div>
 
-          {/* Centered Cookie Icon */}
-          <div className="flex justify-center mb-2.5">
-            <CookieIllustration className="size-13 drop-shadow-md" />
-          </div>
+          {/* Collapse large Cookie Icon & Headline when Options drawer is open so top is never pushed off-screen */}
+          {!isCustomizing && (
+            <>
+              <div className="flex justify-center mb-2">
+                <CookieIllustration className="size-12 drop-shadow-md" />
+              </div>
 
-          {/* Headline */}
-          <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight leading-snug">
-            We use cookies
-            <br />
-            to improve your experience
-          </h3>
+              <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight leading-snug">
+                We use cookies
+                <br />
+                to improve your experience
+              </h3>
 
-          {/* Subtitle */}
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1.5 leading-relaxed max-w-xs mx-auto">
-            They help the site work faster and more smoothly for you.
-          </p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1.5 leading-relaxed max-w-xs mx-auto">
+                They help the site work faster and more smoothly for you.
+              </p>
+            </>
+          )}
 
           {/* Agree to Privacy Policy Checkbox */}
           <div className="mt-3.5 flex items-center justify-center gap-2">

@@ -12,8 +12,8 @@ interface TransitionContext {
 
 const PREPARATION_ROUTES: Record<string, TransitionContext> = {
   "/start-project": {
-    title: "Project Builder",
-    steps: ["Configuring scope...", "Setting up requirements...", "Opening interactive canvas..."],
+    title: "LevelUp Project Studio",
+    steps: ["Configuring studio...", "Loading interactive environment...", "Opening Project Studio..."],
   },
   "/dashboard": {
     title: "Client Workspace",

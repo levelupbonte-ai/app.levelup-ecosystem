@@ -1,8 +1,10 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring } from "motion/react";
 
 export function ScrollProgressBar() {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 160,
@@ -10,6 +12,10 @@ export function ScrollProgressBar() {
     mass: 0.1,
     restDelta: 0.0005,
   });
+
+  if (pathname?.startsWith("/start-project")) {
+    return null;
+  }
 
   return (
     <motion.div
