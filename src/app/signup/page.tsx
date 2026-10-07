@@ -27,15 +27,10 @@ const Signup = () => {
 
   const handleRedirectToStudio = (session?: { access_token?: string; user?: { id: string; email?: string } }) => {
     try {
+      // Access tokens are never passed in URLs or web storage: LevelStudio signs
+      // the user in through the same LevelUp Supabase project.
       if (session?.access_token && session.user) {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("levelup_auth_token", session.access_token);
-          sessionStorage.setItem("levelup_user_uid", session.user.id);
-          sessionStorage.setItem("levelup_user_email", session.user.email || "");
-        }
-        setTargetStudioUrl(
-          `${STUDIO_URL}/#auth_token=${encodeURIComponent(session.access_token)}&uid=${encodeURIComponent(session.user.id)}&email=${encodeURIComponent(session.user.email || "")}`
-        );
+        setTargetStudioUrl(STUDIO_URL);
       } else {
         setTargetStudioUrl(STUDIO_URL);
       }

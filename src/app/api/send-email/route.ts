@@ -6,7 +6,7 @@ import {
   getWeddingSimulationEmailHtml,
 } from "@/lib/email-templates";
 import { isResendConfigured, resend } from "@/lib/resend";
-import { recordBooking, recordLead } from "@/lib/supabase";
+import { recordBooking, recordLead, registerSubmission } from "@/lib/supabase";
 
 // Standard RFC 5322 email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -44,6 +44,18 @@ export async function POST(req: NextRequest) {
       const cleanNom = sanitize(nom, 100) || "Valued Guest";
       const cleanInviteCode = sanitize(inviteCode, 50) || "WEDDING-SAMPLE";
       const cleanTelephone = sanitize(telephone, 30);
+
+      const gate = await registerSubmission({
+        formType: "contact",
+        name: cleanNom,
+        email: cleanEmail,
+        phone: cleanTelephone,
+        data: { kind: "wedding_rsvp", invite_code: cleanInviteCode },
+        source: "wedding_demo",
+      });
+      if (gate === "rate_limited") {
+        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      }
 
       const emailHtml = getWeddingSimulationEmailHtml({
         name: cleanNom,
@@ -120,6 +132,19 @@ export async function POST(req: NextRequest) {
       const cleanEmployees = sanitize(employees, 50);
       const cleanMessage = sanitize(message, 3000);
       const sanitizedQueuePosition = typeof queuePosition === "number" ? Math.max(1, queuePosition) : 1;
+
+      const gate = await registerSubmission({
+        formType: "preview_request",
+        name: cleanName,
+        email: cleanEmail,
+        company: cleanCompany,
+        message: cleanMessage,
+        data: { employees: cleanEmployees, is_waitlisted: Boolean(isWaitlisted) },
+        source: "website_contact",
+      });
+      if (gate === "rate_limited") {
+        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      }
 
       const clientEmailHtml = getPreviewRequestEmailHtml({
         name: cleanName,

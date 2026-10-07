@@ -692,3 +692,52 @@ export async function recordBooking(booking: {
   }
 }
 
+
+/**
+ * Registers a public form submission for levelup-ecosystem.com in the shared
+ * LevelUp tables (form_submissions) through the rate-limited `submit_form` RPC.
+ * Returns "rate_limited" when the visitor exceeded the allowance, so callers
+ * can refuse before sending any email.
+ */
+export async function registerSubmission(input: {
+  formType: "contact" | "preview_request";
+  name?: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  message?: string;
+  data?: Record<string, unknown>;
+  source?: string;
+}): Promise<"ok" | "rate_limited" | "unavailable"> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return "unavailable";
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/submit_form`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+      body: JSON.stringify({
+        p_website_id: process.env.WEBSITE_ID || "ws_6e797257f5b32b86",
+        p_form_type: input.formType,
+        p_name: input.name || null,
+        p_email: input.email,
+        p_phone: input.phone || null,
+        p_company: input.company || null,
+        p_message: input.message || null,
+        p_data: input.data || {},
+        p_source: input.source || "website",
+      }),
+    });
+    if (res.status === 429) return "rate_limited";
+    if (!res.ok) {
+      console.warn("Supabase submit_form error:", res.status);
+      return "unavailable";
+    }
+    return "ok";
+  } catch (err) {
+    console.warn("Failed to register submission:", err);
+    return "unavailable";
+  }
+}

@@ -14,6 +14,21 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 
+// Only same-site paths or LevelUp Ecosystem hosts are allowed as post-login targets.
+function safeRedirect(target: string | null): string {
+  if (!target) return "/dashboard/overview";
+  if (target.startsWith("/") && !target.startsWith("//")) return target;
+  try {
+    const url = new URL(target);
+    if (url.protocol === "https:" && (url.hostname === "levelup-ecosystem.com" || url.hostname.endsWith(".levelup-ecosystem.com"))) {
+      return url.toString();
+    }
+  } catch {
+    // ignore malformed URLs
+  }
+  return "/dashboard/overview";
+}
+
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,18 +41,13 @@ export default function SignInPage() {
   const getTargetUrl = () => {
     if (typeof window === "undefined") return "/dashboard/overview";
     const params = new URLSearchParams(window.location.search);
-    return params.get("redirect_url") || "/dashboard/overview";
+    return safeRedirect(params.get("redirect_url"));
   };
 
   const handleRedirect = (session?: { access_token?: string; user?: { id: string; email?: string } }) => {
     try {
-      if (session?.access_token && session.user) {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("levelup_auth_token", session.access_token);
-          sessionStorage.setItem("levelup_user_uid", session.user.id);
-          sessionStorage.setItem("levelup_user_email", session.user.email || "");
-        }
-      }
+      // The Supabase client keeps the session itself; access tokens are never
+      // copied into web storage readable by other scripts.
       setTargetUrl(getTargetUrl());
     } catch {
       setTargetUrl("/dashboard/overview");
