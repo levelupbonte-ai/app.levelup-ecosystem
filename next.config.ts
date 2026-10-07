@@ -92,6 +92,15 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // LevelUp tag: embedded on client websites.
+        source: "/sdk/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, stale-while-revalidate=86400" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           {
