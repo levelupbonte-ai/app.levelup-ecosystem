@@ -1,11 +1,10 @@
 import type { MetadataRoute } from "next";
 
-import { defaultProjects } from "@/data/projects";
-import { getProjects } from "@/lib/supabase";
+import { getLiveProjects } from "@/lib/levelup-site";
 
 /**
  * Dynamic Sitemap Generator for Next.js App Router:
- * Merges high-authority static pages and client projects from Supabase.
+ * Merges high-authority static pages and client projects from the LevelUp database.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://levelup-ecosystem.com";
@@ -75,46 +74,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // 2. Dynamic project routes from Supabase
-  const dynamicProjectRoutes: MetadataRoute.Sitemap = [];
-  const processedProjectIds = new Set<string>();
-
-  try {
-    const projects = await getProjects();
-    if (Array.isArray(projects)) {
-      for (const item of projects) {
-        const slug = item.id;
-        if (slug && !processedProjectIds.has(slug)) {
-          processedProjectIds.add(slug);
-          const lastModifiedDate = item.updated_at ? new Date(item.updated_at) : now;
-          dynamicProjectRoutes.push({
-            url: `${baseUrl}/projects/${slug}`,
-            lastModified: lastModifiedDate,
-            changeFrequency: "weekly",
-            priority: 0.85,
-          });
-        }
-      }
-    }
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.warn("[Sitemap] Could not retrieve live projects from Supabase, using fallbacks:", err);
-    }
-  }
-
-  // 3. Fallback to default verified projects if not already indexed
-  for (const project of defaultProjects) {
-    if (!processedProjectIds.has(project.id)) {
-      processedProjectIds.add(project.id);
-      dynamicProjectRoutes.push({
-        url: `${baseUrl}/projects/${project.id}`,
-        lastModified: now,
-        changeFrequency: "monthly",
-        priority: 0.85,
-      });
-    }
-  }
+  // 2. Project routes (LevelUp database, else the built-in list; never throws)
+  const projectIds = new Set((await getLiveProjects()).map((p) => p.id));
+  const dynamicProjectRoutes: MetadataRoute.Sitemap = [...projectIds].map(
+    (id) => ({
+      url: `${baseUrl}/projects/${id}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    }),
+  );
 
   return [...staticRoutes, ...dynamicProjectRoutes];
 }

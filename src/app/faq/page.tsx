@@ -6,6 +6,7 @@ import { Background } from "@/components/background";
 import { FAQ } from "@/components/blocks/faq";
 import { Testimonials } from "@/components/blocks/testimonials";
 import { DashedLine } from "@/components/dashed-line";
+import { getFaqCategories, getTestimonialItems } from "@/lib/levelup-site";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions | LevelUp Ecosystem",
@@ -41,7 +42,8 @@ export const metadata: Metadata = {
   },
 };
 
-const faqJsonLd = {
+// Built-in structured data, used when the FAQ is not available from the database.
+const defaultFaqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: [
@@ -88,18 +90,40 @@ const faqJsonLd = {
   ],
 };
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const [faqCategories, testimonials] = await Promise.all([
+    getFaqCategories(),
+    getTestimonialItems(),
+  ]);
+
+  // Structured data mirrors the questions actually shown on the page.
+  const faqJsonLd = faqCategories
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqCategories.flatMap((category) =>
+          category.questions.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        ),
+      }
+    : defaultFaqJsonLd;
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <Background>
         <div className="py-28 lg:py-32 lg:pt-44">
-          <FAQ />
+          <FAQ categories={faqCategories} />
           <DashedLine className="container max-w-5xl scale-x-115 my-12" />
-          <Testimonials />
+          <Testimonials items={testimonials} />
         </div>
       </Background>
     </>

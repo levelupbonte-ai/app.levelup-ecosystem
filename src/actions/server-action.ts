@@ -8,30 +8,30 @@ import {
 } from "@/lib/email-templates";
 import { formSchema } from "@/lib/form-schema";
 import { isResendConfigured, resend } from "@/lib/resend";
-import { recordLead } from "@/lib/supabase";
+import { registerSubmission } from "@/lib/supabase";
 
 export const serverAction = actionClient
   .inputSchema(formSchema)
   .action(async ({ parsedInput }) => {
-    let isWaitlisted = false;
-    let queuePosition = 1;
+    const isWaitlisted = false;
+    const queuePosition = 1;
 
-    try {
-      await recordLead({
-        name: parsedInput.name,
-        email: parsedInput.email,
-        company: parsedInput.company || "",
-        employees: parsedInput.employees || "",
-        message: parsedInput.message,
-        isWaitlisted,
-        queuePosition,
-        source: "contact_form_server_action",
-      });
-    } catch (dbErr) {
-      if (process.env.NODE_ENV === "development") {
-        // eslint-disable-next-line no-console
-        console.warn("[Database] Failed to persist preview request:", dbErr);
-      }
+    // Stored only through the rate-limited submit_form RPC (form_submissions).
+    const gate = await registerSubmission({
+      formType: "preview_request",
+      name: parsedInput.name.slice(0, 120),
+      email: parsedInput.email.trim().toLowerCase(),
+      company: parsedInput.company?.slice(0, 120) || "",
+      message: parsedInput.message.slice(0, 3000),
+      data: {
+        employees: parsedInput.employees?.slice(0, 50) || "",
+        is_waitlisted: isWaitlisted,
+      },
+      source: "contact_form_server_action",
+    });
+    if (gate === "rate_limited") {
+      // Refuse before any e-mail is sent; the form shows its error state.
+      throw new Error("Too many requests. Please try again later.");
     }
 
     // 3. Automated email dispatch via Resend

@@ -6,7 +6,7 @@ import {
   getWeddingSimulationEmailHtml,
 } from "@/lib/email-templates";
 import { isResendConfigured, resend } from "@/lib/resend";
-import { recordBooking, recordLead, registerSubmission } from "@/lib/supabase";
+import { registerSubmission } from "@/lib/supabase";
 
 // Standard RFC 5322 email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     // 1. Simulation RSVP for Wedding Demo
     if (type === "wedding_rsvp") {
-      const { nom, email, inviteCode, telephone } = body;
+      const { nom, email, inviteCode, telephone, slotTime } = body;
 
       const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
       if (!cleanEmail || !EMAIL_REGEX.test(cleanEmail) || cleanEmail.length > 150) {
@@ -44,13 +44,20 @@ export async function POST(req: NextRequest) {
       const cleanNom = sanitize(nom, 100) || "Valued Guest";
       const cleanInviteCode = sanitize(inviteCode, 50) || "WEDDING-SAMPLE";
       const cleanTelephone = sanitize(telephone, 30);
+      const cleanSlotTime = sanitize(slotTime, 50);
 
+      // The RSVP is stored only through submit_form (form_submissions, type "registration").
       const gate = await registerSubmission({
-        formType: "contact",
+        formType: "registration",
         name: cleanNom,
         email: cleanEmail,
         phone: cleanTelephone,
-        data: { kind: "wedding_rsvp", invite_code: cleanInviteCode },
+        data: {
+          kind: "rsvp",
+          event: "wedding_invitation",
+          invite_code: cleanInviteCode,
+          slot_time: cleanSlotTime || null,
+        },
         source: "wedding_demo",
       });
       if (gate === "rate_limited") {
@@ -63,13 +70,12 @@ export async function POST(req: NextRequest) {
         telephone: cleanTelephone,
       });
 
-      let resendResponse = null;
       let sendSuccess = false;
 
       if (isResendConfigured() && resend) {
         const primaryFrom = process.env.RESEND_FROM_EMAIL || "LevelStudio <studio@levelup-ecosystem.com>";
         try {
-          resendResponse = await resend.emails.send({
+          await resend.emails.send({
             from: primaryFrom,
             to: [cleanEmail],
             subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
@@ -78,7 +84,7 @@ export async function POST(req: NextRequest) {
           sendSuccess = true;
         } catch {
           try {
-            resendResponse = await resend.emails.send({
+            await resend.emails.send({
               from: "LevelStudio <onboarding@resend.dev>",
               to: [cleanEmail],
               subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
@@ -91,23 +97,6 @@ export async function POST(req: NextRequest) {
               console.warn("[Resend] Both primary and fallback email send failed:", fallbackErr);
             }
           }
-        }
-      }
-
-      // Persist RSVP booking into Supabase
-      try {
-        await recordBooking({
-          type: "wedding_rsvp",
-          name: cleanNom,
-          email: cleanEmail,
-          phone: cleanTelephone,
-          inviteCode: cleanInviteCode,
-          meta: { delivered: sendSuccess, resendId: resendResponse?.data?.id || null },
-        });
-      } catch (logErr) {
-        if (process.env.NODE_ENV === "development") {
-          // eslint-disable-next-line no-console
-          console.warn("[Supabase] Failed to persist wedding RSVP:", logErr);
         }
       }
 
@@ -209,25 +198,6 @@ export async function POST(req: NextRequest) {
             // eslint-disable-next-line no-console
             console.warn("[Resend] Preview request dispatch failed:", resendErr);
           }
-        }
-      }
-
-      // Persist new client lead directly into Supabase
-      try {
-        await recordLead({
-          name: cleanName,
-          email: cleanEmail,
-          company: cleanCompany,
-          employees: cleanEmployees,
-          message: cleanMessage,
-          isWaitlisted: Boolean(isWaitlisted),
-          queuePosition: sanitizedQueuePosition,
-          source: "contact_preview_request",
-        });
-      } catch (logErr) {
-        if (process.env.NODE_ENV === "development") {
-          // eslint-disable-next-line no-console
-          console.warn("[Supabase] Failed to persist client lead:", logErr);
         }
       }
 

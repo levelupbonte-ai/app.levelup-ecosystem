@@ -372,13 +372,17 @@ const carePlans: PlanItem[] = [
 interface PricingProps {
   className?: string;
   showSectionTitle?: boolean;
+  /** Website build plans from the LevelUp database (falls back to buildPlans). */
   initialPlans?: PlanItem[];
+  /** Monthly care plans from the LevelUp database (falls back to carePlans). */
+  initialCarePlans?: PlanItem[];
 }
 
 export const Pricing = ({
   className,
   showSectionTitle = true,
   initialPlans,
+  initialCarePlans,
 }: PricingProps) => {
   const [billingTab, setBillingTab] = useState<"build" | "care">("build");
   const [expandedPlanId, setExpandedPlanId] = useState<string | null>(null);
@@ -389,7 +393,9 @@ export const Pricing = ({
   const [isCareModalOpen, setIsCareModalOpen] = useState(false);
 
   const effectiveBuildPlans = initialPlans && initialPlans.length > 0 ? initialPlans : buildPlans;
-  const activePlans = billingTab === "build" ? effectiveBuildPlans : carePlans;
+  const effectiveCarePlans =
+    initialCarePlans && initialCarePlans.length > 0 ? initialCarePlans : carePlans;
+  const activePlans = billingTab === "build" ? effectiveBuildPlans : effectiveCarePlans;
   const activeExpandedPlan = activePlans.find((p) => p.id === expandedPlanId) || null;
 
   const handleTabChange = (tab: "build" | "care") => {

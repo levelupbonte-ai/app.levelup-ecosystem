@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, XCircle, ShieldCheck } from "lucide-react";
-import { getLegalDocument } from "@/lib/supabase";
+import { getLegalDocument } from "@/lib/levelup-site";
 
 export const metadata = {
   title: "Terms of Service | LevelUp Ecosystem",

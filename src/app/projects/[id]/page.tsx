@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-import { allProjects } from "@/data/projects";
-import { getProjects } from "@/lib/supabase";
+import { getLiveProjects } from "@/lib/levelup-site";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -143,7 +142,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     };
   }
 
-  const project = allProjects.find((p) => p.id === id);
+  const project = (await getLiveProjects()).find((p) => p.id === id);
   if (!project) {
     return {
       title: "Projects & Client Work | LevelUp Ecosystem",
@@ -215,35 +214,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     redirect("https://finalstop.org");
   }
 
-  // Check Supabase dynamic projects
-  try {
-    const liveProjects = await getProjects();
-    const liveProject = Array.isArray(liveProjects) ? liveProjects.find((p: { id: string }) => p.id === id) : null;
-    if (liveProject && liveProject.href) {
-      if (liveProject.external) {
-        redirect(liveProject.href);
-      }
-      return (
-        <main className="fixed inset-0 w-full h-full bg-[#0a0908] z-30 overflow-hidden">
-          <BackToLevelUpButton />
-          <iframe
-            src={liveProject.href}
-            title={liveProject.title || "Project Showcase"}
-            className="w-full h-full border-0 block"
-          />
-        </main>
-      );
-    }
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.warn("Could not query project from Supabase:", err);
-    }
-  }
-
-  const project = allProjects.find((p) => p.id === id);
+  // Projects from the LevelUp database (content_blocks projects/list), else the built-in list.
+  const project = (await getLiveProjects()).find((p) => p.id === id);
   if (!project) {
     notFound();
+  }
+
+  // An external case study lives on the client's own domain (https only, checked in levelup-site).
+  if (project.external) {
+    redirect(project.href);
   }
 
   return (

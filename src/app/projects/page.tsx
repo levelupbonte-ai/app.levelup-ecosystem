@@ -7,9 +7,9 @@ import { ArrowUpRight } from "lucide-react";
 
 import { Background } from "@/components/background";
 import { ProjectShowcase } from "@/components/blocks/features";
-import { allProjects } from "@/data/projects";
 import { DashedLine } from "@/components/dashed-line";
 import { Button } from "@/components/ui/button";
+import { getConcepts, getLiveProjects } from "@/lib/levelup-site";
 
 export const metadata: Metadata = {
   title: "Featured Projects & Case Studies | LevelUp Ecosystem",
@@ -45,34 +45,12 @@ export const metadata: Metadata = {
   },
 };
 
-const concepts = [
-  {
-    title: "Concept Architecture Studio",
-    badge: "Spatial Design & Architecture",
-    description:
-      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
-    image: "/features/overview-card.svg",
-    tags: ["High-Res Delivery", "Editorial Design", "Bespoke Portfolio"],
-  },
-  {
-    title: "Concept Wellness Clinic & Spa",
-    badge: "Multi-Practitioner Booking",
-    description:
-      "Streamlined patient intake and appointment platform featuring multi-staff scheduling, customized treatment selection, and synchronized calendar notifications for local medical wellness practices.",
-    image: "/features/cycle-card.svg",
-    tags: ["24/7 Scheduling", "Intake Flow", "Staff Sync"],
-  },
-  {
-    title: "Concept Audio & Vinyl Store",
-    badge: "Specialized E-Commerce",
-    description:
-      "Lightweight, sub-2s mobile audio showcase with instant checkout, audio previews, and zero third-party builder bloat.",
-    image: "/features/overview-card.svg",
-    tags: ["Sub-2s Mobile", "Instant Checkout", "Custom Catalog"],
-  },
-];
+export default async function ProjectsPage() {
+  const [projects, concepts] = await Promise.all([
+    getLiveProjects(),
+    getConcepts(),
+  ]);
 
-export default function ProjectsPage() {
   return (
     <Background>
       <div className="py-28 lg:py-32 lg:pt-44">
@@ -91,7 +69,7 @@ export default function ProjectsPage() {
 
         {/* Animated Project Showcases (Final Stop & Le Dernier Retrouvailles with identical scroll animation) */}
         <div className="mt-4 sm:mt-6 space-y-12">
-          {allProjects.map((project) => (
+          {projects.map((project) => (
             <ProjectShowcase key={project.id} item={project} showExploreButton={false} />
           ))}
         </div>
@@ -150,10 +128,10 @@ export default function ProjectsPage() {
 
                 <div className="pt-2">
                   <Link
-                    href="/contact"
+                    href={concept.ctaHref}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:underline"
                   >
-                    <span>Request preview like this</span>
+                    <span>{concept.ctaText}</span>
                     <ArrowUpRight className="size-3.5" />
                   </Link>
                 </div>

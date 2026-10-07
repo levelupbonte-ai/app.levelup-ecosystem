@@ -1,5 +1,3 @@
-import { getProjects } from "@/lib/supabase";
-
 export interface ProjectItem {
   id: string;
   step: string;
@@ -57,46 +55,49 @@ export const defaultProjects: ProjectItem[] = [
 
 export const allProjects: ProjectItem[] = defaultProjects;
 
-/**
- * Loads projects dynamically from Supabase PostgreSQL `projects` table.
- * If Supabase is empty or unreachable, cleanly falls back to default projects.
- */
-export async function getLiveProjects(): Promise<ProjectItem[]> {
-  try {
-    const data = await getProjects();
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      return defaultProjects;
-    }
-
-    return data.map((item: {
-      id: string;
-      step?: string;
-      badge?: string;
-      title?: string;
-      description?: string;
-      image?: string;
-      href?: string;
-      external?: boolean;
-      aspect_ratio?: string;
-      cta_text?: string;
-    }) => ({
-      id: item.id,
-      step: item.step || "01",
-      badge: item.badge || "Client Project",
-      title: item.title || "Project",
-      description: item.description || "",
-      image: item.image || "/og-image.jpg",
-      href: item.href || "#",
-      external: item.external ?? true,
-      aspectRatio: item.aspect_ratio || "aspect-[639/298]",
-      ctaText: item.cta_text || "Explore project",
-    }));
-  } catch (err) {
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.warn("Could not fetch projects from Supabase, using defaults:", err);
-    }
-    return defaultProjects;
-  }
+export interface ConceptItem {
+  title: string;
+  badge: string;
+  description: string;
+  image: string;
+  tags: string[];
+  ctaText: string;
+  ctaHref: string;
 }
 
+/**
+ * Built-in fallbacks. The live lists come from the LevelUp database
+ * (content_blocks projects/list and projects/concepts, see lib/levelup-site.ts).
+ */
+export const defaultConcepts: ConceptItem[] = [
+  {
+    title: "Concept Architecture Studio",
+    badge: "Spatial Design & Architecture",
+    description:
+      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
+    image: "/features/overview-card.svg",
+    tags: ["High-Res Delivery", "Editorial Design", "Bespoke Portfolio"],
+    ctaText: "Request preview like this",
+    ctaHref: "/contact",
+  },
+  {
+    title: "Concept Wellness Clinic & Spa",
+    badge: "Multi-Practitioner Booking",
+    description:
+      "Streamlined patient intake and appointment platform featuring multi-staff scheduling, customized treatment selection, and synchronized calendar notifications for local medical wellness practices.",
+    image: "/features/cycle-card.svg",
+    tags: ["24/7 Scheduling", "Intake Flow", "Staff Sync"],
+    ctaText: "Request preview like this",
+    ctaHref: "/contact",
+  },
+  {
+    title: "Concept Audio & Vinyl Store",
+    badge: "Specialized E-Commerce",
+    description:
+      "Lightweight, sub-2s mobile audio showcase with instant checkout, audio previews, and zero third-party builder bloat.",
+    image: "/features/overview-card.svg",
+    tags: ["Sub-2s Mobile", "Instant Checkout", "Custom Catalog"],
+    ctaText: "Request preview like this",
+    ctaHref: "/contact",
+  },
+];
