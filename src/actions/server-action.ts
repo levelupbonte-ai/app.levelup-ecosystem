@@ -29,21 +29,26 @@ export const serverAction = actionClient
       },
       source: "contact_form_server_action",
     });
-    if (gate === "rate_limited") {
-      // Refuse before any e-mail is sent; the form shows its error state.
-      throw new Error("Too many requests. Please try again later.");
+    // Fail closed: no e-mail at all unless the submission was accepted (rate limits,
+    // valid e-mail, feature enabled). Anything else could turn this into a mail relay.
+    if (gate !== "ok") {
+      throw new Error(
+        gate === "rate_limited"
+          ? "Too many requests. Please try again later."
+          : "Your request could not be sent. Please try again later.",
+      );
     }
 
     // 3. Automated email dispatch via Resend
     let emailDelivered = false;
     if (isResendConfigured() && resend) {
       try {
+        // The auto-reply goes to whatever address was typed: greet by first name only
+        // and never echo free text the visitor wrote.
         const clientHtml = getPreviewRequestEmailHtml({
-          name: parsedInput.name,
-          company: parsedInput.company,
+          name: parsedInput.name.split(/\s+/)[0].slice(0, 40),
           isWaitlisted,
           queuePosition,
-          message: parsedInput.message,
         });
 
         const primaryFrom = process.env.RESEND_FROM_EMAIL || "LevelUp Ecosystem <contact@levelup-ecosystem.com>";

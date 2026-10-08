@@ -15,22 +15,6 @@ const PREPARATION_ROUTES: Record<string, TransitionContext> = {
     title: "LevelUp Project Studio",
     steps: ["Configuring studio...", "Loading interactive environment...", "Opening Project Studio..."],
   },
-  "/dashboard": {
-    title: "Client Workspace",
-    steps: ["Verifying authorization...", "Synchronizing live telemetry...", "Loading overview dashboard..."],
-  },
-  "/auth/sign-in": {
-    title: "Client Authentication",
-    steps: ["Securing handshake...", "Verifying credentials...", "Opening LevelStudio..."],
-  },
-  "/login": {
-    title: "Client Authentication",
-    steps: ["Securing handshake...", "Verifying credentials...", "Opening LevelStudio..."],
-  },
-  "/signup": {
-    title: "New Account",
-    steps: ["Allocating encrypted space...", "Provisioning workspace...", "Setting up dashboard..."],
-  },
 };
 
 const DEFAULT_PREPARATION_CONTEXT: TransitionContext = {

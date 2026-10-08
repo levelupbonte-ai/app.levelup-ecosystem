@@ -27,6 +27,8 @@ export function Footer() {
   const navigation = [
     { name: "Services", href: "/services" },
     { name: "Projects", href: "/projects" },
+    { name: "LevelStudio", href: "/studio" },
+    { name: "Start a Project", href: "/start-project" },
     { name: "About Us", href: "/about" },
     { name: "Pricing", href: "/pricing" },
     { name: "FAQ", href: "/faq" },

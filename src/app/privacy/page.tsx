@@ -3,6 +3,7 @@ import { ArrowLeft, ShieldCheck, CheckCircle2, XCircle, Lock } from "lucide-reac
 import { getLegalDocument } from "@/lib/levelup-site";
 
 export const metadata = {
+  robots: { index: false, follow: true },
   title: "Privacy Policy | LevelUp Ecosystem",
   description:
     "Privacy Policy for LevelUp Ecosystem. How we handle client contact information, Google user data, security, and data protection.",

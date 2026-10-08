@@ -7,6 +7,7 @@ import { CookieActions } from "@/components/cookie-actions";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Cookie Policy & Data Transparency | LevelUp Ecosystem",
   description:
     "Learn about our zero-trust cookie policy: strictly necessary authentication tokens, privacy-preserving session security, and transparency guidelines.",

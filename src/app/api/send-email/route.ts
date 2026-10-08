@@ -60,12 +60,15 @@ export async function POST(req: NextRequest) {
         },
         source: "wedding_demo",
       });
-      if (gate === "rate_limited") {
-        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      // Fail closed: no e-mail unless the submission was accepted by the database.
+      if (gate !== "ok") {
+        return gate === "rate_limited"
+          ? NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+          : NextResponse.json({ error: "Your request could not be sent. Please try again later." }, { status: 503 });
       }
 
       const emailHtml = getWeddingSimulationEmailHtml({
-        name: cleanNom,
+        name: cleanNom.split(/\s+/)[0].slice(0, 40),
         inviteCode: cleanInviteCode,
         telephone: cleanTelephone,
       });
@@ -131,16 +134,18 @@ export async function POST(req: NextRequest) {
         data: { employees: cleanEmployees, is_waitlisted: Boolean(isWaitlisted) },
         source: "website_contact",
       });
-      if (gate === "rate_limited") {
-        return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+      // Fail closed: no e-mail unless the submission was accepted by the database.
+      if (gate !== "ok") {
+        return gate === "rate_limited"
+          ? NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+          : NextResponse.json({ error: "Your request could not be sent. Please try again later." }, { status: 503 });
       }
 
+      // Auto-reply to whatever address was typed: first name only, no visitor free text.
       const clientEmailHtml = getPreviewRequestEmailHtml({
-        name: cleanName,
-        company: cleanCompany,
-        isWaitlisted: Boolean(isWaitlisted),
-        queuePosition: sanitizedQueuePosition,
-        message: cleanMessage,
+        name: cleanName.split(/\s+/)[0].slice(0, 40),
+        isWaitlisted: false,
+        queuePosition: 1,
       });
 
       const internalAlertHtml = getInternalLeadAlertHtml({
@@ -161,9 +166,7 @@ export async function POST(req: NextRequest) {
           await resend.emails.send({
             from: "LevelUp Ecosystem <contact@levelup-ecosystem.com>",
             to: [cleanEmail],
-            subject: isWaitlisted
-              ? `Priority Queue (#${sanitizedQueuePosition}): Your Website Preview Request`
-              : "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
+            subject: "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
             html: clientEmailHtml,
           });
           clientDelivered = true;
@@ -212,7 +215,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: "Unknown email type requested" }, { status: 400 });
   } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : "Unknown error occurred";
-    return NextResponse.json({ error: errorMsg }, { status: 500 });
+    console.error("[send-email]", err);
+    return NextResponse.json({ error: "Something went wrong. Please try again later." }, { status: 500 });
   }
 }
