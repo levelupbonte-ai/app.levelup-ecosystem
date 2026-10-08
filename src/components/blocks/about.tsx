@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { aboutStoryCopy } from "@/data/site-copy";
+import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { getSectionCopy } from "@/lib/levelup-site";
 import { cn } from "@/lib/utils";
 
@@ -24,8 +25,8 @@ const About = async () => {
           title={copy.founder_title}
           paragraphs={copy.founder_paragraphs}
           ctaButton={{
-            href: "/contact",
-            text: "Request a free preview",
+            href: LEVELSTUDIO_URL,
+            text: "Build a free preview",
           }}
         />
       </div>

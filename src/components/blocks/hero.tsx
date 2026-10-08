@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { DashedLine } from "@/components/dashed-line";
 import { PremiumServiceBlock } from "@/components/scroll/premium-reveal";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
-import { LevelUpTransitionOverlay } from "@/components/transition-overlay";
 import { Button } from "@/components/ui/button";
 import { heroCopy } from "@/data/site-copy";
+import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 
 const ICONS = ["globe", "search", "shield", "calendar"] as const;
 type IconName = (typeof ICONS)[number];
@@ -20,24 +19,8 @@ const iconName = (value: string, index: number): IconName =>
     : ICONS[index % ICONS.length];
 
 export const Hero = ({ copy = heroCopy }: { copy?: typeof heroCopy }) => {
-  const [isOpeningStudio, setIsOpeningStudio] = useState(false);
-
-  const handleOpenStudio = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsOpeningStudio(true);
-  };
-
   return (
     <section className="pt-28 lg:pt-40 pb-6 sm:pb-10">
-      <LevelUpTransitionOverlay
-        isActive={isOpeningStudio}
-        title="LevelUp Project Studio"
-        subtitle="Launching interactive environment..."
-        targetUrl="/start-project"
-        onComplete={() => {
-          window.location.href = "/start-project";
-        }}
-      />
       <div className="container flex flex-col justify-between gap-8 md:gap-14 lg:flex-row lg:gap-20">
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
@@ -61,22 +44,22 @@ export const Hero = ({ copy = heroCopy }: { copy?: typeof heroCopy }) => {
 
           <ScrollReveal yOffset={20} duration={0.8} delay={0.45}>
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
+              {/* Primary: the AI-guided project brief (Project Studio). */}
               <Button asChild>
-                <Link href="/start-project">
-                  {copy.cta_primary}
-                </Link>
+                <Link href="/start-project">{copy.cta_primary}</Link>
               </Button>
               <Button
                 variant="outline"
                 className="from-background h-auto gap-2 bg-linear-to-r to-transparent shadow-md font-semibold cursor-pointer transition-all duration-200"
                 asChild
               >
-                <Link href="/start-project">
+                {/* Secondary: a free website preview, built in LevelStudio. */}
+                <a href={LEVELSTUDIO_URL}>
                   <span className="max-w-56 truncate text-start md:max-w-none">
                     {copy.cta_secondary}
                   </span>
                   <ArrowRight className="size-4 stroke-3" />
-                </Link>
+                </a>
               </Button>
             </div>
           </ScrollReveal>
