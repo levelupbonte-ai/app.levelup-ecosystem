@@ -14,7 +14,12 @@ import { geminiRotator } from "./gemini";
  *   AI_ROUTE_AGENTS="groq:openai/gpt-oss-120b,gemini:gemini-3.1-flash-lite"
  */
 
-export type AiTask = "agents" | "site" | "studio_chat" | "studio_build";
+export type AiTask =
+  | "agents"
+  | "site"
+  | "qualify"
+  | "studio_chat"
+  | "studio_build";
 export type ProviderId = "groq" | "cerebras" | "mistral" | "openrouter" | "deepseek" | "gemini";
 export interface AiTarget {
   provider: ProviderId;
@@ -43,6 +48,9 @@ const DEFAULT_ROUTES: Record<AiTask, string> = {
   agents:
     "cerebras:gpt-oss-120b,groq:openai/gpt-oss-120b,mistral:mistral-small-latest,gemini:gemini-3.1-flash-lite",
   site: "groq:openai/gpt-oss-20b,mistral:mistral-small-latest,gemini:gemini-3.1-flash-lite",
+  // Project request qualification: short strict-JSON verdict, fast models first.
+  qualify:
+    "groq:openai/gpt-oss-20b,cerebras:gpt-oss-120b,gemini:gemini-3.1-flash-lite,mistral:mistral-small-latest",
   studio_chat:
     "groq:openai/gpt-oss-120b,cerebras:gpt-oss-120b,gemini:gemini-3.1-flash-lite,deepseek:deepseek-chat",
   studio_build:
@@ -201,8 +209,23 @@ export async function generateText(
     prompt: string;
     maxTokens: number;
     temperature: number;
+    timeoutMs?: number;
   },
 ): Promise<string> {
+  return (await generateTextWithTarget(task, input)).text;
+}
+
+/** Same as generateText, but also says which provider/model answered (for usage logs). */
+export async function generateTextWithTarget(
+  task: AiTask,
+  input: {
+    system?: string;
+    prompt: string;
+    maxTokens: number;
+    temperature: number;
+    timeoutMs?: number;
+  },
+): Promise<{ text: string; target: AiTarget }> {
   let lastError: unknown = new Error(`No AI provider configured for ${task}`);
   for (const target of aiRoute(task)) {
     try {
@@ -215,22 +238,28 @@ export async function generateText(
               ...(input.system ? { systemInstruction: input.system } : {}),
               temperature: input.temperature,
               maxOutputTokens: input.maxTokens,
+              ...(input.timeoutMs
+                ? { httpOptions: { timeout: input.timeoutMs } }
+                : {}),
             },
           });
           return resp.text ?? "";
         }, 2);
-        if (text.trim()) return text.trim();
+        if (text.trim()) return { text: text.trim(), target };
         continue;
       }
       const result = await chatCompletion(target, {
         messages: [
-          ...(input.system ? [{ role: "system" as const, content: input.system }] : []),
+          ...(input.system
+            ? [{ role: "system" as const, content: input.system }]
+            : []),
           { role: "user", content: input.prompt },
         ],
         maxTokens: input.maxTokens,
         temperature: input.temperature,
+        timeoutMs: input.timeoutMs,
       });
-      if (result.content) return result.content;
+      if (result.content) return { text: result.content, target };
     } catch (err) {
       // Any failure (quota, outage, bad key, unknown model) moves to the next target.
       lastError = err;

@@ -340,3 +340,155 @@ export function getInternalLeadAlertHtml({
 </body>
 </html>`;
 }
+
+// ------------------------------------------------------------ project requests
+
+interface ProjectRequestAlertProps {
+  reference: string;
+  requestId: string | null;
+  payload: {
+    name: string;
+    email: string;
+    phone: string | null;
+    locale: string;
+    business_name: string;
+    has_business: boolean | null;
+    business_stage: string | null;
+    sector: string | null;
+    business_age: string | null;
+    website: string | null;
+    social_links: string[];
+    registration_number: string | null;
+    proof_links: string[];
+    budget: string | null;
+    timeline: string | null;
+    project_type: string | null;
+    activity: string | null;
+  };
+  qualification: {
+    score: number | null;
+    verdict: "qualified" | "review" | "rejected";
+    summary: string;
+    reasons: string[];
+    red_flags: string[];
+    model: string | null;
+  };
+  recap: string | null;
+}
+
+const VERDICT_STYLE = {
+  qualified: { label: "Qualifié", color: "#10b981" },
+  review: { label: "À vérifier", color: "#f59e0b" },
+  rejected: { label: "Non qualifié", color: "#ef4444" },
+} as const;
+
+/** Internal alert for the team (French): request details plus the AI qualification. */
+export function getProjectRequestAlertHtml({
+  reference,
+  requestId,
+  payload: p,
+  qualification: q,
+  recap,
+}: ProjectRequestAlertProps): string {
+  const v = VERDICT_STYLE[q.verdict];
+  const row = (label: string, value: unknown) =>
+    value == null || value === "" || (Array.isArray(value) && !value.length)
+      ? ""
+      : `<tr><td style="padding:6px 12px 6px 0;color:#9ca3af;font-size:13px;vertical-align:top;white-space:nowrap;">${escapeHtml(label)}</td><td style="padding:6px 0;font-size:13px;color:#e5e5e5;word-break:break-word;">${Array.isArray(value) ? value.map((x) => escapeHtml(x)).join("<br>") : escapeHtml(value)}</td></tr>`;
+  const list = (title: string, items: string[], color: string) =>
+    items.length
+      ? `<p style="margin:14px 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:${color};">${escapeHtml(title)}</p><ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:#d4d4d8;">${items.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>`
+      : "";
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Nouvelle demande de projet ${escapeHtml(reference)}</title>
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#0b0b10;color:#e5e5e5;padding:24px;margin:0;">
+  <div style="max-width:600px;margin:0 auto;background:#14141c;border:1px solid #2a2a36;border-radius:14px;padding:26px;">
+    <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;">Nouvelle demande de projet · ${escapeHtml(reference)}</p>
+    <h2 style="margin:0 0 16px;font-size:21px;color:#fafafa;">${escapeHtml(p.business_name)}</h2>
+    <div style="border:1px solid ${v.color}55;background:${v.color}14;border-radius:10px;padding:14px 16px;">
+      <p style="margin:0;font-size:14px;"><strong style="color:${v.color};">${v.label}</strong>${q.score != null ? ` &nbsp;·&nbsp; score ${q.score}/100` : " &nbsp;·&nbsp; analyse indisponible"}</p>
+      ${q.summary ? `<p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#e5e5e5;">${escapeHtml(q.summary)}</p>` : ""}
+      ${list("Raisons", q.reasons, "#a78bfa")}
+      ${list("Signaux d'alerte", q.red_flags, "#f87171")}
+    </div>
+    <table role="presentation" style="margin-top:18px;border-collapse:collapse;width:100%;">
+      ${row("Contact", p.name)}
+      ${row("E-mail", p.email)}
+      ${row("Téléphone", p.phone)}
+      ${row("Langue", p.locale)}
+      ${row("Projet", p.project_type)}
+      ${row("Activité existante", p.has_business == null ? null : p.has_business ? "Oui" : "Non")}
+      ${row("Stade", p.business_stage)}
+      ${row("Secteur", p.sector)}
+      ${row("Ancienneté", p.business_age)}
+      ${row("Site", p.website)}
+      ${row("Réseaux", p.social_links)}
+      ${row("Immatriculation", p.registration_number)}
+      ${row("Preuves", p.proof_links)}
+      ${row("Budget", p.budget)}
+      ${row("Délai", p.timeline)}
+    </table>
+    ${p.activity ? `<p style="margin:16px 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9ca3af;">Activité</p><div style="padding:12px;background:#0f0f15;border-radius:8px;font-size:13px;line-height:1.6;color:#d4d4d8;white-space:pre-wrap;">${escapeHtml(p.activity)}</div>` : ""}
+    ${recap ? `<p style="margin:16px 0 6px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9ca3af;">Récapitulatif envoyé au visiteur</p><div style="padding:12px;background:#0f0f15;border-radius:8px;font-size:13px;line-height:1.6;color:#d4d4d8;white-space:pre-wrap;">${escapeHtml(recap)}</div>` : ""}
+    <p style="font-size:11px;color:#6b7280;margin:22px 0 0;line-height:1.6;">
+      Analyse automatique indicative${q.model ? ` (${escapeHtml(q.model)})` : ""}. La décision reste humaine : statut à mettre à jour dans le dashboard LevelUp${requestId ? ` (demande ${escapeHtml(requestId)})` : ""}.
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+/** Visitor confirmation for a request the team will follow up (FR / EN). */
+export function getProjectRequestReceivedHtml({
+  locale,
+  name,
+  reference,
+}: {
+  locale: "fr" | "en";
+  name: string;
+  reference: string;
+}): string {
+  const fr = locale === "fr";
+  const n = escapeHtml(name);
+  const ref = escapeHtml(reference);
+  return `<!DOCTYPE html>
+<html lang="${fr ? "fr" : "en"}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${fr ? "Projet reçu" : "Project received"} — LevelUp Ecosystem</title>
+</head>
+<body style="margin:0;padding:0;background:#07070b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#f4f4f8;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#07070b;padding:40px 16px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;background:#111118;border:1px solid #26263a;border-radius:16px;">
+        <tr><td align="center" style="padding:32px 24px 8px;">
+          <img src="https://levelup-ecosystem.com/icon.svg" width="44" height="44" alt="LevelUp Ecosystem" style="display:block;margin:0 auto;border:0;">
+        </td></tr>
+        <tr><td style="padding:16px 32px 32px;">
+          <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;">${fr ? "Projet reçu" : "Project received"} · ${ref}</p>
+          <h1 style="margin:0 0 14px;font-size:22px;line-height:1.3;color:#fafafa;">${fr ? `Merci ${n}, votre projet est entre de bonnes mains.` : `Thank you ${n}, your project is in good hands.`}</h1>
+          <p style="margin:0 0 14px;font-size:15px;line-height:1.7;color:#c4c4d0;">${
+            fr
+              ? "Notre équipe étudie votre demande et vous recontacte sous 48 heures ouvrées avec les prochaines étapes."
+              : "Our team is reviewing your request and will get back to you within 48 business hours with the next steps."
+          }</p>
+          <p style="margin:0;font-size:13px;line-height:1.7;color:#8a8a9a;">${
+            fr
+              ? `Référence à rappeler dans vos échanges : <strong style="color:#f4f4f8;">${ref}</strong>.`
+              : `Please mention this reference when you reply: <strong style="color:#f4f4f8;">${ref}</strong>.`
+          }</p>
+        </td></tr>
+        <tr><td style="padding:18px 32px;border-top:1px solid #222232;font-size:12px;color:#6b6b7b;">
+          ${fr ? "L'équipe LevelUp Ecosystem" : "The LevelUp Ecosystem Team"} · <a href="https://levelup-ecosystem.com" style="color:#a78bfa;text-decoration:none;">levelup-ecosystem.com</a>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
