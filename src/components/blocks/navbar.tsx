@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 
+import { LoginMenu, MobileLoginChoices } from "@/components/blocks/login-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -488,11 +489,11 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Action: ThemeToggle + Book Now + Login directly after */}
+          {/* Right Action: ThemeToggle + Build a Project + Log in menu */}
           <div className="flex items-center gap-2 sm:gap-2.5">
             <ThemeToggle />
 
-            {/* Desktop Action Buttons: Start a Project then Login */}
+            {/* Desktop Action Buttons: Build a Project then Log in menu */}
             <div className="max-lg:hidden flex items-center gap-2">
               <Link href="/start-project" onClick={() => setIsServicesOpen(false)}>
                 <Button
@@ -506,19 +507,11 @@ export const Navbar = () => {
                 </Button>
               </Link>
 
-              {/* Login button right after Start a Project */}
-              <Link href="https://dashboard.levelup-ecosystem.com/auth/sign-in" onClick={() => setIsServicesOpen(false)}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "group relative font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 cursor-pointer rounded-lg",
-                    !isScrolled && !isServicesOpen ? "px-4 py-2 text-sm" : "px-3 py-1.5 text-xs",
-                  )}
-                >
-                  <SpringNavText text="Login" />
-                </Button>
-              </Link>
+              {/* Log in: LevelStudio or Dashboard (sign-in happens on the dashboard) */}
+              <LoginMenu
+                compact={isScrolled || isServicesOpen}
+                onOpen={() => setIsServicesOpen(false)}
+              />
             </div>
 
             {/* Hamburger Menu Button (Mobile Only) - Clean lines, no background bubble */}
@@ -799,21 +792,12 @@ export const Navbar = () => {
                         Build a Project
                       </Button>
                     </Link>
-                    <Link
-                      href="https://dashboard.levelup-ecosystem.com/auth/sign-in"
-                      className="w-full block"
-                      onClick={() => {
+                    <MobileLoginChoices
+                      onSelect={() => {
                         setIsMenuOpen(false);
                         setOpenMobileDropdown(null);
                       }}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full font-medium rounded-xl h-10"
-                      >
-                        Sign In to LevelStudio
-                      </Button>
-                    </Link>
+                    />
                   </motion.div>
                 </motion.nav>
               </div>
