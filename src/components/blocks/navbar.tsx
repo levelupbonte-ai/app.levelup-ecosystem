@@ -52,6 +52,7 @@ const SERVICES_ITEMS = [
 
 const NAV_LINKS = [
   { label: "Projects", href: "/projects" },
+  { label: "Studio", href: "/studio" },
   { label: "About", href: "/about" },
   { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "/faq" },

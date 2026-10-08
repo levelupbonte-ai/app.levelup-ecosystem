@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle2, XCircle, ShieldCheck } from "lucide-react";
 import { getLegalDocument } from "@/lib/levelup-site";
 
 export const metadata = {
+  robots: { index: false, follow: true },
   title: "Terms of Service | LevelUp Ecosystem",
   description:
     "Terms of Service for LevelUp Ecosystem web design, security checks, and ongoing maintenance.",

@@ -270,6 +270,18 @@
     }
   }
 
+  // "Built by" + LevelUp Ecosystem wordmark (official logo, inherits the text color).
+  var BADGE_HTML =
+    '<span style="font:500 10px/1 ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase">Built by</span>' +
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 220" fill="none" aria-hidden="true" focusable="false" style="height:20px;width:auto">' +
+    '<defs><linearGradient id="lu-badge-top" x1="500" y1="10" x2="500" y2="90" gradientUnits="userSpaceOnUse">' +
+    '<stop stop-color="currentColor" stop-opacity="0.95"/><stop offset="1" stop-color="currentColor" stop-opacity="0.80"/></linearGradient>' +
+    '<linearGradient id="lu-badge-bottom" x1="500" y1="95" x2="500" y2="205" gradientUnits="userSpaceOnUse">' +
+    '<stop stop-color="currentColor" stop-opacity="0.75"/><stop offset="1" stop-color="currentColor" stop-opacity="0.45"/></linearGradient></defs>' +
+    '<text x="50%" y="85" text-anchor="middle" fill="url(#lu-badge-top)" font-family="system-ui,-apple-system,\'Segoe UI\',Roboto,\'DM Sans\',sans-serif" font-size="100px" font-weight="900" letter-spacing="-0.01em">LevelUp</text>' +
+    '<text x="50%" y="198" text-anchor="middle" fill="url(#lu-badge-bottom)" font-family="system-ui,-apple-system,\'Segoe UI\',Roboto,\'DM Sans\',sans-serif" font-size="135px" font-weight="900" letter-spacing="0.01em">Ecosystem</text>' +
+    '</svg>';
+
   function applyBadge(b) {
     var slots = document.querySelectorAll('[data-lu-badge]');
     for (var i = 0; i < slots.length; i++) {
@@ -283,8 +295,10 @@
       a.href = CREDIT_URL + '/?utm_source=' + encodeURIComponent(b.primary_domain || location.hostname) + '&utm_medium=referral&utm_campaign=built_by';
       a.target = '_blank';
       a.rel = 'noopener';
-      a.textContent = 'Built by LevelUp';
-      a.style.cssText = 'font:500 12px/1.4 system-ui,sans-serif;opacity:.75;color:inherit;text-decoration:none';
+      a.setAttribute('aria-label', 'Built by LevelUp Ecosystem (opens in a new tab)');
+      a.style.cssText = 'display:inline-flex;align-items:center;gap:8px;opacity:.75;color:inherit;text-decoration:none';
+      // Static markup (no site data inside), so innerHTML is safe here.
+      a.innerHTML = BADGE_HTML;
       slot.appendChild(a);
     }
   }
