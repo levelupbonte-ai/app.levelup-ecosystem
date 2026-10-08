@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
-import { geminiRotator } from "@/lib/ai/gemini";
+import { generateText } from "@/lib/ai/router";
 import { registerSubmission } from "@/lib/supabase";
 
 // "Start a project" studio: saves the brief in the LevelUp database (quote request)
@@ -12,7 +12,6 @@ import { registerSubmission } from "@/lib/supabase";
 // site per hour). A per-instance IP limit, a small prompt and a capped output
 // keep each call cheap; if the AI is unavailable the brief is still saved.
 
-const MODEL = "gemini-3.1-flash-lite";
 const MAX_PER_IP_PER_DAY = 3;
 const ipHits = new Map<string, { day: string; count: number }>();
 
@@ -56,14 +55,12 @@ Project type: ${brief.type} (${brief.category})
 Answers:
 ${lines}`;
   try {
-    const text = await geminiRotator.executeWithRotation(async (ai) => {
-      const resp = await ai.models.generateContent({
-        model: MODEL,
-        contents: [{ role: "user", parts: [{ text: prompt.slice(0, 6000) }] }],
-        config: { temperature: 0.5, maxOutputTokens: 260 },
-      });
-      return resp.text || "";
-    }, 2);
+    // "site" route: free fast models first (Groq, Mistral), Gemini as fallback.
+    const text = await generateText("site", {
+      prompt: prompt.slice(0, 6000),
+      maxTokens: 260,
+      temperature: 0.5,
+    });
     return text.trim().slice(0, 1200) || null;
   } catch {
     return null;
