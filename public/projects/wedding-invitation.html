@@ -1223,35 +1223,7 @@
   </div>
 </div>
 
-<!-- Firebase (compat SDK) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
 <script>
-  // ---------- CONFIG ----------
-  const firebaseConfig = {
-    apiKey: "AIzaSyA3JgvNu5p-43037jvm4WRDaJHI9ES7uGM",
-    authDomain: "levelup-ia.firebaseapp.com",
-    databaseURL: "https://levelup-ia-default-rtdb.firebaseio.com",
-    projectId: "levelup-ia",
-    storageBucket: "levelup-ia.firebasestorage.app",
-    messagingSenderId: "229420004282",
-    appId: "1:229420004282:web:6735f059a947f0936ae383"
-  };
-
-  const APP_ID = "ldc-2026";
-  const EMAILJS_PUBLIC_KEY = "7UQM4yu7KUSpooMy9";
-  const EMAILJS_SERVICE_ID = "service_yzyqexy";
-  const EMAILJS_TEMPLATE_ID = "template_bmdd4zl";
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
   // ---------- SUPPORT MODAL HANDLERS ----------
   const supportModal = document.getElementById("supportModal");
   const closeSupportModal = document.getElementById("closeSupportModal");
@@ -1347,86 +1319,25 @@
     return `WEDDING-${n}`;
   }
 
-  async function ensureAuth() {
-    try {
-      if (auth.currentUser) return auth.currentUser;
-      const cred = await auth.signInAnonymously();
-      return cred.user;
-    } catch (authErr) {
-      console.warn("Anonymous auth unavailable:", authErr);
-      return null;
-    }
-  }
-
-  async function saveInscription(data) {
-    // 1. Primary write to public bookings collection
-    try {
-      await db.collection("bookings").doc(data.inviteCode).set({
+  // The RSVP is stored in the LevelUp database and the confirmation e-mail is
+  // sent by LevelUp (Resend, levelup-ecosystem.com), both through our own API.
+  async function submitRsvp(data) {
+    const res = await fetch("/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "wedding_rsvp",
         nom: data.nom,
         email: data.email,
         telephone: data.telephone,
-        inviteCode: data.inviteCode,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        evenement: "Wedding Invitation"
-      });
-    } catch (bErr) {
-      console.warn("Bookings collection save fallback:", bErr);
+        inviteCode: data.inviteCode
+      })
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || "RSVP failed");
     }
-
-    // 2. Secondary write to artifacts parties
-    try {
-      const ref = db
-        .collection("artifacts").doc(APP_ID)
-        .collection("public").doc("data")
-        .collection("parties").doc(data.inviteCode);
-      await ref.set({
-        nom: data.nom,
-        email: data.email,
-        telephone: data.telephone,
-        inviteCode: data.inviteCode,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        evenement: "Wedding Invitation"
-      });
-    } catch (aErr) {
-      console.warn("Parties artifact save fallback:", aErr);
-    }
-  }
-
-  async function sendInvitationEmail(data) {
-    try {
-      await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "wedding_rsvp",
-          nom: data.nom,
-          email: data.email,
-          telephone: data.telephone,
-          inviteCode: data.inviteCode
-        })
-      });
-    } catch (apiErr) {
-      console.warn("Backend API email dispatch fallback:", apiErr);
-    }
-
-    try {
-      const params = {
-        to_name: data.nom,
-        to_email: data.email,
-        invitation_number: data.inviteCode,
-        event_name: "Wedding Invitation",
-        event_lieu: "ROSE ESTATE",
-        event_heure: "4:00 PM prompt",
-        event_prix: "Admission by official invitation only",
-        cp_numero: "support: contact@levelup-ecosystem.com",
-        whatsapp_link: "https://levelup-ecosystem.com/#contact",
-        org_name: "The Bride & Groom",
-        telephone: data.telephone
-      };
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-    } catch (ejsErr) {
-      console.warn("EmailJS send failed:", ejsErr);
-    }
+    return res.json();
   }
 
   // ---------- CONFETTI ----------
@@ -1500,19 +1411,8 @@
     submitBtn.textContent = "Confirming attendance...";
 
     try {
-      await ensureAuth();
       const inviteCode = generateInviteCode();
-      const data = { nom, email, telephone, inviteCode };
-
-      // Critical step: save registration to database
-      await saveInscription(data);
-
-      // Non-critical: send email
-      try {
-        await sendInvitationEmail(data);
-      } catch (emailErr) {
-        console.error("Registration saved, but confirmation email could not be sent:", emailErr);
-      }
+      await submitRsvp({ nom, email, telephone, inviteCode });
 
       document.getElementById("formCard").style.display = "none";
       const successCard = document.getElementById("successCard");

@@ -3,8 +3,9 @@
  *
  * Everything comes from one public RPC, `get_site_bundle(p_website_id)`, called
  * with the PUBLISHABLE key only (RLS / SECURITY DEFINER RPC on the database
- * side). The response is cached by Next (5 min, tag "levelup-site") and
- * de-duplicated per request with React `cache()`.
+ * side). The response is cached by Next (tag "levelup-site", 5 min at most):
+ * the database pings /api/revalidate on every content change, so edits show up
+ * within seconds. Requests are de-duplicated with React `cache()`.
  *
  * Rows are written by dashboard editors, so every value is validated before it
  * reaches a component, and every getter falls back to the hard-coded content
@@ -534,4 +535,50 @@ export async function getLegalDocument(slug: string): Promise<{
     last_updated: str(block.last_updated, 80),
     content_markdown: content,
   };
+}
+
+// ============================================================================
+// Editable section text (content_blocks page/key, see src/data/site-copy.ts)
+// ============================================================================
+
+/**
+ * Overlays a database block on the built-in copy, keeping the default's shape:
+ * strings stay strings, string lists stay string lists, and lists of objects
+ * are merged item by item against the first default item. Unknown keys and
+ * wrong types are ignored, and an empty list keeps the default list.
+ */
+function mergeCopy<T>(defaults: T, value: unknown): T {
+  if (typeof defaults === "string") return (str(value) ?? defaults) as T;
+  if (Array.isArray(defaults)) {
+    if (!Array.isArray(value) || value.length === 0) return defaults;
+    const sample = defaults[0];
+    if (typeof sample === "string") {
+      const list = strings(value, 30);
+      return (list.length ? list : defaults) as T;
+    }
+    if (isObject(sample)) {
+      const list = objects(value, 30).map((item) => mergeCopy(sample, item));
+      return (list.length ? list : defaults) as T;
+    }
+    return defaults;
+  }
+  if (isObject(defaults)) {
+    if (!isObject(value)) return defaults;
+    const out: Json = {};
+    for (const [key, fallback] of Object.entries(defaults)) {
+      out[key] = mergeCopy(fallback, value[key]);
+    }
+    return out as T;
+  }
+  return defaults;
+}
+
+/** Text for one section: content_blocks `page/key` over the built-in defaults. */
+export async function getSectionCopy<T extends Json>(
+  page: string,
+  key: string,
+  defaults: T,
+): Promise<T> {
+  const bundle = await getSiteBundle();
+  return mergeCopy(defaults, bundle?.blocks[page]?.[key]);
 }
