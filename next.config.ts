@@ -52,6 +52,17 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // The client dashboard is its own app.
+      {
+        source: "/dashboard/:path*",
+        destination: "https://dashboard.levelup-ecosystem.com/dashboard/site",
+        permanent: true,
+      },
+      {
+        source: "/dashboard",
+        destination: "https://dashboard.levelup-ecosystem.com/dashboard/site",
+        permanent: true,
+      },
       {
         source: "/retrouvailles",
         destination: "/projects/wedding-invitation",

@@ -507,7 +507,7 @@ export const Navbar = () => {
               </Link>
 
               {/* Login button right after Start a Project */}
-              <Link href="/login" onClick={() => setIsServicesOpen(false)}>
+              <Link href="https://dashboard.levelup-ecosystem.com/auth/sign-in" onClick={() => setIsServicesOpen(false)}>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -800,7 +800,7 @@ export const Navbar = () => {
                       </Button>
                     </Link>
                     <Link
-                      href="/login"
+                      href="https://dashboard.levelup-ecosystem.com/auth/sign-in"
                       className="w-full block"
                       onClick={() => {
                         setIsMenuOpen(false);
