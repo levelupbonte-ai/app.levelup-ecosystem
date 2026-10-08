@@ -15,7 +15,16 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
-const items = [
+export interface TestimonialItem {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  image: string;
+}
+
+// Built-in fallback; the live list comes from the LevelUp database (reviews).
+const defaultItems: TestimonialItem[] = [
   {
     quote: "We're misusing LevelUp as a CRM and it still works!",
     author: "Amy Chase",
@@ -77,10 +86,22 @@ const items = [
 export const Testimonials = ({
   className,
   dashedLineClassName,
+  items: itemsProp,
 }: {
   className?: string;
   dashedLineClassName?: string;
+  items?: TestimonialItem[];
 }) => {
+  // Published reviews from the database; none published → no section.
+  if (itemsProp && itemsProp.length === 0) return null;
+  // The carousel loops: short lists are shown twice, like the built-in list.
+  const items =
+    itemsProp && itemsProp.length > 0
+      ? itemsProp.length < 8
+        ? [...itemsProp, ...itemsProp]
+        : itemsProp
+      : defaultItems;
+
   return (
     <>
       <section className={cn("overflow-hidden py-28 lg:py-32", className)}>
@@ -132,7 +153,8 @@ export const Testimonials = ({
                           </blockquote>
                           <div className="space-y-0.5">
                             <div className="text-foreground font-semibold">
-                              {testimonial.author}, {testimonial.role}
+                              {testimonial.author}
+                            {testimonial.role ? `, ${testimonial.role}` : ""}
                             </div>
                             <div className="text-muted-foreground text-sm">
                               {testimonial.company}

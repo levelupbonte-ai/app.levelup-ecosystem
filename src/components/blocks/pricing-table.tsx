@@ -7,8 +7,29 @@ import { Check, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+export interface BuildTablePlan {
+  id: string;
+  name: string;
+  buildPrice: string;
+  monthlyPrice: string;
+  badge?: string;
+  isPopular?: boolean;
+  ctaText: string;
+  ctaHref: string;
+}
+
+export interface CareTablePlan {
+  id: string;
+  name: string;
+  price: string;
+  badge?: string;
+  isPopular?: boolean;
+  ctaText: string;
+  ctaHref: string;
+}
+
 // 1. Website Build Plans
-const buildTablePlans = [
+const defaultBuildTablePlans: BuildTablePlan[] = [
   {
     id: "starter",
     name: "Starter",
@@ -48,7 +69,7 @@ const buildTablePlans = [
 ];
 
 // 2. Monthly Care Plans
-const careTablePlans = [
+const defaultCareTablePlans: CareTablePlan[] = [
   {
     id: "essential",
     name: "Essential Care",
@@ -76,7 +97,7 @@ const careTablePlans = [
   },
 ];
 
-interface ComparisonRow {
+export interface ComparisonRow {
   name: string;
   starter: boolean | string;
   secure: boolean | string;
@@ -84,7 +105,12 @@ interface ComparisonRow {
   custom: boolean | string;
 }
 
-const buildComparisonData: { category: string; rows: ComparisonRow[] }[] = [
+export interface ComparisonCategory {
+  category: string;
+  rows: ComparisonRow[];
+}
+
+const defaultBuildComparisonData: ComparisonCategory[] = [
   {
     category: "Core Deliverables & Architecture",
     rows: [
@@ -254,14 +280,14 @@ const buildComparisonData: { category: string; rows: ComparisonRow[] }[] = [
   },
 ];
 
-interface CareComparisonRow {
+export interface CareComparisonRow {
   name: string;
   essential: boolean | string;
   pro: boolean | string;
   premium: boolean | string;
 }
 
-const careComparisonRows: CareComparisonRow[] = [
+const defaultCareComparisonRows: CareComparisonRow[] = [
   { name: "Monthly Investment", essential: "$39/mo", pro: "$99/mo", premium: "$199/mo" },
   { name: "Managed Cloud Hosting", essential: true, pro: true, premium: true },
   { name: "SSL / HTTPS & DNS Maintenance", essential: true, pro: true, premium: true },
@@ -315,7 +341,20 @@ const renderCell = (val: boolean | string) => {
   );
 };
 
-export const PricingTable = () => {
+/** Comparison matrix from the LevelUp database (content_blocks pricing/comparison). */
+export interface PricingComparison {
+  buildPlans: BuildTablePlan[];
+  carePlans: CareTablePlan[];
+  buildRows: ComparisonCategory[];
+  careRows: CareComparisonRow[];
+}
+
+export const PricingTable = ({ comparison }: { comparison?: PricingComparison }) => {
+  const buildTablePlans = comparison?.buildPlans ?? defaultBuildTablePlans;
+  const careTablePlans = comparison?.carePlans ?? defaultCareTablePlans;
+  const buildComparisonData = comparison?.buildRows ?? defaultBuildComparisonData;
+  const careComparisonRows = comparison?.careRows ?? defaultCareComparisonRows;
+
   const [activeTableTab, setActiveTableTab] = useState<"builds" | "care">("builds");
   const [selectedMobileBuildIdx, setSelectedMobileBuildIdx] = useState(1);
   const [selectedMobileCareIdx, setSelectedMobileCareIdx] = useState(1);

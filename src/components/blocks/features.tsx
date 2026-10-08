@@ -474,7 +474,9 @@ export function BarberShopShowcase({
 
 export const ProjectShowcase = BarberShopShowcase;
 
-export const Features = () => {
+export const Features = ({ projects }: { projects?: ProjectItem[] }) => {
+  const showcaseItems = projects && projects.length > 0 ? projects : items;
+
   return (
     <section id="feature-modern-teams" className="pb-20 lg:pb-32 pt-8">
       <div className="container max-w-6xl">
@@ -504,11 +506,11 @@ export const Features = () => {
         </div>
 
         {/* Showcase Items */}
-        {items.map((item, index) => (
+        {showcaseItems.map((item, index) => (
           <BarberShopShowcase
             key={item.id}
             item={item}
-            showExploreButton={index === items.length - 1}
+            showExploreButton={index === showcaseItems.length - 1}
           />
         ))}
 

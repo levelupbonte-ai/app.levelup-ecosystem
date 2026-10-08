@@ -8,7 +8,13 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
-const categories = [
+export interface FaqCategory {
+  title: string;
+  questions: { question: string; answer: string }[];
+}
+
+// Built-in fallback; the live FAQ comes from the LevelUp database (faq_items).
+export const defaultFaqCategories: FaqCategory[] = [
   {
     title: "About LevelUp Ecosystem",
     questions: [
@@ -75,11 +81,16 @@ export const FAQ = ({
   headerTag = "h2",
   className,
   className2,
+  categories: categoriesProp,
 }: {
   headerTag?: "h1" | "h2";
   className?: string;
   className2?: string;
+  categories?: FaqCategory[];
 }) => {
+  const categories =
+    categoriesProp && categoriesProp.length > 0 ? categoriesProp : defaultFaqCategories;
+
   return (
     <section className={cn("py-28 lg:py-32", className)}>
       <div className="container max-w-5xl">
