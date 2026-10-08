@@ -41,6 +41,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
       const urlHasIntro = typeof window !== "undefined" && window.location.search.includes("intro");
 
       if (hasSeenSession === "true" && !urlHasIntro) {
+        document.documentElement.classList.remove("lu-intro");
         setShouldPlay(false);
         setPhase("done");
         if (typeof window !== "undefined") {
@@ -134,6 +135,8 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
     // 1.85s: Curtain lifts upward to reveal the website
     const tExit = setTimeout(() => {
       setPhase("exit");
+      // The curtain lifts: uncover the page underneath it.
+      document.documentElement.classList.remove("lu-intro");
       if (typeof window !== "undefined") {
         (window as unknown as { __site_ready?: boolean }).__site_ready = true;
         window.dispatchEvent(new CustomEvent("site-ready"));

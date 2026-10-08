@@ -351,6 +351,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* First visit of the session: hide the page under the intro colour before
+            the first paint, so the content never flashes before the animation.
+            The preloader lifts the cover; a timer guarantees it never sticks. */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "html.lu-intro body::before{content:'';position:fixed;inset:0;z-index:99998;background:#FAFAFD}html.lu-intro.dark body::before{background:#0A0A10}",
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var d=document.documentElement;if(sessionStorage.getItem('levelup_preloader_intro_seen_v4')!=='true'||location.search.indexOf('intro')>-1){d.classList.add('lu-intro');setTimeout(function(){d.classList.remove('lu-intro')},4000)}}catch(e){}})();",
+          }}
+        />
         <link rel="icon" type="image/svg+xml" href="/icon.svg" />
         <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
