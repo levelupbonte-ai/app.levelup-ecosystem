@@ -182,7 +182,7 @@ export function Preloader({ forcePlay = false, onComplete }: PreloaderProps) {
 
   return (
     <AnimatePresence>
-      {phase !== "done" && (
+      {(phase as string) !== "done" && (
         <motion.div
           key="levelup-cinematic-preloader"
           initial={{ y: 0 }}

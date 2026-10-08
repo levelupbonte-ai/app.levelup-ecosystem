@@ -326,7 +326,7 @@ const renderCell = (val: boolean | string) => {
     );
   }
 
-  if (val === "—" || val === false) {
+  if (val === "—") {
     return (
       <span className="size-6 flex items-center justify-center mx-auto text-muted-foreground/45">
         <X className="size-4 stroke-[2.5]" />

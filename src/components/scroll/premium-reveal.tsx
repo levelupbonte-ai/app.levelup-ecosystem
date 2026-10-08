@@ -37,7 +37,7 @@ function useResponsiveYOffset(desktopOffset = 20, mobileOffset = 10) {
 }
 
 // Smooth high-end agency ease-out curve (no bouncing, minimal and elegant)
-const EASE_OUT_PREMIUM = [0.16, 1, 0.3, 1];
+const EASE_OUT_PREMIUM = [0.16, 1, 0.3, 1] as const;
 
 interface PremiumServiceBlockProps {
   title: string;
