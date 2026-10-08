@@ -6,59 +6,63 @@ import { Mail, MapPin, Sparkles } from "lucide-react";
 
 import { ContactForm } from "@/components/blocks/contact-form";
 import { DashedLine } from "@/components/dashed-line";
+import { contactCopy } from "@/data/site-copy";
+import { getSectionCopy } from "@/lib/levelup-site";
 
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Studio Location",
-    content: (
-      <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        <p className="font-semibold text-foreground">San Diego, California · Worldwide</p>
-        <p>Partnering with ambitious businesses, founders, and creators across the United States and globally.</p>
-      </div>
-    ),
-  },
-  {
-    icon: Mail,
-    title: "Direct Studio Email",
-    content: (
-      <div className="mt-2 text-sm">
-        <Link
-          href="mailto:contact@levelup-ecosystem.com"
-          className="font-medium text-foreground hover:underline"
-        >
-          contact@levelup-ecosystem.com
-        </Link>
-        <p className="text-muted-foreground text-xs mt-1">
-          Direct engineering &amp; project inquiries
-        </p>
-      </div>
-    ),
-  },
-  {
-    icon: Sparkles,
-    title: "Free 24-48h Preview",
-    content: (
-      <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        <p>Send your business details. We build a functional mobile prototype on your phone before any payment.</p>
-      </div>
-    ),
-  },
-];
+const EMAIL = /^[^\s@<>"']+@[^\s@<>"']+\.[a-z]{2,}$/i;
 
-export default function Contact() {
+export default async function Contact() {
+  const copy = await getSectionCopy("contact", "intro", contactCopy);
+  const email = EMAIL.test(copy.email) ? copy.email : contactCopy.email;
+  const contactInfo = [
+    {
+      icon: MapPin,
+      title: "Studio Location",
+      content: (
+        <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
+          <p className="font-semibold text-foreground">{copy.location}</p>
+          <p>{copy.location_note}</p>
+        </div>
+      ),
+    },
+    {
+      icon: Mail,
+      title: "Direct Studio Email",
+      content: (
+        <div className="mt-2 text-sm">
+          <Link
+            href={`mailto:${email}`}
+            className="font-medium text-foreground hover:underline"
+          >
+            {email}
+          </Link>
+          <p className="text-muted-foreground text-xs mt-1">{copy.email_note}</p>
+        </div>
+      ),
+    },
+    {
+      icon: Sparkles,
+      title: copy.preview_title,
+      content: (
+        <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
+          <p>{copy.preview_text}</p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <section className="py-28 lg:py-32 lg:pt-44">
       <div className="container max-w-3xl">
         <div className="text-center space-y-3">
           <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
-            Get In Touch With LevelUp Ecosystem
+            {copy.eyebrow}
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">
-            Let&apos;s Build Your Website
+            {copy.title}
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed text-sm md:text-base">
-            Request your free interactive mobile preview, ask questions about 24/7 online booking, or request a non-destructive website security check.
+            {copy.subtitle}
           </p>
         </div>
 
@@ -82,9 +86,9 @@ export default function Contact() {
         {/* Inquiry Form */}
         <div className="mx-auto max-w-xl">
           <div className="mb-6 space-y-1 text-center md:text-left">
-            <h2 className="text-xl font-bold tracking-tight">Request a Preview or Consultation</h2>
+            <h2 className="text-xl font-bold tracking-tight">{copy.form_title}</h2>
             <p className="text-xs text-muted-foreground">
-              Tell us about your business, current website or goals. We reply within 24 business hours.
+              {copy.form_subtitle}
             </p>
           </div>
           <ContactForm />

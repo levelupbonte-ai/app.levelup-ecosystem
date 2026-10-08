@@ -10,31 +10,16 @@ import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
 import { LevelUpTransitionOverlay } from "@/components/transition-overlay";
 import { Button } from "@/components/ui/button";
+import { heroCopy } from "@/data/site-copy";
 
-const features = [
-  {
-    title: "Bespoke Websites",
-    description: "Fast, modern sites built to convert.",
-    iconName: "globe" as const,
-  },
-  {
-    title: "Search Visibility",
-    description: "Get found first on Google & Maps.",
-    iconName: "search" as const,
-  },
-  {
-    title: "Cyber Protection",
-    description: "Active shield against attacks and downtime.",
-    iconName: "shield" as const,
-  },
-  {
-    title: "Automated Booking",
-    description: "24/7 scheduling with zero manual work.",
-    iconName: "calendar" as const,
-  },
-];
+const ICONS = ["globe", "search", "shield", "calendar"] as const;
+type IconName = (typeof ICONS)[number];
+const iconName = (value: string, index: number): IconName =>
+  (ICONS as readonly string[]).includes(value)
+    ? (value as IconName)
+    : ICONS[index % ICONS.length];
 
-export const Hero = () => {
+export const Hero = ({ copy = heroCopy }: { copy?: typeof heroCopy }) => {
   const [isOpeningStudio, setIsOpeningStudio] = useState(false);
 
   const handleOpenStudio = (e: React.MouseEvent) => {
@@ -57,7 +42,7 @@ export const Hero = () => {
         {/* Left side - Main content with scroll reveals */}
         <div className="flex-1">
           <SplitText
-            text="LevelUp Your Online Presence."
+            text={copy.title}
             as="h1"
             className="text-foreground max-w-160 text-3xl tracking-tight md:text-4xl lg:text-5xl font-bold"
             delay={0.15}
@@ -68,9 +53,9 @@ export const Hero = () => {
           <ScrollReveal yOffset={24} duration={0.8} delay={0.35}>
             <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mt-5 max-w-xl">
               <span className="text-foreground font-semibold text-lg sm:text-xl md:text-2xl block mb-1.5">
-                Turn Your Business Into a Brand.
+                {copy.kicker}
               </span>
-              Modern websites designed to get you found, build trust, and turn visitors into customers.
+              {copy.subtitle}
             </p>
           </ScrollReveal>
 
@@ -78,7 +63,7 @@ export const Hero = () => {
             <div className="mt-8 flex flex-wrap items-center gap-4 lg:flex-nowrap">
               <Button asChild>
                 <Link href="/start-project">
-                  Build a Project
+                  {copy.cta_primary}
                 </Link>
               </Button>
               <Button
@@ -88,7 +73,7 @@ export const Hero = () => {
               >
                 <Link href="/start-project">
                   <span className="max-w-56 truncate text-start md:max-w-none">
-                    Build free preview
+                    {copy.cta_secondary}
                   </span>
                   <ArrowRight className="size-4 stroke-3" />
                 </Link>
@@ -108,12 +93,12 @@ export const Hero = () => {
             className="absolute top-0 lg:hidden"
           />
           <div>
-            {features.map((feature, index) => (
+            {copy.features.map((feature, index) => (
               <PremiumServiceBlock
-                key={feature.title}
+                key={index}
                 title={feature.title}
                 description={feature.description}
-                iconName={feature.iconName}
+                iconName={iconName(feature.icon, index)}
                 index={index}
               />
             ))}

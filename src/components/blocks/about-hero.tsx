@@ -1,49 +1,28 @@
 import { DashedLine } from "@/components/dashed-line";
+import { aboutHeroCopy } from "@/data/site-copy";
+import { getSectionCopy } from "@/lib/levelup-site";
 
-const stats = [
-  {
-    value: "< 2s",
-    label: "Mobile page load speed",
-  },
-  {
-    value: "24/7",
-    label: "Online appointment booking",
-  },
-  {
-    value: "100%",
-    label: "Code & client ownership",
-  },
-  {
-    value: "$0",
-    label: "Bulky builder subscription lock-in",
-  },
-];
-
-export function AboutHero() {
+export async function AboutHero() {
+  const copy = await getSectionCopy("about", "hero", aboutHeroCopy);
   return (
     <section className="">
       <div className="container flex max-w-5xl flex-col justify-between gap-8 md:gap-20 lg:flex-row lg:items-center lg:gap-24 xl:gap-24">
         <div className="flex-[1.5]">
           <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
-            Independent Web &amp; Security Engineering Studio • California &amp; Worldwide
+            {copy.eyebrow}
           </span>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            Meet LevelUp Ecosystem
+            {copy.title}
           </h1>
 
           <p className="text-foreground/90 mt-5 text-xl md:text-2xl lg:text-3xl font-medium leading-snug">
-            Fast, secure digital infrastructure engineered for ambitious brands, founders, and creators worldwide.
+            {copy.lead}
           </p>
 
           <div className="text-muted-foreground mt-8 hidden max-w-lg space-y-4 text-base leading-relaxed md:block lg:mt-10">
-            <p>
-              Headquartered in San Diego, California and collaborating with clients across the United States and globally,
-              LevelUp Ecosystem delivers custom web platforms that solve real business needs.
-            </p>
-            <p>
-              We engineer bespoke digital architectures with effortless 24/7 customer
-              appointment booking, sub-2-second mobile load speeds, and real cybersecurity protections from day one.
-            </p>
+            {copy.paragraphs.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
           </div>
         </div>
 
@@ -58,8 +37,8 @@ export function AboutHero() {
             orientation="horizontal"
             className="absolute top-0 lg:hidden"
           />
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1">
+          {copy.stats.map((stat, index) => (
+            <div key={index} className="flex flex-col gap-1">
               <div className="font-display text-4xl font-bold tracking-tight md:text-5xl text-foreground">
                 {stat.value}
               </div>

@@ -5,7 +5,7 @@ import {
   getPreviewRequestEmailHtml,
   getWeddingSimulationEmailHtml,
 } from "@/lib/email-templates";
-import { isResendConfigured, resend } from "@/lib/resend";
+import { TEAM_INBOX, sendBrandedEmail } from "@/lib/resend";
 import { registerSubmission } from "@/lib/supabase";
 
 // Standard RFC 5322 email validation regex
@@ -73,35 +73,11 @@ export async function POST(req: NextRequest) {
         telephone: cleanTelephone,
       });
 
-      let sendSuccess = false;
-
-      if (isResendConfigured() && resend) {
-        const primaryFrom = process.env.RESEND_FROM_EMAIL || "LevelStudio <studio@levelup-ecosystem.com>";
-        try {
-          await resend.emails.send({
-            from: primaryFrom,
-            to: [cleanEmail],
-            subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
-            html: emailHtml,
-          });
-          sendSuccess = true;
-        } catch {
-          try {
-            await resend.emails.send({
-              from: "LevelStudio <onboarding@resend.dev>",
-              to: [cleanEmail],
-              subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
-              html: emailHtml,
-            });
-            sendSuccess = true;
-          } catch (fallbackErr) {
-            if (process.env.NODE_ENV === "development") {
-              // eslint-disable-next-line no-console
-              console.warn("[Resend] Both primary and fallback email send failed:", fallbackErr);
-            }
-          }
-        }
-      }
+      const sendSuccess = await sendBrandedEmail({
+        to: cleanEmail,
+        subject: "RSVP Confirmation — Le Dernier Retrouvailles (Simulation Demo)",
+        html: emailHtml,
+      });
 
       return NextResponse.json({
         success: true,
@@ -158,51 +134,17 @@ export async function POST(req: NextRequest) {
         queuePosition: sanitizedQueuePosition,
       });
 
-      let clientDelivered = false;
-      let teamAlertDelivered = false;
-
-      if (isResendConfigured() && resend) {
-        try {
-          await resend.emails.send({
-            from: "LevelUp Ecosystem <contact@levelup-ecosystem.com>",
-            to: [cleanEmail],
-            subject: "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
-            html: clientEmailHtml,
-          });
-          clientDelivered = true;
-
-          try {
-            const systemSender = process.env.RESEND_FROM_EMAIL || "LevelUp System <system@levelup-ecosystem.com>";
-            await resend.emails.send({
-              from: systemSender,
-              to: ["teams@levelup-ecosystem.com"],
-              subject: `[New Lead] ${cleanName}${cleanCompany ? ` (${cleanCompany})` : ""}${isWaitlisted ? ` [Queue #${sanitizedQueuePosition}]` : ""}`,
-              html: internalAlertHtml,
-            });
-            teamAlertDelivered = true;
-          } catch {
-            try {
-              await resend.emails.send({
-                from: "LevelUp <onboarding@resend.dev>",
-                to: ["teams@levelup-ecosystem.com"],
-                subject: `[New Lead] ${cleanName}${cleanCompany ? ` (${cleanCompany})` : ""}${isWaitlisted ? ` [Queue #${sanitizedQueuePosition}]` : ""}`,
-                html: internalAlertHtml,
-              });
-              teamAlertDelivered = true;
-            } catch (tErr) {
-              if (process.env.NODE_ENV === "development") {
-                // eslint-disable-next-line no-console
-                console.warn("[Resend] Team alert fallback failed:", tErr);
-              }
-            }
-          }
-        } catch (resendErr) {
-          if (process.env.NODE_ENV === "development") {
-            // eslint-disable-next-line no-console
-            console.warn("[Resend] Preview request dispatch failed:", resendErr);
-          }
-        }
-      }
+      const clientDelivered = await sendBrandedEmail({
+        to: cleanEmail,
+        subject: "We Received Your Free Mobile Preview Request — LevelUp Ecosystem",
+        html: clientEmailHtml,
+      });
+      const teamAlertDelivered = await sendBrandedEmail({
+        sender: "system",
+        to: TEAM_INBOX,
+        subject: `[New Lead] ${cleanName}${cleanCompany ? ` (${cleanCompany})` : ""}${isWaitlisted ? ` [Queue #${sanitizedQueuePosition}]` : ""}`,
+        html: internalAlertHtml,
+      });
 
       return NextResponse.json({
         success: true,
