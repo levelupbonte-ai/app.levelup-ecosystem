@@ -43,7 +43,27 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
+    const signIn = "https://dashboard.levelup-ecosystem.com/auth/sign-in";
+    const signUp = "https://dashboard.levelup-ecosystem.com/auth/sign-up";
     return [
+      // Authentication only happens on the dashboard. Old links keep working:
+      // the query string (?next=) is forwarded, legacy ?redirect_uri= becomes ?next=.
+      {
+        source: "/login",
+        has: [{ type: "query", key: "redirect_uri", value: "(?<redirectUri>.+)" }],
+        destination: `${signIn}?next=:redirectUri`,
+        permanent: true,
+      },
+      { source: "/login", destination: signIn, permanent: true },
+      {
+        source: "/signup",
+        has: [{ type: "query", key: "redirect_uri", value: "(?<redirectUri>.+)" }],
+        destination: `${signUp}?next=:redirectUri`,
+        permanent: true,
+      },
+      { source: "/signup", destination: signUp, permanent: true },
+      { source: "/auth/sign-up", destination: signUp, permanent: true },
+      { source: "/auth/:path*", destination: signIn, permanent: true },
       // The client dashboard is its own app.
       {
         source: "/dashboard/:path*",
