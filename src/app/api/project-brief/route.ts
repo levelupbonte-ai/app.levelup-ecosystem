@@ -93,7 +93,13 @@ export async function POST(request: NextRequest) {
   if (saved === "rate_limited") return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   if (saved !== "ok") return NextResponse.json({ error: "unavailable" }, { status: 503 });
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  // Vercel sets x-vercel-forwarded-for / x-real-ip itself; a client-supplied
+  // x-forwarded-for value is only a last resort.
+  const ip =
+    request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip")?.trim() ||
+    request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
+    "unknown";
   const summary = allowIp(ip) ? await recap(brief) : null;
   return NextResponse.json({ reference: brief.id, summary });
 }

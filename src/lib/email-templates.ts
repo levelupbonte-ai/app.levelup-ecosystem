@@ -8,6 +8,14 @@
  * - Simulation templates link directly to the consultation/order form (no studio link)
  */
 
+/** Escapes text for HTML element and attribute contexts. Every value from a
+ *  visitor goes through this before it is placed in an email. */
+export function escapeHtml(value: unknown): string {
+  return String(value ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
+  );
+}
+
 interface WeddingSimulationEmailProps {
   name: string;
   inviteCode: string;
@@ -19,6 +27,9 @@ export function getWeddingSimulationEmailHtml({
   inviteCode,
   telephone,
 }: WeddingSimulationEmailProps): string {
+  name = escapeHtml(name) as typeof name;
+  inviteCode = escapeHtml(inviteCode) as typeof inviteCode;
+  telephone = escapeHtml(telephone) as typeof telephone;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,8 +155,9 @@ export function getPreviewRequestEmailHtml({
   name,
   company,
   isWaitlisted,
-  message,
 }: PreviewRequestEmailProps): string {
+  name = escapeHtml(name) as typeof name;
+  company = escapeHtml(company) as typeof company;
   const statusHeadline = isWaitlisted
     ? `Priority Waitlist: Your Website Preview Request`
     : `We Received Your Preview Request`;
@@ -219,16 +231,7 @@ export function getPreviewRequestEmailHtml({
                       </tr>`
                           : ""
                       }
-                      ${
-                        message
-                          ? `<tr>
-                        <td style="padding-top:12px;">
-                          <span style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#a09584;display:block;">Submitted Message</span>
-                          <span style="font-size:12.5px;color:#b6aba0;line-height:1.5;display:block;white-space:pre-wrap;">${message.slice(0, 300)}</span>
-                        </td>
-                      </tr>`
-                          : ""
-                      }
+                      <!-- The visitor's message is never echoed back: this email can reach any address typed in the form. -->
                     </table>
                   </td>
                 </tr>
@@ -302,6 +305,11 @@ export function getInternalLeadAlertHtml({
   isWaitlisted,
   queuePosition,
 }: InternalLeadAlertProps): string {
+  name = escapeHtml(name) as typeof name;
+  email = escapeHtml(email) as typeof email;
+  company = escapeHtml(company) as typeof company;
+  employees = escapeHtml(employees) as typeof employees;
+  message = escapeHtml(message) as typeof message;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>

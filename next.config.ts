@@ -42,14 +42,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/__/auth/:path*",
-        destination: "https://app-levelup-ecosystem.firebaseapp.com/__/auth/:path*",
-      },
-    ];
-  },
   async redirects() {
     return [
       // The client dashboard is its own app.
@@ -118,10 +110,10 @@ const nextConfig: NextConfig = {
             key: "X-Content-Type-Options",
             value: "nosniff",
           },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
-          },
+          // Only LevelUp itself may frame these pages (clickjacking).
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
