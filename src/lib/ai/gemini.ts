@@ -105,8 +105,17 @@ function nextPacificMidnight(now = new Date()): number {
   return next.getTime() + offset;
 }
 
-function classify(err: any): { kind: FailureKind; retryAfterMs?: number } {
-  const msg = String(err?.message || err || "");
+type KeyStateRow = {
+  fingerprint: string;
+  cooldown_until: string | null;
+  exhausted_until: string | null;
+  invalid: boolean | null;
+  updated_at: string | null;
+};
+
+function classify(error: unknown): { kind: FailureKind; retryAfterMs?: number } {
+  const err = error as { message?: unknown; status?: unknown; code?: unknown } | null;
+  const msg = String(err?.message || error || "");
   const status = Number(err?.status || err?.code || 0);
   if (/API key not valid|API_KEY_INVALID|API key expired|UNAUTHENTICATED|ACCESS_TOKEN_TYPE_UNSUPPORTED|PERMISSION_DENIED/i.test(msg) || status === 401 || status === 403) {
     return { kind: "invalid_key" };
@@ -231,13 +240,13 @@ export class GeminiKeyRotator {
           .eq("provider", "gemini")
           .in("fingerprint", this.slots.map((s) => s.fingerprint));
         if (error) throw error;
-        const byFp = new Map((data ?? []).map((r: any) => [r.fingerprint, r]));
+        const byFp = new Map((data ?? []).map((r: KeyStateRow) => [r.fingerprint, r]));
         for (const s of this.slots) {
-          const r: any = byFp.get(s.fingerprint);
+          const r = byFp.get(s.fingerprint);
           if (!r) continue;
           s.cooldownUntil = Math.max(s.cooldownUntil, r.cooldown_until ? Date.parse(r.cooldown_until) : 0);
           s.exhaustedUntil = Math.max(s.exhaustedUntil, r.exhausted_until ? Date.parse(r.exhausted_until) : 0);
-          if (r.invalid) s.invalidUntil = Math.max(s.invalidUntil, Date.parse(r.updated_at) + 86_400_000);
+          if (r.invalid) s.invalidUntil = Math.max(s.invalidUntil, Date.parse(r.updated_at ?? "") + 86_400_000);
         }
       } catch {
         // Shared state is an optimisation; local state keeps working without it.
@@ -359,11 +368,11 @@ export class GeminiKeyRotator {
         const result = await operation(this.createClient(slot.key), slot.key);
         this.markSuccess(slot);
         return result;
-      } catch (err: any) {
+      } catch (err: unknown) {
         lastError = err;
         const { kind, retryAfterMs } = classify(err);
         if (kind === "other") throw err;
-        this.markFailure(slot, kind, retryAfterMs, String(err?.message || ""));
+        this.markFailure(slot, kind, retryAfterMs, String((err as { message?: unknown } | null)?.message || ""));
         console.warn(`[gemini:${this.pool}] attempt ${i + 1} failed (${kind}) with key ${slot.fingerprint}; switching key`);
       }
     }

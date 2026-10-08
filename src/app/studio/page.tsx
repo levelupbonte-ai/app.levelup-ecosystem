@@ -4,8 +4,7 @@ import Link from "next/link";
 import { Background } from "@/components/background";
 import { DashedLine } from "@/components/dashed-line";
 import { Button } from "@/components/ui/button";
-
-const STUDIO_URL = "https://studio.levelup-ecosystem.com";
+import { LEVELSTUDIO_URL as STUDIO_URL } from "@/lib/levelup-login";
 
 export const metadata: Metadata = {
   title: "LevelStudio — AI Website Builder by LevelUp Ecosystem",

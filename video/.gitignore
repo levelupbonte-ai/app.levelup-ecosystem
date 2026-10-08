@@ -1,0 +1,7 @@
+node_modules
+out
+public/captures/*
+!public/captures/studio-home.jpg
+!public/captures/studio-chat-*.jpg
+!public/captures/*-mobile-full.jpg
+public/captures/*-desktop-full.jpg
