@@ -9,13 +9,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function StartProjectPage() {
+export default async function StartProjectPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string | string[] }>;
+}) {
+  // English by default; ?lang=fr|en is forwarded to the studio.
+  const { lang } = await searchParams;
+  const src =
+    lang === "fr" || lang === "en"
+      ? `/project-studio.html?lang=${lang}`
+      : "/project-studio.html";
   return (
-    <div className="fixed inset-0 z-[200] w-screen h-dvh bg-[#07070b] overflow-hidden select-none">
+    <div className="fixed inset-0 z-[200] h-dvh w-screen overflow-hidden bg-[#07070b] select-none">
       <iframe
-        src="/project-studio.html"
+        src={src}
         title="LevelUp Project Studio"
-        className="w-full h-full border-0 block bg-[#07070b]"
+        className="block h-full w-full border-0 bg-[#07070b]"
         allow="clipboard-write"
       />
     </div>

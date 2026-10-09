@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { LanguageSwitch } from "@/components/language-switch";
+
 export function Footer() {
   const pathname = usePathname();
 
@@ -68,6 +70,7 @@ export function Footer() {
             </li>
           ))}
         </ul>
+        <LanguageSwitch className="mt-2" />
       </nav>
 
       {/* LevelUp Ecosystem - Clean, crisp, neutral, no curvature, no color glow */}
