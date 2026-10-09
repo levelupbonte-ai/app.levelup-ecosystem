@@ -1,24 +1,14 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
+import { type Locale, useLocale } from "@/lib/locale";
 import { levelUpLoginUrl, LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { cn } from "@/lib/utils";
-
-type Locale = "en" | "fr";
-
-/** Browser language (French or English). The server render is English. */
-function useLocale(): Locale {
-  return useSyncExternalStore(
-    () => () => {},
-    () => (/^fr\b/i.test(navigator.language || "") ? "fr" : "en"),
-    () => "en",
-  );
-}
 
 const COPY = {
   en: {

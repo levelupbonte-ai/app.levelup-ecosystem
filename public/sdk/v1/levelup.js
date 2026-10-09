@@ -14,9 +14,10 @@
  *   - window.LevelUp: ready, site(), submitForm(), bookAppointment(),
  *     joinWaitlist(), waitlist(), ticketStatus().
  *
- * Security: only the public website id and the public (publishable) key are
- * used. Writes go through rate-limited database functions that only accept
- * the client's own domains. Content is inserted as text, never as HTML.
+ * Security: only the public website id is used. Every request goes to the
+ * LevelUp Ecosystem API (https://levelup-ecosystem.com/api/v1/...), where
+ * writes are rate-limited and only accepted from the client's own domains.
+ * Content is inserted as text, never as HTML.
  * Options: data-seo="off" disables SEO changes, data-forms="off" disables
  * form handling.
  */
@@ -24,13 +25,24 @@
   'use strict';
   if (window.LevelUp && window.LevelUp.version) return;
 
-  var VERSION = '1.0.0';
-  var API = 'https://rncuhmvykrmtxfzqpitc.supabase.co/rest/v1/rpc/';
-  var KEY = 'sb_publishable_C6yyhI8mh1Dcgfw94mxVYg_VIIMqvBE';
+  var VERSION = '1.1.0';
   var CREDIT_URL = 'https://levelup-ecosystem.com';
   var CACHE_MS = 5 * 60 * 1000;
 
   var script = document.currentScript || document.querySelector('script[data-site][src*="levelup"]');
+  // LevelUp Ecosystem API. A tag served by a LevelUp host (or a local dev server)
+  // talks to that same host; a copy served from anywhere else uses the main domain.
+  var API = (function () {
+    try {
+      var u = new URL(script.src, location.href);
+      if (/(^|\.)levelup-ecosystem\.com$/.test(u.hostname) || /^(localhost|127\.0\.0\.1)$/.test(u.hostname)) {
+        return u.origin + '/api/v1/';
+      }
+    } catch (e) {
+      /* fall through */
+    }
+    return 'https://levelup-ecosystem.com/api/v1/';
+  })();
   var siteId = script && script.getAttribute('data-site');
   var seoEnabled = !script || script.getAttribute('data-seo') !== 'off';
   var formsEnabled = !script || script.getAttribute('data-forms') !== 'off';
@@ -52,16 +64,23 @@
     return e;
   }
 
-  function rpc(name, args) {
-    return fetch(API + name, {
+  function call(action, args) {
+    args = args || {};
+    args.site = siteId;
+    return fetch(API + action, {
       method: 'POST',
-      headers: { apikey: KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify(args || {}),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(args),
       credentials: 'omit',
-      keepalive: name === 'tag_ping'
+      keepalive: action === 'ping'
     }).then(function (res) {
       return res.text().then(function (text) {
-        var body = text ? JSON.parse(text) : null;
+        var body = null;
+        try {
+          body = text ? JSON.parse(text) : null;
+        } catch (e) {
+          body = null;
+        }
         if (!res.ok) {
           var code = body && body.code;
           var message =
@@ -103,7 +122,7 @@
   var bundlePromise = (function () {
     var cached = readCache();
     if (cached) return Promise.resolve(cached);
-    return rpc('get_site_bundle', { p_website_id: siteId }).then(function (b) {
+    return call('site').then(function (b) {
       if (!b) throw LevelUpError('Website not found or not active', 'PT404', 404);
       writeCache(b);
       return b;
@@ -315,16 +334,15 @@
         data[clean(k, 60)] = clean(fields[k], 1000);
       }
     });
-    return rpc('submit_form', {
-      p_website_id: siteId,
-      p_form_type: type || 'contact',
-      p_name: clean(fields.name, 120) || null,
-      p_email: clean(fields.email, 254) || null,
-      p_phone: clean(fields.phone, 40) || null,
-      p_company: clean(fields.company, 160) || null,
-      p_message: clean(fields.message, 5000) || null,
-      p_data: data,
-      p_source: clean(location.hostname + location.pathname, 200)
+    return call('forms', {
+      type: type || 'contact',
+      name: clean(fields.name, 120) || null,
+      email: clean(fields.email, 254) || null,
+      phone: clean(fields.phone, 40) || null,
+      company: clean(fields.company, 160) || null,
+      message: clean(fields.message, 5000) || null,
+      data: data,
+      source: clean(location.hostname + location.pathname, 200)
     });
   }
 
@@ -371,21 +389,21 @@
     submitForm: submitForm,
     bookAppointment: function (o) {
       o = o || {};
-      return rpc('book_appointment', {
-        p_website_id: siteId, p_service_slug: o.service, p_date: o.date, p_time: o.time,
-        p_name: o.name, p_email: o.email || null, p_phone: o.phone || null,
-        p_team_member_slug: o.teamMember || null, p_notes: o.notes || null
+      return call('appointments', {
+        service: o.service, date: o.date, time: o.time,
+        name: o.name, email: o.email || null, phone: o.phone || null,
+        teamMember: o.teamMember || null, notes: o.notes || null
       });
     },
     joinWaitlist: function (o) {
       o = o || {};
-      return rpc('join_waitlist', {
-        p_website_id: siteId, p_name: o.name, p_phone: o.phone || null, p_email: o.email || null,
-        p_service_slug: o.service || null, p_team_member_slug: o.teamMember || null
+      return call('waitlist-join', {
+        name: o.name, phone: o.phone || null, email: o.email || null,
+        service: o.service || null, teamMember: o.teamMember || null
       });
     },
-    waitlist: function () { return rpc('get_public_waitlist', { p_website_id: siteId }); },
-    ticketStatus: function (code) { return rpc('get_ticket_status', { p_website_id: siteId, p_ticket_code: code }); }
+    waitlist: function () { return call('waitlist'); },
+    ticketStatus: function (code) { return call('tickets', { code: code }); }
   };
 
   function onReady(fn) {
@@ -411,7 +429,7 @@
   try {
     if (!sessionStorage.getItem('levelup:ping:' + siteId)) {
       sessionStorage.setItem('levelup:ping:' + siteId, '1');
-      rpc('tag_ping', { p_website_id: siteId, p_version: VERSION }).catch(function () {});
+      call('ping', { version: VERSION }).catch(function () {});
     }
   } catch (e) {
     /* storage unavailable */

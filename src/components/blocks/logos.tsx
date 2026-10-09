@@ -6,18 +6,18 @@ import Link from "next/link";
 
 import Marquee from "react-fast-marquee";
 import {
-  SiAnthropic,
   SiCloudflare,
   SiCss,
   SiGithub,
   SiGoogle,
-  SiGooglegemini,
   SiHtml5,
   SiJavascript,
   SiNextdotjs,
   SiReact,
   SiReplit,
+  SiStripe,
   SiTypescript,
+  SiWhatsapp,
 } from "react-icons/si";
 
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
@@ -64,14 +64,14 @@ export const Logos = () => {
 
   const bottomRowTools: ToolItem[] = [
     {
-      name: "Claude",
-      icon: SiAnthropic,
-      href: "https://claude.ai",
+      name: "Stripe",
+      icon: SiStripe,
+      href: "https://stripe.com",
     },
     {
-      name: "Gemini",
-      icon: SiGooglegemini,
-      href: "https://gemini.google.com",
+      name: "WhatsApp",
+      icon: SiWhatsapp,
+      href: "https://www.whatsapp.com",
     },
     {
       name: "Replit",
@@ -115,7 +115,7 @@ export const Logos = () => {
             {/* Top row - Core Frontend & Languages */}
             <LogoRow tools={topRowTools} />
 
-            {/* Bottom row - AI, Cloud & Developer Tools */}
+            {/* Bottom row - Cloud, payments & developer tools */}
             <LogoRow tools={bottomRowTools} direction="right" />
           </div>
         </ScrollReveal>

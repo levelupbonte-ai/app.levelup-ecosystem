@@ -11,7 +11,11 @@
  * reaches a component, and every getter falls back to the hard-coded content
  * when the bundle is missing, empty or malformed. Nothing here ever throws.
  */
+import "server-only";
+
 import { cache } from "react";
+
+import { PLATFORM_CONFIGURED, callPlatform } from "@/lib/platform-api";
 
 import type { FaqCategory } from "@/components/blocks/faq";
 import type { PlanItem } from "@/components/blocks/pricing";
@@ -79,14 +83,6 @@ export interface SiteBundle {
 // Config
 // ============================================================================
 
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-// Publishable key only (sb_publishable_... or the legacy anon JWT). Never the secret key.
-const SUPABASE_PUBLISHABLE_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_PUBLISHABLE_KEY ||
-  process.env.SUPABASE_ANON_KEY;
 const WEBSITE_ID = process.env.WEBSITE_ID || "ws_6e797257f5b32b86";
 
 const REQUEST_TIMEOUT_MS = 5000;
@@ -216,38 +212,23 @@ function parseBundle(raw: unknown): SiteBundle | null {
  * Returns null on any error so callers fall back to the built-in content.
  */
 export const getSiteBundle = cache(async (): Promise<SiteBundle | null> => {
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) return null;
+  if (!PLATFORM_CONFIGURED) return null;
   if (!/^ws_[a-z0-9]{8,32}$/.test(WEBSITE_ID)) return null;
 
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_site_bundle`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: SUPABASE_PUBLISHABLE_KEY,
-        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-      },
-      body: JSON.stringify({ p_website_id: WEBSITE_ID }),
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  const { status, body } = await callPlatform(
+    "get_site_bundle",
+    { p_website_id: WEBSITE_ID },
+    {
+      timeoutMs: REQUEST_TIMEOUT_MS,
       next: { revalidate: 300, tags: ["levelup-site"] },
-    });
-    if (!res.ok) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "[levelup-site] get_site_bundle returned status",
-        res.status,
-      );
-      return null;
-    }
-    return parseBundle(await res.json());
-  } catch (err) {
+    },
+  );
+  if (status !== 200) {
     // eslint-disable-next-line no-console
-    console.warn(
-      "[levelup-site] get_site_bundle unavailable, using built-in content:",
-      err instanceof Error ? err.message : err,
-    );
+    console.warn("[levelup-site] site bundle unavailable, status", status);
     return null;
   }
+  return parseBundle(body);
 });
 
 // ============================================================================

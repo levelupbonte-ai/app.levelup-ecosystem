@@ -16,6 +16,7 @@ import {
 import { AnimatePresence, motion, type Variants } from "motion/react";
 
 import { LoginMenu, MobileLoginChoices } from "@/components/blocks/login-menu";
+import { LanguageSwitch } from "@/components/language-switch";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -491,6 +492,7 @@ export const Navbar = () => {
 
           {/* Right Action: ThemeToggle + Build a Project + Log in menu */}
           <div className="flex items-center gap-2 sm:gap-2.5">
+            <LanguageSwitch hint />
             <ThemeToggle />
 
             {/* Desktop Action Buttons: Build a Project then Log in menu */}

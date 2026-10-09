@@ -1320,7 +1320,7 @@
   }
 
   // The RSVP is stored in the LevelUp database and the confirmation e-mail is
-  // sent by LevelUp (Resend, levelup-ecosystem.com), both through our own API.
+  // sent by LevelUp (levelup-ecosystem.com), both through our own API.
   async function submitRsvp(data) {
     const res = await fetch("/api/send-email", {
       method: "POST",

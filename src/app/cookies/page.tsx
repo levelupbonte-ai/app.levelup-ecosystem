@@ -35,7 +35,7 @@ const COOKIE_TABLE = [
   },
   {
     name: "sb-*-auth-token",
-    provider: "LevelStudio (Supabase)",
+    provider: "LevelUp Ecosystem (account sign-in)",
     type: "HTTP-Only / Encrypted Storage",
     duration: "Session / 30 Days",
     purpose: "Maintains secure workspace authentication and prevents Cross-Site Request Forgery (CSRF).",

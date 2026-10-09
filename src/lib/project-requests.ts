@@ -1,6 +1,7 @@
 import "server-only";
 
 import { generateTextWithTarget, type AiTarget } from "@/lib/ai/router";
+import { callPlatform } from "@/lib/platform-api";
 
 /**
  * Project requests ("Start a project") in the shared LevelUp database.
@@ -13,15 +14,6 @@ import { generateTextWithTarget, type AiTarget } from "@/lib/ai/router";
  *     which providers answered in ai_calls (app 'showcase').
  * Staff review the rows in the LevelUp dashboard.
  */
-
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-// Publishable key only (sb_publishable_... or the legacy anon JWT). Never the secret key.
-const SUPABASE_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_PUBLISHABLE_KEY ||
-  process.env.SUPABASE_ANON_KEY;
 
 export type Verdict = "qualified" | "review" | "rejected";
 
@@ -57,28 +49,8 @@ export interface ProjectRequestPayload {
   brief: Record<string, unknown>;
 }
 
-async function rpc(
-  fn: string,
-  args: Record<string, unknown>,
-): Promise<{ status: number; body: unknown }> {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return { status: 503, body: null };
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-      },
-      cache: "no-store",
-      body: JSON.stringify(args),
-      signal: AbortSignal.timeout(8000),
-    });
-    return { status: res.status, body: await res.json().catch(() => null) };
-  } catch {
-    return { status: 503, body: null };
-  }
-}
+const rpc = (fn: string, args: Record<string, unknown>) =>
+  callPlatform(fn, args, { timeoutMs: 8000 });
 
 export async function submitProjectRequest(
   payload: ProjectRequestPayload,
