@@ -5,7 +5,7 @@ import { reportClientError } from "@/lib/error-sensor";
 
 /**
  * Client-side component that hooks into global window error and promise rejection
- * events to report anomalies in real time to the Firestore database.
+ * events to report anomalies in real time to the LevelUp platform.
  */
 export function ErrorSensor() {
   useEffect(() => {

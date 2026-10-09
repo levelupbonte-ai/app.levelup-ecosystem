@@ -19,8 +19,8 @@ const integrations = [
   { name: "Stripe", src: "/logos/stripe.svg" },
   { name: "WhatsApp", src: "/logos/whatsapp.svg" },
   { name: "Google Maps", src: "/logos/maps.svg" },
-  { name: "Resend", src: "/logos/resend.svg" },
-  { name: "Supabase", src: "/logos/supabase.svg" },
+  { name: "Gmail", src: "/logos/gmail.svg" },
+  { name: "Google Analytics", src: "/logos/analytics.svg" },
   { name: "Cloudflare", src: "/logos/cloudflare-icon.svg" },
   { name: "GitHub", src: "/logos/github-icon.svg" },
 ];

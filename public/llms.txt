@@ -10,7 +10,7 @@
 - **Bespoke Digital Invitations & Event Experiences**: Luxury digital wedding and gala invitation platforms with real-time online RSVP collection, itinerary countdown, and Google Maps venue navigation.
 - **Cybersecurity Checks & Non-Destructive Vulnerability Audits**: Plain-English security evaluations covering database rules, API key isolation, HTTPS certificates, DNS hardening, and two-factor authentication (2FA).
 - **Managed Website Care Plans ($49/month)**: High-speed cloud hosting, daily automated snapshots, uptime monitoring, and fast on-demand content edits.
-- **Local & Global SEO Architecture**: Structured Schema.org JSON-LD data, OpenGraph social sharing preview cards, sub-2s mobile loading speeds, and international discoverability for both human searchers and AI search engines (Perplexity, ChatGPT, Claude, Gemini).
+- **Local & Global SEO Architecture**: Structured Schema.org JSON-LD data, OpenGraph social sharing preview cards, sub-2s mobile loading speeds, and international discoverability for both human searchers and AI search engines and assistants.
 
 ## International & Full-Stack Scope
 - **Headquarters**: San Diego, California, United States
@@ -33,7 +33,7 @@
 ## Specialty: Wedding & Event Web Experiences (San Diego, CA)
 - Bespoke digital wedding invitations and interactive RSVP portals
 - Instant mobile-responsive event itinerary and Google Maps navigation
-- Real-time guest attendance tracking with Firestore database security
+- Real-time guest attendance tracking with secure, access-controlled storage
 - Guest photo galleries and celebration messaging boards
 
 ## Frequently Asked Questions (FAQ)

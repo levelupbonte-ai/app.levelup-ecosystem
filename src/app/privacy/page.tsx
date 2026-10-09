@@ -81,7 +81,7 @@ export default async function PrivacyPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 font-bold">✓</span>
                 <span>
-                  <strong className="text-foreground">Account Authentication (LevelStudio):</strong> When you create an account, we store your name and verified email via Firebase Authentication to manage your workspace access securely.
+                  <strong className="text-foreground">Account Authentication (LevelStudio):</strong> When you create an account, we store your name and verified email through our secure authentication service to manage your workspace access securely.
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -178,8 +178,8 @@ export default async function PrivacyPage() {
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-muted-foreground">
               <li>End-to-end TLS 1.3 / HTTPS encryption in transit.</li>
-              <li>Strict Firestore access rules allowing users to read and modify only their own data.</li>
-              <li>Encrypted cloud backups hosted in secure Google Cloud Platform data centers.</li>
+              <li>Strict database access rules allowing users to read and modify only their own data.</li>
+              <li>Encrypted cloud backups hosted in secure data centers.</li>
               <li>Regular automated vulnerability checks and dependency audits.</li>
             </ul>
           </div>

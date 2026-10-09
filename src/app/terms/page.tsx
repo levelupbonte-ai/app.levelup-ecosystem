@@ -84,7 +84,7 @@ export default async function TermsPage() {
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 font-bold">✓</span>
                 <span>
-                  <strong className="text-foreground">Cybersecurity Audits &amp; Hardening:</strong> Code-level vulnerability assessment, Firestore security rules enforcement, SSL/TLS configuration, DDoS mitigation, and OWASP top-10 defense protocols.
+                  <strong className="text-foreground">Cybersecurity Audits &amp; Hardening:</strong> Code-level vulnerability assessment, database access rules enforcement, SSL/TLS configuration, DDoS mitigation, and OWASP top-10 defense protocols.
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -200,7 +200,7 @@ export default async function TermsPage() {
               7. Limitation of Liability &amp; Disclaimers
             </h2>
             <p className="text-muted-foreground">
-              LevelUp Ecosystem provides services on an &quot;as is&quot; and &quot;as available&quot; basis. While we implement bank-grade cybersecurity protocols and proactive server monitoring, we do not guarantee uninterrupted uptime or that third-party cloud hosting providers (e.g. Google Cloud, AWS, Vercel) will experience zero downtime. In no event shall LevelUp Ecosystem or its founder Richelieu Bonte be liable for indirect, incidental, or consequential damages.
+              LevelUp Ecosystem provides services on an &quot;as is&quot; and &quot;as available&quot; basis. While we implement bank-grade cybersecurity protocols and proactive server monitoring, we do not guarantee uninterrupted uptime or that third-party cloud hosting providers will experience zero downtime. In no event shall LevelUp Ecosystem or its founder Richelieu Bonte be liable for indirect, incidental, or consequential damages.
             </p>
           </div>
 
