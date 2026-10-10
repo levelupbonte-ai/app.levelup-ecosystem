@@ -1,4 +1,5 @@
 import { Capabilities } from "@/components/home/capabilities";
+import { Ecosystem } from "@/components/home/ecosystem";
 import { HomeHero } from "@/components/home/hero";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { Work, type WorkCase } from "@/components/home/work";
@@ -41,6 +42,7 @@ export default async function Home() {
       <Capabilities />
       <HowItWorks />
       <Work cases={cases} />
+      <Ecosystem />
     </>
   );
 }
