@@ -15,6 +15,8 @@ import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/styles/globals.css";
 
+import { instrumentSans, jetbrainsMono } from "./fonts";
+
 const dmSans = localFont({
   src: [
     {
@@ -382,7 +384,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${dmSans.variable} ${inter.variable} antialiased`}
+        className={`${dmSans.variable} ${inter.variable} ${instrumentSans.variable} ${jetbrainsMono.variable} antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider
