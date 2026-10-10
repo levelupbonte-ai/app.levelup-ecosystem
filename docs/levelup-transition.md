@@ -3,7 +3,8 @@
 One brand transition for the whole ecosystem: a thin violet edge leads an ink
 panel up the screen, the LevelUp star glints at the centre, then the panel
 continues upward with the violet edge trailing to reveal the next page.
-About 650 ms, transform/opacity only, no dependencies. The panel takes the
+About 520 ms of motion (under 700 ms with the route load), transform/opacity
+only, no dependencies. The panel takes the
 page's `--foreground` colour (ink on the light theme, paper on the dark one).
 
 | File | What it is |

@@ -3,7 +3,7 @@
  *
  * A full-screen ink panel with a thin violet leading edge sweeps up the
  * screen, the LevelUp star glints at the centre, then the panel continues
- * upward, violet edge trailing, to reveal the next page. About 650 ms,
+ * upward, violet edge trailing, to reveal the next page. About 520 ms of motion,
  * transform/opacity only (compositor), no dependencies.
  *
  * One file for the whole ecosystem: the showcase (Next 15), LevelStudio
@@ -17,10 +17,10 @@
  */
 
 const config = {
-  cover: 280, // ms, panel sweeping in
-  reveal: 290, // ms, panel sweeping out
+  cover: 240, // ms, panel sweeping in
+  reveal: 260, // ms, panel sweeping out
   edge: 6, // px, the violet edge leading (cover) / trailing (reveal) the panel
-  hold: 30, // ms fully covered (the star glint)
+  hold: 20, // ms fully covered (the star glint)
   /** Panel colour; null = the page's --foreground (ink on light, paper on dark). */
   panel: null,
   /** Cookie domain used to hand the wipe over to another LevelUp app. */
