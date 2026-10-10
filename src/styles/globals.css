@@ -336,6 +336,12 @@ nextjs-portal,
    stacks are resolved on the element itself, never on :root.
    ========================================================================== */
 
+/* Inner pages share the editorial display face. Declared on <body>, where
+   the next/font variable exists (the intro uses font-sans, not this). */
+body {
+  --display-family: var(--font-instrument, "Instrument Sans"), ui-sans-serif, system-ui, sans-serif;
+}
+
 @utility font-editorial {
   font-family: var(--font-instrument, "Instrument Sans"), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: normal;
