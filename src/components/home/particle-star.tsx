@@ -148,10 +148,21 @@ function buildParticles(facets: Facet[], step: number): Particle[] {
   return out;
 }
 
-function parseColor(value: string): [number, number, number] {
-  const m = value.match(/\d+(\.\d+)?/g);
-  if (!m || m.length < 3) return [17, 17, 17];
-  return [Number(m[0]), Number(m[1]), Number(m[2])];
+/** Any CSS colour (oklch included) to sRGB, by painting one pixel. */
+function toRgb(value: string): [number, number, number] {
+  try {
+    const c = document.createElement("canvas");
+    c.width = c.height = 1;
+    const x = c.getContext("2d", { willReadFrequently: true });
+    if (!x) return [17, 17, 17];
+    x.fillStyle = "#111";
+    x.fillStyle = value;
+    x.fillRect(0, 0, 1, 1);
+    const [r, g, b] = x.getImageData(0, 0, 1, 1).data;
+    return [r, g, b];
+  } catch {
+    return [17, 17, 17];
+  }
 }
 
 export function ParticleStar({
@@ -195,7 +206,7 @@ export function ParticleStar({
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 
     const buildStyles = () => {
-      const base = parseColor(getComputedStyle(canvas).color);
+      const base = toRgb(getComputedStyle(canvas).color);
       styles = Array.from({ length: LEVELS }, (_, l) => {
         const b = l / (LEVELS - 1);
         const mix = Math.min(1, Math.max(0, (b - 0.35) / 0.6)) * tint;
