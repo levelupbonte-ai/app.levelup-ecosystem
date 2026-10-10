@@ -201,7 +201,10 @@ export function cover() {
   const a = slide(panel, "calc(100% + 8px)", "0", config.cover, 0);
   glint.animate(
     [
-      { opacity: 0, transform: "translate(-50%, -50%) scale(0.55) rotate(-72deg)" },
+      {
+        opacity: 0,
+        transform: "translate(-50%, -50%) scale(0.55) rotate(-72deg)",
+      },
       { opacity: 1, transform: "translate(-50%, -50%) scale(1) rotate(0deg)" },
     ],
     {
@@ -225,7 +228,10 @@ export function reveal() {
   glint.animate(
     [
       { opacity: 1, transform: "translate(-50%, -50%) scale(1) rotate(0deg)" },
-      { opacity: 0, transform: "translate(-50%, -50%) scale(0.8) rotate(36deg)" },
+      {
+        opacity: 0,
+        transform: "translate(-50%, -50%) scale(0.8) rotate(36deg)",
+      },
     ],
     { duration: 180, easing: EASE_IN, fill: "forwards" },
   );
@@ -248,7 +254,9 @@ export async function play(during) {
 function cookieDomain() {
   if (config.domain) return config.domain;
   const host = location.hostname;
-  return /(^|\.)levelup-ecosystem\.com$/.test(host) ? ".levelup-ecosystem.com" : null;
+  return /(^|\.)levelup-ecosystem\.com$/.test(host)
+    ? ".levelup-ecosystem.com"
+    : null;
 }
 
 /** True for links to another LevelUp app (studio., dashboard., the showcase). */
@@ -309,7 +317,10 @@ export function revealOnLoad() {
   }
   show();
   cancelAll();
-  panel.animate([{ transform: "translate3d(0, 0, 0)" }], { duration: 0, fill: "forwards" });
+  panel.animate([{ transform: "translate3d(0, 0, 0)" }], {
+    duration: 0,
+    fill: "forwards",
+  });
   glint.animate([{ opacity: 1, transform: "translate(-50%, -50%) scale(1)" }], {
     duration: 0,
     fill: "forwards",
@@ -346,7 +357,11 @@ export function intercept(options = {}) {
     }
     const anchor =
       event.target instanceof Element ? event.target.closest("a[href]") : null;
-    if (!anchor || anchor.hasAttribute("download") || anchor.closest("[data-no-transition]")) {
+    if (
+      !anchor ||
+      anchor.hasAttribute("download") ||
+      anchor.closest("[data-no-transition]")
+    ) {
       return;
     }
     const target = anchor.getAttribute("target");
@@ -360,7 +375,8 @@ export function intercept(options = {}) {
     if (url.protocol !== "http:" && url.protocol !== "https:") return;
     if (url.origin === location.origin) {
       // Same page (only the hash differs): native scrolling.
-      if (url.pathname === location.pathname && url.search === location.search) return;
+      if (url.pathname === location.pathname && url.search === location.search)
+        return;
       event.preventDefault();
       const href = url.pathname + url.search + url.hash;
       if (onInternal) onInternal(href, anchor);

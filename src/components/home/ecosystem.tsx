@@ -44,14 +44,46 @@ const COPY: Record<
     titleMuted: "Everything connected.",
     lead: "Your website, your bookings and your clients share one account, so nothing lives in five different tools.",
     items: [
-      { name: "Dashboard", kind: "Manage", body: "Your site, bookings and clients in one place." },
-      { name: "Online booking", kind: "Book", body: "Appointments, confirmations and a waitlist." },
-      { name: "SEO", kind: "Get found", body: "Titles, descriptions and local search, editable any time." },
-      { name: "Analytics", kind: "Measure", body: "Set up at launch, so you see where visitors come from." },
-      { name: "Forms", kind: "Capture", body: "Contact and quote requests land in your dashboard." },
-      { name: "E-mail", kind: "Notify", body: "Booking confirmations and new-request alerts." },
-      { name: "Security", kind: "Protect", body: "HTTPS, monitoring and hardened settings." },
-      { name: "LevelStudio", kind: "Preview", body: "A free, interactive draft before you commit." },
+      {
+        name: "Dashboard",
+        kind: "Manage",
+        body: "Your site, bookings and clients in one place.",
+      },
+      {
+        name: "Online booking",
+        kind: "Book",
+        body: "Appointments, confirmations and a waitlist.",
+      },
+      {
+        name: "SEO",
+        kind: "Get found",
+        body: "Titles, descriptions and local search, editable any time.",
+      },
+      {
+        name: "Analytics",
+        kind: "Measure",
+        body: "Set up at launch, so you see where visitors come from.",
+      },
+      {
+        name: "Forms",
+        kind: "Capture",
+        body: "Contact and quote requests land in your dashboard.",
+      },
+      {
+        name: "E-mail",
+        kind: "Notify",
+        body: "Booking confirmations and new-request alerts.",
+      },
+      {
+        name: "Security",
+        kind: "Protect",
+        body: "HTTPS, monitoring and hardened settings.",
+      },
+      {
+        name: "LevelStudio",
+        kind: "Preview",
+        body: "A free, interactive draft before you commit.",
+      },
     ],
   },
   fr: {
@@ -60,14 +92,46 @@ const COPY: Record<
     titleMuted: "Tout est connecté.",
     lead: "Votre site, vos réservations et vos clients partagent un seul compte : rien ne s’éparpille entre cinq outils.",
     items: [
-      { name: "Tableau de bord", kind: "Gérer", body: "Votre site, vos réservations et vos clients au même endroit." },
-      { name: "Réservation", kind: "Réserver", body: "Rendez-vous, confirmations et liste d’attente." },
-      { name: "SEO", kind: "Être trouvé", body: "Titres, descriptions et recherche locale, modifiables à tout moment." },
-      { name: "Statistiques", kind: "Mesurer", body: "Installées au lancement, pour savoir d’où viennent vos visiteurs." },
-      { name: "Formulaires", kind: "Collecter", body: "Demandes de contact et de devis dans votre tableau de bord." },
-      { name: "E-mail", kind: "Notifier", body: "Confirmations de réservation et alertes de nouvelles demandes." },
-      { name: "Sécurité", kind: "Protéger", body: "HTTPS, surveillance et réglages renforcés." },
-      { name: "LevelStudio", kind: "Prévisualiser", body: "Un brouillon interactif gratuit avant de vous engager." },
+      {
+        name: "Tableau de bord",
+        kind: "Gérer",
+        body: "Votre site, vos réservations et vos clients au même endroit.",
+      },
+      {
+        name: "Réservation",
+        kind: "Réserver",
+        body: "Rendez-vous, confirmations et liste d’attente.",
+      },
+      {
+        name: "SEO",
+        kind: "Être trouvé",
+        body: "Titres, descriptions et recherche locale, modifiables à tout moment.",
+      },
+      {
+        name: "Statistiques",
+        kind: "Mesurer",
+        body: "Installées au lancement, pour savoir d’où viennent vos visiteurs.",
+      },
+      {
+        name: "Formulaires",
+        kind: "Collecter",
+        body: "Demandes de contact et de devis dans votre tableau de bord.",
+      },
+      {
+        name: "E-mail",
+        kind: "Notifier",
+        body: "Confirmations de réservation et alertes de nouvelles demandes.",
+      },
+      {
+        name: "Sécurité",
+        kind: "Protéger",
+        body: "HTTPS, surveillance et réglages renforcés.",
+      },
+      {
+        name: "LevelStudio",
+        kind: "Prévisualiser",
+        body: "Un brouillon interactif gratuit avant de vous engager.",
+      },
     ],
   },
 };

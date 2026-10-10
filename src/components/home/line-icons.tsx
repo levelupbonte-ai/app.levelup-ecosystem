@@ -217,7 +217,14 @@ export function SecurityIcon() {
         strokeWidth={3}
       />
       <circle cx="100" cy="83" r="3.5" fill="var(--background)" />
-      <rect x="98.5" y="84" width="3" height="7" rx="1" fill="var(--background)" />
+      <rect
+        x="98.5"
+        y="84"
+        width="3"
+        height="7"
+        rx="1"
+        fill="var(--background)"
+      />
       <line
         className="lu-loop"
         x1="56"

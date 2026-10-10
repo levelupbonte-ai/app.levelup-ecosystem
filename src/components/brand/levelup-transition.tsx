@@ -52,8 +52,7 @@ type NavigateOptions = { replace?: boolean; scroll?: boolean };
 
 /** Set by <LevelUpTransitions />; used by useTransitionRouter(). */
 let activeNavigate:
-  | ((href: string, options?: NavigateOptions) => Promise<void>)
-  | null = null;
+  ((href: string, options?: NavigateOptions) => Promise<void>) | null = null;
 
 const nextFrames = () =>
   new Promise<void>((resolve) =>

@@ -392,7 +392,7 @@ export function ParticleStar({
   return (
     <div
       ref={wrapRef}
-      className={cn("relative text-foreground", className)}
+      className={cn("text-foreground relative", className)}
       role={label ? "img" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
@@ -409,7 +409,7 @@ export function ParticleStar({
       ) : (
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 block h-full w-full text-foreground"
+          className="text-foreground absolute inset-0 block h-full w-full"
         />
       )}
     </div>

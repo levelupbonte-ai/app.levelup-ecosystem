@@ -23,7 +23,7 @@ export const Background = ({
       {variant === "top" && (
         <div
           aria-hidden="true"
-          className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] opacity-70 [mask-image:linear-gradient(to_bottom,black_30%,transparent)]"
+          className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] [mask-image:linear-gradient(to_bottom,black_30%,transparent)] opacity-70"
         />
       )}
       {children}

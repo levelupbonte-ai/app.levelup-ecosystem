@@ -35,4 +35,9 @@ export const STAR_FACET_COLORS = [
 ] as const;
 
 /** Bounding box of the outline, used to centre the mark. */
-export const STAR_BOUNDS = { minX: 28, maxX: 484, minY: 38, maxY: 470 } as const;
+export const STAR_BOUNDS = {
+  minX: 28,
+  maxX: 484,
+  minY: 38,
+  maxY: 470,
+} as const;

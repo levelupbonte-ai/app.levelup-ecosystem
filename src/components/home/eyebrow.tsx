@@ -22,7 +22,9 @@ export function Eyebrow({
     <span
       className={cn(
         "font-label inline-flex items-center gap-3 text-[13px] tracking-tight",
-        tone === "inverted" ? "text-ink-foreground/60" : "text-muted-foreground",
+        tone === "inverted"
+          ? "text-ink-foreground/60"
+          : "text-muted-foreground",
         className,
       )}
     >

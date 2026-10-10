@@ -25,7 +25,10 @@ const CASE_COPY: Record<
     domain: string;
     desktop: string;
     mobile: string;
-    copy: Record<Locale, { label: string; body: string; tags: string[]; alt: string }>;
+    copy: Record<
+      Locale,
+      { label: string; body: string; tags: string[]; alt: string }
+    >;
   }
 > = {
   "final-stop": {
@@ -70,7 +73,13 @@ const CASE_COPY: Record<
 
 const COPY: Record<
   Locale,
-  { eyebrow: string; title: string; titleMuted: string; all: string; visit: string }
+  {
+    eyebrow: string;
+    title: string;
+    titleMuted: string;
+    all: string;
+    visit: string;
+  }
 > = {
   en: {
     eyebrow: "Selected work",
@@ -218,7 +227,10 @@ export function Work({ cases }: { cases: WorkCase[] }) {
                 >
                   <div className="font-label text-muted-foreground flex items-center gap-4 text-xs">
                     <span>{String(i + 1).padStart(2, "0")}</span>
-                    <span className="bg-foreground/20 h-px w-8" aria-hidden="true" />
+                    <span
+                      className="bg-foreground/20 h-px w-8"
+                      aria-hidden="true"
+                    />
                     <span>{c.label}</span>
                   </div>
                   <h3 className="font-editorial mt-6 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.98] font-normal tracking-[-0.04em]">

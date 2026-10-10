@@ -60,7 +60,7 @@ const COPY: Record<
 };
 
 /** Star + wordmark, as on the rest of the ecosystem. */
-function Wordmark({ compact }: { compact: boolean }) {
+function Wordmark() {
   return (
     <span className="font-editorial flex items-center gap-2.5 select-none">
       <Image
@@ -69,25 +69,12 @@ function Wordmark({ compact }: { compact: boolean }) {
         width={28}
         height={28}
         unoptimized
-        className={cn(
-          "shrink-0 transition-[width,height] duration-500",
-          compact ? "size-6" : "size-7",
-        )}
+        className="size-7 shrink-0"
       />
-      <span
-        className={cn(
-          "text-foreground leading-none tracking-[-0.03em] transition-[font-size] duration-500",
-          compact ? "text-xl" : "text-[1.4rem]",
-        )}
-      >
+      <span className="text-foreground text-[1.4rem] leading-none tracking-[-0.03em]">
         LevelUp
       </span>
-      <span
-        className={cn(
-          "font-label text-muted-foreground hidden leading-none tracking-tight transition-[font-size] duration-500 sm:inline",
-          compact ? "mt-0.5 text-[10px]" : "mt-1 text-[11px]",
-        )}
-      >
+      <span className="font-label text-muted-foreground mt-1 hidden text-[11px] leading-none tracking-tight sm:inline">
         Ecosystem
       </span>
     </span>
@@ -156,122 +143,112 @@ export const Navbar = () => {
   const floating = isScrolled && !isMenuOpen;
 
   return (
-    <header
-      className={cn(
-        "font-editorial fixed z-[100] transition-[top,left,right] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-        floating
-          ? "top-3 right-3 left-3 lg:top-4 lg:right-4 lg:left-4"
-          : "top-0 right-0 left-0",
-      )}
-    >
-      <nav
-        aria-label={t.menu}
+    <header className="font-editorial fixed inset-x-0 top-0 z-[100]">
+      {/* Scrolled: the bar floats (transform) and its glass backdrop fades in
+          (opacity). Nothing changes size, so the header never shifts layout. */}
+      <div
         className={cn(
-          "mx-auto border transition-[max-width,background-color,border-color,box-shadow,border-radius] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          floating
-            ? "border-hairline bg-background/80 max-w-[1240px] rounded-2xl shadow-[0_10px_40px_-12px_rgb(0_0_0/0.18)] backdrop-blur-xl dark:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.7)]"
-            : "max-w-[1400px] rounded-none border-transparent bg-transparent shadow-none",
+          "mx-auto max-w-[1400px] px-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-3 lg:px-6",
+          floating ? "translate-y-2.5 lg:translate-y-3" : "translate-y-0",
         )}
       >
-        <div
-          className={cn(
-            "grid grid-cols-[1fr_auto] items-center gap-4 px-4 transition-[height] duration-500 sm:px-6 xl:grid-cols-[auto_1fr_auto] xl:gap-8 xl:px-7",
-            floating ? "h-14" : "h-[4.5rem] lg:h-20",
-            !floating && "lg:px-12 xl:px-12",
-          )}
-        >
-          <Link
-            href="/"
-            aria-label={t.home}
-            className="focus-visible:ring-brand/50 justify-self-start rounded-md focus-visible:ring-2 focus-visible:outline-none"
-          >
-            <Wordmark compact={floating} />
-          </Link>
-
-          {/* Desktop links, centred */}
-          <ul className="hidden items-center justify-self-center gap-6 xl:flex 2xl:gap-9">
-            {t.links.map((link) => {
-              const active = isActive(link.href);
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "group focus-visible:ring-brand/50 relative inline-flex rounded-sm py-1 text-[15px] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none",
-                      active
-                        ? "text-foreground"
-                        : "text-foreground/65 hover:text-foreground",
-                    )}
-                  >
-                    {link.label}
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "absolute -bottom-0.5 left-0 h-px w-full origin-left transition-transform duration-300",
-                        active
-                          ? "bg-brand scale-x-100"
-                          : "bg-foreground scale-x-0 group-hover:scale-x-100",
-                      )}
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="flex items-center justify-self-end gap-1.5 sm:gap-2.5">
-            <LanguageSwitch hint />
-            <ThemeToggle className="hidden sm:flex" />
-            <div className="hidden items-center gap-1 whitespace-nowrap xl:flex">
-              <LoginMenu compact={floating} />
-              <Link
-                href="/start-project"
-                className={cn(
-                  "group bg-foreground text-background focus-visible:ring-brand/50 inline-flex items-center gap-1.5 rounded-full font-medium transition-[opacity,padding,height,font-size] duration-500 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-                  floating ? "h-9 px-4 text-[13px]" : "h-10 px-5 text-sm",
-                )}
-              >
-                {t.cta}
-                <ArrowRight
-                  aria-hidden="true"
-                  className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-                />
-              </Link>
-            </div>
-
-            {/* Mobile / tablet menu button */}
-            <button
-              ref={menuButtonRef}
-              type="button"
-              onClick={() => setIsMenuOpen((open) => !open)}
-              aria-expanded={isMenuOpen}
-              aria-controls="lu-mobile-menu"
-              aria-label={isMenuOpen ? t.close : t.open}
-              className="text-foreground focus-visible:ring-brand/50 relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
+        <nav aria-label={t.menu} className="relative">
+          <div
+            aria-hidden="true"
+            className={cn(
+              "border-hairline bg-background/80 absolute inset-0 rounded-2xl border shadow-[0_10px_40px_-12px_rgb(0_0_0/0.18)] backdrop-blur-xl transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] dark:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.7)]",
+              floating ? "scale-100 opacity-100" : "scale-[1.015] opacity-0",
+            )}
+          />
+          <div className="relative grid h-14 grid-cols-[1fr_auto] items-center gap-4 px-2 sm:px-3 lg:h-16 lg:px-6 xl:grid-cols-[auto_1fr_auto] xl:gap-8">
+            <Link
+              href="/"
+              aria-label={t.home}
+              className="focus-visible:ring-brand/50 justify-self-start rounded-md focus-visible:ring-2 focus-visible:outline-none"
             >
-              <span className="relative block h-3 w-5" aria-hidden="true">
-                <span
-                  className={cn(
-                    "absolute left-0 block h-[1.5px] w-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    isMenuOpen
-                      ? "top-[5px] rotate-45"
-                      : "top-0 rotate-0",
-                  )}
-                />
-                <span
-                  className={cn(
-                    "absolute left-0 block h-[1.5px] w-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    isMenuOpen
-                      ? "top-[5px] -rotate-45"
-                      : "top-[10px] rotate-0",
-                  )}
-                />
-              </span>
-            </button>
+              <Wordmark />
+            </Link>
+
+            {/* Desktop links, centred */}
+            <ul className="hidden items-center gap-6 justify-self-center xl:flex 2xl:gap-9">
+              {t.links.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "group focus-visible:ring-brand/50 relative inline-flex rounded-sm py-1 text-[15px] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none",
+                        active
+                          ? "text-foreground"
+                          : "text-foreground/65 hover:text-foreground",
+                      )}
+                    >
+                      {link.label}
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "absolute -bottom-0.5 left-0 h-px w-full origin-left transition-transform duration-300",
+                          active
+                            ? "bg-brand scale-x-100"
+                            : "bg-foreground scale-x-0 group-hover:scale-x-100",
+                        )}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="flex items-center gap-1.5 justify-self-end sm:gap-2.5">
+              <LanguageSwitch hint />
+              <ThemeToggle className="hidden sm:flex" />
+              <div className="hidden items-center gap-1 whitespace-nowrap xl:flex">
+                <LoginMenu />
+                <Link
+                  href="/start-project"
+                  className="group bg-foreground text-background focus-visible:ring-brand/50 inline-flex h-10 items-center gap-1.5 rounded-full px-5 text-sm font-medium transition-opacity duration-300 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  {t.cta}
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              </div>
+
+              {/* Mobile / tablet menu button */}
+              <button
+                ref={menuButtonRef}
+                type="button"
+                onClick={() => setIsMenuOpen((open) => !open)}
+                aria-expanded={isMenuOpen}
+                aria-controls="lu-mobile-menu"
+                aria-label={isMenuOpen ? t.close : t.open}
+                className="text-foreground focus-visible:ring-brand/50 relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
+              >
+                <span className="relative block h-3 w-5" aria-hidden="true">
+                  <span
+                    className={cn(
+                      "absolute left-0 block h-[1.5px] w-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                      isMenuOpen ? "top-[5px] rotate-45" : "top-0 rotate-0",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "absolute left-0 block h-[1.5px] w-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                      isMenuOpen
+                        ? "top-[5px] -rotate-45"
+                        : "top-[10px] rotate-0",
+                    )}
+                  />
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Mobile menu: full-screen editorial overlay */}
       <div

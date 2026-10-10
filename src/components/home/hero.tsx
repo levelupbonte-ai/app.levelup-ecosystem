@@ -8,6 +8,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
+import { cn } from "@/lib/utils";
 
 import { Eyebrow } from "./eyebrow";
 import { ParticleStar } from "./particle-star";
@@ -140,11 +141,12 @@ function RotatingWord({ words, active }: { words: string[]; active: boolean }) {
               </span>
             ))
           : word}
+        <span className="text-brand">.</span>
       </span>
       <span
         key={`bar-${index}`}
         aria-hidden="true"
-        className="bg-brand/25 dark:bg-brand/35 absolute right-0 -bottom-[0.02em] left-0 h-[0.09em] origin-left"
+        className="bg-brand/25 dark:bg-brand/35 absolute right-[0.32em] -bottom-[0.02em] left-0 h-[0.09em] origin-left"
         style={
           animated
             ? { animation: "lu-progress 0.7s cubic-bezier(0.16,1,0.3,1) both" }
@@ -163,11 +165,13 @@ export function HomeHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const [inViewRef, inView] = useInView<HTMLDivElement>({ rootMargin: "0px" });
 
-  // First visit: the intro curtain lifts from the bottom, so the headline
-  // waits a beat longer before rising.
+  // First visit: the entrance plays when the intro curtain lifts (paused by
+  // CSS while html.lu-intro is set), a beat after it starts rising.
+  const [play, setPlay] = useState(false);
   useEffect(() => {
     if (document.documentElement.classList.contains("lu-intro")) {
       sectionRef.current?.style.setProperty("--lu-intro-offset", "380ms");
+      setPlay(true);
     }
   }, []);
 
@@ -175,12 +179,15 @@ export function HomeHero() {
     <section
       ref={sectionRef}
       aria-labelledby="home-hero-title"
-      className="font-editorial relative isolate overflow-hidden"
+      className={cn(
+        "font-editorial relative isolate overflow-hidden",
+        play && "lu-play",
+      )}
     >
       {/* Thin grid */}
       <div
         aria-hidden="true"
-        className="grid-lines pointer-events-none absolute inset-0 -z-10 opacity-70 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+        className="grid-lines pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,black_55%,transparent)] opacity-70"
       />
 
       {/* The LevelUp star, in particles */}
@@ -214,7 +221,6 @@ export function HomeHero() {
             <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
               <span className="lu-enter block" style={delay(190)}>
                 {t.pre} <RotatingWord words={t.words} active={inView} />
-                <span className="text-brand">.</span>
               </span>
             </span>
           </span>
@@ -222,7 +228,7 @@ export function HomeHero() {
 
         <div className="mt-10 grid items-end gap-9 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-24">
           <p
-            className="lu-enter-fade text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty sm:text-xl lg:text-[1.375rem]"
+            className="lu-enter-slide text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty sm:text-xl lg:text-[1.375rem]"
             style={delay(360)}
           >
             {t.sub}
@@ -244,7 +250,7 @@ export function HomeHero() {
             </Link>
             <a
               href={LEVELSTUDIO_URL}
-              className="group border-foreground/20 hover:border-foreground/40 bg-background/70 hover:bg-background backdrop-blur-sm focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
+              className="group border-foreground/20 hover:border-foreground/40 bg-background/70 hover:bg-background focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium backdrop-blur-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
             >
               {t.secondary}
               <ArrowUpRight

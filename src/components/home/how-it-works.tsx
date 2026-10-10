@@ -73,7 +73,15 @@ const COPY: Record<
     },
     dashboard: {
       url: "dashboard.levelup-ecosystem.com",
-      nav: ["Overview", "Appointments", "Waitlist", "Requests", "Services", "Reviews", "SEO"],
+      nav: [
+        "Overview",
+        "Appointments",
+        "Waitlist",
+        "Requests",
+        "Services",
+        "Reviews",
+        "SEO",
+      ],
       heading: "Appointments",
       slots: [
         { time: "09:00", state: "ok" },
@@ -129,7 +137,15 @@ const COPY: Record<
     },
     dashboard: {
       url: "dashboard.levelup-ecosystem.com",
-      nav: ["Vue d’ensemble", "Rendez-vous", "File d’attente", "Demandes", "Services", "Avis", "SEO"],
+      nav: [
+        "Vue d’ensemble",
+        "Rendez-vous",
+        "File d’attente",
+        "Demandes",
+        "Services",
+        "Avis",
+        "SEO",
+      ],
       heading: "Rendez-vous",
       slots: [
         { time: "09:00", state: "ok" },
@@ -160,7 +176,10 @@ function WindowFrame({
       <div className="border-ink-foreground/12 flex items-center justify-between gap-4 border-b px-5 py-3.5">
         <div className="flex gap-2" aria-hidden="true">
           {[0, 1, 2].map((i) => (
-            <span key={i} className="bg-ink-foreground/20 size-2.5 rounded-full" />
+            <span
+              key={i}
+              className="bg-ink-foreground/20 size-2.5 rounded-full"
+            />
           ))}
         </div>
         <span className="font-label text-ink-foreground/45 truncate text-xs">
@@ -174,7 +193,9 @@ function WindowFrame({
           className="bg-brand-soft lu-loop size-2 rounded-full"
           style={{ animation: "lu-pulse 2s ease-in-out infinite" }}
         />
-        <span className="font-label text-ink-foreground/50 text-xs">{status}</span>
+        <span className="font-label text-ink-foreground/50 text-xs">
+          {status}
+        </span>
       </div>
     </div>
   );
@@ -256,7 +277,10 @@ function DashboardPanel({ t }: { t: (typeof COPY)["en"]["dashboard"] }) {
         role="img"
         aria-label={`${t.heading}: ${t.slots.map((s) => `${s.time} ${s.state === "ok" ? t.confirmed : t.toConfirm}`).join(", ")}`}
       >
-        <ul className="border-ink-foreground/12 space-y-1 border-r p-3 sm:p-4" aria-hidden="true">
+        <ul
+          className="border-ink-foreground/12 space-y-1 border-r p-3 sm:p-4"
+          aria-hidden="true"
+        >
           {t.nav.map((item, i) => (
             <li
               key={item}

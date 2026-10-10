@@ -382,6 +382,14 @@ body {
     transform: translate3d(0, 0, 0);
   }
 }
+@keyframes lu-slide-up {
+  from {
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
 @keyframes lu-fade {
   from {
     opacity: 0;
@@ -477,12 +485,20 @@ body {
   }
 }
 
-.lu-enter {
+/* The hero entrance plays once the first-visit intro lifts (.lu-play is set
+   by the hero when html.lu-intro is present). Other visits arrive through the
+   page transition, so the hero is painted at rest: the headline is the LCP. */
+.lu-play .lu-enter {
   animation: lu-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--lu-intro-offset, 0ms) + var(--d, 0ms));
 }
-.lu-enter-fade {
+.lu-play .lu-enter-fade {
   animation: lu-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--lu-intro-offset, 0ms) + var(--d, 0ms));
+}
+/* Transform only: painted at first paint (no opacity), so it never delays LCP. */
+.lu-play .lu-enter-slide {
+  animation: lu-slide-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--lu-intro-offset, 0ms) + var(--d, 0ms));
 }
 .lu-enter-soft {
@@ -490,6 +506,7 @@ body {
   animation-delay: calc(var(--lu-intro-offset, 0ms) + var(--d, 0ms));
 }
 html.lu-intro .lu-enter,
+html.lu-intro .lu-enter-slide,
 html.lu-intro .lu-enter-fade,
 html.lu-intro .lu-enter-soft {
   animation-play-state: paused;
@@ -530,6 +547,7 @@ html.lu-intro .lu-enter-soft {
 
 @media (prefers-reduced-motion: reduce) {
   .lu-enter,
+  .lu-enter-slide,
   .lu-enter-fade,
   .lu-enter-soft,
   .lu-char {
