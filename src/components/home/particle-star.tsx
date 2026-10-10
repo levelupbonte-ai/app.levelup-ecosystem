@@ -25,7 +25,7 @@ import { usePrefersReducedMotion } from "./use-reduced-motion";
  * prefers-reduced-motion the static star image is shown instead.
  */
 
-const GLYPHS = "·:-=+*x%#@";
+const GLYPHS = "·:-=+*#%@";
 const LEVELS = GLYPHS.length;
 const VIOLET = [139, 92, 246] as const; // #8B5CF6
 const SCALE_UNIT = 230; // icon units per normalised unit
@@ -278,7 +278,8 @@ export function ParticleStar({
         projected.x[i] = cxp + x3 * k * scale;
         projected.y[i] = cyp + y3 * k * scale;
 
-        let b = lit[p.facet];
+        // Every facet stays readable; light facets climb to violet.
+        let b = 0.22 + 0.78 * lit[p.facet];
         if (p.edge) b = Math.min(1, b + 0.22);
         // A few glyphs twinkle.
         const tw = Math.sin(time * 1.7 + p.phase * 3);

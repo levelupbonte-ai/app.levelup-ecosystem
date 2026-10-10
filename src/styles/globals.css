@@ -422,6 +422,15 @@ nextjs-portal,
     opacity: 1;
   }
 }
+@keyframes lu-pulse-soft {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
 @keyframes lu-ring {
   from {
     transform: scale(0.4);
@@ -501,8 +510,8 @@ html.lu-intro .lu-enter-soft {
 }
 
 /* Small looping line-art: only runs while its section is on screen. */
-[data-inview="false"] .lu-loop,
-[data-inview="false"].lu-loop {
+[data-live="false"] .lu-loop,
+[data-live="false"].lu-loop {
   animation-play-state: paused !important;
 }
 

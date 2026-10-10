@@ -186,7 +186,7 @@ export function HomeHero() {
       {/* The LevelUp star, in particles */}
       <div
         aria-hidden="true"
-        className="lu-enter-soft pointer-events-none absolute top-14 -right-[34%] -z-10 aspect-square w-[96vw] opacity-40 sm:-right-[18%] sm:w-[70vw] sm:opacity-60 lg:top-[47%] lg:-right-[3%] lg:w-[min(50vw,760px)] lg:-translate-y-1/2 lg:opacity-100"
+        className="lu-enter-soft pointer-events-none absolute top-10 -right-[40%] -z-10 aspect-square w-[96vw] opacity-30 sm:-right-[18%] sm:w-[70vw] sm:opacity-60 lg:top-[47%] lg:-right-[3%] lg:w-[min(50vw,760px)] lg:-translate-y-1/2 lg:opacity-100"
         style={delay(250)}
       >
         <ParticleStar className="h-full w-full" />
@@ -244,7 +244,7 @@ export function HomeHero() {
             </Link>
             <a
               href={LEVELSTUDIO_URL}
-              className="group border-foreground/20 hover:border-foreground/40 hover:bg-foreground/[0.03] focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
+              className="group border-foreground/20 hover:border-foreground/40 bg-background/70 hover:bg-background backdrop-blur-sm focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
             >
               {t.secondary}
               <ArrowUpRight
@@ -260,7 +260,7 @@ export function HomeHero() {
       <div
         className="lu-enter-soft lu-marquee border-hairline relative overflow-hidden border-y py-5 lg:py-6"
         style={delay(620)}
-        data-inview={inView ? "true" : "false"}
+        data-live={inView ? "true" : "false"}
       >
         <p className="sr-only">
           {t.factsLabel}: {t.facts.join(", ")}.
