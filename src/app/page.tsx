@@ -1,4 +1,5 @@
 import { Capabilities } from "@/components/home/capabilities";
+import { HomeCta } from "@/components/home/cta";
 import { Ecosystem } from "@/components/home/ecosystem";
 import { HomeHero } from "@/components/home/hero";
 import { HowItWorks } from "@/components/home/how-it-works";
@@ -70,6 +71,7 @@ export default async function Home() {
         projectFrom={lowestPrice(pricing.buildPlans, FALLBACK_PROJECT_FROM)}
         careFrom={lowestPrice(pricing.carePlans, FALLBACK_CARE_FROM)}
       />
+      <HomeCta />
     </>
   );
 }
