@@ -8,6 +8,7 @@ import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { Reveal } from "./reveal";
 
 const COPY: Record<
@@ -125,7 +126,8 @@ export function PricingTeaser({
         <div className="grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
           <Reveal>
             <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
-            <h2
+            <LensText
+              as="h2"
               id="pricing-title"
               className="font-editorial text-[clamp(2.5rem,6vw,5.25rem)] leading-[0.98] font-normal tracking-[-0.04em]"
             >
@@ -134,7 +136,7 @@ export function PricingTeaser({
               <span className="text-transparent [-webkit-text-stroke:1.5px_var(--foreground)]">
                 {t.titleStroke}
               </span>
-            </h2>
+            </LensText>
             <p className="text-muted-foreground mt-6 max-w-md text-lg leading-relaxed text-pretty">
               {t.lead}
             </p>

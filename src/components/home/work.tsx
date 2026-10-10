@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { DeviceMockup } from "./device-mockup";
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { LiveRegion, Reveal } from "./reveal";
 
 /** What the server passes for each case (title/link may come from the database). */
@@ -133,14 +134,15 @@ export function Work({ cases }: { cases: WorkCase[] }) {
         <div className="mb-14 flex flex-col gap-8 lg:mb-24 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>
             <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
-            <h2
+            <LensText
+              as="h2"
               id="work-title"
               className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
             >
               {t.title}
               <br />
               <span className="text-muted-foreground">{t.titleMuted}</span>
-            </h2>
+            </LensText>
           </Reveal>
           <Reveal delay={120}>
             <Link

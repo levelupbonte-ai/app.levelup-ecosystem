@@ -538,6 +538,78 @@ html.lu-intro .lu-enter-soft {
   animation-play-state: paused !important;
 }
 
+/* Cursor lens (components/home/lens.tsx): the inverted copy of a heading,
+   clipped to a circle that follows the pointer. */
+.lu-lens {
+  clip-path: circle(var(--lr, 0px) at var(--lx, -200px) var(--ly, -200px));
+}
+.lu-lens * {
+  color: inherit !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Aurora: large soft gradient blobs drifting slowly (transform only). */
+.lu-aurora {
+  --a1: rgb(200 179 254 / 0.55);
+  --a2: rgb(139 92 246 / 0.22);
+  --a3: rgb(147 197 253 / 0.38);
+  --a4: rgb(221 214 254 / 0.6);
+}
+.dark .lu-aurora {
+  --a1: rgb(76 29 149 / 0.45);
+  --a2: rgb(139 92 246 / 0.2);
+  --a3: rgb(30 58 138 / 0.42);
+  --a4: rgb(49 46 129 / 0.4);
+}
+.lu-blob {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--c), transparent);
+  will-change: transform;
+}
+@keyframes lu-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8vw, 6vh, 0) scale(1.12);
+  }
+}
+@keyframes lu-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-10vw, 4vh, 0) scale(0.94);
+  }
+}
+@keyframes lu-drift-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  to {
+    transform: translate3d(6vw, -8vh, 0) scale(1.1);
+  }
+}
+
+/* Glass surfaces (prompt box, pills). */
+.lu-glass {
+  background: rgb(255 255 255 / 0.55);
+  border: 1px solid rgb(255 255 255 / 0.75);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.6) inset,
+    0 18px 50px -24px rgb(76 29 149 / 0.28);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+.dark .lu-glass {
+  background: rgb(255 255 255 / 0.06);
+  border-color: rgb(255 255 255 / 0.12);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.06) inset,
+    0 18px 50px -24px rgb(0 0 0 / 0.7);
+}
+
 .lu-marquee-track {
   animation: lu-marquee 42s linear infinite;
 }

@@ -15,6 +15,7 @@ import {
 import { type Locale, useLocale } from "@/lib/locale";
 
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { Reveal } from "./reveal";
 
 const ICONS: LucideIcon[] = [
@@ -151,14 +152,15 @@ export function Ecosystem() {
           <Eyebrow center className="mb-6">
             {t.eyebrow}
           </Eyebrow>
-          <h2
+          <LensText
+            as="h2"
             id="ecosystem-title"
             className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
           >
             {t.title}
             <br />
             <span className="text-muted-foreground">{t.titleMuted}</span>
-          </h2>
+          </LensText>
           <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty">
             {t.lead}
           </p>

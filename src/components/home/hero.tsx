@@ -2,16 +2,14 @@
 
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 
-import Link from "next/link";
-
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-
-import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
+import { Aurora } from "./aurora";
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { ParticleStar } from "./particle-star";
+import { PromptBox } from "./prompt-box";
 import { StarGlyph } from "./star-glyph";
 import { useInView } from "./use-in-view";
 import { usePrefersReducedMotion } from "./use-reduced-motion";
@@ -25,8 +23,6 @@ const COPY: Record<
     words: string[];
     srTitle: string;
     sub: string;
-    primary: string;
-    secondary: string;
     facts: string[];
     factsLabel: string;
   }
@@ -39,8 +35,6 @@ const COPY: Record<
     srTitle:
       "Websites built to impress, take bookings, rank on Google and last.",
     sub: "Custom websites that look premium, take bookings 24/7, get found on Google and stay protected. You run it all from one dashboard.",
-    primary: "Start your project",
-    secondary: "Get a free preview",
     factsLabel: "What every LevelUp site includes",
     facts: [
       "Online booking 24/7",
@@ -61,8 +55,6 @@ const COPY: Record<
     srTitle:
       "Des sites faits pour séduire, prendre des réservations, être trouvés sur Google et durer.",
     sub: "Des sites sur mesure au rendu premium, qui prennent des réservations 24h/24, se trouvent sur Google et restent protégés. Vous pilotez tout depuis un seul tableau de bord.",
-    primary: "Lancer mon projet",
-    secondary: "Aperçu gratuit",
     factsLabel: "Ce que chaque site LevelUp inclut",
     facts: [
       "Réservation en ligne 24h/24",
@@ -101,14 +93,13 @@ function afterIntro(run: () => void) {
   };
 }
 
-function RotatingWord({ words, active }: { words: string[]; active: boolean }) {
-  const [index, setIndex] = useState(0);
-  const [animated, setAnimated] = useState(false);
+/** Rotation state, shared by the heading and its lens copy so they stay in sync. */
+function useRotation(words: string[], active: boolean) {
+  const [state, setState] = useState({ index: 0, animated: false });
   const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
-    setIndex(0);
-    setAnimated(false);
+    setState({ index: 0, animated: false });
   }, [words]);
 
   useEffect(() => {
@@ -116,8 +107,10 @@ function RotatingWord({ words, active }: { words: string[]; active: boolean }) {
     let timer = 0;
     const cancel = afterIntro(() => {
       timer = window.setInterval(() => {
-        setAnimated(true);
-        setIndex((i) => (i + 1) % words.length);
+        setState((s) => ({
+          index: (s.index + 1) % words.length,
+          animated: true,
+        }));
       }, ROTATE_MS);
     });
     return () => {
@@ -126,7 +119,18 @@ function RotatingWord({ words, active }: { words: string[]; active: boolean }) {
     };
   }, [active, reduced, words]);
 
-  const word = words[index] ?? words[0];
+  return state;
+}
+
+function RotatingWord({
+  word,
+  index,
+  animated,
+}: {
+  word: string;
+  index: number;
+  animated: boolean;
+}) {
   return (
     <span className="relative inline-block whitespace-nowrap">
       <span key={`${word}-${index}`} className="inline-flex">
@@ -137,7 +141,7 @@ function RotatingWord({ words, active }: { words: string[]; active: boolean }) {
                 className="lu-char"
                 style={{ animationDelay: `${i * 45}ms` }}
               >
-                {char === " " ? " " : char}
+                {char === " " ? "\u00A0" : char}
               </span>
             ))
           : word}
@@ -167,6 +171,28 @@ export function HomeHero() {
 
   // First visit: the entrance plays when the intro curtain lifts (paused by
   // CSS while html.lu-intro is set), a beat after it starts rising.
+  const rotation = useRotation(t.words, inView);
+  const word = t.words[rotation.index] ?? t.words[0];
+  const headline = (
+    <span aria-hidden="true" className="block">
+      <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+        <span className="lu-enter block" style={delay(90)}>
+          {t.lead}
+        </span>
+      </span>
+      <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+        <span className="lu-enter block" style={delay(190)}>
+          {t.pre}{" "}
+          <RotatingWord
+            word={word}
+            index={rotation.index}
+            animated={rotation.animated}
+          />
+        </span>
+      </span>
+    </span>
+  );
+
   const [play, setPlay] = useState(false);
   useEffect(() => {
     if (document.documentElement.classList.contains("lu-intro")) {
@@ -183,12 +209,10 @@ export function HomeHero() {
         "font-editorial relative isolate overflow-hidden",
         play && "lu-play",
       )}
+      data-live={inView ? "true" : "false"}
     >
-      {/* Thin grid */}
-      <div
-        aria-hidden="true"
-        className="grid-lines pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,black_55%,transparent)] opacity-70"
-      />
+      {/* Airy aurora + faint grid */}
+      <Aurora />
 
       {/* The LevelUp star, in particles */}
       <div
@@ -201,72 +225,39 @@ export function HomeHero() {
 
       <div
         ref={inViewRef}
-        className="mx-auto max-w-[1400px] px-4 pt-32 pb-14 sm:px-6 lg:px-12 lg:pt-44 lg:pb-20"
+        className="mx-auto max-w-[1400px] px-4 pt-28 pb-14 sm:px-6 lg:px-12 lg:pt-36 lg:pb-16"
       >
-        <div className="lu-enter-fade mb-7 lg:mb-9" style={delay(0)}>
+        <div className="lu-enter-fade mb-6 lg:mb-8" style={delay(0)}>
           <Eyebrow>{t.eyebrow}</Eyebrow>
         </div>
 
-        <h1
+        <LensText
+          as="h1"
           id="home-hero-title"
-          className="text-foreground text-[clamp(2.75rem,14vw,9.75rem)] leading-[0.92] font-normal tracking-[-0.045em]"
+          className="text-foreground text-[clamp(2.75rem,14vw,9.25rem)] leading-[0.92] font-normal tracking-[-0.045em]"
+          overlay={headline}
         >
           <span className="sr-only">{t.srTitle}</span>
-          <span aria-hidden="true" className="block">
-            <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
-              <span className="lu-enter block" style={delay(90)}>
-                {t.lead}
-              </span>
-            </span>
-            <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
-              <span className="lu-enter block" style={delay(190)}>
-                {t.pre} <RotatingWord words={t.words} active={inView} />
-              </span>
-            </span>
-          </span>
-        </h1>
+          {headline}
+        </LensText>
 
-        <div className="mt-10 grid items-end gap-9 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-24">
+        <div className="mt-8 max-w-[46rem] lg:mt-10">
           <p
             className="lu-enter-slide text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty sm:text-xl lg:text-[1.375rem]"
             style={delay(360)}
           >
             {t.sub}
           </p>
-
-          <div
-            className="lu-enter-fade flex flex-col gap-3 sm:flex-row sm:items-center lg:justify-end"
-            style={delay(460)}
-          >
-            <Link
-              href="/start-project"
-              className="group bg-foreground text-background focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-            >
-              {t.primary}
-              <ArrowRight
-                aria-hidden="true"
-                className="size-4 transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-            <a
-              href={LEVELSTUDIO_URL}
-              className="group border-foreground/20 hover:border-foreground/40 bg-background/70 hover:bg-background focus-visible:ring-brand/50 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium backdrop-blur-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
-            >
-              {t.secondary}
-              <ArrowUpRight
-                aria-hidden="true"
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </a>
+          <div className="lu-enter-fade mt-7 lg:mt-8" style={delay(460)}>
+            <PromptBox />
           </div>
         </div>
       </div>
 
       {/* Facts strip: only things that are true of every project. */}
       <div
-        className="lu-enter-soft lu-marquee border-hairline relative overflow-hidden border-y py-5 lg:py-6"
+        className="lu-enter-soft lu-marquee border-hairline bg-background/40 relative overflow-hidden border-y py-5 backdrop-blur-[2px] lg:py-6"
         style={delay(620)}
-        data-live={inView ? "true" : "false"}
       >
         <p className="sr-only">
           {t.factsLabel}: {t.facts.join(", ")}.

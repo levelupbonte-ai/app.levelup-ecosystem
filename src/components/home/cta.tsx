@@ -7,8 +7,11 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 
+import { Aurora } from "./aurora";
+import { LensText } from "./lens";
 import { ParticleStar } from "./particle-star";
 import { Reveal } from "./reveal";
+import { useInView } from "./use-in-view";
 
 const COPY: Record<
   Locale,
@@ -39,6 +42,7 @@ const COPY: Record<
 export function HomeCta() {
   const locale = useLocale();
   const t = COPY[locale];
+  const [liveRef, live] = useInView<HTMLDivElement>({ rootMargin: "120px" });
 
   return (
     <section
@@ -47,7 +51,12 @@ export function HomeCta() {
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
         <Reveal>
-          <div className="border-foreground relative overflow-hidden border">
+          <div
+            ref={liveRef}
+            data-live={live ? "true" : "false"}
+            className="border-foreground relative isolate overflow-hidden border"
+          >
+            <Aurora grid={false} className="opacity-70" />
             <div
               aria-hidden="true"
               className="border-hairline absolute top-0 right-0 size-12 border-b border-l lg:size-20"
@@ -59,14 +68,15 @@ export function HomeCta() {
 
             <div className="relative grid items-center gap-6 px-6 py-14 sm:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-10 lg:px-16 lg:py-20">
               <div className="relative z-10">
-                <h2
+                <LensText
+                  as="h2"
                   id="cta-title"
                   className="font-editorial text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.96] font-normal tracking-[-0.04em]"
                 >
                   {t.title[0]}
                   <br />
                   {t.title[1]}
-                </h2>
+                </LensText>
                 <p className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl">
                   {t.body}
                 </p>

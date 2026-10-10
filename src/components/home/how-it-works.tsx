@@ -6,6 +6,7 @@ import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { Reveal } from "./reveal";
 
 type Panel = "brief" | "studio" | "dashboard";
@@ -385,14 +386,16 @@ export function HowItWorks() {
           <Eyebrow tone="inverted" className="mb-6">
             {t.eyebrow}
           </Eyebrow>
-          <h2
+          <LensText
+            as="h2"
+            tone="inverted"
             id="how-title"
             className="font-editorial text-ink-foreground text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
           >
             {t.title}
             <br />
             <span className="text-ink-foreground/50">{t.titleMuted}</span>
-          </h2>
+          </LensText>
         </Reveal>
 
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">

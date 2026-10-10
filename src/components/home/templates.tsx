@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { DeviceMockup } from "./device-mockup";
 import { Eyebrow } from "./eyebrow";
+import { LensText } from "./lens";
 import { LiveRegion, Reveal } from "./reveal";
 import {
   TEMPLATE_COPY,
@@ -82,14 +83,15 @@ export function Templates() {
         <Reveal className="mb-14 grid gap-8 lg:mb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-end lg:gap-16">
           <div>
             <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
-            <h2
+            <LensText
+              as="h2"
               id="templates-title"
               className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
             >
               {t.title}
               <br />
               <span className="text-muted-foreground">{t.titleMuted}</span>
-            </h2>
+            </LensText>
           </div>
           <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
             {t.lead}
