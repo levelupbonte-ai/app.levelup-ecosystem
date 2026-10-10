@@ -370,7 +370,7 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       aria-labelledby="how-title"
-      className="font-editorial bg-ink text-ink-foreground relative overflow-hidden py-24 lg:py-36 dark:border-y dark:border-white/10"
+      className="font-editorial bg-ink text-ink-foreground relative overflow-clip py-24 lg:py-36 dark:border-y dark:border-white/10"
     >
       <div
         aria-hidden="true"
