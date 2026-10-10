@@ -8,6 +8,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Background } from "@/components/background";
 import { ProjectShowcase } from "@/components/blocks/features";
 import { DashedLine } from "@/components/dashed-line";
+import { TemplateCards } from "@/components/home/templates";
 import { Button } from "@/components/ui/button";
 import { getConcepts, getLiveProjects } from "@/lib/levelup-site";
 
@@ -73,6 +74,9 @@ export default async function ProjectsPage() {
             <ProjectShowcase key={project.id} item={project} showExploreButton={false} />
           ))}
         </div>
+
+        {/* Premium templates (LevelUp demo sites, not clients) */}
+        <TemplateCards />
 
         {/* Additional Concepts Section */}
         <section className="container max-w-5xl mt-20 space-y-8">

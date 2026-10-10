@@ -4,6 +4,7 @@ import { Ecosystem } from "@/components/home/ecosystem";
 import { HomeHero } from "@/components/home/hero";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { PricingTeaser } from "@/components/home/pricing-teaser";
+import { Templates } from "@/components/home/templates";
 import { Work, type WorkCase } from "@/components/home/work";
 import type { PlanItem } from "@/components/blocks/pricing";
 import { getLiveProjects, getPricingContent } from "@/lib/levelup-site";
@@ -66,6 +67,7 @@ export default async function Home() {
       <Capabilities />
       <HowItWorks />
       <Work cases={cases} />
+      <Templates />
       <Ecosystem />
       <PricingTeaser
         projectFrom={lowestPrice(pricing.buildPlans, FALLBACK_PROJECT_FROM)}

@@ -1,7 +1,5 @@
 "use client";
 
-import type { CSSProperties } from "react";
-
 import Link from "next/link";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -9,6 +7,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
+import { DeviceMockup } from "./device-mockup";
 import { Eyebrow } from "./eyebrow";
 import { LiveRegion, Reveal } from "./reveal";
 
@@ -108,66 +107,14 @@ function CaseVisual({
 }) {
   const c = CASE_COPY[id];
   return (
-    <div className="relative pb-10 sm:pb-14">
-      <div className="border-hairline bg-card overflow-hidden border shadow-[0_30px_80px_-40px_rgb(0_0_0/0.35)]">
-        <div className="border-hairline flex items-center gap-3 border-b px-4 py-2.5">
-          <div className="flex gap-1.5" aria-hidden="true">
-            {[0, 1, 2].map((i) => (
-              <span key={i} className="bg-foreground/15 size-2 rounded-full" />
-            ))}
-          </div>
-          <span className="font-label text-muted-foreground mx-auto truncate text-[11px]">
-            {c.domain}
-          </span>
-        </div>
-        {/* eslint-disable-next-line @next/next/no-img-element -- responsive capture via srcSet */}
-        <img
-          src={`${c.desktop}-1440.webp`}
-          srcSet={`${c.desktop}-720.webp 720w, ${c.desktop}-1440.webp 1440w`}
-          sizes="(min-width: 1024px) 56vw, 92vw"
-          width={1440}
-          height={900}
-          alt={alt}
-          loading="lazy"
-          decoding="async"
-          className="block aspect-[16/10] w-full object-cover object-top"
-        />
-      </div>
-
-      {/* Phone: the mobile site scrolling by itself */}
-      <div
-        aria-hidden="true"
-        className={cn(
-          "absolute bottom-0 w-[30%] max-w-[210px] min-w-[112px]",
-          flip ? "-left-2 sm:-left-6" : "-right-2 sm:-right-6",
-        )}
-      >
-        <div className="border-foreground/85 bg-foreground rounded-[1.6rem] border-[5px] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.5)] sm:rounded-[2rem] sm:border-[6px]">
-          <div
-            className="relative aspect-[9/19] overflow-hidden rounded-[1.25rem] bg-black sm:rounded-[1.6rem]"
-            style={{ containerType: "size" } as CSSProperties}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element -- decorative long capture */}
-            <img
-              src={c.mobile}
-              width={440}
-              height={3520}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="lu-loop block w-full"
-              style={
-                {
-                  "--phone-h": "100cqh",
-                  animation:
-                    "lu-phone-scroll 16s cubic-bezier(0.45,0,0.55,1) infinite alternate",
-                } as CSSProperties
-              }
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <DeviceMockup
+      domain={c.domain}
+      desktop={c.desktop}
+      mobile={c.mobile}
+      mobileSize={{ width: 440, height: 3520 }}
+      alt={alt}
+      flip={flip}
+    />
   );
 }
 
