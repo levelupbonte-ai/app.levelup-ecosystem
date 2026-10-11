@@ -668,3 +668,194 @@ html.lu-intro .lu-enter-soft {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   Legal documents (/terms, /privacy, ...): long-form reading typography.
+   The HTML is generated from src/content/legal/*.md at build time.
+   ========================================================================== */
+.lu-legal {
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.lu-legal > :first-child {
+  margin-top: 0;
+}
+.lu-legal h2 {
+  font-family: var(--font-instrument, "Instrument Sans"), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 3.25rem 0 1.1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--hairline);
+  scroll-margin-top: 7rem;
+  text-wrap: balance;
+}
+.lu-legal > h2:first-child {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+.lu-legal h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 2rem 0 0.6rem;
+  scroll-margin-top: 7rem;
+}
+.lu-legal h2 a,
+.lu-legal h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.lu-legal h2 a:hover::after,
+.lu-legal h2 a:focus-visible::after {
+  content: " #";
+  color: var(--brand-ink);
+}
+.lu-legal p {
+  margin: 0.9rem 0;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+.lu-legal strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.lu-legal p a,
+.lu-legal li a,
+.lu-legal td a {
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--brand-ink) 40%, transparent);
+  text-underline-offset: 3px;
+}
+.lu-legal a:hover {
+  text-decoration-color: currentColor;
+}
+.lu-clause {
+  font-family: var(--font-jetbrains, "JetBrains Mono"), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--brand-ink);
+  margin-right: 0.5rem;
+}
+@media (min-width: 640px) {
+  .lu-legal p:has(> .lu-clause:first-child) {
+    padding-left: 3.1rem;
+  }
+  .lu-legal p > .lu-clause:first-child {
+    display: inline-block;
+    width: 3.1rem;
+    margin-left: -3.1rem;
+    margin-right: 0;
+  }
+  .lu-legal > ul,
+  .lu-legal > ol {
+    margin-left: 3.1rem;
+  }
+}
+.lu-legal ul,
+.lu-legal ol {
+  margin: 0.9rem 0;
+  padding-left: 1.4rem;
+}
+.lu-legal ul {
+  list-style: disc;
+}
+.lu-legal ol {
+  list-style: decimal;
+}
+.lu-legal li {
+  margin: 0.35rem 0;
+  padding-left: 0.2rem;
+}
+.lu-legal li::marker {
+  color: var(--brand);
+}
+.lu-legal hr {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 2.5rem 0;
+}
+.lu-legal code {
+  font-family: var(--font-jetbrains, "JetBrains Mono"), ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--muted);
+  border-radius: 6px;
+  padding: 0.12em 0.4em;
+  overflow-wrap: anywhere;
+}
+.lu-legal blockquote {
+  margin: 1.25rem 0;
+  padding: 0.25rem 0 0.25rem 1.1rem;
+  border-left: 2px solid var(--brand);
+}
+.lu-table {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.lu-table:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.lu-table table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.lu-table th {
+  text-align: left;
+  font-weight: 600;
+  background: var(--muted);
+  white-space: nowrap;
+}
+.lu-table th,
+.lu-table td {
+  padding: 0.65rem 0.9rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--hairline);
+  overflow-wrap: normal;
+}
+.lu-table tr:last-child td {
+  border-bottom: 0;
+}
+.lu-table code {
+  white-space: nowrap;
+}
+.lu-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.lu-summary li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin: 0;
+  line-height: 1.6;
+}
+.lu-summary li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.62em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: var(--brand);
+}
+.lu-summary p {
+  margin: 0.5rem 0 0;
+}
+.lu-summary a {
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

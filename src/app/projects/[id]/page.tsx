@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   if (id === "final-stop") {
     const title = "Final Stop Barber Shop — 24/7 Online Booking & Web Platform | San Diego";
     const description =
-      "Sub-2-second load times, mobile appointment scheduling, haircut showcase, and Google Maps local SEO in San Diego, CA.";
+      "Mobile-first appointment scheduling, haircut showcase, and Google Maps local SEO in San Diego, CA.";
     const imageUrl = "https://levelup-ecosystem.com/projects/final-stop.png";
 
     return {

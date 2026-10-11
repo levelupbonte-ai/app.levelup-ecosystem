@@ -64,12 +64,12 @@ export const defaultFaqCategories: FaqCategory[] = [
           "We audit your domain registrar and DNS settings, verify SSL HTTPS certificates, audit database permissions, implement two-factor authentication (2FA) on your hosting and business email accounts, install spam bot honeypots, and test for credential leakage.",
       },
       {
-        question: "Do I own my website, code, and domain?",
+        question: "Who owns my website, content and domain?",
         answer:
-          "Yes, 100%. Once final payment is settled, you own all rights to your domain, branding, text, and customer lists. There are no lock-in contracts or hostage fees.",
+          "You own your domain, brand, text, photos and customer data, and you can export them on request. LevelUp builds, hosts and maintains the site on its platform under a license: we keep the code, templates and components (and may reuse them for other clients, never your content or branding), and the site stays online while your care plan is active. We never hold your domain or your data hostage. If you want the project-specific code, a code buy-out is available under a separate written agreement.",
       },
       {
-        question: "What is included in the $49/month Care Plan?",
+        question: "What is included in a Care Plan?",
         answer:
           "High-speed cloud hosting, automated daily backups, monthly security updates, 24/7 uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
       },

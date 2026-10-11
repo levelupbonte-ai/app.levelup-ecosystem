@@ -12,7 +12,13 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { LEVELSTUDIO_URL, levelUpLoginUrl } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 
-type FooterLink = { label: string; href: string; external?: boolean };
+type FooterLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+  /** Opens the cookie preferences instead of navigating. */
+  cookieSettings?: boolean;
+};
 
 const COPY: Record<
   Locale,
@@ -61,9 +67,14 @@ const COPY: Record<
       {
         title: "Legal",
         links: [
-          { label: "Privacy", href: "/privacy" },
-          { label: "Terms", href: "/terms" },
-          { label: "Cookies", href: "/cookies" },
+          { label: "Terms of Service", href: "/terms" },
+          { label: "Privacy Policy", href: "/privacy" },
+          { label: "Acceptable Use", href: "/acceptable-use" },
+          { label: "Services Agreement", href: "/services-agreement" },
+          { label: "Data Processing (DPA)", href: "/dpa" },
+          { label: "Cookie Policy", href: "/cookies" },
+          { label: "LevelStudio Terms", href: "/levelstudio-terms" },
+          { label: "Cookie settings", href: "/cookies", cookieSettings: true },
         ],
       },
     ],
@@ -108,9 +119,14 @@ const COPY: Record<
       {
         title: "Légal",
         links: [
+          { label: "Conditions d'utilisation", href: "/terms" },
           { label: "Confidentialité", href: "/privacy" },
-          { label: "Conditions", href: "/terms" },
-          { label: "Cookies", href: "/cookies" },
+          { label: "Utilisation acceptable", href: "/acceptable-use" },
+          { label: "Contrat de services", href: "/services-agreement" },
+          { label: "Traitement des données (DPA)", href: "/dpa" },
+          { label: "Politique des cookies", href: "/cookies" },
+          { label: "Conditions LevelStudio", href: "/levelstudio-terms" },
+          { label: "Paramètres des cookies", href: "/cookies", cookieSettings: true },
         ],
       },
     ],
@@ -180,7 +196,19 @@ export function Footer() {
               <ul className="space-y-3.5">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    {link.external ? (
+                    {link.cookieSettings ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("levelup_open_cookie_settings"),
+                          )
+                        }
+                        className="text-foreground/80 hover:text-foreground cursor-pointer text-left text-[15px] transition-colors"
+                      >
+                        {link.label}
+                      </button>
+                    ) : link.external ? (
                       <a
                         href={link.href}
                         className="group text-foreground/80 hover:text-foreground inline-flex items-center gap-1 text-[15px] transition-colors"

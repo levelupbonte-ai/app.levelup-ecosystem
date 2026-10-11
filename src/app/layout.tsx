@@ -184,7 +184,7 @@ const jsonLdGraph = {
           name: "Transparent Pricing & Care Plans",
           url: "https://levelup-ecosystem.com/pricing",
           description:
-            "Website packages, 24-48h free mobile previews, and $49/mo high-speed care plans.",
+            "Website packages, 24-48h free mobile previews, and monthly care plans.",
         },
         {
           "@type": "WebPage",
@@ -200,7 +200,7 @@ const jsonLdGraph = {
           name: "Frequently Asked Questions",
           url: "https://levelup-ecosystem.com/faq",
           description:
-            "Answers about free mobile previews, Google Maps local ranking, turnaround times, and website ownership.",
+            "Answers about free mobile previews, Google Maps local ranking, turnaround times, and who owns what.",
         },
         {
           "@type": "WebPage",
@@ -243,7 +243,7 @@ const jsonLdGraph = {
           "@type": "SiteNavigationElement",
           position: 3,
           name: "Pricing",
-          description: "Clear fixed pricing, free 24-48h mobile previews, and $49/mo care plans.",
+          description: "Clear fixed pricing, free 24-48h mobile previews, and monthly care plans.",
           url: "https://levelup-ecosystem.com/pricing",
         },
         {
@@ -257,7 +257,7 @@ const jsonLdGraph = {
           "@type": "SiteNavigationElement",
           position: 5,
           name: "FAQ",
-          description: "Common questions about turnaround, ownership, and local SEO.",
+          description: "Common questions about turnaround, content and data ownership, and local SEO.",
           url: "https://levelup-ecosystem.com/faq",
         },
         {

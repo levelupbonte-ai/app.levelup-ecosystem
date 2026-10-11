@@ -43,19 +43,19 @@ const buildPlans: PlanItem[] = [
     price: "$850",
     pricePeriod: "/one-time",
     description:
-      "A bespoke high-converting showcase website built from scratch. Includes mobile-first responsive architecture, Google Maps integration, technical and local SEO foundations, and 100% full ownership with zero monthly fees.",
+      "A custom-designed, high-converting showcase website. Includes mobile-first responsive architecture, Google Maps integration, technical and local SEO foundations, and your content, brand and data stay yours. Built, hosted and maintained by LevelUp on a care plan.",
     shortPoints: [
       "Custom bespoke design (up to 5 pages)",
       "Mobile, tablet & desktop responsive",
       "Google Maps & Local SEO foundation",
       "Contact & lead capture form",
-      "100% website code ownership",
+      "Your content, brand & data stay yours",
     ],
     fullFeatures: [
       {
         category: "Included Deliverables",
         items: [
-          { text: "Custom website design (no generic templates)", included: true },
+          { text: "Custom website design around your brand (never a generic template)", included: true },
           { text: "Up to 5 custom-crafted pages", included: true },
           { text: "Responsive design: mobile, tablet & desktop", included: true },
           { text: "Contact and lead capture form", included: true },
@@ -63,13 +63,13 @@ const buildPlans: PlanItem[] = [
           { text: "Basic technical SEO architecture", included: true },
           { text: "Local SEO foundation targeting your service area", included: true },
           { text: "Optimized meta titles & descriptions", included: true },
-          { text: "Image & asset optimization (sub-2s loading speed target)", included: true },
+          { text: "Image & asset optimization for fast loading", included: true },
           { text: "SSL / HTTPS security encryption standard", included: true },
           { text: "Google Analytics setup", included: true },
           { text: "Basic accessibility (WCAG compliant)", included: true },
           { text: "2 rounds of revisions included", included: true },
           { text: "Website launch & verification", included: true },
-          { text: "100% full website and code ownership", included: true },
+          { text: "Your content, brand and customer data stay yours (exportable)", included: true },
         ],
       },
       {
@@ -79,7 +79,7 @@ const buildPlans: PlanItem[] = [
           { text: "Live 2-way calendar sync (Google, Apple, Square)", included: false },
           { text: "Automated SMS/Email appointment confirmations", included: false },
           { text: "Database security audit & access hardening", included: false },
-          { text: "Included monthly website updates (Care optional)", included: false },
+          { text: "Included monthly website updates (with a care plan)", included: false },
         ],
       },
     ],
@@ -135,9 +135,9 @@ const buildPlans: PlanItem[] = [
       {
         category: "Features Not Included (Available in Bundle / Care)",
         items: [
-          { text: "Managed cloud hosting & CDN (Care optional)", included: false },
-          { text: "Automated daily offsite backups (Care optional)", included: false },
-          { text: "Monthly on-demand website edits (Care optional)", included: false },
+          { text: "Managed cloud hosting & CDN (with a care plan)", included: false },
+          { text: "Automated daily offsite backups (with a care plan)", included: false },
+          { text: "Monthly on-demand website edits (with a care plan)", included: false },
         ],
       },
     ],
@@ -220,7 +220,7 @@ const buildPlans: PlanItem[] = [
           { text: "Full-stack custom web applications", included: true },
           { text: "Custom business systems & workflow automation", included: true },
           { text: "Third-party API, CRM and ERP integrations", included: true },
-          { text: "Custom database architecture (Cloud SQL, Firestore, Redis)", included: true },
+          { text: "Custom database architecture", included: true },
         ],
       },
       {
@@ -229,7 +229,7 @@ const buildPlans: PlanItem[] = [
           { text: "Transparent quote based on your exact specifications", included: true },
           { text: "Pay only for the features you actually need", included: true },
           { text: "Milestone-based delivery & dedicated engineering review", included: true },
-          { text: "100% full source code ownership", included: true },
+          { text: "Code buy-out available on request (separate written agreement)", included: true },
         ],
       },
     ],
@@ -275,7 +275,7 @@ const carePlans: PlanItem[] = [
         items: [
           { text: "Unused monthly hours do not roll over to the next month", included: true },
           { text: "Major redesigns or feature additions quoted separately", included: true },
-          { text: "Cancel anytime with zero long-term contract", included: true },
+          { text: "No long-term contract: cancel with 30 days' notice", included: true },
         ],
       },
     ],
@@ -360,7 +360,7 @@ const carePlans: PlanItem[] = [
         items: [
           { text: "Unused monthly hours do not roll over to the next month", included: true },
           { text: "Major multi-week system builds quoted separately", included: true },
-          { text: "Cancel anytime with zero penalty", included: true },
+          { text: "Cancel with 30 days' notice", included: true },
         ],
       },
     ],
@@ -446,7 +446,7 @@ export const Pricing = ({
           <div className="mb-8 sm:mb-10 text-center">
             <PremiumTextSectionReveal
               heading="Transparent Pricing. Zero Hidden Fees."
-              description="Choose a turnkey website build or ongoing monthly care. Clean deliverables, fast mobile speeds, and 100% full ownership."
+              description="Choose a turnkey website build or ongoing monthly care. Clean deliverables, fast mobile speeds, and your content, brand and data always yours."
               headingAs="h2"
               headingClassName="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]"
               descriptionClassName="mt-3 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"

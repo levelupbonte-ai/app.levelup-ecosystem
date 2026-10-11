@@ -75,6 +75,18 @@ const nextConfig: NextConfig = {
         destination: "https://dashboard.levelup-ecosystem.com/dashboard/site",
         permanent: true,
       },
+      // Legal pages: alternative names resolve to the canonical paths.
+      { source: "/terms-of-service", destination: "/terms", permanent: true },
+      { source: "/terms-and-conditions", destination: "/terms", permanent: true },
+      { source: "/legal", destination: "/terms", permanent: true },
+      { source: "/privacy-policy", destination: "/privacy", permanent: true },
+      { source: "/cookie-policy", destination: "/cookies", permanent: true },
+      { source: "/acceptable-use-policy", destination: "/acceptable-use", permanent: true },
+      { source: "/aup", destination: "/acceptable-use", permanent: true },
+      { source: "/master-services-agreement", destination: "/services-agreement", permanent: true },
+      { source: "/msa", destination: "/services-agreement", permanent: true },
+      { source: "/data-processing", destination: "/dpa", permanent: true },
+      { source: "/levelstudio/terms", destination: "/levelstudio-terms", permanent: true },
       {
         source: "/retrouvailles",
         destination: "/projects/wedding-invitation",

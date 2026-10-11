@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Frequently Asked Questions | LevelUp Ecosystem",
     description:
-      "Learn how our free mobile previews work, project turnaround times, website ownership, local SEO on Google Maps, and monthly care plan inclusions.",
+      "Learn how our free mobile previews work, project turnaround times, who owns what, local SEO on Google Maps, and monthly care plan inclusions.",
     url: "/faq",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -60,7 +60,7 @@ const defaultFaqJsonLd = {
       name: "Can you help our business rank higher on Google Maps in San Diego?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Every website we build is configured for local search visibility: structured Schema.org markup, localized Google Business Profile linking, fast mobile speeds, and exact geographic coordinates so nearby customers find you first.",
+        text: "Yes. Every website we build is configured for local search visibility: structured Schema.org markup, localized Google Business Profile linking, mobile-first performance, and exact geographic coordinates so nearby customers find you first.",
       },
     },
     {
@@ -73,18 +73,18 @@ const defaultFaqJsonLd = {
     },
     {
       "@type": "Question",
-      name: "Do I actually own my website?",
+      name: "Who owns my website, content and domain?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes, 100%. Unlike proprietary site builders that lock you in, you own your domain, code, and content completely. You are free to move your site at any time with zero penalty.",
+        text: "You own your domain, brand, text, photos and customer data, and you can export them on request. LevelUp builds, hosts and maintains the site on its platform under a license: we keep the code, templates and components (and may reuse them for other clients, never your content or branding), and the site stays online while your care plan is active. We never hold your domain or your data hostage. If you want the project-specific code, a code buy-out is available under a separate written agreement.",
       },
     },
     {
       "@type": "Question",
-      name: "What is included in the $49/month Care Plan?",
+      name: "What is included in a Care Plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Our Care Plan covers blazing-fast cloud hosting, daily automated backups, 24/7 uptime monitoring, security patches, SSL certificate renewals, and up to 2 minor content updates per month.",
+        text: "A Care Plan covers managed cloud hosting, daily automated backups, 24/7 uptime monitoring, security patches, SSL certificate renewals, and monthly content updates, with the amount of update time depending on the plan you choose.",
       },
     },
   ],

@@ -35,7 +35,7 @@ const COPY: Record<
     eyebrow: "Pricing",
     title: "Simple,",
     titleStroke: "honest pricing",
-    lead: "Fixed project prices and optional monthly care. No builder subscription, no lock-in.",
+    lead: "Fixed project prices, and a care plan that keeps your site hosted, protected and up to date. Your content, brand and data stay yours.",
     from: "from",
     cards: [
       {
@@ -43,9 +43,9 @@ const COPY: Record<
         note: "Custom design and build",
         period: "one-time",
         points: [
-          "Designed from scratch, mobile-first",
+          "Designed around your brand, mobile-first",
           "Booking, SEO and security options",
-          "You own the site and its code",
+          "Your content, brand and data stay yours",
         ],
         cta: "Start your project",
         href: "/start-project",
@@ -70,7 +70,7 @@ const COPY: Record<
     eyebrow: "Tarifs",
     title: "Des tarifs",
     titleStroke: "simples et clairs",
-    lead: "Des prix de projet fixes et un entretien mensuel en option. Pas d’abonnement à un constructeur de site, aucun engagement forcé.",
+    lead: "Des prix de projet fixes, et un plan de maintenance qui garde votre site hébergé, protégé et à jour. Votre contenu, votre marque et vos données restent à vous.",
     from: "à partir de",
     cards: [
       {
@@ -78,7 +78,7 @@ const COPY: Record<
         note: "Design et développement sur mesure",
         period: "une fois",
         points: [
-          "Conçu de zéro, pensé mobile d’abord",
+          "Conçu autour de votre marque, pensé mobile d’abord",
           "Options réservation, SEO et sécurité",
           "Le site et son code vous appartiennent",
         ],
