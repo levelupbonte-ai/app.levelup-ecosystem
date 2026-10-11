@@ -1,53 +1,38 @@
 # LevelUp Ecosystem
-> LevelUp Ecosystem is a full-stack web development, custom software architecture, and cybersecurity studio based in San Diego, California. We architect high-performance web applications, 24/7 online booking systems, bespoke digital invitations, and secure cloud infrastructure for local enterprises, national businesses, and international clients worldwide.
 
-## Founder & Principal Engineer
-> Richelieu Bonte is the founder of LevelUp Ecosystem. He is a cybersecurity student and full-stack software engineer based in San Diego, California, originally from the Democratic Republic of Congo. He directs architecture, security evaluations, human code auditing, and cloud infrastructure for all studio projects worldwide.
+> LevelUp Ecosystem is a web design and development studio based in San Diego, California, founded by Richelieu Bonte. It designs, builds, hosts and maintains custom websites for local businesses, brands and creators: mobile-first design, 24/7 online booking, Google visibility (local SEO, Google Maps) and security basics, all run from one client dashboard. It also operates LevelStudio, an AI-assisted website draft builder. English is the official language of the site; French is available as a translation.
 
-## Core Capabilities & Services
-- **Full-Stack Web Application Engineering**: High-speed Next.js 15, React 19, TypeScript, Tailwind CSS, API routes, and cloud microservices.
-- **Automated 24/7 Online Booking Systems**: Real-time calendar synchronization (Square, Calendly, Acuity, Stripe) for barbershops, salons, wellness practices, and service contractors.
-- **Bespoke Digital Invitations & Event Experiences**: Luxury digital wedding and gala invitation platforms with real-time online RSVP collection, itinerary countdown, and Google Maps venue navigation.
-- **Cybersecurity Checks & Non-Destructive Vulnerability Audits**: Plain-English security evaluations covering database rules, API key isolation, HTTPS certificates, DNS hardening, and two-factor authentication (2FA).
-- **Managed Website Care Plans ($49/month)**: High-speed cloud hosting, daily automated snapshots, uptime monitoring, and fast on-demand content edits.
-- **Local & Global SEO Architecture**: Structured Schema.org JSON-LD data, OpenGraph social sharing preview cards, sub-2s mobile loading speeds, and international discoverability for both human searchers and AI search engines and assistants.
+Contact: contact@levelup-ecosystem.com. Prices and plans change over time: always use the pricing page for current figures.
 
-## International & Full-Stack Scope
-- **Headquarters**: San Diego, California, United States
-- **Delivery Scope**: Local San Diego County businesses, United States nationwide enterprises, and international clients across Europe, Africa, and the Americas with remote-first full-stack delivery.
+## Services
 
-## Site Structure & Official Navigation Links
-- Home: https://levelup-ecosystem.com
-- Services: https://levelup-ecosystem.com/services
-- Projects & Case Studies: https://levelup-ecosystem.com/projects
-- Pricing & Care Plans: https://levelup-ecosystem.com/pricing
-- About the Studio: https://levelup-ecosystem.com/about
-- Frequently Asked Questions: https://levelup-ecosystem.com/faq
-- Request Free 24-48h Preview: https://levelup-ecosystem.com/contact
-- Client Workspace Login: https://levelup-ecosystem.com/login
+- [Services](https://levelup-ecosystem.com/services): custom websites with online booking, website security checks, managed care plans (hosting, backups, updates), local SEO.
+- [Pricing](https://levelup-ecosystem.com/pricing): fixed website project prices and monthly care plans.
+- [Start a project](https://levelup-ecosystem.com/start-project): tell us about your project; every project starts with a free preview.
+- [Contact](https://levelup-ecosystem.com/contact): ask a question or request a free preview.
 
-## Client Case Studies
-- **Final Stop Barber Shop & Salon** (San Diego, CA — https://finalstop.org): Built a high-speed, mobile-first appointment booking platform with sub-2-second load times and Google Maps integration, replacing phone tag with automated calendar sync.
-- **Le Dernier Retrouvailles — Wedding & Private Event Digital Invitation** (San Diego, CA — https://levelup-ecosystem.com/projects/wedding-invitation): Bespoke digital wedding invitation experience with real-time RSVP submission, interactive ceremony schedule, accommodation guide, and directions for weddings and luxury events in Southern California.
+## LevelStudio and templates
 
-## Specialty: Wedding & Event Web Experiences (San Diego, CA)
-- Bespoke digital wedding invitations and interactive RSVP portals
-- Instant mobile-responsive event itinerary and Google Maps navigation
-- Real-time guest attendance tracking with secure, access-controlled storage
-- Guest photo galleries and celebration messaging boards
+- [LevelStudio](https://levelup-ecosystem.com/studio): the AI website builder of LevelUp Ecosystem. Describe your business, answer a few guided questions and preview a website draft; LevelUp's engineers then deliver the production site. The app is at https://studio.levelup-ecosystem.com.
+- [Projects and templates](https://levelup-ecosystem.com/projects): client work and three demo templates built by LevelUp: Miss Beauty (hair atelier, https://missbeauty.levelup-ecosystem.com/), Taste of Egypt Cafe (cafe and bakery, https://resto.levelup-ecosystem.com/) and LevelFlight (travel and visa advisory, https://travel.levelup-ecosystem.com/).
 
-## Frequently Asked Questions (FAQ)
-- **Who is Richelieu Bonte?**
-  Richelieu Bonte is the founder of LevelUp Ecosystem, a web design studio building secure, AI-assisted websites for local businesses and creators. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo.
-- **Who founded LevelUp Ecosystem?**
-  LevelUp Ecosystem was founded by Richelieu Bonte, a cybersecurity student based in San Diego, California.
-- **What is LevelStudio?**
-  LevelStudio is LevelUp Ecosystem's instant creation and automated AI draft generator, allowing clients to test website concepts and interactive mobile prototypes before human engineering.
-- **How does the free preview work?**
-  LevelUp Ecosystem generates a functional, interactive mobile prototype for prospective clients within 24 to 48 hours to test on their phone before any payment or contract commitment.
+## Company
 
-## Location & Contact
-- **Headquarters**: San Diego, California, United States
-- **Service Area**: San Diego County, across the United States, and international clients
-- **Email**: hello@levelup-ecosystem.com
-- **Website**: https://levelup-ecosystem.com
+- [About](https://levelup-ecosystem.com/about): the studio, its founder and its principles.
+- [FAQ](https://levelup-ecosystem.com/faq): how the free preview works, timelines, who owns what, care plans.
+
+## Legal
+
+- [Terms of Service](https://levelup-ecosystem.com/terms)
+- [Privacy Policy](https://levelup-ecosystem.com/privacy)
+- [Acceptable Use Policy](https://levelup-ecosystem.com/acceptable-use)
+- [Services Agreement](https://levelup-ecosystem.com/services-agreement)
+- [Data Processing Addendum](https://levelup-ecosystem.com/dpa)
+- [Cookie Policy](https://levelup-ecosystem.com/cookies)
+- [LevelStudio Terms](https://levelup-ecosystem.com/levelstudio-terms)
+
+## Optional
+
+- [Full description for AI assistants](https://levelup-ecosystem.com/llms-full.txt)
+- [Sitemap](https://levelup-ecosystem.com/sitemap.xml)
+- [Client dashboard (sign in)](https://dashboard.levelup-ecosystem.com/auth/sign-in)

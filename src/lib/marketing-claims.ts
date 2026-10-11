@@ -21,6 +21,8 @@ const RULES: [RegExp, string][] = [
   [/\(no generic templates\)/gi, "(never a generic template)"],
   [/Custom database architecture \(Cloud SQL, Firestore, Redis\)/g, "Custom database architecture"],
   [/the \$49\/month Care Plan/g, "a Care Plan"],
+  [/Monthly care plan \(\$49\/mo\)\./g, "Monthly care plans."],
+  [/50\+ professional templates/g, "Professional templates"],
   [/Cancel anytime with zero penalty/g, "Cancel with 30 days' notice"],
   [/Cancel anytime with zero long-term contract/g, "No long-term contract: cancel with 30 days' notice"]
 ];

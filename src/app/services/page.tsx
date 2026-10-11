@@ -214,7 +214,7 @@ export default function ServicesPage() {
                     </div>
                     <div>
                       <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
-                        Service 03 • $49 / month
+                        Service 03 • Monthly plans
                       </span>
                       <h2 className="text-2xl font-bold tracking-tight">
                         Managed Website Care &amp; Maintenance
