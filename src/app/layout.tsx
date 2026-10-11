@@ -13,6 +13,7 @@ import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
 import { TopScrollDissolver } from "@/components/scroll/top-scroll-dissolver";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { WebAnalytics } from "@/components/web-analytics";
 import "@/styles/globals.css";
 
 import { instrumentSans, jetbrainsMono } from "./fonts";
@@ -404,6 +405,8 @@ export default function RootLayout({
           <Footer />
           <CookieBanner />
         </ThemeProvider>
+        {/* Cookieless analytics + speed insights (Vercel deployments only). */}
+        {process.env.VERCEL ? <WebAnalytics /> : null}
       </body>
     </html>
   );
