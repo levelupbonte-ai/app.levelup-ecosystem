@@ -63,6 +63,12 @@ const nextConfig: NextConfig = {
       },
       { source: "/signup", destination: signUp, permanent: true },
       { source: "/auth/sign-up", destination: signUp, permanent: true },
+      // Stray OAuth return on the showcase: the dashboard completes it (query string is kept).
+      {
+        source: "/auth/callback",
+        destination: "https://dashboard.levelup-ecosystem.com/auth/callback",
+        permanent: false,
+      },
       { source: "/auth/:path*", destination: signIn, permanent: true },
       // The client dashboard is its own app.
       {
