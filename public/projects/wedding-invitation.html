@@ -1113,6 +1113,9 @@
     <p class="hint">Please complete this form to receive your official digital invitation card and table placement via email.</p>
 
     <form id="inscriptionForm">
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+        <label>Leave this field empty<input type="text" id="hpUrl" name="hp_url" tabindex="-1" autocomplete="off"></label>
+      </div>
       <label for="nom">Full Name</label>
       <input type="text" id="nom" placeholder="e.g. John Doe" required>
 
@@ -1321,6 +1324,8 @@
 
   // The RSVP is stored in the LevelUp database and the confirmation e-mail is
   // sent by LevelUp (levelup-ecosystem.com), both through our own API.
+  // Anti-spam: when the page was displayed, and a honeypot field people never see.
+  const FORM_STARTED_AT = Date.now();
   async function submitRsvp(data) {
     const res = await fetch("/api/send-email", {
       method: "POST",
@@ -1330,7 +1335,9 @@
         nom: data.nom,
         email: data.email,
         telephone: data.telephone,
-        inviteCode: data.inviteCode
+        inviteCode: data.inviteCode,
+        startedAt: FORM_STARTED_AT,
+        hp: (document.getElementById("hpUrl") || {}).value || ""
       })
     });
     if (!res.ok) {
