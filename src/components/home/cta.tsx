@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
+import { PreviewIcon } from "@/components/brand/preview-icon";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 
@@ -95,6 +96,7 @@ export function HomeCta() {
                     href={LEVELSTUDIO_URL}
                     className="group border-foreground/20 hover:border-foreground/40 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors"
                   >
+                    <PreviewIcon className="text-brand size-[18px]" />
                     {t.secondary}
                     <ArrowUpRight
                       aria-hidden="true"

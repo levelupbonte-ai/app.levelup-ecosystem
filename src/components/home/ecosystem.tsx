@@ -1,6 +1,7 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
+
 import {
   BarChart3,
   CalendarCheck,
@@ -9,8 +10,9 @@ import {
   MessageSquareText,
   Search,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
+
+import { PreviewIcon } from "@/components/brand/preview-icon";
 
 import { type Locale, useLocale } from "@/lib/locale";
 
@@ -18,7 +20,7 @@ import { Eyebrow } from "./eyebrow";
 import { LensText } from "./lens";
 import { Reveal } from "./reveal";
 
-const ICONS: LucideIcon[] = [
+const ICONS: ComponentType<SVGProps<SVGSVGElement>>[] = [
   LayoutDashboard,
   CalendarCheck,
   Search,
@@ -26,7 +28,7 @@ const ICONS: LucideIcon[] = [
   MessageSquareText,
   Mail,
   ShieldCheck,
-  Sparkles,
+  PreviewIcon,
 ];
 
 const COPY: Record<

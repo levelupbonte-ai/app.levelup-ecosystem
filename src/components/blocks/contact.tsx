@@ -2,8 +2,9 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Mail, MapPin, Sparkles } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
+import { PreviewIcon } from "@/components/brand/preview-icon";
 import { ContactForm } from "@/components/blocks/contact-form";
 import { DashedLine } from "@/components/dashed-line";
 import { contactCopy } from "@/data/site-copy";
@@ -41,7 +42,7 @@ export default async function Contact() {
       ),
     },
     {
-      icon: Sparkles,
+      icon: PreviewIcon,
       title: copy.preview_title,
       content: (
         <div className="text-muted-foreground mt-2 text-sm leading-relaxed">

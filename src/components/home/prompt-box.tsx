@@ -9,15 +9,13 @@ import {
   ArrowUp,
   CalendarDays,
   LayoutTemplate,
-  Sparkles,
 } from "lucide-react";
 
+import { PreviewIcon } from "@/components/brand/preview-icon";
 import { loadLevelUpTransition } from "@/components/brand/levelup-transition";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
-
-import { StarGlyph } from "./star-glyph";
 
 const MAX = 500;
 
@@ -119,7 +117,7 @@ export function PromptBox({ className }: { className?: string }) {
         />
         <div className="flex items-center justify-between gap-3 px-2 pb-1">
           <span className="font-label text-muted-foreground inline-flex items-center gap-2 text-[11px] sm:text-xs">
-            <StarGlyph className="text-brand size-3" />
+            <PreviewIcon className="text-brand size-3.5" />
             {t.hint}
           </span>
           <button
@@ -146,7 +144,7 @@ export function PromptBox({ className }: { className?: string }) {
           />
         </Link>
         <a href={LEVELSTUDIO_URL} className={pill}>
-          <Sparkles aria-hidden="true" className="text-brand size-4" />
+          <PreviewIcon className="text-brand size-4" />
           {t.preview}
         </a>
         <Link href="/contact" className={pill}>
