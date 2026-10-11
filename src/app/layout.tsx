@@ -109,16 +109,18 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  // One coherent favicon set (the violet LevelUp star): the .ico (16-64 px,
+  // 48 px included for Google), the SVG, a 96 px PNG, the Apple touch icon
+  // and the web manifest (192 / 512 px).
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48 64x64" },
       { url: "/favicon/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon.svg", type: "image/svg+xml" },
     ],
     apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-    shortcut: [{ url: "/favicon.ico" }],
   },
+  manifest: "/favicon/site.webmanifest",
   openGraph: {
     title: "LevelUp Ecosystem | Full-Stack Web Engineering, Booking Systems & Security",
     description:
@@ -368,9 +370,6 @@ export default function RootLayout({
               "(function(){try{var d=document.documentElement;if(sessionStorage.getItem('levelup_preloader_intro_seen_v4')!=='true'||location.search.indexOf('intro')>-1){d.classList.add('lu-intro');setTimeout(function(){d.classList.remove('lu-intro')},4000)}}catch(e){}})();",
           }}
         />
-        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-        <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var o=JSON.stringify;JSON.stringify=function(v,r,s){try{return o(v,r,s);}catch(e){if(e instanceof TypeError&&String(e.message).indexOf("circular")!==-1){var seen=new WeakSet();return o(v,function(k,val){if(typeof Node!=="undefined"&&val instanceof Node){return val.nodeName||"Node";}if(typeof val==="object"&&val!==null){if(seen.has(val)){return"[Circular]";}seen.add(val);}return typeof r==="function"?r(k,val):val;},s);}throw e;};};}catch(_){}})();`,

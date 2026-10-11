@@ -613,6 +613,37 @@ html.lu-intro .lu-enter-soft {
 .lu-marquee-track {
   animation: lu-marquee 42s linear infinite;
 }
+
+/* Phones: glass without a live backdrop blur. Re-blurring the drifting
+   aurora behind five glass surfaces every frame is what makes scrolling
+   stutter on mid-range phones; a denser tint reads the same. */
+@media (max-width: 767px) {
+  .lu-glass {
+    background: rgb(255 255 255 / 0.74);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .dark .lu-glass {
+    background: rgb(255 255 255 / 0.08);
+  }
+}
+
+/* Touch: a quick press-in on buttons and pills (tap feedback). */
+@media (hover: none) and (pointer: coarse) {
+  .lu-press {
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      scale 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.3s,
+      color 0.3s,
+      background-color 0.3s,
+      border-color 0.3s;
+  }
+  .lu-press:active {
+    scale: 0.965;
+    transition-duration: 0.08s;
+  }
+}
 .lu-marquee:hover .lu-marquee-track {
   animation-play-state: paused;
 }

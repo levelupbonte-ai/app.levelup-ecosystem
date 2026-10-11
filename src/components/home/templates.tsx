@@ -37,7 +37,7 @@ function TemplateActions({
       <Link
         href={templateStartHref(item.slug)}
         className={cn(
-          "group bg-foreground text-background inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-opacity hover:opacity-90",
+          "lu-press group bg-foreground text-background inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-opacity hover:opacity-90",
           compact ? "h-11 px-5 text-sm" : "h-12 px-6 text-[15px]",
         )}
       >
@@ -52,7 +52,7 @@ function TemplateActions({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "group border-foreground/20 hover:border-foreground/45 inline-flex items-center justify-center gap-2 rounded-full border whitespace-nowrap transition-colors",
+          "lu-press group border-foreground/20 hover:border-foreground/45 inline-flex items-center justify-center gap-2 rounded-full border whitespace-nowrap transition-colors",
           compact ? "h-11 px-5 text-sm" : "h-12 px-6 text-[15px]",
         )}
       >
@@ -125,9 +125,12 @@ export function Templates() {
                     <h3 className="font-editorial mt-5 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.98] font-normal tracking-[-0.04em]">
                       {item.name}
                     </h3>
-                    <p className="text-foreground/70 mt-3 text-lg italic">
+                    <LensText
+                      as="p"
+                      className="text-foreground/70 mt-3 w-fit text-lg italic"
+                    >
                       “{c.tagline}”
-                    </p>
+                    </LensText>
                     <p className="text-muted-foreground mt-5 max-w-md text-lg leading-relaxed text-pretty">
                       {c.body}
                     </p>

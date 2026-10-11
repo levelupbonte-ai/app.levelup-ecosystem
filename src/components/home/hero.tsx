@@ -242,12 +242,13 @@ export function HomeHero() {
         </LensText>
 
         <div className="mt-8 max-w-[46rem] lg:mt-10">
-          <p
+          <LensText
+            as="p"
             className="lu-enter-slide text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty sm:text-xl lg:text-[1.375rem]"
             style={delay(360)}
           >
             {t.sub}
-          </p>
+          </LensText>
           <div className="lu-enter-fade mt-7 lg:mt-8" style={delay(460)}>
             <PromptBox />
           </div>
@@ -256,7 +257,7 @@ export function HomeHero() {
 
       {/* Facts strip: only things that are true of every project. */}
       <div
-        className="lu-enter-soft lu-marquee border-hairline bg-background/40 relative overflow-hidden border-y py-5 backdrop-blur-[2px] lg:py-6"
+        className="lu-enter-soft lu-marquee border-hairline bg-background/40 relative overflow-hidden border-y py-5 md:backdrop-blur-[2px] lg:py-6"
         style={delay(620)}
       >
         <p className="sr-only">

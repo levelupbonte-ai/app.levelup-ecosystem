@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { ArrowUpRight } from "lucide-react";
 
+import { FooterWordmark } from "@/components/brand/footer-wordmark";
 import { LanguageSwitch } from "@/components/language-switch";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LEVELSTUDIO_URL, levelUpLoginUrl } from "@/lib/levelup-login";
@@ -216,15 +217,8 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Oversized wordmark, cropped by the page edge */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none mx-auto -mb-[3.2vw] max-w-[1400px] px-4 select-none sm:px-6 lg:px-12"
-      >
-        <p className="text-foreground/[0.07] text-center text-[19.5vw] leading-[0.8] tracking-[-0.06em] whitespace-nowrap lg:text-[min(19.5vw,17.5rem)]">
-          LevelUp
-        </p>
-      </div>
+      {/* The LevelUp Ecosystem lockup of the intro, built by the star's particles */}
+      <FooterWordmark className="mt-8 md:mt-12" />
     </footer>
   );
 }

@@ -156,7 +156,7 @@ export const Navbar = () => {
           <div
             aria-hidden="true"
             className={cn(
-              "border-hairline bg-background/80 absolute inset-0 rounded-2xl border shadow-[0_10px_40px_-12px_rgb(0_0_0/0.18)] backdrop-blur-xl transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] dark:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.7)]",
+              "border-hairline bg-background/88 lg:bg-background/80 absolute inset-0 rounded-2xl border shadow-[0_10px_40px_-12px_rgb(0_0_0/0.18)] backdrop-blur-md transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:backdrop-blur-xl dark:shadow-[0_10px_40px_-12px_rgb(0_0_0/0.7)]",
               floating ? "scale-100 opacity-100" : "scale-[1.015] opacity-0",
             )}
           />
@@ -226,7 +226,7 @@ export const Navbar = () => {
                 aria-expanded={isMenuOpen}
                 aria-controls="lu-mobile-menu"
                 aria-label={isMenuOpen ? t.close : t.open}
-                className="text-foreground focus-visible:ring-brand/50 relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
+                className="lu-press text-foreground focus-visible:ring-brand/50 relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
               >
                 <span className="relative block h-3 w-5" aria-hidden="true">
                   <span
@@ -256,10 +256,10 @@ export const Navbar = () => {
         inert={!isMenuOpen}
         aria-hidden={!isMenuOpen}
         className={cn(
-          "bg-background fixed inset-0 -z-10 transition-opacity duration-500 xl:hidden",
+          "bg-background fixed inset-0 -z-10 transition-opacity xl:hidden",
           isMenuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0",
+            ? "pointer-events-auto opacity-100 duration-500"
+            : "pointer-events-none opacity-0 duration-300",
         )}
       >
         <div className="flex h-full flex-col overflow-y-auto px-6 pt-24 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-10">
@@ -322,7 +322,7 @@ export const Navbar = () => {
             <Link
               href="/start-project"
               onClick={() => setIsMenuOpen(false)}
-              className="bg-foreground text-background flex h-14 items-center justify-center gap-2 rounded-full text-base font-medium"
+              className="lu-press bg-foreground text-background flex h-14 items-center justify-center gap-2 rounded-full text-base font-medium"
             >
               {t.cta}
               <ArrowRight aria-hidden="true" className="size-4" />

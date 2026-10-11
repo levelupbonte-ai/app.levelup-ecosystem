@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
+import { PreviewIcon } from "@/components/brand/preview-icon";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 
@@ -77,13 +78,16 @@ export function HomeCta() {
                   <br />
                   {t.title[1]}
                 </LensText>
-                <p className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl">
+                <LensText
+                  as="p"
+                  className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl"
+                >
                   {t.body}
-                </p>
+                </LensText>
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     href="/start-project"
-                    className="group bg-foreground text-background inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium transition-opacity hover:opacity-90"
+                    className="lu-press group bg-foreground text-background inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium transition-opacity hover:opacity-90"
                   >
                     {t.primary}
                     <ArrowRight
@@ -93,8 +97,9 @@ export function HomeCta() {
                   </Link>
                   <a
                     href={LEVELSTUDIO_URL}
-                    className="group border-foreground/20 hover:border-foreground/40 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors"
+                    className="lu-press group border-foreground/20 hover:border-foreground/40 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors"
                   >
+                    <PreviewIcon className="text-brand size-[18px]" />
                     {t.secondary}
                     <ArrowUpRight
                       aria-hidden="true"

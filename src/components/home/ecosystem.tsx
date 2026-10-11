@@ -1,6 +1,7 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
+
 import {
   BarChart3,
   CalendarCheck,
@@ -9,8 +10,9 @@ import {
   MessageSquareText,
   Search,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
+
+import { PreviewIcon } from "@/components/brand/preview-icon";
 
 import { type Locale, useLocale } from "@/lib/locale";
 
@@ -18,7 +20,7 @@ import { Eyebrow } from "./eyebrow";
 import { LensText } from "./lens";
 import { Reveal } from "./reveal";
 
-const ICONS: LucideIcon[] = [
+const ICONS: ComponentType<SVGProps<SVGSVGElement>>[] = [
   LayoutDashboard,
   CalendarCheck,
   Search,
@@ -26,7 +28,7 @@ const ICONS: LucideIcon[] = [
   MessageSquareText,
   Mail,
   ShieldCheck,
-  Sparkles,
+  PreviewIcon,
 ];
 
 const COPY: Record<
@@ -161,9 +163,12 @@ export function Ecosystem() {
             <br />
             <span className="text-muted-foreground">{t.titleMuted}</span>
           </LensText>
-          <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty">
+          <LensText
+            as="p"
+            className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty"
+          >
             {t.lead}
-          </p>
+          </LensText>
         </Reveal>
 
         <ul className="bg-hairline border-hairline grid grid-cols-1 gap-px border sm:grid-cols-2 lg:grid-cols-4">
