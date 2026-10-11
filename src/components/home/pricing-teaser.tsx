@@ -137,9 +137,12 @@ export function PricingTeaser({
                 {t.titleStroke}
               </span>
             </LensText>
-            <p className="text-muted-foreground mt-6 max-w-md text-lg leading-relaxed text-pretty">
+            <LensText
+              as="p"
+              className="text-muted-foreground mt-6 max-w-md text-lg leading-relaxed text-pretty"
+            >
               {t.lead}
-            </p>
+            </LensText>
             <Link
               href="/pricing"
               className="group hover:text-brand-ink mt-8 inline-flex items-center gap-2 text-[15px] underline decoration-current/25 underline-offset-[6px] transition-colors"

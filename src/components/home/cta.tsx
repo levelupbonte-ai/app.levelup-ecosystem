@@ -78,9 +78,12 @@ export function HomeCta() {
                   <br />
                   {t.title[1]}
                 </LensText>
-                <p className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl">
+                <LensText
+                  as="p"
+                  className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl"
+                >
                   {t.body}
-                </p>
+                </LensText>
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     href="/start-project"

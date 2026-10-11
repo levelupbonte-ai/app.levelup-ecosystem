@@ -163,9 +163,12 @@ export function Ecosystem() {
             <br />
             <span className="text-muted-foreground">{t.titleMuted}</span>
           </LensText>
-          <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty">
+          <LensText
+            as="p"
+            className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty"
+          >
             {t.lead}
-          </p>
+          </LensText>
         </Reveal>
 
         <ul className="bg-hairline border-hairline grid grid-cols-1 gap-px border sm:grid-cols-2 lg:grid-cols-4">

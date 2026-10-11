@@ -125,9 +125,12 @@ export function Templates() {
                     <h3 className="font-editorial mt-5 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.98] font-normal tracking-[-0.04em]">
                       {item.name}
                     </h3>
-                    <p className="text-foreground/70 mt-3 text-lg italic">
+                    <LensText
+                      as="p"
+                      className="text-foreground/70 mt-3 w-fit text-lg italic"
+                    >
                       “{c.tagline}”
-                    </p>
+                    </LensText>
                     <p className="text-muted-foreground mt-5 max-w-md text-lg leading-relaxed text-pretty">
                       {c.body}
                     </p>
