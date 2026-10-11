@@ -29,13 +29,13 @@ export const aboutHeroCopy = {
   lead: "Fast, secure digital infrastructure engineered for ambitious brands, founders, and creators worldwide.",
   paragraphs: [
     "Headquartered in San Diego, California and collaborating with clients across the United States and globally, LevelUp Ecosystem delivers custom web platforms that solve real business needs.",
-    "We engineer bespoke digital architectures with effortless 24/7 customer appointment booking, sub-2-second mobile load speeds, and real cybersecurity protections from day one.",
+    "We engineer bespoke digital architectures with effortless 24/7 customer appointment booking, fast mobile-first pages, and real cybersecurity protections from day one.",
   ],
   stats: [
-    { value: "< 2s", label: "Mobile page load speed" },
+    { value: "Free", label: "Preview of your site before you commit" },
     { value: "24/7", label: "Online appointment booking" },
-    { value: "100%", label: "Code & client ownership" },
-    { value: "$0", label: "Bulky builder subscription lock-in" },
+    { value: "Yours", label: "Domain, content and customer data" },
+    { value: "1", label: "Dashboard for your site, bookings and clients" },
   ],
 };
 

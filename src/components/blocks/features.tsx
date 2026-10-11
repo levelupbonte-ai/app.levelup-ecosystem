@@ -86,9 +86,10 @@ function DesktopPinnedBarberShopShowcase({
   const buttonY = useTransform(smoothProgress, [0.72, 0.86, 1], [22, 0, 0]);
 
   return (
-    <div ref={containerRef} className="relative h-[240vh] hidden md:block pt-2">
-      {/* Sticky viewport pinned frame - tight optical spacing below header */}
-      <div className="sticky top-24 lg:top-28 w-full flex items-center justify-center overflow-hidden px-4 lg:px-8 py-4">
+    <div ref={containerRef} className="relative h-[200svh] hidden md:block">
+      {/* Pinned for one screen of scroll, centred in the viewport under the
+          header, so the frame never leaves a large empty band below it. */}
+      <div className="sticky top-0 h-svh w-full flex items-center justify-center overflow-hidden px-4 pt-20 pb-6 lg:px-8 lg:pt-24">
         <div className="w-full max-w-5xl mx-auto">
           {/* Main 12-column grid */}
           <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">

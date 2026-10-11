@@ -12,14 +12,25 @@ export const metadata: Metadata = {
 export default async function StartProjectPage({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string | string[] }>;
+  searchParams: Promise<{
+    lang?: string | string[];
+    template?: string | string[];
+  }>;
 }) {
-  // English by default; ?lang=fr|en is forwarded to the studio.
-  const { lang } = await searchParams;
-  const src =
-    lang === "fr" || lang === "en"
-      ? `/project-studio.html?lang=${lang}`
-      : "/project-studio.html";
+  // English by default; ?lang=fr|en and ?template=<slug> (the "Start with
+  // this template" links) are forwarded to the studio.
+  const { lang, template } = await searchParams;
+  const query = new URLSearchParams();
+  if (lang === "fr" || lang === "en") query.set("lang", lang);
+  if (
+    template === "missbeauty" ||
+    template === "resto" ||
+    template === "travel"
+  )
+    query.set("template", template);
+  const src = query.size
+    ? `/project-studio.html?${query.toString()}`
+    : "/project-studio.html";
   return (
     <div className="fixed inset-0 z-[200] h-dvh w-screen overflow-hidden bg-[#07070b] select-none">
       <iframe
