@@ -121,7 +121,7 @@ export function Capabilities() {
           <Reveal delay={120}>
             <Link
               href="/services"
-              className="group border-foreground/20 hover:border-foreground/45 inline-flex h-12 items-center gap-2 rounded-full border px-6 text-[15px] whitespace-nowrap transition-colors"
+              className="lu-press group border-foreground/20 hover:border-foreground/45 inline-flex h-12 items-center gap-2 rounded-full border px-6 text-[15px] whitespace-nowrap transition-colors"
             >
               {t.more}
               <ArrowRight

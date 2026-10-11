@@ -408,7 +408,7 @@ export function HowItWorks() {
                   }}
                   data-step={i}
                   className={cn(
-                    "border-ink-foreground/12 border-b py-10 transition-opacity duration-500 lg:flex lg:min-h-[62vh] lg:items-center lg:py-12",
+                    "border-ink-foreground/12 border-b py-10 transition-opacity duration-500 lg:flex lg:min-h-[62svh] lg:items-center lg:py-12",
                     i === 0 && "border-t",
                     active === i ? "lg:opacity-100" : "lg:opacity-35",
                   )}
@@ -451,7 +451,7 @@ export function HowItWorks() {
 
           {/* Desktop: one sticky panel that follows the active step. */}
           <div className="hidden min-w-0 lg:block">
-            <div className="sticky top-[calc(50vh-15rem)]">
+            <div className="sticky top-[calc(50svh-15rem)]">
               <div className="relative">
                 {t.steps.map((step, i) => (
                   <div

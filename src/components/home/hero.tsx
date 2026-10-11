@@ -257,7 +257,7 @@ export function HomeHero() {
 
       {/* Facts strip: only things that are true of every project. */}
       <div
-        className="lu-enter-soft lu-marquee border-hairline bg-background/40 relative overflow-hidden border-y py-5 backdrop-blur-[2px] lg:py-6"
+        className="lu-enter-soft lu-marquee border-hairline bg-background/40 relative overflow-hidden border-y py-5 md:backdrop-blur-[2px] lg:py-6"
         style={delay(620)}
       >
         <p className="sr-only">

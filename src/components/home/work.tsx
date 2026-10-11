@@ -147,7 +147,7 @@ export function Work({ cases }: { cases: WorkCase[] }) {
           <Reveal delay={120}>
             <Link
               href="/projects"
-              className="group border-foreground/20 hover:border-foreground/45 inline-flex h-12 items-center gap-2 rounded-full border px-6 text-[15px] whitespace-nowrap transition-colors"
+              className="lu-press group border-foreground/20 hover:border-foreground/45 inline-flex h-12 items-center gap-2 rounded-full border px-6 text-[15px] whitespace-nowrap transition-colors"
             >
               {t.all}
               <ArrowRight

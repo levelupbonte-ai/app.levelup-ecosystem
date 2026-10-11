@@ -87,7 +87,7 @@ export function HomeCta() {
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <Link
                     href="/start-project"
-                    className="group bg-foreground text-background inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium transition-opacity hover:opacity-90"
+                    className="lu-press group bg-foreground text-background inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-medium transition-opacity hover:opacity-90"
                   >
                     {t.primary}
                     <ArrowRight
@@ -97,7 +97,7 @@ export function HomeCta() {
                   </Link>
                   <a
                     href={LEVELSTUDIO_URL}
-                    className="group border-foreground/20 hover:border-foreground/40 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors"
+                    className="lu-press group border-foreground/20 hover:border-foreground/40 inline-flex h-14 items-center justify-center gap-2 rounded-full border px-8 text-base font-medium transition-colors"
                   >
                     <PreviewIcon className="text-brand size-[18px]" />
                     {t.secondary}

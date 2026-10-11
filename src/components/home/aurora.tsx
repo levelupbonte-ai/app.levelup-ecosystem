@@ -13,12 +13,14 @@ const BLOBS = [
   },
   {
     c: "var(--a2)",
-    className: "top-[20%] left-[25%] h-[60vmax] w-[60vmax]",
+    // Phones keep two blobs: half the layers to composite while scrolling.
+    className: "top-[20%] left-[25%] hidden h-[60vmax] w-[60vmax] md:block",
     anim: "lu-drift-c 23s",
   },
   {
     c: "var(--a4)",
-    className: "bottom-[-45%] left-[-10%] h-[70vmax] w-[70vmax]",
+    className:
+      "bottom-[-45%] left-[-10%] hidden h-[70vmax] w-[70vmax] md:block",
     anim: "lu-drift-b 37s",
   },
 ];

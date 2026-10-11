@@ -37,7 +37,7 @@ function TemplateActions({
       <Link
         href={templateStartHref(item.slug)}
         className={cn(
-          "group bg-foreground text-background inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-opacity hover:opacity-90",
+          "lu-press group bg-foreground text-background inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-opacity hover:opacity-90",
           compact ? "h-11 px-5 text-sm" : "h-12 px-6 text-[15px]",
         )}
       >
@@ -52,7 +52,7 @@ function TemplateActions({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "group border-foreground/20 hover:border-foreground/45 inline-flex items-center justify-center gap-2 rounded-full border whitespace-nowrap transition-colors",
+          "lu-press group border-foreground/20 hover:border-foreground/45 inline-flex items-center justify-center gap-2 rounded-full border whitespace-nowrap transition-colors",
           compact ? "h-11 px-5 text-sm" : "h-12 px-6 text-[15px]",
         )}
       >

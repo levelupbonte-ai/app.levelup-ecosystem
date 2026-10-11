@@ -193,7 +193,7 @@ function toRgb(value: string): [number, number, number] {
 
 /** Particle counts aimed for: the "thousand pieces" without hurting phones. */
 const TARGET_DESKTOP = 2600;
-const TARGET_MOBILE = 1500;
+const TARGET_MOBILE = 1200;
 
 /* Pointer physics, per 60 fps frame. */
 const SPRING = 0.032; // pull back to the home position
@@ -228,6 +228,7 @@ export function ParticleStar({
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
     const facets = buildFacets();
     let P: Particles = buildParticles(facets, 0.1);
     // Live state of every particle: screen offset from home, and velocity.
@@ -300,7 +301,9 @@ export function ParticleStar({
       if (!rect.width || !rect.height) return;
       width = rect.width;
       height = rect.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // DPR capped at 2, and 1.5 on touch screens where the star is a faint
+      // backdrop: ~45% fewer pixels to fill each frame.
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -498,14 +501,20 @@ export function ParticleStar({
       }
     };
 
+    // Touch screens: the calm drift is drawn at 30 fps (it is slow and sits
+    // behind the text), the burst and its reform at the full frame rate.
+    let skip = false;
     const frame = (now: number) => {
       if (!running) return;
+      raf = requestAnimationFrame(frame);
+      const calm = coarse && !ptr.on && !ptr.bursts.length && energy === 0;
+      skip = calm ? !skip : false;
+      if (skip) return;
       const ms = last ? Math.min(64, now - last) : 16.7;
       last = now;
       time += ms / 1000;
       step(ms / 16.67);
       draw();
-      raf = requestAnimationFrame(frame);
     };
 
     const start = () => {
