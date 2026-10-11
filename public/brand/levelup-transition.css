@@ -1,0 +1,35 @@
+/*
+ * LevelUp signature transition: pre-paint cover for the destination app.
+ *
+ * When a visitor leaves one LevelUp app through the wipe (go()), the next app
+ * should paint covered, then sweep the panel away (revealOnLoad()). Add this
+ * stylesheet plus the one-line inline script below to the destination <head>:
+ *
+ *   <link rel="stylesheet" href="https://levelup-ecosystem.com/brand/levelup-transition.css">
+ *   <script>/(?:^|;\s*)lu_wipe=1/.test(document.cookie)&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&document.documentElement.classList.add("lu-wipe-in")</script>
+ *
+ * revealOnLoad() removes the class as soon as the animated overlay is in place.
+ * A pure-CSS failsafe uncovers the page after 2.5 s if the module never loads.
+ */
+html.lu-wipe-in body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  pointer-events: none;
+  background: #0e0e12;
+  animation: lu-wipe-failsafe 0.3s ease-out 2.5s forwards;
+}
+
+@keyframes lu-wipe-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.lu-wipe-in body::after {
+    display: none;
+  }
+}

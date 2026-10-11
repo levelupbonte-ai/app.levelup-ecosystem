@@ -201,7 +201,7 @@ export function CookieBanner() {
           >
             <div className="flex items-center justify-between pb-3 border-b border-neutral-200/60 dark:border-zinc-800/60">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="size-4 text-[#2563EB]" />
+                <SlidersHorizontal className="size-4 text-brand-ink" />
                 <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-100 tracking-tight font-sans">
                   Cookie Preferences &amp; Permissions
                 </h4>
@@ -246,7 +246,7 @@ export function CookieBanner() {
                 <Switch
                   checked={analyticsEnabled}
                   onCheckedChange={setAnalyticsEnabled}
-                  className="data-[state=checked]:bg-[#2563EB]"
+                  className="data-[state=checked]:bg-[#8B5CF6]"
                   aria-label="Toggle analytics cookies"
                 />
               </div>
@@ -266,7 +266,7 @@ export function CookieBanner() {
                 <Switch
                   checked={personalizationEnabled}
                   onCheckedChange={setPersonalizationEnabled}
-                  className="data-[state=checked]:bg-[#2563EB]"
+                  className="data-[state=checked]:bg-[#8B5CF6]"
                   aria-label="Toggle personalization cookies"
                 />
               </div>
@@ -275,7 +275,7 @@ export function CookieBanner() {
             <div className="mt-4 pt-3 flex items-center justify-between border-t border-neutral-200/60 dark:border-zinc-800/60">
               <Link
                 href="/cookies"
-                className="text-xs text-[#2563EB] hover:underline font-medium inline-flex items-center gap-1"
+                className="text-xs text-brand-ink hover:underline font-medium inline-flex items-center gap-1"
               >
                 <ShieldCheck className="size-3.5" />
                 <span>Read Cookie Policy</span>
@@ -291,7 +291,7 @@ export function CookieBanner() {
                 <button
                   type="button"
                   onClick={handleSavePreferences}
-                  className="text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-5 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
+                  className="text-xs font-semibold text-background bg-foreground hover:opacity-90 active:scale-[0.98] px-5 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
                 >
                   Save Preferences
                 </button>
@@ -348,7 +348,7 @@ export function CookieBanner() {
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="text-xs sm:text-sm font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
+                className="text-xs sm:text-sm font-semibold text-background bg-foreground hover:opacity-90 active:scale-[0.98] px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all cursor-pointer"
               >
                 Accept All
               </button>
@@ -378,7 +378,7 @@ export function CookieBanner() {
           >
             <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-neutral-200/70 dark:border-zinc-800/70">
               <div className="flex items-center gap-1.5">
-                <SlidersHorizontal className="size-4 text-[#2563EB]" />
+                <SlidersHorizontal className="size-4 text-brand-ink" />
                 <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-sans tracking-tight">
                   Customize Cookies
                 </h4>
@@ -421,7 +421,7 @@ export function CookieBanner() {
                   <Switch
                     checked={analyticsEnabled}
                     onCheckedChange={setAnalyticsEnabled}
-                    className="data-[state=checked]:bg-[#2563EB]"
+                    className="data-[state=checked]:bg-[#8B5CF6]"
                     aria-label="Toggle analytics cookies"
                   />
                 </div>
@@ -439,7 +439,7 @@ export function CookieBanner() {
                   <Switch
                     checked={personalizationEnabled}
                     onCheckedChange={setPersonalizationEnabled}
-                    className="data-[state=checked]:bg-[#2563EB]"
+                    className="data-[state=checked]:bg-[#8B5CF6]"
                     aria-label="Toggle personalization cookies"
                   />
                 </div>
@@ -453,14 +453,14 @@ export function CookieBanner() {
             <div className="mt-3 pt-2 flex items-center justify-between gap-2">
               <Link
                 href="/cookies"
-                className="text-[11px] text-[#2563EB] hover:underline font-medium"
+                className="text-[11px] text-brand-ink hover:underline font-medium"
               >
                 Policy Details
               </Link>
               <button
                 type="button"
                 onClick={handleSavePreferences}
-                className="text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] px-4 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
+                className="text-xs font-semibold text-background bg-foreground hover:opacity-90 active:scale-[0.98] px-4 py-1.5 rounded-full shadow-xs transition-all cursor-pointer"
               >
                 Save My Choices
               </button>
@@ -493,7 +493,7 @@ export function CookieBanner() {
               onClick={() => setAgreedToPolicy(!agreedToPolicy)}
               className={`size-4.5 rounded flex items-center justify-center transition-all cursor-pointer ${
                 agreedToPolicy
-                  ? "bg-[#2563EB] text-white border border-[#2563EB]"
+                  ? "bg-foreground text-background border border-foreground"
                   : "bg-transparent border border-neutral-300 dark:border-zinc-700"
               }`}
               aria-label="Toggle agreement to Privacy Policy"
@@ -508,7 +508,7 @@ export function CookieBanner() {
               <Link
                 href="/privacy"
                 onClick={(e) => e.stopPropagation()}
-                className="text-[#2563EB] font-medium hover:underline"
+                className="text-brand-ink font-medium hover:underline"
               >
                 Privacy Policy
               </Link>
@@ -549,7 +549,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={handleAcceptAll}
-              className="w-full text-xs font-semibold text-white bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-[0.98] py-2 rounded-xl shadow-xs transition-all cursor-pointer"
+              className="w-full text-xs font-semibold text-background bg-foreground hover:opacity-90 active:scale-[0.98] py-2 rounded-xl shadow-xs transition-all cursor-pointer"
             >
               Accept
             </button>
