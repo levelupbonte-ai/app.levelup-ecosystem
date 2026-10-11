@@ -1,6 +1,80 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
+/**
+ * Content-Security-Policy for every response. What the site really uses:
+ * - scripts: its own bundles + the inline bootstrap scripts of Next.js and of
+ *   the intro/theme code in the layout (hence 'unsafe-inline'; a per-request
+ *   nonce would make every page dynamic), Vercel Web Analytics / Speed
+ *   Insights (served from the same origin on Vercel; va.vercel-scripts.com in
+ *   preview/debug builds).
+ * - styles: own CSS + inline styles (React style props, next/font) + the
+ *   Google Fonts stylesheet used by the static studio and invitation pages.
+ * - images: own files, data:/blob: (captures, previews), the image host of the
+ *   project cards.
+ * - frames: the static studio / invitation pages (same origin) and client
+ *   sites shown inside /projects/[id].
+ * - connect: same origin (server actions, /api, analytics beacons).
+ */
+function contentSecurityPolicy(allowCdn: boolean) {
+  const script = [
+    "'self'",
+    "'unsafe-inline'",
+    ...(isDev ? ["'unsafe-eval'"] : []),
+    "https://va.vercel-scripts.com",
+    ...(allowCdn ? ["https://cdn.jsdelivr.net"] : []),
+  ];
+  const directives: Record<string, string[]> = {
+    "default-src": ["'self'"],
+    "script-src": script,
+    "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    "img-src": ["'self'", "data:", "blob:", "https://i.ibb.co", "https://*.ibb.co"],
+    "font-src": ["'self'", "data:", "https://fonts.gstatic.com"],
+    "media-src": ["'self'", "data:", "blob:"],
+    "connect-src": [
+      "'self'",
+      "https://vitals.vercel-insights.com",
+      "https://va.vercel-scripts.com",
+      ...(isDev ? ["ws:", "wss:"] : []),
+    ],
+    "frame-src": ["'self'", "https:"],
+    "worker-src": ["'self'", "blob:"],
+    "manifest-src": ["'self'"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "form-action": [
+      "'self'",
+      "https://studio.levelup-ecosystem.com",
+      "https://dashboard.levelup-ecosystem.com",
+    ],
+    "frame-ancestors": ["'self'"],
+  };
+  const parts = Object.entries(directives).map(([k, v]) => `${k} ${v.join(" ")}`);
+  if (!isDev) parts.push("upgrade-insecure-requests");
+  return parts.join("; ");
+}
+
+function securityHeaders(allowCdn: boolean) {
+  return [
+    { key: "Content-Security-Policy", value: contentSecurityPolicy(allowCdn) },
+    { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+    { key: "X-Content-Type-Options", value: "nosniff" },
+    // Only LevelUp itself may frame these pages (clickjacking); the static
+    // studio and invitation pages are framed by the site.
+    { key: "X-Frame-Options", value: "SAMEORIGIN" },
+    { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+    {
+      key: "Permissions-Policy",
+      value:
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()",
+    },
+    { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+    { key: "X-DNS-Prefetch-Control", value: "on" },
+  ];
+}
+
 const nextConfig: NextConfig = {
   distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   output: "standalone",
@@ -142,25 +216,13 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          // Only LevelUp itself may frame these pages (clickjacking).
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "Content-Security-Policy", value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'" },
-          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-          {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
-          },
-        ],
+        // Legacy static portfolio page: loads its animation libraries from a CDN.
+        source: "/projects/blackpater-portofolio.html",
+        headers: securityHeaders(true),
+      },
+      {
+        source: "/((?!projects/blackpater-portofolio\\.html).*)",
+        headers: securityHeaders(false),
       },
     ];
   },
