@@ -1,14 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { usePrefersReducedMotion } from "@/components/home/use-reduced-motion";
-import {
-  STAR_BOUNDS,
-  STAR_CENTER,
-  STAR_FACET_COLORS,
-  STAR_OUTLINE,
-} from "@/lib/levelup-star";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,40 +11,66 @@ import { cn } from "@/lib/utils";
  * wider "Ecosystem", both in currentColor with a top-down fade, 1000 × 220
  * viewBox cropped at the bottom edge).
  *
- * The first time it scrolls into view, the LevelUp star appears in particles
- * and its pieces fly out to assemble the letters (the glyphs are sampled
- * from the same text drawn on a canvas); then the crisp SVG text fades in
- * and the particles fade out. Afterwards the pointer (or a tap) knocks a few
- * particles off the letters and they spring back.
+ * At rest it is the crisp SVG text. When the pointer (or a finger) moves over
+ * it, the letters turn into the fine particles they are made of (sampled
+ * from the same text drawn on a canvas, gradient included) and flow away
+ * from it like ink in water: pushed out with a soft falloff, entrained by the
+ * pointer's motion and curled into a slight swirl. Once it leaves they drift
+ * back on critically damped springs and, settled, hand over to the SVG
+ * again. At home the particles reproduce the text pixel for pixel, so the
+ * swaps are invisible.
  *
  * The text stays real DOM text (SVG <text>, one accessible name); the canvas
  * is aria-hidden. No JavaScript or prefers-reduced-motion: just the text.
+ * Performance: typed arrays, one canvas written as raw pixels (alpha splats,
+ * no draw call per particle), DPR capped, nothing runs at rest, paused off
+ * screen.
  */
 
 const VIEW_W = 1000;
-const VIEW_H = 220;
 const LINES = [
-  { text: "LevelUp", y: 85, size: 100, spacing: -0.01 },
-  { text: "Ecosystem", y: 198, size: 135, spacing: 0.01 },
+  {
+    text: "LevelUp",
+    y: 85,
+    size: 100,
+    spacing: -0.01,
+    fade: [10, 90, 0.85, 0.45],
+  },
+  {
+    text: "Ecosystem",
+    y: 198,
+    size: 135,
+    spacing: 0.01,
+    fade: [95, 205, 0.55, 0.25],
+  },
 ] as const;
 
-/* Build timeline (ms). */
-const STAR_IN = 380; // the star materialises
-const STAGGER = 650; // spread of the departures across the word
-const FLIGHT = 1050; // one particle's trip
-const TEXT_IN = 1650; // crisp text starts fading in
-const DUST_OUT = 1850; // particles start fading out
-const END = 2500;
+/** Particle budgets (each is one block of the sampled text). */
+const TARGET_DESKTOP = 56000;
+const TARGET_MOBILE = 18000;
 
-const TARGET_DESKTOP = 3200;
-const TARGET_MOBILE = 1600;
+/* Flow (CSS px and seconds; scaled to device px at run time). */
+const PUSH = 2400; // outward push at the pointer
+const SWIRL = 950; // tangential curl
+const ENTRAIN = 5; // how fast particles pick up the pointer's velocity
+const DAMP = 2.6; // velocity decay (1/s)
+const HOME_NEAR = 7; // spring home while the pointer is around
+const HOME_FREE = 20; // spring home once it has left
 
-/* Pointer physics once built (per 60 fps frame). */
-const SPRING = 0.06;
-const FRICTION = 0.86;
-
-function easeInOut(t: number) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+interface Field {
+  n: number;
+  /** Device-pixel canvas size. */
+  w: number;
+  h: number;
+  /** Block size of one particle, device px. */
+  s: number;
+  /** Home (top-left of the block), device px. */
+  hx: Float32Array;
+  hy: Float32Array;
+  /** Alpha of the block (coverage × gradient), 0–1. */
+  a: Float32Array;
+  /** Response to the flow: uneven, organic dispersion. */
+  m: Float32Array;
 }
 
 function hash(i: number) {
@@ -58,50 +78,23 @@ function hash(i: number) {
   return s - Math.floor(s);
 }
 
-/** Point in the star? Returns the facet index (0–9) or -1. */
-function starFacet(x: number, y: number) {
-  const c = STAR_CENTER;
-  for (let f = 0; f < STAR_OUTLINE.length; f++) {
-    const p = STAR_OUTLINE[(f + STAR_OUTLINE.length - 1) % STAR_OUTLINE.length];
-    const q = STAR_OUTLINE[f];
-    const d = (p[1] - q[1]) * (c.x - q[0]) + (q[0] - p[0]) * (c.y - q[1]);
-    const a = ((p[1] - q[1]) * (x - q[0]) + (q[0] - p[0]) * (y - q[1])) / d;
-    const b = ((q[1] - c.y) * (x - q[0]) + (c.x - q[0]) * (y - q[1])) / d;
-    if (a >= 0 && b >= 0 && a + b <= 1) return f;
-  }
-  return -1;
-}
-
-interface Field {
-  n: number;
-  /** Letter (home) positions, canvas px. */
-  tx: Float32Array;
-  ty: Float32Array;
-  /** Star (start) positions, canvas px. */
-  sx: Float32Array;
-  sy: Float32Array;
-  facet: Uint8Array;
-  delay: Float32Array;
-  arc: Float32Array;
-  dot: number;
-}
-
-/** Samples the two lines of text into particle targets, paired with
- *  starting points inside the star (both sorted left to right, so the
- *  pieces stream out of the star towards their own side of the word). */
+/** Draws the lockup (with its gradients) at device resolution and cuts it
+ *  into s × s blocks: one particle per block that holds any ink. */
 function buildField(
-  width: number,
-  height: number,
+  w: number,
+  h: number,
+  /** The lockup's box inside the canvas, device px. */
+  box: { x: number; y: number; w: number },
   family: string,
-  small: boolean,
+  target: number,
+  minBlock: number,
 ): Field | null {
-  const k = width / VIEW_W;
   const c = document.createElement("canvas");
-  c.width = Math.max(1, Math.round(width));
-  c.height = Math.max(1, Math.round(height));
+  c.width = w;
+  c.height = h;
   const x = c.getContext("2d", { willReadFrequently: true });
   if (!x) return null;
-  x.fillStyle = "#000";
+  const k = box.w / VIEW_W;
   x.textAlign = "center";
   x.textBaseline = "alphabetic";
   for (const line of LINES) {
@@ -110,421 +103,478 @@ function buildField(
     if ("letterSpacing" in x) {
       (
         x as CanvasRenderingContext2D & { letterSpacing: string }
-      ).letterSpacing = `${(line.spacing * size).toFixed(2)}px`;
+      ).letterSpacing = `${(line.spacing * size).toFixed(3)}px`;
     }
-    x.fillText(line.text, width / 2, line.y * k);
+    const [y0, y1, a0, a1] = line.fade;
+    const g = x.createLinearGradient(0, box.y + y0 * k, 0, box.y + y1 * k);
+    g.addColorStop(0, `rgba(0,0,0,${a0})`);
+    g.addColorStop(1, `rgba(0,0,0,${a1})`);
+    x.fillStyle = g;
+    x.fillText(line.text, box.x + box.w / 2, box.y + line.y * k);
   }
-  const data = x.getImageData(0, 0, c.width, c.height).data;
-  const at = (px: number, py: number) =>
-    data[(Math.round(py) * c.width + Math.round(px)) * 4 + 3];
-
-  // Count ink at a trial step, then pick the step that lands on the target.
-  const target = small ? TARGET_MOBILE : TARGET_DESKTOP;
+  const data = x.getImageData(0, 0, w, h).data;
   let ink = 0;
-  for (let py = 0; py < c.height; py += 2)
-    for (let px = 0; px < c.width; px += 2) if (at(px, py) > 128) ink++;
-  const step = Math.max(1.6, 2 * Math.sqrt(ink / target));
+  for (let i = 3; i < data.length; i += 4) if (data[i]) ink++;
+  let s = minBlock;
+  while (ink / (s * s) > target) s++;
 
-  const tx: number[] = [];
-  const ty: number[] = [];
-  let row = 0;
-  for (let py = step / 2; py < c.height; py += step, row++) {
-    const shift = row % 2 ? step / 2 : 0;
-    for (let px = shift; px < c.width; px += step) {
-      if (at(px, py) > 128) {
-        tx.push(px);
-        ty.push(py);
+  const hx: number[] = [];
+  const hy: number[] = [];
+  const al: number[] = [];
+  const norm = 1 / (s * s * 255);
+  for (let by = 0; by < h; by += s) {
+    for (let bx = 0; bx < w; bx += s) {
+      let sum = 0;
+      for (let yy = by; yy < Math.min(h, by + s); yy++) {
+        for (let xx = bx; xx < Math.min(w, bx + s); xx++) {
+          sum += data[(yy * w + xx) * 4 + 3];
+        }
       }
+      if (sum === 0) continue;
+      hx.push(bx);
+      hy.push(by);
+      al.push(sum * norm);
     }
   }
-  const n = tx.length;
+  const n = hx.length;
   if (!n) return null;
-
-  // The star, centred in the box, as tall as the lockup.
-  const starH = height * 0.92;
-  const s = starH / (STAR_BOUNDS.maxY - STAR_BOUNDS.minY);
-  const ox = width / 2 - ((STAR_BOUNDS.minX + STAR_BOUNDS.maxX) / 2) * s;
-  const oy = height / 2 - ((STAR_BOUNDS.minY + STAR_BOUNDS.maxY) / 2) * s;
-  const stars: { x: number; y: number; f: number }[] = [];
-  let seed = 0;
-  while (stars.length < n && seed < n * 6) {
-    const ux =
-      STAR_BOUNDS.minX +
-      hash(seed * 2 + 1) * (STAR_BOUNDS.maxX - STAR_BOUNDS.minX);
-    const uy =
-      STAR_BOUNDS.minY +
-      hash(seed * 2 + 7) * (STAR_BOUNDS.maxY - STAR_BOUNDS.minY);
-    seed++;
-    const f = starFacet(ux, uy);
-    if (f >= 0) stars.push({ x: ox + ux * s, y: oy + uy * s, f });
-  }
-  while (stars.length < n) stars.push({ x: width / 2, y: height / 2, f: 0 });
-
-  const order = Array.from({ length: n }, (_, i) => i).sort(
-    (a, b) => tx[a] - tx[b] || ty[a] - ty[b],
-  );
-  stars.sort((a, b) => a.x - b.x || a.y - b.y);
-
-  const field: Field = {
+  const m = new Float32Array(n);
+  for (let i = 0; i < n; i++) m[i] = 0.55 + hash(i) * 0.9;
+  return {
     n,
-    tx: new Float32Array(n),
-    ty: new Float32Array(n),
-    sx: new Float32Array(n),
-    sy: new Float32Array(n),
-    facet: new Uint8Array(n),
-    delay: new Float32Array(n),
-    arc: new Float32Array(n),
-    dot: Math.max(1.2, step * 0.78),
+    w,
+    h,
+    s,
+    hx: Float32Array.from(hx),
+    hy: Float32Array.from(hy),
+    a: Float32Array.from(al),
+    m,
   };
-  for (let j = 0; j < n; j++) {
-    const i = order[j];
-    field.tx[j] = tx[i];
-    field.ty[j] = ty[i];
-    field.sx[j] = stars[j].x;
-    field.sy[j] = stars[j].y;
-    field.facet[j] = stars[j].f;
-    // Departures spread outward from the centre of the word, a little noisy.
-    const off = Math.abs(tx[i] - width / 2) / (width / 2);
-    field.delay[j] = STAR_IN + off * STAGGER + hash(j + 31) * 160;
-    field.arc[j] = (hash(j + 77) - 0.5) * height * 0.9;
-  }
-  return field;
+}
+
+/** Any CSS colour to sRGB, by painting one pixel. */
+function toRgb(value: string): [number, number, number] {
+  const c = document.createElement("canvas");
+  c.width = c.height = 1;
+  const x = c.getContext("2d", { willReadFrequently: true });
+  if (!x) return [17, 17, 17];
+  x.fillStyle = "#111";
+  x.fillStyle = value;
+  x.fillRect(0, 0, 1, 1);
+  const [r, g, b] = x.getImageData(0, 0, 1, 1).data;
+  return [r, g, b];
 }
 
 export function FooterWordmark({ className }: { className?: string }) {
   const reduced = usePrefersReducedMotion();
   const boxRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<SVGTextElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // "static": text shown, no canvas (SSR, no JS, reduced motion).
-  // "waiting": text hidden until the build plays. "built": text shown.
-  const [state, setState] = useState<"static" | "waiting" | "built">("static");
 
   useEffect(() => {
-    if (reduced) {
-      setState("static");
-      return;
-    }
+    if (reduced) return;
     const box = boxRef.current;
+    const svg = svgRef.current;
     const canvas = canvasRef.current;
-    const textEl = textRef.current;
-    if (!box || !canvas || !textEl) return;
+    if (!box || !svg || !canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    setState("waiting");
 
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
     let field: Field | null = null;
-    let width = 0;
-    let height = 0;
-    let raf = 0;
-    let t0 = 0;
-    let phase: "idle" | "build" | "done" = "idle";
+    let dirty = true;
+    let building = false;
+    let dpr = 1;
     let ox = new Float32Array(0);
     let oy = new Float32Array(0);
     let vx = new Float32Array(0);
     let vy = new Float32Array(0);
-    let energy = 0;
-    let X = new Float32Array(0);
-    let Y = new Float32Array(0);
-    let shown = false;
-    let colours: string[] = [];
-    const ptr = { cx: 0, cy: 0, on: false, x: 0, y: 0, px: 0, py: 0 };
-    let bursts: { cx: number; cy: number }[] = [];
+    let acc = new Float32Array(0); // Σ alpha × coverage
+    let cov = new Float32Array(0); // Σ coverage
+    let image: ImageData | null = null;
+    let colour = "";
+    let raf = 0;
+    let last = 0;
+    let live = false; // particle layer on screen
+    let visible = false;
     let disposed = false;
+    // Pointer, client coordinates; velocity smoothed in CSS px/s.
+    const ptr = {
+      on: false,
+      cx: 0,
+      cy: 0,
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: 0,
+      fresh: true,
+    };
+    let touchId: number | null = null;
 
     const family = () =>
-      getComputedStyle(textEl).fontFamily || "DM Sans, sans-serif";
+      getComputedStyle(svg.querySelector("text") ?? svg).fontFamily ||
+      "DM Sans, sans-serif";
 
-    const setup = () => {
-      const rect = box.getBoundingClientRect();
-      if (!rect.width) return false;
-      width = rect.width;
-      height = rect.height;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      field = buildField(width, height, family(), window.innerWidth < 640);
-      const n = field?.n ?? 0;
-      ox = new Float32Array(n);
-      oy = new Float32Array(n);
-      vx = new Float32Array(n);
-      vy = new Float32Array(n);
-      colours = STAR_FACET_COLORS.map((c) => c);
-      return !!field;
-    };
-
-    /** Draws every particle, grouped by facet colour (ten fill styles). */
-    const paint = (
-      posX: (i: number) => number,
-      posY: (i: number) => number,
-      alpha: number,
-    ) => {
-      ctx.clearRect(0, 0, width, height);
-      if (!field || alpha <= 0) return;
-      const d = field.dot;
-      const h = d / 2;
-      ctx.globalAlpha = alpha;
-      for (let f = 0; f < colours.length; f++) {
-        ctx.fillStyle = colours[f];
-        for (let i = 0; i < field.n; i++) {
-          if (field.facet[i] !== f) continue;
-          ctx.fillRect(posX(i) - h, posY(i) - h, d, d);
-        }
+    const build = async () => {
+      if (building || disposed) return;
+      building = true;
+      try {
+        await document.fonts.load(`900 100px ${family()}`);
+      } catch {
+        /* sample with whatever is loaded */
       }
-      ctx.globalAlpha = 1;
-    };
-
-    const buildFrame = (now: number) => {
-      if (disposed || !field) return;
-      if (!t0) t0 = now;
-      const t = now - t0;
-      const F = field;
-      const appear = Math.min(1, t / STAR_IN);
-      // The star materialises: grows a little and turns into place.
-      const grow = 0.75 + 0.25 * easeInOut(appear);
-      const spin = (1 - easeInOut(appear)) * -0.5;
-      const cs = Math.cos(spin);
-      const sn = Math.sin(spin);
-      const cx = width / 2;
-      const cy = height / 2;
-      if (X.length !== F.n) {
-        X = new Float32Array(F.n);
-        Y = new Float32Array(F.n);
-      }
-      for (let i = 0; i < F.n; i++) {
-        const rx = (F.sx[i] - cx) * grow;
-        const ry = (F.sy[i] - cy) * grow;
-        const sx = cx + rx * cs - ry * sn;
-        const sy = cy + rx * sn + ry * cs;
-        const p = Math.min(1, Math.max(0, (t - F.delay[i]) / FLIGHT));
-        const e = easeInOut(p);
-        // Curved path: an arc perpendicular to the trip, zero at both ends.
-        const dx = F.tx[i] - sx;
-        const dy = F.ty[i] - sy;
-        const len = Math.hypot(dx, dy) || 1;
-        const bend = Math.sin(Math.PI * e) * F.arc[i];
-        X[i] = sx + dx * e + (-dy / len) * bend;
-        Y[i] = sy + dy * e + (dx / len) * bend;
-      }
-      const fade =
-        t < DUST_OUT ? 1 : Math.max(0, 1 - (t - DUST_OUT) / (END - DUST_OUT));
-      paint(
-        (i) => X[i],
-        (i) => Y[i],
-        Math.min(appear * 1.4, 1) * fade,
+      building = false;
+      if (disposed) return;
+      const r = box.getBoundingClientRect();
+      const c = canvas.getBoundingClientRect();
+      if (!r.width || !r.height || !c.width) return;
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+      // The canvas overhangs the lockup (above and to the sides), so the
+      // letters can blow out of their box instead of being clipped.
+      const w = Math.round(c.width * dpr);
+      const h = Math.round(c.height * dpr);
+      field = buildField(
+        w,
+        h,
+        {
+          x: (r.left - c.left) * dpr,
+          y: (r.top - c.top) * dpr,
+          w: r.width * dpr,
+        },
+        family(),
+        coarse || r.width < 640 ? TARGET_MOBILE : TARGET_DESKTOP,
+        Math.max(1, Math.round(dpr)),
       );
-      if (t >= TEXT_IN && !shown) {
-        shown = true;
-        setState("built");
-      }
-      if (t >= END) {
-        phase = "done";
-        ctx.clearRect(0, 0, width, height);
-        raf = ptr.on || bursts.length ? requestAnimationFrame(dustFrame) : 0;
-        return;
-      }
-      raf = requestAnimationFrame(buildFrame);
+      dirty = false;
+      if (!field) return;
+      canvas.width = w;
+      canvas.height = h;
+      ox = new Float32Array(field.n);
+      oy = new Float32Array(field.n);
+      vx = new Float32Array(field.n);
+      vy = new Float32Array(field.n);
+      acc = new Float32Array(w * h);
+      cov = new Float32Array(w * h);
+      image = ctx.createImageData(w, h);
+      colour = "";
     };
 
-    /** After the build: particles live on the letters, invisible until the
-     *  pointer knocks them off; they show while displaced and spring back. */
-    let lastDust = 0;
-    const dustFrame = (now: number) => {
-      if (disposed || !field) return;
+    /** Splats every particle into the buffers (box coverage, so sub-pixel
+     *  motion stays smooth) and writes them out as one image. A pixel shows
+     *  the mean alpha of the particles covering it, times the coverage up
+     *  to 1: crowded particles never get darker than the letters they came
+     *  from, scattered ones thin out. */
+    const paint = () => {
       const F = field;
-      const dt = lastDust ? Math.min(4, (now - lastDust) / 16.67) : 1;
-      lastDust = now;
-      const rect = canvas.getBoundingClientRect();
-      const R = Math.max(40, height * 0.42);
-      const R2 = R * R;
-      let pvx = 0;
-      let pvy = 0;
-      if (ptr.on) {
-        ptr.x = ptr.cx - rect.left;
-        ptr.y = ptr.cy - rect.top;
-        pvx = (ptr.x - ptr.px) / dt;
-        pvy = (ptr.y - ptr.py) / dt;
-        ptr.px = ptr.x;
-        ptr.py = ptr.y;
-      }
-      for (const b of bursts) {
-        const bx = b.cx - rect.left;
-        const by = b.cy - rect.top;
-        const RB = height * 0.9;
-        for (let i = 0; i < F.n; i++) {
-          const dx = F.tx[i] + ox[i] - bx;
-          const dy = F.ty[i] + oy[i] - by;
-          const d = Math.hypot(dx, dy) || 1;
-          if (d > RB) continue;
-          const f = (1 - d / RB) * 9 * (0.6 + hash(i) * 0.8);
-          vx[i] += (dx / d) * f;
-          vy[i] += (dy / d) * f;
-        }
-      }
-      bursts = [];
-      const spring = 1 - Math.pow(1 - SPRING, dt);
-      const keep = Math.pow(FRICTION, dt);
-      let e = 0;
+      if (!F || !image) return;
+      const px = image.data;
+      acc.fill(0);
+      cov.fill(0);
+      const { w, h, s } = F;
       for (let i = 0; i < F.n; i++) {
-        let ax = 0;
-        let ay = 0;
-        if (ptr.on) {
-          const dx = F.tx[i] + ox[i] - ptr.x;
-          const dy = F.ty[i] + oy[i] - ptr.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < R2) {
-            const d = Math.sqrt(d2) || 1;
-            const f = 1 - d / R;
-            const m = 0.6 + hash(i) * 0.8;
-            ax = ((dx / d) * f * f * 2.2 + pvx * f * 0.18) * m;
-            ay = ((dy / d) * f * f * 2.2 + pvy * f * 0.18) * m;
+        const x = F.hx[i] + ox[i];
+        const y = F.hy[i] + oy[i];
+        const x0 = Math.floor(x);
+        const y0 = Math.floor(y);
+        const fx = x - x0;
+        const fy = y - y0;
+        const a = F.a[i];
+        for (let j = 0; j <= s; j++) {
+          const yy = y0 + j;
+          if (yy < 0 || yy >= h) continue;
+          const wy = j === 0 ? 1 - fy : j === s ? fy : 1;
+          if (wy <= 0) continue;
+          const row = yy * w;
+          const ay = a * wy;
+          for (let k = 0; k <= s; k++) {
+            const xx = x0 + k;
+            if (xx < 0 || xx >= w) continue;
+            const wx = k === 0 ? 1 - fx : k === s ? fx : 1;
+            if (wx > 0) {
+              acc[row + xx] += ay * wx;
+              cov[row + xx] += wy * wx;
+            }
           }
         }
-        vx[i] = (vx[i] + ax * dt - ox[i] * spring) * keep;
-        vy[i] = (vy[i] + ay * dt - oy[i] * spring) * keep;
-        ox[i] += vx[i] * dt;
-        oy[i] += vy[i] * dt;
-        e += Math.abs(ox[i]) + Math.abs(oy[i]);
       }
-      energy = e / F.n;
+      for (let p = 0, q = 3; p < acc.length; p++, q += 4) {
+        const c = cov[p];
+        px[q] = c > 1 ? (acc[p] / c) * 255 : acc[p] * 255;
+      }
+      ctx.putImageData(image, 0, 0);
+    };
 
-      // Only the displaced particles are drawn: dust lifting off the text.
-      ctx.clearRect(0, 0, width, height);
-      const d = F.dot;
-      const h = d / 2;
-      for (let f = 0; f < colours.length; f++) {
-        ctx.fillStyle = colours[f];
-        for (let i = 0; i < F.n; i++) {
-          if (F.facet[i] !== f) continue;
-          const m = Math.abs(ox[i]) + Math.abs(oy[i]);
-          if (m < 0.8) continue;
-          ctx.globalAlpha = Math.min(1, m / 10);
-          ctx.fillRect(F.tx[i] + ox[i] - h, F.ty[i] + oy[i] - h, d, d);
+    /** The ink colour (theme): the pixels' RGB, set once per change. */
+    const syncColour = () => {
+      const now = getComputedStyle(svg).color;
+      if (!image || now === colour) return;
+      colour = now;
+      const [r, g, b] = toRgb(now);
+      const px = image.data;
+      for (let i = 0; i < px.length; i += 4) {
+        px[i] = r;
+        px[i + 1] = g;
+        px[i + 2] = b;
+      }
+    };
+
+    const showParticles = (on: boolean) => {
+      if (live === on) return;
+      live = on;
+      // Same image either way: the swap is invisible.
+      canvas.style.opacity = on ? "1" : "0";
+      svg.style.opacity = on ? "0" : "1";
+    };
+
+    const step = (dt: number) => {
+      const F = field;
+      if (!F) return 0;
+      const rect = canvas.getBoundingClientRect();
+      const R = Math.max(48, rect.height * 0.45) * dpr;
+      const R2 = R * R;
+      let px = 0;
+      let py = 0;
+      let fvx = 0;
+      let fvy = 0;
+      if (ptr.on) {
+        // Pointer in device px, at the block centre convention.
+        px = (ptr.cx - rect.left) * dpr - F.s / 2;
+        py = (ptr.cy - rect.top) * dpr - F.s / 2;
+        if (ptr.fresh) {
+          ptr.x = px;
+          ptr.y = py;
+          ptr.fresh = false;
         }
+        const k = 1 - Math.exp(-dt * 18);
+        ptr.vx += ((px - ptr.x) / dt - ptr.vx) * k;
+        ptr.vy += ((py - ptr.y) / dt - ptr.vy) * k;
+        ptr.x = px;
+        ptr.y = py;
+        fvx = ptr.vx;
+        fvy = ptr.vy;
       }
-      ctx.globalAlpha = 1;
+      const push = PUSH * dpr;
+      const swirl = SWIRL * dpr;
+      const homeK = ptr.on ? HOME_NEAR : HOME_FREE;
+      // Critically damped overall (the drag above counts): no overshoot,
+      // no slow tail.
+      const homeC = Math.max(0, 2 * Math.sqrt(homeK) - DAMP);
+      const damp = Math.exp(-DAMP * dt);
+      const entrain = 1 - Math.exp(-ENTRAIN * dt);
+      let moving = 0;
+      for (let i = 0; i < F.n; i++) {
+        let u = vx[i];
+        let v = vy[i];
+        const dx0 = ox[i];
+        const dy0 = oy[i];
+        const at = dx0 === 0 && dy0 === 0 && u === 0 && v === 0;
+        if (ptr.on) {
+          const dx = F.hx[i] + dx0 - px;
+          const dy = F.hy[i] + dy0 - py;
+          const d2 = dx * dx + dy * dy;
+          if (d2 >= R2 && at) continue; // untouched, at home
+          if (d2 < R2) {
+            const d = Math.sqrt(d2) + 1e-3;
+            const t = 1 - d2 / R2;
+            const f = t * t * F.m[i]; // soft falloff
+            const nx = dx / d;
+            const ny = dy / d;
+            u += (nx * push - ny * swirl) * f * dt;
+            v += (ny * push + nx * swirl) * f * dt;
+            // Carried along by the pointer's flow.
+            u += (fvx - u) * entrain * f;
+            v += (fvy - v) * entrain * f;
+          }
+        } else if (at) {
+          continue;
+        }
+        u += (-homeK * dx0 - homeC * u) * dt;
+        v += (-homeK * dy0 - homeC * v) * dt;
+        u *= damp;
+        v *= damp;
+        vx[i] = u;
+        vy[i] = v;
+        ox[i] = dx0 + u * dt;
+        oy[i] = dy0 + v * dt;
+        const e =
+          Math.abs(ox[i]) +
+          Math.abs(oy[i]) +
+          (Math.abs(u) + Math.abs(v)) * 0.05;
+        if (e > moving) moving = e;
+      }
+      return moving / dpr;
+    };
 
-      if (ptr.on || energy > 0.03) {
-        raf = requestAnimationFrame(dustFrame);
-      } else {
+    const frame = (now: number) => {
+      raf = 0;
+      if (disposed || !field) return;
+      const dt = last ? Math.min(1 / 30, (now - last) / 1000) : 1 / 60;
+      last = now;
+      const moving = step(dt);
+      if (!ptr.on && moving < 0.25) {
+        // Settled: back home exactly, then the crisp text again.
         ox.fill(0);
         oy.fill(0);
         vx.fill(0);
         vy.fill(0);
-        ctx.clearRect(0, 0, width, height);
-        raf = 0;
-        lastDust = 0;
-      }
-    };
-
-    const play = async () => {
-      if (phase !== "idle") return;
-      phase = "build";
-      try {
-        await document.fonts.load(`900 100px ${family()}`);
-      } catch {
-        /* sample with whatever is available */
-      }
-      if (disposed) return;
-      if (!setup()) {
-        phase = "done";
-        setState("built");
+        showParticles(false);
+        last = 0;
         return;
       }
-      raf = requestAnimationFrame(buildFrame);
+      paint();
+      raf = requestAnimationFrame(frame);
     };
 
+    const wake = async () => {
+      if (disposed || !visible) return;
+      if (dirty || !field) await build();
+      if (!field || raf) return;
+      if (!live) {
+        syncColour();
+        paint(); // home positions: the same picture as the SVG
+        showParticles(true);
+      }
+      last = 0;
+      raf = requestAnimationFrame(frame);
+    };
+
+    const near = (x: number, y: number) => {
+      const r = box.getBoundingClientRect();
+      const m = Math.max(24, r.height * 0.25);
+      return (
+        x >= r.left - m &&
+        x <= r.right + m &&
+        y >= r.top - m &&
+        y <= r.bottom + m
+      );
+    };
+    const press = (x: number, y: number) => {
+      if (!ptr.on) ptr.fresh = true;
+      ptr.cx = x;
+      ptr.cy = y;
+      ptr.on = true;
+      void wake();
+    };
+    const release = () => {
+      ptr.on = false;
+      ptr.vx = ptr.vy = 0;
+    };
+
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return; // touch events below
+      if (visible && near(e.clientX, e.clientY)) press(e.clientX, e.clientY);
+      else if (ptr.on) release();
+    };
+    const onOut = (e: PointerEvent) => {
+      if (!e.relatedTarget && e.pointerType !== "touch") release();
+    };
+    // Touch events keep flowing while the page scrolls (pointer events
+    // would be cancelled), so a drag in any direction stirs the letters.
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.changedTouches[0];
+      if (!t || !visible || !near(t.clientX, t.clientY)) return;
+      touchId = t.identifier;
+      press(t.clientX, t.clientY);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchId === null) return;
+      for (const t of Array.from(e.changedTouches)) {
+        if (t.identifier === touchId) press(t.clientX, t.clientY);
+      }
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (touchId === null) return;
+      for (const t of Array.from(e.changedTouches)) {
+        if (t.identifier === touchId) {
+          touchId = null;
+          release();
+        }
+      }
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerout", onOut, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
+    // Sample the text ahead of time, once the footer comes close.
+    let idle = 0;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          io.disconnect();
-          void play();
+        visible = entry.isIntersecting;
+        if (visible && dirty && !idle) {
+          const ric = window.requestIdleCallback as
+            typeof window.requestIdleCallback | undefined;
+          const run = () => {
+            idle = 0;
+            if (dirty) void build();
+          };
+          idle = ric ? ric(run, { timeout: 800 }) : window.setTimeout(run, 200);
+        }
+        if (!visible) {
+          // Off screen: drop the animation, back to the crisp text.
+          cancelAnimationFrame(raf);
+          raf = 0;
+          release();
+          ox.fill(0);
+          oy.fill(0);
+          vx.fill(0);
+          vy.fill(0);
+          showParticles(false);
         }
       },
-      { threshold: 0.45 },
+      { rootMargin: "200px" },
     );
     io.observe(box);
 
-    const wake = () => {
-      if (phase === "done" && !raf) {
-        lastDust = 0;
-        raf = requestAnimationFrame(dustFrame);
-      }
-    };
-    const inside = (e: PointerEvent) => {
-      const r = box.getBoundingClientRect();
-      return (
-        e.clientX >= r.left &&
-        e.clientX <= r.right &&
-        e.clientY >= r.top &&
-        e.clientY <= r.bottom
-      );
-    };
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" && !ptr.on) return;
-      if (!inside(e)) {
-        ptr.on = false;
-        return;
-      }
-      if (!ptr.on) {
-        const r = box.getBoundingClientRect();
-        ptr.px = e.clientX - r.left;
-        ptr.py = e.clientY - r.top;
-      }
-      ptr.cx = e.clientX;
-      ptr.cy = e.clientY;
-      ptr.on = true;
-      wake();
-    };
-    const onDown = (e: PointerEvent) => {
-      if (phase !== "done" || !inside(e)) return;
-      bursts.push({ cx: e.clientX, cy: e.clientY });
-      wake();
-    };
-    const onUp = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse") ptr.on = false;
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onDown, { passive: true });
-    window.addEventListener("pointerup", onUp, { passive: true });
-    window.addEventListener("pointercancel", onUp, { passive: true });
-
     const ro = new ResizeObserver(() => {
-      if (phase === "done") setup();
+      dirty = true;
+      if (live) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        release();
+        showParticles(false);
+      }
     });
     ro.observe(box);
 
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      const cic = window.cancelIdleCallback as
+        typeof window.cancelIdleCallback | undefined;
+      cic?.(idle);
+      window.clearTimeout(idle);
       io.disconnect();
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerdown", onDown);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
+      document.removeEventListener("pointerout", onOut);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      svg.style.opacity = "";
     };
   }, [reduced]);
 
   return (
     <div
       className={cn(
-        "pointer-events-none mx-auto -mb-2 w-full max-w-2xl overflow-hidden px-4 pb-0 opacity-80 select-none sm:max-w-3xl md:max-w-4xl dark:opacity-85",
+        "pointer-events-none mx-auto -mb-2 w-full max-w-2xl overflow-x-clip px-4 pb-0 opacity-80 select-none sm:max-w-3xl md:max-w-4xl dark:opacity-85",
         className,
       )}
     >
       <div ref={boxRef} className="relative">
         <svg
-          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+          ref={svgRef}
+          viewBox={`0 0 ${VIEW_W} 220`}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           role="img"
           aria-label="LevelUp Ecosystem"
-          className={cn(
-            "text-foreground block h-auto w-full transition-opacity duration-700 ease-out select-none",
-            state === "waiting" ? "opacity-0" : "opacity-100",
-          )}
+          className="text-foreground block h-auto w-full select-none"
         >
           <defs>
             <linearGradient
@@ -551,7 +601,6 @@ export function FooterWordmark({ className }: { className?: string }) {
             </linearGradient>
           </defs>
           <text
-            ref={textRef}
             x="50%"
             y="85"
             textAnchor="middle"
@@ -586,7 +635,7 @@ export function FooterWordmark({ className }: { className?: string }) {
           <canvas
             ref={canvasRef}
             aria-hidden="true"
-            className="absolute inset-0 block h-full w-full"
+            className="text-foreground absolute -top-[45%] -left-4 block h-[145%] w-[calc(100%+2rem)] opacity-0"
           />
         )}
       </div>
