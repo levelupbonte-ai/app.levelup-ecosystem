@@ -20,9 +20,16 @@ import { usePrefersReducedMotion } from "./use-reduced-motion";
  * facet (the star is a shallow ten-facet pyramid), and the mark slowly sways
  * and breathes in 3D. Light facets glow violet, dark ones fall back to ink.
  *
- * Performance: DPR capped at 2, ~1k glyphs drawn in ten batches (one fill
- * style each), paused when off screen or when the tab is hidden. Under
- * prefers-reduced-motion the static star image is shown instead.
+ * The pointer scatters it: glyphs near the cursor are pushed away (and
+ * dragged along with its speed), then spring back home with friction; a click
+ * or a tap bursts the whole mark and it reforms. The canvas sits under the
+ * page content, so the pointer is followed on the window.
+ *
+ * Performance: typed arrays, one canvas, glyphs blitted from a pre-drawn
+ * atlas (drawImage, no fillText per frame), ~2.6k glyphs on desktop and
+ * ~1.5k on phones, DPR capped at 2, physics skipped once settled, paused off
+ * screen and in hidden tabs. Under prefers-reduced-motion the static star
+ * image is shown instead.
  */
 
 const GLYPHS = "·:-=+*#%@";
@@ -40,13 +47,16 @@ interface Facet {
   tone: number;
 }
 
-interface Particle {
-  x: number;
-  y: number;
-  z: number;
-  facet: number;
-  phase: number;
-  edge: boolean;
+interface Particles {
+  n: number;
+  x: Float32Array;
+  y: Float32Array;
+  z: Float32Array;
+  facet: Uint8Array;
+  phase: Float32Array;
+  edge: Uint8Array;
+  /** Per-particle response to the pointer (0.55 to 1.45): uneven scatter. */
+  mass: Float32Array;
 }
 
 const HEIGHT = 0.34;
@@ -121,11 +131,14 @@ function hash(i: number) {
   return s - Math.floor(s);
 }
 
-function buildParticles(facets: Facet[], step: number): Particle[] {
-  const out: Particle[] = [];
+function buildParticles(facets: Facet[], step: number): Particles {
+  const xs: number[] = [];
+  const ys: number[] = [];
+  const zs: number[] = [];
+  const fs: number[] = [];
+  const es: number[] = [];
   const [minX, minY] = norm(STAR_BOUNDS.minX, STAR_BOUNDS.minY);
   const [maxX, maxY] = norm(STAR_BOUNDS.maxX, STAR_BOUNDS.maxY);
-  let k = 0;
   for (let y = minY; y <= maxY; y += step) {
     // Offset every other row: a softer, less mechanical texture.
     const shift = Math.round((y - minY) / step) % 2 ? step / 2 : 0;
@@ -133,19 +146,32 @@ function buildParticles(facets: Facet[], step: number): Particle[] {
       for (let f = 0; f < facets.length; f++) {
         const w = bary(x, y, facets[f].a, facets[f].b, facets[f].c);
         if (!w) continue;
-        out.push({
-          x,
-          y,
-          z: w[0] * HEIGHT,
-          facet: f,
-          phase: hash(k++) * Math.PI * 2,
-          edge: w[1] < 0.06 || w[2] < 0.06,
-        });
+        xs.push(x);
+        ys.push(y);
+        zs.push(w[0] * HEIGHT);
+        fs.push(f);
+        es.push(w[1] < 0.06 || w[2] < 0.06 ? 1 : 0);
         break;
       }
     }
   }
-  return out;
+  const n = xs.length;
+  const phase = new Float32Array(n);
+  const mass = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    phase[i] = hash(i) * Math.PI * 2;
+    mass[i] = 0.55 + hash(i + 9173) * 0.9;
+  }
+  return {
+    n,
+    x: Float32Array.from(xs),
+    y: Float32Array.from(ys),
+    z: Float32Array.from(zs),
+    facet: Uint8Array.from(fs),
+    phase,
+    edge: Uint8Array.from(es),
+    mass,
+  };
 }
 
 /** Any CSS colour (oklch included) to sRGB, by painting one pixel. */
@@ -164,6 +190,17 @@ function toRgb(value: string): [number, number, number] {
     return [17, 17, 17];
   }
 }
+
+/** Particle counts aimed for: the "thousand pieces" without hurting phones. */
+const TARGET_DESKTOP = 2600;
+const TARGET_MOBILE = 1500;
+
+/* Pointer physics, per 60 fps frame. */
+const SPRING = 0.032; // pull back to the home position
+const FRICTION = 0.885; // velocity kept each frame
+const PUSH = 5.5; // repulsion near the pointer
+const DRAG = 0.5; // share of the pointer's own speed passed on
+const TAP_BURST = 30; // impulse of a tap / click burst
 
 export function ParticleStar({
   className,
@@ -192,30 +229,70 @@ export function ParticleStar({
     if (!ctx) return;
 
     const facets = buildFacets();
-    let particles: Particle[] = [];
+    let P: Particles = buildParticles(facets, 0.1);
+    // Live state of every particle: screen offset from home, and velocity.
+    let ox = new Float32Array(0);
+    let oy = new Float32Array(0);
+    let vx = new Float32Array(0);
+    let vy = new Float32Array(0);
+    let hx = new Float32Array(0);
+    let hy = new Float32Array(0);
+    let level = new Uint8Array(0);
     let width = 0;
     let height = 0;
+    let dpr = 1;
     let scale = 1;
     let fontPx = 11;
-    let styles: string[] = [];
+    let cell = 14;
+    let atlas: HTMLCanvasElement | null = null;
     let raf = 0;
     let visible = false;
     let running = false;
     let last = 0;
     let time = hash(7) * 10;
-    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    let energy = 0;
+    const tilt = { x: 0, y: 0, tx: 0, ty: 0 };
+    // Pointer in client coordinates; mapped to the canvas once per frame.
+    const ptr = {
+      cx: 0,
+      cy: 0,
+      x: 0,
+      y: 0,
+      px: 0,
+      py: 0,
+      vx: 0,
+      vy: 0,
+      on: false,
+      fresh: true,
+      bursts: [] as { cx: number; cy: number }[],
+    };
 
-    const buildStyles = () => {
+    /** One row of pre-drawn glyphs (one per brightness level): drawImage is
+     *  far cheaper than fillText for thousands of glyphs a frame. */
+    const buildAtlas = () => {
       const base = toRgb(getComputedStyle(canvas).color);
-      styles = Array.from({ length: LEVELS }, (_, l) => {
+      cell = Math.ceil(fontPx * 1.3);
+      const a = atlas ?? document.createElement("canvas");
+      a.width = Math.ceil(cell * LEVELS * dpr);
+      a.height = Math.ceil(cell * dpr);
+      const x = a.getContext("2d");
+      if (!x) return;
+      x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      x.clearRect(0, 0, cell * LEVELS, cell);
+      x.font = `${fontPx}px ui-monospace, SFMono-Regular, Menlo, monospace`;
+      x.textAlign = "center";
+      x.textBaseline = "middle";
+      for (let l = 0; l < LEVELS; l++) {
         const b = l / (LEVELS - 1);
         const mix = Math.min(1, Math.max(0, (b - 0.35) / 0.6)) * tint;
         const r = Math.round(base[0] + (VIOLET[0] - base[0]) * mix);
         const g = Math.round(base[1] + (VIOLET[1] - base[1]) * mix);
         const bl = Math.round(base[2] + (VIOLET[2] - base[2]) * mix);
-        const a = (0.16 + 0.8 * b) * intensity;
-        return `rgba(${r},${g},${bl},${a.toFixed(3)})`;
-      });
+        const al = (0.16 + 0.8 * b) * intensity;
+        x.fillStyle = `rgba(${r},${g},${bl},${al.toFixed(3)})`;
+        x.fillText(GLYPHS[l], cell * l + cell / 2, cell / 2);
+      }
+      atlas = a;
     };
 
     const resize = () => {
@@ -223,32 +300,37 @@ export function ParticleStar({
       if (!rect.width || !rect.height) return;
       width = rect.width;
       height = rect.height;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       scale = Math.min(width, height) * 0.43;
-      // ~12px between glyphs whatever the canvas size.
-      const spacing = width < 420 ? 10 : 12.5;
-      fontPx = width < 420 ? 9 : 11;
-      particles = buildParticles(facets, spacing / scale);
-      buildStyles();
+      // Sample at a trial step, then refine it to land on the target count.
+      const small = width < 420 || window.innerWidth < 640;
+      const target = small ? TARGET_MOBILE : TARGET_DESKTOP;
+      const trial = 10 / scale;
+      const n0 = buildParticles(facets, trial).n || 1;
+      const step = trial * Math.sqrt(n0 / target);
+      P = buildParticles(facets, step);
+      const spacing = step * scale;
+      fontPx = Math.max(6.5, Math.min(11, spacing * 1.12));
+      ox = new Float32Array(P.n);
+      oy = new Float32Array(P.n);
+      vx = new Float32Array(P.n);
+      vy = new Float32Array(P.n);
+      hx = new Float32Array(P.n);
+      hy = new Float32Array(P.n);
+      level = new Uint8Array(P.n);
+      energy = 0;
+      buildAtlas();
     };
 
-    const buckets: number[][] = Array.from({ length: LEVELS }, () => []);
-    const projected = { x: new Float32Array(0), y: new Float32Array(0) };
-
-    const draw = () => {
-      if (projected.x.length < particles.length) {
-        projected.x = new Float32Array(particles.length);
-        projected.y = new Float32Array(particles.length);
-      }
-      for (const b of buckets) b.length = 0;
-
-      pointer.x += (pointer.tx - pointer.x) * 0.05;
-      pointer.y += (pointer.ty - pointer.y) * 0.05;
-      const ry = Math.sin(time * 0.36) * 0.5 + pointer.x * 0.22;
-      const rx = Math.sin(time * 0.27) * 0.16 + 0.06 + pointer.y * 0.18;
+    const step = (dt: number) => {
+      // dt in 60 fps frames (1 = 16.7 ms).
+      tilt.x += (tilt.tx - tilt.x) * 0.05 * dt;
+      tilt.y += (tilt.ty - tilt.y) * 0.05 * dt;
+      const ry = Math.sin(time * 0.36) * 0.5 + tilt.x * 0.22;
+      const rx = Math.sin(time * 0.27) * 0.16 + 0.06 + tilt.y * 0.18;
       const rz = Math.sin(time * 0.19) * 0.05;
       const breathe = 1 + Math.sin(time * 0.9) * 0.025;
       const cy = Math.cos(ry);
@@ -270,15 +352,64 @@ export function ParticleStar({
         return 0.45 * f.tone + 0.55 * d;
       });
 
+      // Pointer, in canvas coordinates (one layout read per frame).
+      let active = false;
+      let R = 0;
+      if (ptr.on || ptr.bursts.length) {
+        const rect = canvas.getBoundingClientRect();
+        if (ptr.on) {
+          ptr.x = ptr.cx - rect.left;
+          ptr.y = ptr.cy - rect.top;
+          if (ptr.fresh) {
+            ptr.px = ptr.x;
+            ptr.py = ptr.y;
+            ptr.fresh = false;
+          }
+          ptr.vx = (ptr.vx + (ptr.x - ptr.px) / dt) * 0.5;
+          ptr.vy = (ptr.vy + (ptr.y - ptr.py) / dt) * 0.5;
+          ptr.px = ptr.x;
+          ptr.py = ptr.y;
+          R = scale * 0.55;
+          // Only while the pointer is over (or close to) the mark.
+          const dcx = ptr.x - width / 2;
+          const dcy = ptr.y - height / 2;
+          active = dcx * dcx + dcy * dcy < (scale + R) * (scale + R);
+        }
+        for (const b of ptr.bursts) {
+          const bx = b.cx - rect.left;
+          const by = b.cy - rect.top;
+          const RB = scale * 1.6;
+          for (let i = 0; i < P.n; i++) {
+            const dx = hx[i] + ox[i] - bx;
+            const dy = hy[i] + oy[i] - by;
+            const d = Math.sqrt(dx * dx + dy * dy) || 1;
+            if (d > RB) continue;
+            const f = (1 - d / RB) * TAP_BURST * P.mass[i];
+            // A little swirl so the burst does not look like a ring.
+            const sw = Math.sin(P.phase[i]) * 0.45;
+            vx[i] += ((dx - dy * sw) / d) * f;
+            vy[i] += ((dy + dx * sw) / d) * f;
+          }
+          energy = 1;
+        }
+        ptr.bursts.length = 0;
+      }
+
       const cxp = width / 2;
       const cyp = height / 2;
       const persp = 3.2;
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        const wobble = 1 + Math.sin(time * 1.3 + p.phase) * 0.012;
-        const x = p.x * breathe * wobble;
-        const y = p.y * breathe * wobble;
-        const z = p.z;
+      const R2 = R * R;
+      const pvx = ptr.vx * DRAG;
+      const pvy = ptr.vy * DRAG;
+      const spring = 1 - Math.pow(1 - SPRING, dt);
+      const keep = Math.pow(FRICTION, dt);
+      const physics = active || energy > 0.02;
+      let e = 0;
+      for (let i = 0; i < P.n; i++) {
+        const wobble = 1 + Math.sin(time * 1.3 + P.phase[i]) * 0.012;
+        const x = P.x[i] * breathe * wobble;
+        const y = P.y[i] * breathe * wobble;
+        const z = P.z[i];
         const x1 = x * cy + z * sy;
         const z1 = -x * sy + z * cy;
         const y2 = y * cx - z1 * sx;
@@ -286,43 +417,93 @@ export function ParticleStar({
         const x3 = x1 * cz - y2 * sz;
         const y3 = x1 * sz + y2 * cz;
         const k = persp / (persp - z2);
-        projected.x[i] = cxp + x3 * k * scale;
-        projected.y[i] = cyp + y3 * k * scale;
+        hx[i] = cxp + x3 * k * scale;
+        hy[i] = cyp + y3 * k * scale;
+
+        let speed = 0;
+        if (physics) {
+          let ax = 0;
+          let ay = 0;
+          if (active) {
+            const dx = hx[i] + ox[i] - ptr.x;
+            const dy = hy[i] + oy[i] - ptr.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < R2) {
+              const d = Math.sqrt(d2) || 1;
+              const f = 1 - d / R;
+              const m = P.mass[i];
+              const push = f * f * PUSH * m;
+              ax += (dx / d) * push + pvx * f * m;
+              ay += (dy / d) * push + pvy * f * m;
+            }
+          }
+          let u = (vx[i] + ax * dt - ox[i] * spring) * keep;
+          let v = (vy[i] + ay * dt - oy[i] * spring) * keep;
+          // Cap the speed: scattered, never teleported.
+          const s2 = u * u + v * v;
+          if (s2 > 1600) {
+            const c = 40 / Math.sqrt(s2);
+            u *= c;
+            v *= c;
+          }
+          vx[i] = u;
+          vy[i] = v;
+          ox[i] += u * dt;
+          oy[i] += v * dt;
+          speed = Math.abs(u) + Math.abs(v);
+          e += speed + (Math.abs(ox[i]) + Math.abs(oy[i])) * 0.1;
+        }
 
         // Every facet stays readable; light facets climb to violet.
-        let b = 0.22 + 0.78 * lit[p.facet];
-        if (p.edge) b = Math.min(1, b + 0.22);
-        // A few glyphs twinkle.
-        const tw = Math.sin(time * 1.7 + p.phase * 3);
+        let b = 0.22 + 0.78 * lit[P.facet[i]];
+        if (P.edge[i]) b = Math.min(1, b + 0.22);
+        // A few glyphs twinkle; flying pieces glow.
+        const tw = Math.sin(time * 1.7 + P.phase[i] * 3);
         if (tw > 0.97) b = Math.min(1, b + 0.35);
-        const level = Math.max(
+        if (speed > 0.6) b = Math.min(1, b + speed * 0.05);
+        level[i] = Math.max(
           0,
           Math.min(LEVELS - 1, Math.round(b * (LEVELS - 1))),
         );
-        buckets[level].push(i);
       }
-
-      ctx.clearRect(0, 0, width, height);
-      ctx.font = `${fontPx}px ui-monospace, SFMono-Regular, Menlo, monospace`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      for (let l = 0; l < LEVELS; l++) {
-        const list = buckets[l];
-        if (!list.length) continue;
-        ctx.fillStyle = styles[l];
-        const glyph = GLYPHS[l];
-        for (let j = 0; j < list.length; j++) {
-          const i = list[j];
-          ctx.fillText(glyph, projected.x[i], projected.y[i]);
+      if (physics) {
+        energy = e / Math.max(1, P.n);
+        if (!active && energy <= 0.02) {
+          ox.fill(0);
+          oy.fill(0);
+          vx.fill(0);
+          vy.fill(0);
+          energy = 0;
         }
+      }
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      if (!atlas) return;
+      const sw = cell * dpr;
+      const half = cell / 2;
+      for (let i = 0; i < P.n; i++) {
+        ctx.drawImage(
+          atlas,
+          level[i] * sw,
+          0,
+          sw,
+          sw,
+          hx[i] + ox[i] - half,
+          hy[i] + oy[i] - half,
+          cell,
+          cell,
+        );
       }
     };
 
     const frame = (now: number) => {
       if (!running) return;
-      const dt = last ? Math.min(64, now - last) : 16;
+      const ms = last ? Math.min(64, now - last) : 16.7;
       last = now;
-      time += dt / 1000;
+      time += ms / 1000;
+      step(ms / 16.67);
       draw();
       raf = requestAnimationFrame(frame);
     };
@@ -339,11 +520,15 @@ export function ParticleStar({
     };
 
     resize();
+    step(1);
     draw();
 
     const ro = new ResizeObserver(() => {
       resize();
-      if (!running) draw();
+      if (!running) {
+        step(1);
+        draw();
+      }
     });
     ro.observe(wrap);
 
@@ -362,7 +547,7 @@ export function ParticleStar({
 
     // Theme switches: re-read the ink colour.
     const mo = new MutationObserver(() => {
-      buildStyles();
+      buildAtlas();
       if (!running) draw();
     });
     mo.observe(document.documentElement, {
@@ -370,14 +555,47 @@ export function ParticleStar({
       attributeFilter: ["class"],
     });
 
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    const onPointer = (e: PointerEvent) => {
-      pointer.tx = (e.clientX / window.innerWidth - 0.5) * 2;
-      pointer.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    // The canvas sits under the page content (pointer-events: none), so the
+    // pointer is followed on the window and mapped onto the mark.
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") {
+        tilt.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+        tilt.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      } else if (!ptr.on) {
+        return; // touch: only while a finger that started on the star is down
+      }
+      if (!ptr.on) ptr.fresh = true;
+      ptr.cx = e.clientX;
+      ptr.cy = e.clientY;
+      ptr.on = true;
     };
-    if (finePointer) {
-      window.addEventListener("pointermove", onPointer, { passive: true });
-    }
+    const overStar = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      return dx * dx + dy * dy < scale * scale;
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!running || !overStar(e)) return;
+      ptr.bursts.push({ cx: e.clientX, cy: e.clientY });
+      if (e.pointerType !== "mouse") {
+        ptr.cx = e.clientX;
+        ptr.cy = e.clientY;
+        ptr.on = true;
+        ptr.fresh = true;
+      }
+    };
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") ptr.on = false;
+    };
+    const onOut = (e: PointerEvent) => {
+      if (!e.relatedTarget) ptr.on = false;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("pointerup", onUp, { passive: true });
+    window.addEventListener("pointercancel", onUp, { passive: true });
+    document.addEventListener("pointerout", onOut, { passive: true });
 
     return () => {
       stop();
@@ -385,7 +603,11 @@ export function ParticleStar({
       io.disconnect();
       mo.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      document.removeEventListener("pointerout", onOut);
     };
   }, [reduced, tint, intensity]);
 
