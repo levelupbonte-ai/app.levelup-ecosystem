@@ -66,6 +66,18 @@ const RULES: [RegExp, string][] = [
   [/E-commerce stores with instant Stripe checkouts/g, "E-commerce stores with online checkout"],
   [/^Instant Checkout$/g, "Online Checkout"],
   [/with instant checkout,/g, "with online checkout,"],
+  [/^Instant email notifications for new bookings$/g, "Email notifications for new bookings"],
+  [/, and instant confirmation\.$/g, ", and automatic confirmation."],
+
+  // Home hero features (content_blocks home/hero): no ranking, protection or
+  // "zero work" promises.
+  [/^Bespoke Websites$/g, "Custom Websites"],
+  [/^Fast, modern sites built to convert\.$/g, "Modern, mobile-first sites built around your brand."],
+  [/^Get found first on Google & Maps\.$/g, "Local SEO foundations for Google & Maps."],
+  [/^Cyber Protection$/g, "Security Basics"],
+  [/^Active shield against attacks and downtime\.$/g, "HTTPS, spam protection, backups and monitoring."],
+  [/^Automated Booking$/g, "Online Booking"],
+  [/^24\/7 scheduling with zero manual work\.$/g, "Clients book 24/7, you confirm from your dashboard."],
 
   // Third-party product names are not part of what we promise.
   [/^Google Analytics setup$/g, "Analytics setup"],
@@ -145,6 +157,19 @@ const REPLACEMENTS: [RegExp, string][] = [
   [
     /^LevelStudio is LevelUp Ecosystem's automated AI preview generator/,
     "LevelStudio is LevelUp Ecosystem's online AI studio. You describe your business, answer a few guided questions and preview a website draft on your phone. Once you approve a draft, LevelUp finishes, tests and launches the production site.",
+  ],
+  // FAQ (faq_items): no ranking promise, security check is a review, not an audit.
+  [
+    /^Yes\. Local visibility requires coordinated website data/,
+    "We can help. Local visibility depends on consistent website data and a verified Google Business Profile. We match your name, phone number and service areas to your Google listing, add local business Schema.org structured data and keep your pages light on mobile. Rankings are decided by Google, so no one can promise you a position.",
+  ],
+  [
+    /^We audit your domain registrar and DNS settings/,
+    "We review your domain registrar and DNS settings, check your SSL/HTTPS certificate and database permissions, help you turn on two-factor authentication (2FA) for your hosting and business email accounts, add spam-bot honeypots to your forms, and check for exposed keys or passwords. It is a review based on security best practices, not a professional penetration test.",
+  ],
+  [
+    /^High-speed cloud hosting, automated daily backups, monthly security updates, 24\/7 uptime monitoring/,
+    "Managed hosting, automated daily backups, monthly security updates, uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
   ],
   [
     /^A bespoke high-converting showcase website built from scratch\./,

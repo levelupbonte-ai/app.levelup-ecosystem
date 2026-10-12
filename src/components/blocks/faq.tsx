@@ -46,7 +46,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "Can you help our business rank higher on Google Maps in San Diego?",
         answer:
-          "Yes. Local visibility requires coordinated website data and a verified Google Business Profile. We format your name, phone number, and service areas to match your Google listing, insert local business Schema.org structured data, and optimize page load speeds so mobile searchers convert into appointments.",
+          "We can help. Local visibility depends on consistent website data and a verified Google Business Profile. We match your name, phone number and service areas to your Google listing, add local business Schema.org structured data and keep your pages light on mobile. Rankings are decided by Google, so no one can promise you a position.",
       },
       {
         question: "How long does a website take to build and launch?",
@@ -61,7 +61,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is included in the Website Security Check?",
         answer:
-          "We audit your domain registrar and DNS settings, verify SSL HTTPS certificates, audit database permissions, implement two-factor authentication (2FA) on your hosting and business email accounts, install spam bot honeypots, and test for credential leakage.",
+          "We review your domain registrar and DNS settings, check your SSL/HTTPS certificate and database permissions, help you turn on two-factor authentication (2FA) for your hosting and business email accounts, add spam-bot honeypots to your forms, and check for exposed keys or passwords. It is a review based on security best practices, not a professional penetration test.",
       },
       {
         question: "Who owns my website, content and domain?",
@@ -71,7 +71,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is included in a Care Plan?",
         answer:
-          "High-speed cloud hosting, automated daily backups, monthly security updates, 24/7 uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
+          "Managed hosting, automated daily backups, monthly security updates, uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
       },
     ],
   },

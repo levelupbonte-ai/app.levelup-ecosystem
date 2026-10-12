@@ -103,7 +103,7 @@ export default function ServicesPage() {
                 <p className="text-muted-foreground leading-relaxed">
                   Tailored for barbershops, boutique hair salons, wellness clinics, personal trainers, and local contractors.
                   We replace endless phone tag and missed calls with a frictionless mobile booking flow connected directly
-                  to your calendar and payment provider (Square, Calendly, Acuity, or Stripe).
+                  to your calendar, with online payments if you need them.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/60">
@@ -131,7 +131,7 @@ export default function ServicesPage() {
                       <span>Google Maps Optimization</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Structured local business data to improve ranking on Google Maps and local search.
+                      Structured local business data to help you show up on Google Maps and in local search.
                     </p>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function ServicesPage() {
                       <span>Database &amp; API Key Isolation</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Ensures customer data and private credentials are never exposed in public frontend code.
+                      Checks that customer data and private credentials are not exposed in public frontend code.
                     </p>
                   </div>
                   <div className="space-y-1">
@@ -241,7 +241,7 @@ export default function ServicesPage() {
                       <span>Daily Offsite Backups</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Automatic snapshots taken every day so your site can be restored in minutes if needed.
+                      Automatic snapshots taken every day so your site can be restored if needed.
                     </p>
                   </div>
                   <div className="space-y-1">
@@ -259,7 +259,7 @@ export default function ServicesPage() {
                       <span>24/7 Uptime &amp; SSL Checks</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Continuous monitoring ensures your site remains accessible and secure around the clock.
+                      Automated uptime monitoring alerts us if your site goes down, so we can act quickly.
                     </p>
                   </div>
                 </div>
