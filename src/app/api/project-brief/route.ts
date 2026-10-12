@@ -91,9 +91,20 @@ const QUALIFY_KEYS = [
   "gmb",
   "tt",
   "olink",
-  "reg",
-  "proof",
   "act",
+];
+
+/**
+ * "Where is your business today?" (studio, English or French option labels):
+ * whether the business already operates and for how long. Older briefs still
+ * send "hb" (yes / no) and "age".
+ */
+const STAGES: { re: RegExp; running: boolean; age: string | null }[] = [
+  { re: /over a year|plus d.un an/i, running: true, age: "More than 1 year" },
+  { re: /less than a year|moins d.un an/i, running: true, age: "Less than 1 year" },
+  { re: /launching soon|lancement/i, running: false, age: null },
+  { re: /still an idea|encore une id/i, running: false, age: null },
+  { re: /personal project|projet personnel/i, running: false, age: null },
 ];
 
 /** URL-looking tokens (with or without scheme) from free text. */
@@ -111,37 +122,42 @@ function links(text: string, max = 8): string[] {
 function toPayload(brief: Brief): ProjectRequestPayload {
   const a = brief.answers;
   const hb = str(a.hb);
+  const stage = STAGES.find((s) => s.re.test(str(a.stage)));
   const social = ["ig", "fb", "gmb", "tt", "olink"]
     .map((k) => str(a[k]).slice(0, 300))
     .filter(Boolean);
-  const proof = str(a.proof);
+  // No registration number or proof documents are asked any more: links the
+  // visitor mentions in the description are kept for the review.
+  const described =
+    opt(a.act, 2000) ??
+    opt(a.does, 2000) ??
+    opt(a.idea, 2000) ??
+    opt(a.what, 2000) ??
+    opt(a.svc, 2000);
   return {
     locale: brief.locale ?? "en",
     name: str(a.cname).slice(0, 120),
     email: str(a.email).toLowerCase().slice(0, 254),
     phone: opt(a.phone, 40),
     business_name: (str(a.biz) || str(a.name) || str(a.org)).slice(0, 160),
-    has_business: /^(yes|oui)$/i.test(hb)
-      ? true
-      : /^(no|non)$/i.test(hb)
-        ? false
-        : null,
+    has_business: stage
+      ? stage.running
+      : /^(yes|oui)$/i.test(hb)
+        ? true
+        : /^(no|non)$/i.test(hb)
+          ? false
+          : null,
     business_stage: opt(a.stage, 80),
     sector: opt(a.sector, 120),
-    business_age: opt(a.age, 60),
+    business_age: stage?.age ?? opt(a.age, 60),
     website: opt(a.web, 300) ?? opt(a.url, 300),
     social_links: social,
-    registration_number: opt(a.reg, 40),
-    proof_links: links(proof),
+    registration_number: null,
+    proof_links: links(described ?? ""),
     budget: opt(a.budget, 60),
     timeline: opt(a.when, 60),
     project_type: `${brief.type} (${brief.category})`.slice(0, 120),
-    activity:
-      opt(a.act, 2000) ??
-      opt(a.does, 2000) ??
-      opt(a.idea, 2000) ??
-      opt(a.what, 2000) ??
-      opt(a.svc, 2000),
+    activity: described,
     brief: {
       reference: brief.id,
       type: brief.type,
@@ -149,7 +165,6 @@ function toPayload(brief: Brief): ProjectRequestPayload {
       complexity: brief.complexity ?? null,
       eta_min: brief.eta_min ?? null,
       eta_max: brief.eta_max ?? null,
-      proof_text: proof.slice(0, 2000) || null,
       answers: a,
     },
   };

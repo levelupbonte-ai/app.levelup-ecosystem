@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { getLiveProjects } from "@/lib/levelup-site";
-import { LEGAL_DOCS, LEGAL_UPDATED_ISO } from "@/lib/legal-docs";
+import { LEGAL_DOCS, legalUpdated } from "@/lib/legal-docs";
 
 const BASE_URL = "https://levelup-ecosystem.com";
 
@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const legalRoutes: MetadataRoute.Sitemap = LEGAL_DOCS.map((d) => ({
     url: `${BASE_URL}${d.path}`,
-    lastModified: new Date(LEGAL_UPDATED_ISO),
+    lastModified: new Date(legalUpdated(d.slug).iso),
     changeFrequency: "yearly",
     priority: 0.3
   }));

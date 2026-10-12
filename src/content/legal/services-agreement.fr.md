@@ -4,7 +4,7 @@
 
 **LevelUp Ecosystem**
 Date d'entrée en vigueur : 11 octobre 2026
-Dernière mise à jour : 11 octobre 2026
+Dernière mise à jour : 12 octobre 2026
 
 ---
 
@@ -163,13 +163,12 @@ Les articles 15 et 16 des Conditions s'appliquent. Pour les clients professionne
 
 ## 12. Dispositions générales
 
-12.1 **Non-sollicitation.** Pendant une Commande et 12 mois après, aucune partie ne sollicite directement l'embauche d'un salarié ou prestataire individuel de l'autre ayant travaillé sur les Services, hors annonces générales.
-12.2 **Sous-traitance.** LevelUp peut recourir à des sous-traitants et en reste responsable.
-12.3 **Publicité** : selon l'article 3.9 des Conditions.
-12.4 **Intégralité ; avenants.** Les Commandes ne peuvent être modifiées que par écrit signé (y compris électroniquement). Les mises à jour du Contrat s'appliquent aux nouvelles Commandes et, pour les plans récurrents existants, au renouvellement suivant après un préavis d'au moins 30 jours.
-12.5 **Langue.** L'anglais est la version officielle et fait foi.
-12.6 **Signature électronique** et exemplaires multiples admis.
-12.7 **Notifications** : selon l'article 18.6 des Conditions.
+12.1 **Sous-traitance.** LevelUp peut recourir à des sous-traitants et en reste responsable.
+12.2 **Publicité** : selon l'article 3.9 des Conditions.
+12.3 **Intégralité ; avenants.** Les Commandes ne peuvent être modifiées que par écrit signé (y compris électroniquement). Les mises à jour du Contrat s'appliquent aux nouvelles Commandes et, pour les plans récurrents existants, au renouvellement suivant après un préavis d'au moins 30 jours.
+12.4 **Langue.** L'anglais est la version officielle et fait foi.
+12.5 **Signature électronique** et exemplaires multiples admis.
+12.6 **Notifications** : selon l'article 18.6 des Conditions.
 
 ## 13. Contact
 

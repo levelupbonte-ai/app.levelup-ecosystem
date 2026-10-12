@@ -163,7 +163,7 @@ export function Templates() {
                       domain={item.domain}
                       desktop={item.desktop}
                       mobile={item.mobile}
-                      mobileSize={{ width: 390, height: 3600 }}
+                      mobileSize={{ width: 780, height: 1688 }}
                       alt={`${item.name}, ${c.industry}`}
                       flip={flip}
                     />

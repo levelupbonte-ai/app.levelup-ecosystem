@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
@@ -71,6 +71,15 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+// Android: the on-screen keyboard resizes the layout (dvh follows it), so
+// fields such as the hero prompt stay above it. iOS ignores the key; pages
+// that need it follow window.visualViewport instead. Zoom stays allowed.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://levelup-ecosystem.com"),
