@@ -125,6 +125,21 @@ new `data-theme-section` the moment the panel starts to lift (the module's
 `lu-transition` "reveal" event), so the 600 ms colour morph is seen on the
 revealed page.
 
+## Route loading is real
+
+The transition never fakes a load. There is deliberately **no `loading.tsx`**
+in the app: with one, Next commits the route's fallback immediately and the
+panel would lift on a skeleton. Without it, a client-side navigation to a route
+whose payload or chunk is not ready yet stays on the current page until the
+server answers (static routes are prefetched, so they are instant; the dynamic
+`/projects/[id]`, `/project/[id]` and `/start-project` really wait), and the
+panel simply holds, with the status line after 1.2 s, until the new route
+commits. The only fixed time is the signature itself (cover 240 ms plus 20 ms,
+the pen finish of at most 170 ms and the 260 ms lift). If a navigation has not
+committed after 10 s the panel lifts anyway. Verified against a route whose
+server response was delayed 3.6 s: the old page stays, the overlay holds, "Almost
+ready…" appears, then the new page renders.
+
 ## Other LevelUp apps
 
 1. In `<head>` (pre-paint cover when arriving through the wipe):
