@@ -31,7 +31,7 @@ export const defaultProjects: ProjectItem[] = [
     badge: "Client Project • Digital Experience",
     title: "Wedding Invitation",
     description:
-      "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and instant confirmation.",
+      "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and automatic confirmation.",
     image: "/projects/wedding-card.jpg",
     href: "/projects/wedding-invitation",
     external: false,
@@ -44,7 +44,7 @@ export const defaultProjects: ProjectItem[] = [
     badge: "Client Case Study • Personal Brand & Portfolio",
     title: "Black_Pater — Portfolio",
     description:
-      "A bespoke cinematic digital portfolio engineered for Jean-Pierre Lofumbwa (« Le Prof »), Congolese educator, entrepreneur, and cultural ambassador in the US. Features custom typography, interactive timeline journey, cover flow showcase, and multi-language support.",
+      "A bespoke cinematic digital portfolio designed for Jean-Pierre Lofumbwa (« Le Prof »), Congolese educator, entrepreneur, and cultural ambassador in the US. Features custom typography, interactive timeline journey, cover flow showcase, and multi-language support.",
     image: "https://i.ibb.co/S4XSRHVc/IMG-8467.jpg",
     href: "https://blackpater.com",
     external: true,
@@ -74,7 +74,7 @@ export const defaultConcepts: ConceptItem[] = [
     title: "Concept Architecture Studio",
     badge: "Spatial Design & Architecture",
     description:
-      "Architectural firm portfolio engineered with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
+      "Architectural firm portfolio designed with cinematic high-resolution asset delivery, progressive scroll perspectives, and editorial typography that honors structural design without platform lag.",
     image: "/features/overview-card.svg",
     tags: ["High-Res Delivery", "Editorial Design", "Bespoke Portfolio"],
     ctaText: "Request preview like this",

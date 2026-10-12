@@ -1,6 +1,6 @@
 # LevelUp Ecosystem (full description)
 
-> LevelUp Ecosystem is a web design and development studio based in San Diego, California, United States, founded by Richelieu Bonte. English is the official language of the site and of the legal documents; French is provided as a translation.
+> LevelUp Ecosystem is an online web studio founded by Richelieu Bonte in San Diego, California, United States. It is an online business: there is no physical studio or office open to visitors, and projects run remotely. English is the official language of the site and of the legal documents; French is provided as a translation.
 
 Official website: https://levelup-ecosystem.com
 Contact: contact@levelup-ecosystem.com (postal address available on request)
@@ -15,7 +15,7 @@ LevelUp designs, builds, hosts and maintains websites for local businesses (for 
 - Custom design around the client's brand, mobile-first, never a generic template.
 - Online booking, available 24/7, with confirmations and a dashboard to confirm, reschedule and follow up.
 - Google visibility: local SEO foundations, structured data, Google Maps integration and help with Google Business Profile setup.
-- Security basics: HTTPS, hardened settings, anti-spam protection, uptime monitoring, and website security checks (non-destructive reviews with a plain-language report).
+- Security best practices: HTTPS, hardened settings, anti-spam protection, uptime monitoring, and website security checks (non-destructive reviews with a plain-language report; not a professional penetration test).
 - Care plans (monthly): managed hosting, backups, security updates and a monthly amount of update time, depending on the plan.
 - One client dashboard for the website, bookings, requests, services, reviews and SEO.
 - Digital event experiences such as wedding invitations with online RSVP.
@@ -35,7 +35,7 @@ Website projects have fixed prices and care plans are billed monthly. See https:
 
 ## LevelStudio
 
-LevelStudio is the AI website builder of LevelUp Ecosystem (https://levelup-ecosystem.com/studio, app at https://studio.levelup-ecosystem.com). A user describes their business in a sentence, answers a few guided questions, and previews a website draft on desktop and mobile. A draft is a preview, not the final website: once approved, LevelUp's engineers deliver the production site with booking, SEO, security and hosting. AI output can contain mistakes and must be reviewed before publishing. Terms: https://levelup-ecosystem.com/levelstudio-terms
+LevelStudio is the online AI website studio of LevelUp Ecosystem (https://levelup-ecosystem.com/studio, app at https://studio.levelup-ecosystem.com). A user describes their business in a sentence, answers a few guided questions, and previews a website draft on desktop and mobile. A draft is a preview, not the final website: once approved, LevelUp finishes, tests and launches the production site with booking, SEO, security and hosting. AI output can contain mistakes and must be reviewed before publishing. Terms: https://levelup-ecosystem.com/levelstudio-terms
 
 ## Templates (demo sites built by LevelUp, not client sites)
 
@@ -55,7 +55,14 @@ More: https://levelup-ecosystem.com/projects
 
 ## Founder
 
-Richelieu Bonte founded LevelUp Ecosystem and directs architecture, security reviews and code reviews of the studio's projects. More: https://levelup-ecosystem.com/about
+Richelieu Bonte is the founder of LevelUp Ecosystem. He is a first-year cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo. He is not a traditional software engineer or developer: he builds websites with AI-assisted development, directing modern AI tools, testing every page and reviewing security settings before launch. His title is Founder. More: https://levelup-ecosystem.com/about
+
+## How LevelUp builds
+
+- AI-assisted: modern AI tools produce the code under the founder's direction.
+- Human-reviewed: every page is tested on phone and desktop, forms and bookings are tried end to end, and nothing goes live without the client's approval.
+- Security-first habits: HTTPS, careful access settings, spam protection, backups and updates, reviewed before launch.
+- LevelUp does not claim certifications, a large team, or years of industry experience.
 
 ## Privacy and cookies
 

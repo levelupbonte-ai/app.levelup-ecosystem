@@ -21,17 +21,17 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is LevelUp Ecosystem?",
         answer:
-          "LevelUp Ecosystem is an independent web architecture and development studio based in San Diego, California. The studio builds fast, secure websites with 24/7 online booking, local SEO, and cybersecurity basics for businesses, barbershops, salons, and creators.",
+          "LevelUp Ecosystem is an online web studio founded by Richelieu Bonte in San Diego, California. We design, build, host and maintain websites for local businesses, barbershops, salons, brands and creators: custom design, 24/7 online booking, Google visibility, security best practices and one client dashboard. We work online, with no office open to visitors.",
       },
       {
         question: "Who is Richelieu Bonte?",
         answer:
-          "Richelieu Bonte is the founder and principal engineer of LevelUp Ecosystem, an independent web design studio building secure, AI-assisted websites for local businesses and creators. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo.",
+          "Richelieu Bonte is the founder of LevelUp Ecosystem. He is a first-year cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo. He is not a traditional software engineer: he builds with AI, directing modern AI tools, testing every page and reviewing security settings before launch.",
       },
       {
         question: "What is LevelStudio?",
         answer:
-          "LevelStudio is LevelUp Ecosystem's automated AI preview generator, allowing clients to test website concepts and interactive mobile prototypes on their phone before human engineering and deployment.",
+          "LevelStudio is LevelUp Ecosystem's online AI studio. You describe your business, answer a few guided questions and preview a website draft on your phone. Once you approve a draft, LevelUp finishes, tests and launches the production site.",
       },
     ],
   },
@@ -46,7 +46,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "Can you help our business rank higher on Google Maps in San Diego?",
         answer:
-          "Yes. Local visibility requires coordinated website data and a verified Google Business Profile. We format your name, phone number, and service areas to match your Google listing, insert local business Schema.org structured data, and optimize page load speeds so mobile searchers convert into appointments.",
+          "We can help. Local visibility depends on consistent website data and a verified Google Business Profile. We match your name, phone number and service areas to your Google listing, add local business Schema.org structured data and keep your pages light on mobile. Rankings are decided by Google, so no one can promise you a position.",
       },
       {
         question: "How long does a website take to build and launch?",
@@ -61,7 +61,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is included in the Website Security Check?",
         answer:
-          "We audit your domain registrar and DNS settings, verify SSL HTTPS certificates, audit database permissions, implement two-factor authentication (2FA) on your hosting and business email accounts, install spam bot honeypots, and test for credential leakage.",
+          "We review your domain registrar and DNS settings, check your SSL/HTTPS certificate and database permissions, help you turn on two-factor authentication (2FA) for your hosting and business email accounts, add spam-bot honeypots to your forms, and check for exposed keys or passwords. It is a review based on security best practices, not a professional penetration test.",
       },
       {
         question: "Who owns my website, content and domain?",
@@ -71,7 +71,7 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is included in a Care Plan?",
         answer:
-          "High-speed cloud hosting, automated daily backups, monthly security updates, 24/7 uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
+          "Managed hosting, automated daily backups, monthly security updates, uptime monitoring, and on-demand content edits (updating hours, prices, service menus, or staff members).",
       },
     ],
   },
@@ -110,9 +110,9 @@ export const FAQ = ({
               </h2>
             )}
             <p className="text-muted-foreground max-w-md leading-relaxed lg:mx-auto">
-              Have questions about our San Diego web design, 24/7 online booking, or cybersecurity audits?{" "}
+              Have questions about our websites, 24/7 online booking, or website security checks?{" "}
               <Link href="/contact" className="text-foreground underline underline-offset-4 font-semibold">
-                Get in touch with our team
+                Get in touch
               </Link>
               .
             </p>

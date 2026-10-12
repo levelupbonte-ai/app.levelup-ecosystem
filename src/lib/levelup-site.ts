@@ -414,7 +414,8 @@ export async function getTestimonialItems(): Promise<
 
   const items = bundle.reviews.flatMap((r) => {
     const image = safeUrl(r.data.image);
-    if (!image) return [];
+    // Placeholder rows from the site template are never real client reviews.
+    if (!image || r.source === "template") return [];
     return [
       {
         quote: r.comment,
@@ -425,8 +426,7 @@ export async function getTestimonialItems(): Promise<
       },
     ];
   });
-  // Database reachable: only real, published reviews are shown (an empty list
-  // hides the section). The built-in list is only an outage fallback.
+  // Only real, published reviews are shown; an empty list hides the section.
   return items;
 }
 

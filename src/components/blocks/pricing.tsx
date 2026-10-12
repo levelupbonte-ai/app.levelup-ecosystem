@@ -43,7 +43,7 @@ const buildPlans: PlanItem[] = [
     price: "$850",
     pricePeriod: "/one-time",
     description:
-      "A custom-designed, high-converting showcase website. Includes mobile-first responsive architecture, Google Maps integration, technical and local SEO foundations, and your content, brand and data stay yours. Built, hosted and maintained by LevelUp on a care plan.",
+      "A custom-designed showcase website. Includes a mobile-first responsive design, Google Maps integration, technical and local SEO foundations, and your content, brand and data stay yours. Built, hosted and maintained by LevelUp on a care plan.",
     shortPoints: [
       "Custom bespoke design (up to 5 pages)",
       "Mobile, tablet & desktop responsive",
@@ -60,13 +60,13 @@ const buildPlans: PlanItem[] = [
           { text: "Responsive design: mobile, tablet & desktop", included: true },
           { text: "Contact and lead capture form", included: true },
           { text: "Google Maps integration with interactive directions", included: true },
-          { text: "Basic technical SEO architecture", included: true },
+          { text: "Basic technical SEO setup", included: true },
           { text: "Local SEO foundation targeting your service area", included: true },
           { text: "Optimized meta titles & descriptions", included: true },
           { text: "Image & asset optimization for fast loading", included: true },
           { text: "SSL / HTTPS security encryption standard", included: true },
-          { text: "Google Analytics setup", included: true },
-          { text: "Basic accessibility (WCAG compliant)", included: true },
+          { text: "Analytics setup", included: true },
+          { text: "Basic accessibility checks (WCAG guidelines)", included: true },
           { text: "2 rounds of revisions included", included: true },
           { text: "Website launch & verification", included: true },
           { text: "Your content, brand and customer data stay yours (exportable)", included: true },
@@ -78,7 +78,7 @@ const buildPlans: PlanItem[] = [
           { text: "24/7 online booking engine", included: false },
           { text: "Live 2-way calendar sync (Google, Apple, Square)", included: false },
           { text: "Automated SMS/Email appointment confirmations", included: false },
-          { text: "Database security audit & access hardening", included: false },
+          { text: "Database security review & access hardening", included: false },
           { text: "Included monthly website updates (with a care plan)", included: false },
         ],
       },
@@ -94,11 +94,11 @@ const buildPlans: PlanItem[] = [
     price: "$1,500",
     pricePeriod: "/one-time",
     description:
-      "An automated appointment booking and customer acquisition powerhouse. Includes self-service scheduling, 2-way calendar sync, cybersecurity hardening, and advanced local SEO.",
+      "A website with online booking built in: self-service scheduling, 2-way calendar sync, security hardening, and advanced local SEO.",
     shortPoints: [
       "24/7 Online Booking System",
       "Live 2-Way Calendar Sync",
-      "Cybersecurity Hardening & Audit",
+      "Security Hardening & Review",
       "Google Business Profile Setup",
       "Advanced Local & Technical SEO",
     ],
@@ -111,7 +111,7 @@ const buildPlans: PlanItem[] = [
           { text: "Live 2-way calendar integration (Google, Apple, Square, Calendly)", included: true },
           { text: "Automated appointment email confirmations to reduce no-shows", included: true },
           { text: "Lead capture & notification pipeline", included: true },
-          { text: "Instant email notifications for new bookings", included: true },
+          { text: "Email notifications for new bookings", included: true },
           { text: "Google Business Profile setup & integration assistance", included: true },
           { text: "Advanced interactive contact/lead intake forms", included: true },
         ],
@@ -153,7 +153,7 @@ const buildPlans: PlanItem[] = [
     pricePeriod: "/turnkey package",
     secondaryNote: "Full Secure build + 1 year of Pro Care ($99/mo value)",
     description:
-      "The complete turnkey package: you get the $1,500 Secure website build plus a full year of managed cloud hosting, daily backups, continuous security defense, and monthly updates handled for you.",
+      "The complete turnkey package: you get the $1,500 Secure website build plus a full year of managed cloud hosting, daily backups, security updates, and monthly updates handled for you.",
     shortPoints: [
       "Full Secure Build Included ($1,500 value)",
       "1 Full Year of Managed Cloud Hosting",
@@ -167,7 +167,7 @@ const buildPlans: PlanItem[] = [
         items: [
           { text: "Everything included in the $1,500 Secure build", included: true },
           { text: "24/7 online booking engine & live calendar sync", included: true },
-          { text: "Full cybersecurity audit and hardening", included: true },
+          { text: "Security review and hardening", included: true },
           { text: "Advanced local SEO & Google Business Profile setup", included: true },
           { text: "3 rounds of build revisions included", included: true },
         ],
@@ -175,13 +175,13 @@ const buildPlans: PlanItem[] = [
       {
         category: "Included 1-Year Care Management",
         items: [
-          { text: "Managed ultra-fast cloud hosting on edge infrastructure", included: true },
+          { text: "Managed cloud hosting", included: true },
           { text: "Global Content Delivery Network (CDN)", included: true },
-          { text: "Automated daily offsite backups with instant recovery", included: true },
+          { text: "Automated daily offsite backups with restore on request", included: true },
           { text: "24/7 continuous uptime monitoring & health checks", included: true },
           { text: "Up to 2 hours of monthly website updates (text, photos, prices)", included: true },
           { text: "Continuous SSL renewal & DNS management", included: true },
-          { text: "Priority developer support", included: true },
+          { text: "Priority support", included: true },
         ],
       },
     ],
@@ -203,7 +203,7 @@ const buildPlans: PlanItem[] = [
       "Portfolios, landing pages & creators",
       "E-commerce, booking & client portals",
       "Dashboards, custom APIs & AI web apps",
-      "100% customized to your exact needs",
+      "Tailored to your needs",
     ],
     fullFeatures: [
       {
@@ -214,10 +214,10 @@ const buildPlans: PlanItem[] = [
           { text: "Creator portfolios, personal branding & landing pages", included: true },
           { text: "Restaurant websites with interactive digital menus", included: true },
           { text: "Custom 24/7 booking platforms for barbershops, salons & clinics", included: true },
-          { text: "E-commerce stores with instant Stripe checkouts", included: true },
+          { text: "E-commerce stores with online checkout", included: true },
           { text: "Client portals & SaaS dashboards", included: true },
           { text: "AI-powered websites & smart interactive tools", included: true },
-          { text: "Full-stack custom web applications", included: true },
+          { text: "Custom web applications", included: true },
           { text: "Custom business systems & workflow automation", included: true },
           { text: "Third-party API, CRM and ERP integrations", included: true },
           { text: "Custom database architecture", included: true },
@@ -228,7 +228,7 @@ const buildPlans: PlanItem[] = [
         items: [
           { text: "Transparent quote based on your exact specifications", included: true },
           { text: "Pay only for the features you actually need", included: true },
-          { text: "Milestone-based delivery & dedicated engineering review", included: true },
+          { text: "Milestone-based delivery with a review at each step", included: true },
           { text: "Code buy-out available on request (separate written agreement)", included: true },
         ],
       },
@@ -249,7 +249,7 @@ const carePlans: PlanItem[] = [
     description:
       "Keeps your website online, fast, and protected. Managed cloud hosting, daily backups, and 30 minutes of monthly minor updates.",
     shortPoints: [
-      "Managed Edge Cloud Hosting",
+      "Managed Cloud Hosting",
       "SSL / HTTPS & DNS Maintenance",
       "Daily Automated Offsite Backups",
       "24/7 Continuous Uptime Monitoring",
@@ -259,7 +259,7 @@ const carePlans: PlanItem[] = [
       {
         category: "Infrastructure & Security",
         items: [
-          { text: "High-speed cloud hosting on global edge network", included: true },
+          { text: "Managed cloud hosting", included: true },
           { text: "Continuous SSL certificate auto-renewals", included: true },
           { text: "Automated daily offsite backups", included: true },
           { text: "24/7 uptime monitoring & health checks", included: true },
@@ -291,10 +291,10 @@ const carePlans: PlanItem[] = [
     price: "$99",
     pricePeriod: "/month",
     description:
-      "Our most popular monthly plan. We handle all hosting, advanced security defense, SEO improvements, and up to 2 hours of monthly updates.",
+      "Our recommended monthly plan. We handle all hosting, security monitoring, SEO improvements, and up to 2 hours of monthly updates.",
     shortPoints: [
       "Everything in Essential Care",
-      "Advanced Security & Threat Defense",
+      "Advanced Security Monitoring",
       "Up to 2 hours / month of website updates",
       "Monthly SEO & Analytics Reporting",
       "Priority Support (WhatsApp & Email)",
@@ -309,7 +309,7 @@ const carePlans: PlanItem[] = [
           { text: "Content updates, text tweaks, photo swaps & price changes", included: true },
           { text: "Ongoing SEO maintenance & basic monthly SEO tuning", included: true },
           { text: "Monthly traffic & performance analytics reporting", included: true },
-          { text: "Priority developer support via WhatsApp and email", included: true },
+          { text: "Priority support via WhatsApp and email", included: true },
           { text: "New sections / custom page creation", included: false },
           { text: "Custom code development", included: false },
         ],
@@ -330,7 +330,7 @@ const carePlans: PlanItem[] = [
     id: "care-premium",
     name: "Premium Care",
     badge: "High Growth",
-    subtitle: "Full digital engineering partner: content, SEO, dev & priority support",
+    subtitle: "Your ongoing web partner: content, SEO, development & priority support",
     price: "$199",
     pricePeriod: "/month",
     description:
@@ -340,11 +340,11 @@ const carePlans: PlanItem[] = [
       "Up to 5 hours / month of website updates",
       "1 hour / month of custom development",
       "New sections & pages creation",
-      "Highest Priority VIP Developer Support",
+      "Highest Priority Support",
     ],
     fullFeatures: [
       {
-        category: "VIP Engineering & Expansion",
+        category: "Growth & Expansion",
         items: [
           { text: "Everything in Pro Care included", included: true },
           { text: "Up to 5 hours of monthly website updates & content maintenance", included: true },
@@ -352,7 +352,7 @@ const carePlans: PlanItem[] = [
           { text: "Creation of new sections or landing pages as needed", included: true },
           { text: "Advanced monthly SEO improvements & rank tracking", included: true },
           { text: "Deep analytics & conversion reporting", included: true },
-          { text: "Highest priority VIP developer support (direct line)", included: true },
+          { text: "Highest priority support (direct line)", included: true },
         ],
       },
       {

@@ -1,9 +1,11 @@
 import { DashedLine } from "@/components/dashed-line";
 import { aboutHeroCopy } from "@/data/site-copy";
 import { getSectionCopy } from "@/lib/levelup-site";
+import { truthfulStats } from "@/lib/marketing-claims";
 
 export async function AboutHero() {
   const copy = await getSectionCopy("about", "hero", aboutHeroCopy);
+  const stats = truthfulStats(copy.stats, aboutHeroCopy.stats);
   return (
     <section className="">
       <div className="container flex max-w-5xl flex-col justify-between gap-8 md:gap-20 lg:flex-row lg:items-center lg:gap-24 xl:gap-24">
@@ -37,7 +39,7 @@ export async function AboutHero() {
             orientation="horizontal"
             className="absolute top-0 lg:hidden"
           />
-          {copy.stats.map((stat, index) => (
+          {stats.map((stat, index) => (
             <div key={index} className="flex flex-col gap-1">
               <div className="font-display text-4xl font-bold tracking-tight md:text-5xl text-foreground">
                 {stat.value}

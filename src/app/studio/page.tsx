@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { LEVELSTUDIO_URL as STUDIO_URL } from "@/lib/levelup-login";
 
 export const metadata: Metadata = {
-  title: "LevelStudio — AI Website Builder by LevelUp Ecosystem",
+  title: "LevelStudio — Online AI Website Studio by LevelUp Ecosystem",
   description:
-    "LevelStudio turns a short brief into a real website draft in minutes: AI-guided questions, professional templates, live mobile preview, and a production build delivered by the LevelUp Ecosystem engineering team.",
+    "LevelStudio is the online AI website studio of LevelUp Ecosystem: describe your business, answer a few guided questions and preview a website draft. Once you approve it, LevelUp finishes, tests and launches the production site.",
   alternates: { canonical: "/studio" },
   openGraph: {
-    title: "LevelStudio — AI Website Builder by LevelUp Ecosystem",
+    title: "LevelStudio — Online AI Website Studio by LevelUp Ecosystem",
     description:
       "Describe your business, answer a few AI-guided questions, and preview a real website draft in minutes.",
     url: "https://levelup-ecosystem.com/studio",
@@ -34,7 +34,7 @@ const steps = [
   },
   {
     title: "Launch with LevelUp",
-    body: "Our engineers turn the approved draft into a fast, secure production site with booking, SEO and hosting.",
+    body: "LevelUp turns the approved draft into the production site, tests it and launches it with booking, SEO and hosting.",
   },
 ];
 
@@ -49,11 +49,11 @@ const features = [
 const faq = [
   {
     q: "What is LevelStudio?",
-    a: "LevelStudio is the AI website builder of LevelUp Ecosystem. It turns a short description of your business into a website draft you can preview and refine before LevelUp builds the production site.",
+    a: "LevelStudio is the online AI website studio of LevelUp Ecosystem. It turns a short description of your business into a website draft you can preview and refine before LevelUp builds the production site.",
   },
   {
     q: "Is the draft my final website?",
-    a: "No. Drafts are previews. Once you approve one, the LevelUp engineering team delivers the production website with booking, SEO, security and hosting.",
+    a: "No. Drafts are previews, and AI output can contain mistakes. Once you approve one, LevelUp finishes the production website, tests it and launches it with booking, SEO, security settings and hosting.",
   },
   {
     q: "Who can use LevelStudio?",
@@ -95,13 +95,13 @@ export default function StudioPage() {
       <div className="py-28 lg:py-32 lg:pt-44">
         <section className="container max-w-5xl">
           <span className="text-muted-foreground font-mono text-xs font-bold uppercase tracking-widest">
-            LevelStudio • AI website builder
+            LevelStudio • Online AI studio
           </span>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
             From a one-line brief to a real website draft
           </h1>
           <p className="text-foreground/90 mt-5 max-w-3xl text-xl leading-snug font-medium md:text-2xl">
-            LevelStudio is the AI website builder of LevelUp Ecosystem. Describe your business, answer a few
+            LevelStudio is the online AI website studio of LevelUp Ecosystem. Describe your business, answer a few
             guided questions, and preview your new site in minutes.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

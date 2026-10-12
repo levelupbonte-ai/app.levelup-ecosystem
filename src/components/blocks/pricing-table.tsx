@@ -7,6 +7,21 @@ import { Check, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+/**
+ * Short tab label for the mobile matrix: the first word of the plan name
+ * ("Essential Care" -> "Essential"), but a combined plan keeps both parts
+ * ("Secure + Care" -> "Secure+Care") so every tab stays unique. If two labels
+ * would still collide, the full names are used.
+ */
+function tabLabels(names: string[]): string[] {
+  const short = names.map(
+    (name) => name.trim().replace(/\s*\+\s*/g, "+").split(/\s+/)[0],
+  );
+  return short.map((label, i) =>
+    short.indexOf(label) !== short.lastIndexOf(label) ? names[i] : label,
+  );
+}
+
 export interface BuildTablePlan {
   id: string;
   name: string;
@@ -112,7 +127,7 @@ export interface ComparisonCategory {
 
 const defaultBuildComparisonData: ComparisonCategory[] = [
   {
-    category: "Core Deliverables & Architecture",
+    category: "Core Deliverables",
     rows: [
       {
         name: "One-Time Investment",
@@ -270,7 +285,7 @@ const defaultBuildComparisonData: ComparisonCategory[] = [
         custom: true,
       },
       {
-        name: "Database Security Rules & Audit",
+        name: "Database Security Rules & Review",
         starter: false,
         secure: true,
         care: true,
@@ -352,6 +367,8 @@ export interface PricingComparison {
 export const PricingTable = ({ comparison }: { comparison?: PricingComparison }) => {
   const buildTablePlans = comparison?.buildPlans ?? defaultBuildTablePlans;
   const careTablePlans = comparison?.carePlans ?? defaultCareTablePlans;
+  const buildTabLabels = tabLabels(buildTablePlans.map((p) => p.name));
+  const careTabLabels = tabLabels(careTablePlans.map((p) => p.name));
   const buildComparisonData = comparison?.buildRows ?? defaultBuildComparisonData;
   const careComparisonRows = comparison?.careRows ?? defaultCareComparisonRows;
 
@@ -420,12 +437,13 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                     onClick={() => setSelectedMobileBuildIdx(idx)}
                     className={cn(
                       "py-1.5 px-1 rounded-lg text-xs font-bold transition-all cursor-pointer truncate",
+                      buildTabLabels[idx].length > 8 && "px-0.5 text-[11px] tracking-tight",
                       selectedMobileBuildIdx === idx
                         ? "bg-foreground text-background shadow-xs"
                         : "text-muted-foreground hover:text-foreground",
                     )}
                   >
-                    {plan.name.split(" ")[0]}
+                    {buildTabLabels[idx]}
                   </button>
                 ))}
               </div>
@@ -545,12 +563,13 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                     onClick={() => setSelectedMobileCareIdx(idx)}
                     className={cn(
                       "py-1.5 px-1 rounded-lg text-xs font-bold transition-all cursor-pointer truncate",
+                      careTabLabels[idx].length > 8 && "px-0.5 text-[11px] tracking-tight",
                       selectedMobileCareIdx === idx
                         ? "bg-foreground text-background shadow-xs"
                         : "text-muted-foreground hover:text-foreground",
                     )}
                   >
-                    {plan.name.split(" ")[0]}
+                    {careTabLabels[idx]}
                   </button>
                 ))}
               </div>

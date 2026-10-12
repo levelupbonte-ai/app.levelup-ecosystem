@@ -268,9 +268,9 @@ export function ContactForm() {
           <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/10 p-3.5 text-xs text-amber-900 transition-all dark:text-amber-200/95">
             <Clock className="mt-0.5 size-4 shrink-0 text-amber-700 dark:text-amber-400" />
             <div className="space-y-1">
-              <p className="font-semibold text-amber-800 dark:text-amber-300">Priority Waitlist Active</p>
+              <p className="font-semibold text-amber-800 dark:text-amber-300">Waitlist Active</p>
               <p className="leading-relaxed">
-                Immediate build capacity is currently full. Your request has been placed on our priority waitlist (estimated 3 to 5 business days turnaround). Our team will review your project details as soon as a development slot opens. A confirmation email has been sent to your inbox.
+                We are currently working on other projects, so your request has been placed on our waitlist (review typically within 3 to 5 business days). We will review your project details as soon as we can start. A confirmation email has been sent to your inbox.
               </p>
             </div>
           </div>
@@ -282,7 +282,7 @@ export function ContactForm() {
             <div className="space-y-1">
               <p className="font-semibold text-purple-800 dark:text-purple-300">Preview Request Received</p>
               <p className="leading-relaxed">
-                Thank you! Our team has received your submission. We will prepare your functional mobile preview within 24 to 48 hours. A confirmation email has been sent to your inbox.
+                Thank you! We have received your submission. We will prepare your functional mobile preview within 24 to 48 hours. A confirmation email has been sent to your inbox.
               </p>
             </div>
           </div>
