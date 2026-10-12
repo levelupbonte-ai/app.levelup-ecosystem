@@ -1552,7 +1552,13 @@ function build(c: Copy, locale: Locale, compact: boolean): DemoBuild {
   };
 }
 
-export function StudioDemo({ active }: { active?: boolean }) {
+export function StudioDemo({
+  active,
+  scrub,
+}: {
+  active?: boolean;
+  scrub?: "self" | (() => number);
+}) {
   const locale = useLocale();
   const c = COPY[locale];
   const builder = useCallback(
@@ -1573,6 +1579,7 @@ export function StudioDemo({ active }: { active?: boolean }) {
       tone="dark"
       active={active}
       prepare={prepare}
+      scrub={scrub}
     />
   );
 }

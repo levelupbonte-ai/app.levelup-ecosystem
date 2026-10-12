@@ -1086,7 +1086,13 @@ function build(c: Copy, compact: boolean): DemoBuild {
   };
 }
 
-export function DashboardDemo({ active }: { active?: boolean }) {
+export function DashboardDemo({
+  active,
+  scrub,
+}: {
+  active?: boolean;
+  scrub?: "self" | (() => number);
+}) {
   const locale = useLocale();
   const c = COPY[locale];
   const builder = useCallback((compact: boolean) => build(c, compact), [c]);
@@ -1113,6 +1119,7 @@ export function DashboardDemo({ active }: { active?: boolean }) {
       tone="light"
       active={active}
       prepare={prepare}
+      scrub={scrub}
     />
   );
 }

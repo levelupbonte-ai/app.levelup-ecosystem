@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
@@ -149,6 +149,32 @@ export function HowItWorks() {
   const t = COPY[locale];
   const [active, setActive] = useState(0);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [wide, setWide] = useState(false);
+
+  // Desktop: the demos are scrubbed by the scroll through their step (the
+  // panel is sticky). Elsewhere each demo is scrubbed by its own travel
+  // through the viewport (`"self"`).
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setWide(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const stepProgress = useCallback((i: number) => {
+    const el = stepRefs.current[i];
+    if (!el) return 0;
+    const r = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // 0 when the step reaches the activation band (50% of the viewport),
+    // 1 when it has just left it (45%): the whole step is the timeline.
+    return (0.5 * vh - r.top) / (0.05 * vh + r.height);
+  }, []);
+  const scrubs = useMemo(
+    () => [0, 1, 2].map((i) => () => stepProgress(i)),
+    [stepProgress],
+  );
 
   // The step crossing the middle of the viewport drives the sticky panel.
   useEffect(() => {
@@ -169,13 +195,17 @@ export function HowItWorks() {
     return () => observer.disconnect();
   }, []);
 
-  const renderPanel = (panel: Panel, isActive: boolean) =>
+  const renderPanel = (
+    panel: Panel,
+    isActive: boolean,
+    scrub: "self" | (() => number),
+  ) =>
     panel === "brief" ? (
       <BriefPanel t={t.brief} active={isActive} />
     ) : panel === "studio" ? (
-      <LazyStudioDemo active={isActive} />
+      <LazyStudioDemo active={isActive} scrub={scrub} />
     ) : (
-      <LazyDashboardDemo active={isActive} />
+      <LazyDashboardDemo active={isActive} scrub={scrub} />
     );
 
   return (
@@ -219,7 +249,9 @@ export function HowItWorks() {
                   }}
                   data-step={i}
                   className={cn(
-                    "border-ink-foreground/12 border-b py-10 transition-opacity duration-500 lg:flex lg:min-h-[62svh] lg:items-center lg:py-12",
+                    "border-ink-foreground/12 border-b py-10 transition-opacity duration-500 lg:flex lg:items-center lg:py-12",
+                    // The live demos are scrubbed by scrolling through their step.
+                    i === 0 ? "lg:min-h-[62svh]" : "lg:min-h-[115svh]",
                     i === 0 && "border-t",
                     active === i ? "lg:opacity-100" : "lg:opacity-35",
                   )}
@@ -251,7 +283,7 @@ export function HowItWorks() {
                       </div>
                       {/* Phones and tablets: the panel sits under its step. */}
                       <div className="mt-8 lg:hidden">
-                        {renderPanel(step.panel, true)}
+                        {renderPanel(step.panel, true, "self")}
                       </div>
                     </div>
                   </div>
@@ -276,7 +308,7 @@ export function HowItWorks() {
                         : "pointer-events-none translate-y-3 opacity-0",
                     )}
                   >
-                    {renderPanel(step.panel, active === i)}
+                    {renderPanel(step.panel, active === i, wide ? scrubs[i] : "self")}
                   </div>
                 ))}
               </div>

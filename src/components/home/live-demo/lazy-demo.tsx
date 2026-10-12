@@ -102,14 +102,28 @@ function useNear<T extends Element>() {
   return [ref, near] as const;
 }
 
-export function LazyStudioDemo({ active }: { active?: boolean }) {
+type Scrub = "self" | (() => number);
+
+export function LazyStudioDemo({
+  active,
+  scrub,
+}: {
+  active?: boolean;
+  scrub?: Scrub;
+}) {
   const [ref, near] = useNear<HTMLDivElement>();
-  if (near) return <StudioDemo active={active} />;
+  if (near) return <StudioDemo active={active} scrub={scrub} />;
   return <StudioSlot holder={ref} />;
 }
 
-export function LazyDashboardDemo({ active }: { active?: boolean }) {
+export function LazyDashboardDemo({
+  active,
+  scrub,
+}: {
+  active?: boolean;
+  scrub?: Scrub;
+}) {
   const [ref, near] = useNear<HTMLDivElement>();
-  if (near) return <DashboardDemo active={active} />;
+  if (near) return <DashboardDemo active={active} scrub={scrub} />;
   return <DashboardSlot holder={ref} />;
 }

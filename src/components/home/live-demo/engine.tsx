@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -298,6 +299,7 @@ function Playback({
   playing,
   reduced,
   restartKey,
+  getProgress,
 }: {
   build: (compact: boolean) => DemoBuild;
   compact: boolean;
@@ -305,7 +307,10 @@ function Playback({
   playing: boolean;
   reduced: boolean;
   restartKey: number;
+  /** Scroll-scrubbed demo: returns 0..1; the clock follows it (no loop). */
+  getProgress?: () => number;
 }) {
+  const scrubbed = Boolean(getProgress);
   const built = useMemo(() => build(compact), [build, compact]);
   const { script } = built;
   const dw = compact ? Math.min(460, Math.max(340, width)) : 1040;
@@ -336,9 +341,10 @@ function Playback({
       firstRestart.current = false;
       return;
     }
+    if (scrubbed) return; // scroll position owns the clock
     clock.set(reduced ? script.finalAt : 0);
     setEpoch((e) => e + 1);
-  }, [restartKey, clock, reduced, script.finalAt]);
+  }, [restartKey, clock, reduced, script.finalAt, scrubbed]);
 
   // Camera, pointer and the cross-fade of the loop: written every frame.
   useLayoutEffect(() => {
@@ -392,8 +398,9 @@ function Playback({
       last.current = { scale: S, tx, ty };
 
       /* loop fade (the epoch swap happens while fully transparent) */
-      const fade =
-        Math.min(1, t / 500) * Math.min(1, (script.duration - t) / 600);
+      const fade = scrubbed
+        ? Math.min(1, 0.4 + t / 300) // scrubbed: no outro, back to the start is a clean frame
+        : Math.min(1, t / 500) * Math.min(1, (script.duration - t) / 600);
       layer.dataset.ldT = String(Math.round(t)); // read by the visual QA harness
       layer.style.opacity = String(clamp01(fade));
       layer.style.transform = `translate(${tx}px, ${ty}px) scale(${S})`;
@@ -471,11 +478,32 @@ function Playback({
 
     frame(clock.t);
     return clock.onFrame(frame);
-  }, [clock, script, width, dw, dh, s, rig, reduced]);
+  }, [clock, script, width, dw, dh, s, rig, reduced, scrubbed]);
+
+  // Scroll-scrubbed: the clock eases toward (scroll progress x timeline), so
+  // the scenario builds as the page scrolls, forward and backward.
+  useEffect(() => {
+    if (!playing || !getProgress) return;
+    let raf = 0;
+    let prev = 0;
+    let cur = -1;
+    const span = Math.max(1, clock.duration - 500);
+    const tick = (now: number) => {
+      const dt = prev ? Math.min(now - prev, 64) : 16;
+      prev = now;
+      const target = clamp01(getProgress()) * span;
+      cur = cur < 0 ? target : cur + (target - cur) * (1 - Math.exp(-dt / 140));
+      if (Math.abs(target - cur) < 0.5) cur = target;
+      if (cur !== clock.t) clock.set(cur);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [playing, clock, getProgress]);
 
   // The player.
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || getProgress) return;
     let raf = 0;
     let prev = 0;
     const tick = (now: number) => {
@@ -491,7 +519,7 @@ function Playback({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [playing, clock]);
+  }, [playing, clock, getProgress]);
 
   return (
     <ClockContext.Provider value={clock}>
@@ -548,6 +576,7 @@ export function LiveDemo({
   tone,
   active = true,
   prepare,
+  scrub,
 }: {
   label: ReactNode;
   status: string;
@@ -560,6 +589,11 @@ export function LiveDemo({
   active?: boolean;
   /** Resources to have ready before the first frame (fonts). */
   prepare?: () => Promise<unknown> | undefined;
+  /**
+   * Scroll-scrubbed playback: "self" (progress of the window itself through
+   * the viewport) or a function returning 0..1. Unset = plays on its own.
+   */
+  scrub?: "self" | (() => number);
 }) {
   const vpRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -636,6 +670,17 @@ export function LiveDemo({
     return () => ro.disconnect();
   }, []);
 
+  const getProgress = useCallback(() => {
+    if (scrub === "self") {
+      const el = vpRef.current;
+      if (!el) return 0;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 as the window's centre enters at 86% of the viewport, 1 at 36%.
+      return clamp01((0.86 * vh - (r.top + r.height / 2)) / (0.5 * vh));
+    }
+    return scrub ? scrub() : 0;
+  }, [scrub]);
   const compact = width > 0 && width < 520;
   const playing = ready && width > 0 && onScreen && tabVisible && active;
 
@@ -660,6 +705,7 @@ export function LiveDemo({
               playing={playing && !reduced}
               reduced={reduced}
               restartKey={restart}
+              getProgress={scrub ? getProgress : undefined}
             />
           )}
         </div>
