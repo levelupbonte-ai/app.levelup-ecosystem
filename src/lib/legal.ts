@@ -3,7 +3,7 @@ import "server-only";
 import fs from "node:fs";
 import path from "node:path";
 
-import { Marked, type Token, type Tokens } from "marked";
+import { Marked, type Renderer, type Token, type Tokens } from "marked";
 
 import type { Locale } from "@/lib/locale";
 import type { LegalSlug } from "@/lib/legal-docs";
@@ -52,19 +52,20 @@ export function getLegalDoc(slug: LegalSlug, locale: Locale): LegalDoc {
   const source = fs.readFileSync(path.join(DIR, `${key}.md`), "utf8");
   const toc: LegalDoc["toc"] = [];
   const tableLabel = locale === "fr" ? "Tableau" : "Table";
+  let tableCount = 0;
 
   const marked = new Marked({
     gfm: true,
     breaks: true,
     renderer: {
-      heading(this: any, { tokens, depth }: Tokens.Heading) {
+      heading(this: Renderer, { tokens, depth }: Tokens.Heading) {
         const inner = this.parser.parseInline(tokens) as string;
         const text = stripTags(inner);
         const id = headingId(text);
         if (depth === 2) toc.push({ id, text });
         return `<h${depth} id="${id}"><a href="#${id}">${inner}</a></h${depth}>\n`;
       },
-      paragraph(this: any, { tokens }: Tokens.Paragraph) {
+      paragraph(this: Renderer, { tokens }: Tokens.Paragraph) {
         const html = (this.parser.parseInline(tokens) as string).replace(
           /(^|<br>\s*)(\d{1,2}\.\d{1,2})(?=\s)/g,
           '$1<span class="lu-clause">$2</span>'
@@ -75,7 +76,7 @@ export function getLegalDoc(slug: LegalSlug, locale: Locale): LegalDoc {
           .map((p) => `<p>${p}</p>\n`)
           .join("");
       },
-      table(this: any, token: Tokens.Table) {
+      table(this: Renderer, token: Tokens.Table) {
         const head = token.header
           .map(
             (c, i) =>
@@ -93,9 +94,9 @@ export function getLegalDoc(slug: LegalSlug, locale: Locale): LegalDoc {
                 .join("")}</tr>`
           )
           .join("");
-        return `<div class="lu-table" role="region" aria-label="${tableLabel}" tabindex="0"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>\n`;
+        return `<div class="lu-table" role="region" aria-label="${tableLabel} ${++tableCount}" tabindex="0"><table><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>\n`;
       },
-      link(this: any, { href, title, tokens }: Tokens.Link) {
+      link(this: Renderer, { href, title, tokens }: Tokens.Link) {
         const inner = this.parser.parseInline(tokens) as string;
         const external = /^https?:\/\//.test(href);
         const t = title ? ` title="${title}"` : "";

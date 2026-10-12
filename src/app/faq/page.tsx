@@ -121,7 +121,7 @@ export default async function FAQPage() {
       />
       <Background>
         <div className="py-28 lg:py-32 lg:pt-44">
-          <FAQ categories={faqCategories} />
+          <FAQ categories={faqCategories} headerTag="h1" />
           <DashedLine className="container max-w-5xl scale-x-115 my-12" />
           <Testimonials items={testimonials} />
         </div>

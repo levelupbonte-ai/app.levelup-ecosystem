@@ -152,6 +152,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: unknown) {
     // Logged on the server only; the visitor gets a generic answer.
+    // eslint-disable-next-line no-console
     console.error("[send-email]", err);
     return NextResponse.json({ error: GENERIC_ERROR }, { status: 500 });
   }

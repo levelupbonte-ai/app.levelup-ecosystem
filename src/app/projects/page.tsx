@@ -71,7 +71,7 @@ export default async function ProjectsPage() {
         {/* Animated Project Showcases (Final Stop & Le Dernier Retrouvailles with identical scroll animation) */}
         <div className="mt-4 space-y-12 sm:mt-6 md:-mt-24 md:space-y-0">
           {projects.map((project) => (
-            <ProjectShowcase key={project.id} item={project} showExploreButton={false} />
+            <ProjectShowcase key={project.id} item={project} showExploreButton={false} headingAs="h2" />
           ))}
         </div>
 

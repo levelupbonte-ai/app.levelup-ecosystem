@@ -183,7 +183,7 @@ function WindowFrame({
             />
           ))}
         </div>
-        <span className="font-label text-ink-foreground/45 truncate text-xs">
+        <span className="font-label text-ink-foreground/60 truncate text-xs">
           {label}
         </span>
       </div>
@@ -289,7 +289,7 @@ function DashboardPanel({ t }: { t: (typeof COPY)["en"]["dashboard"] }) {
                 "truncate rounded-md px-2.5 py-1.5",
                 i === 1
                   ? "bg-ink-foreground/10 text-ink-foreground"
-                  : "text-ink-foreground/45",
+                  : "text-ink-foreground/60",
               )}
             >
               {item}

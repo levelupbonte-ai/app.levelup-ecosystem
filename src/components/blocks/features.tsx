@@ -31,9 +31,11 @@ const items: ProjectItem[] = allProjects;
 function DesktopPinnedBarberShopShowcase({
   item,
   showExploreButton = true,
+  headingAs: Title = "h3",
 }: {
   item: ProjectItem;
   showExploreButton?: boolean;
+  headingAs?: "h2" | "h3";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -161,15 +163,15 @@ function DesktopPinnedBarberShopShowcase({
                     href={item.href}
                     className="group/title block"
                   >
-                    <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                    <Title className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
                       {item.title}
-                    </h3>
+                    </Title>
                   </a>
                 ) : (
                   <Link href={item.href} className="group/title block">
-                    <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+                    <Title className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
                       {item.title}
-                    </h3>
+                    </Title>
                   </Link>
                 )}
               </motion.div>
@@ -238,7 +240,7 @@ function DesktopPinnedBarberShopShowcase({
 /**
  * Mobile Scroll-driven Word-by-word Reveal:
  * As the user scrolls down on mobile, each word smoothly illuminates from
- * dimmed (opacity 0.22) to full crystal clarity (opacity 1.0) with zero layout shift.
+ * dimmed (opacity 0.8, enough for AA contrast) to full clarity (opacity 1.0) with zero layout shift.
  */
 function MobileScrollWord({
   word,
@@ -249,7 +251,7 @@ function MobileScrollWord({
   progress: MotionValue<number>;
   range: [number, number];
 }) {
-  const opacity = useTransform(progress, range, [0.25, 1]);
+  const opacity = useTransform(progress, range, [0.8, 1]);
 
   return (
     <motion.span
@@ -306,9 +308,11 @@ function MobileScrollTextReveal({
 function MobileScaleOnScrollItem({
   item,
   isLast,
+  headingAs: Title = "h3",
 }: {
   item: ProjectItem;
   isLast: boolean;
+  headingAs?: "h2" | "h3";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -402,15 +406,15 @@ function MobileScaleOnScrollItem({
               href={item.href}
               className="group/title block"
             >
-              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+              <Title className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
                 {item.title}
-              </h3>
+              </Title>
             </a>
           ) : (
             <Link href={item.href} className="group/title block">
-              <h3 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
+              <Title className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground group-hover/title:text-primary transition-colors leading-tight">
                 {item.title}
-              </h3>
+              </Title>
             </Link>
           )}
 
@@ -458,17 +462,20 @@ function MobileScaleOnScrollItem({
 export function BarberShopShowcase({
   item = items[0],
   showExploreButton = true,
+  headingAs = "h3",
 }: {
   item?: ProjectItem;
   showExploreButton?: boolean;
+  /** Heading level of the project title (h2 on pages whose only heading above is the h1). */
+  headingAs?: "h2" | "h3";
 }) {
   return (
     <div className="relative">
       {/* Desktop: Pinned scrub animation with original design */}
-      <DesktopPinnedBarberShopShowcase item={item} showExploreButton={showExploreButton} />
+      <DesktopPinnedBarberShopShowcase item={item} showExploreButton={showExploreButton} headingAs={headingAs} />
 
       {/* Mobile: Exact original scale-on-scroll layout with mobile pan */}
-      <MobileScaleOnScrollItem item={item} isLast={true} />
+      <MobileScaleOnScrollItem item={item} isLast={true} headingAs={headingAs} />
     </div>
   );
 }

@@ -447,7 +447,7 @@ export const Pricing = ({
             <PremiumTextSectionReveal
               heading="Transparent Pricing. Zero Hidden Fees."
               description="Choose a turnkey website build or ongoing monthly care. Clean deliverables, fast mobile speeds, and your content, brand and data always yours."
-              headingAs="h2"
+              headingAs="h1"
               headingClassName="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]"
               descriptionClassName="mt-3 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto"
               align="center"
@@ -545,9 +545,9 @@ export const Pricing = ({
                         </div>
 
                         {/* Title & Subtitle */}
-                        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
+                        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                           {plan.name}
-                        </h3>
+                        </h2>
                         <p className="text-xs text-muted-foreground leading-relaxed mt-1 line-clamp-2 min-h-[34px]">
                           {plan.subtitle}
                         </p>
@@ -623,9 +623,9 @@ export const Pricing = ({
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 border-b border-border/70">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                      <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground font-sans">
                         {activeExpandedPlan.name}
-                      </h3>
+                      </h2>
                       {activeExpandedPlan.badge && (
                         <span
                           className={cn(
@@ -807,9 +807,9 @@ export const Pricing = ({
                       key={idx}
                       className="p-5 sm:p-6 rounded-2xl border border-border/70 bg-muted/20 space-y-3"
                     >
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-foreground font-mono">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-foreground font-mono">
                         {group.category}
-                      </h4>
+                      </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                         {group.items.map((item, iIdx) => (
                           <div
