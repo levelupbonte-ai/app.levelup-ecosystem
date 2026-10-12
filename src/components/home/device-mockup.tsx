@@ -1,11 +1,8 @@
-import type { CSSProperties } from "react";
-
 import { cn } from "@/lib/utils";
 
 /**
  * Desktop browser capture with a phone overlapping one corner; the phone
- * scrolls the long mobile capture by itself (CSS transform loop, paused by a
- * parent data-live="false", off under reduced motion).
+ * shows the top of the mobile capture, still.
  */
 export function DeviceMockup({
   domain,
@@ -61,10 +58,7 @@ export function DeviceMockup({
         )}
       >
         <div className="border-foreground/85 bg-foreground rounded-[1.6rem] border-[5px] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.5)] sm:rounded-[2rem] sm:border-[6px]">
-          <div
-            className="relative aspect-[9/19] overflow-hidden rounded-[1.25rem] bg-black sm:rounded-[1.6rem]"
-            style={{ containerType: "size" } as CSSProperties}
-          >
+          <div className="relative aspect-[9/19] overflow-hidden rounded-[1.25rem] bg-black sm:rounded-[1.6rem]">
             {/* eslint-disable-next-line @next/next/no-img-element -- decorative long capture */}
             <img
               src={mobile}
@@ -73,14 +67,7 @@ export function DeviceMockup({
               alt=""
               loading="lazy"
               decoding="async"
-              className="lu-loop block w-full"
-              style={
-                {
-                  "--phone-h": "100cqh",
-                  animation:
-                    "lu-phone-scroll 16s cubic-bezier(0.45,0,0.55,1) infinite alternate",
-                } as CSSProperties
-              }
+              className="block w-full"
             />
           </div>
         </div>
