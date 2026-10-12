@@ -73,9 +73,6 @@ function Wordmark() {
       />
       <span className="text-foreground text-[1.4rem] leading-none tracking-[-0.03em]">
         LevelUp
-      </span>{" "}
-      <span className="font-label text-muted-foreground mt-1 hidden text-[11px] leading-none tracking-tight sm:inline">
-        Ecosystem
       </span>
     </span>
   );
