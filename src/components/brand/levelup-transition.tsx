@@ -4,6 +4,13 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 
+import {
+  applySectionTheme,
+  holdSectionTheme,
+  sectionEdgeColor,
+  sectionForPath
+} from "@/lib/section-theme";
+
 /**
  * LevelUp signature transition for Next.js (app router).
  *
@@ -12,6 +19,9 @@ import { usePathname, useRouter } from "next/navigation";
  * wipe (see docs/levelup-transition.md). This file wires it to the router:
  *  - internal links: cover → router.push → wait for the new route → reveal;
  *  - links to other LevelUp apps (studio., dashboard.): cover → full load.
+ * Section themes: the panel edge takes the destination section's colour, and
+ * the new section's palette is applied when the panel starts to lift, so the
+ * ~600 ms colour morph is seen on the revealed page (see lib/section-theme.ts).
  * Under prefers-reduced-motion the module stays out of the way and links
  * behave natively.
  */
@@ -89,10 +99,23 @@ export function LevelUpTransitions() {
         return;
       }
       busyRef.current = true;
+      const html = document.documentElement;
+      const targetPath = href.split(/[?#]/)[0] || "/";
+      const section = sectionForPath(targetPath);
+      const onPhase = (event: Event) => {
+        const phase = (event as CustomEvent<{ phase?: string }>).detail?.phase;
+        if (phase === "reveal") {
+          applySectionTheme(section);
+          holdSectionTheme(false);
+        }
+      };
       try {
         router.prefetch(href);
+        const edge = sectionEdgeColor(section);
+        if (edge) html.style.setProperty("--lu-edge", edge);
+        holdSectionTheme(true);
+        document.addEventListener("lu-transition", onPhase);
         await api.cover();
-        const targetPath = href.split(/[?#]/)[0] || "/";
         const arrived = new Promise<void>((resolve) => {
           if (targetPath === pathRef.current) {
             window.setTimeout(resolve, 80);
@@ -100,13 +123,17 @@ export function LevelUpTransitions() {
           }
           arrivedRef.current = resolve;
           // Never stay covered: slow networks still get the page back.
-          window.setTimeout(resolve, 4000);
+          window.setTimeout(resolve, 10000);
         });
         push();
         await arrived;
         await nextFrames();
         await api.reveal();
       } finally {
+        document.removeEventListener("lu-transition", onPhase);
+        applySectionTheme(sectionForPath(pathRef.current));
+        holdSectionTheme(false);
+        html.style.removeProperty("--lu-edge");
         busyRef.current = false;
       }
     };
