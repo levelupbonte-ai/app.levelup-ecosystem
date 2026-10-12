@@ -39,7 +39,7 @@ export const serverAction = actionClient
         success: true,
         isWaitlisted,
         emailDelivered: false,
-        message: "Thank you! Our team has received your request.",
+        message: "Thank you! We have received your request.",
       };
     }
     if (guard === "rate_limited") throw new FormError(RATE_LIMITED_MESSAGE);
@@ -101,8 +101,8 @@ export const serverAction = actionClient
       isWaitlisted,
       emailDelivered,
       message: isWaitlisted
-        ? "High demand notice: Immediate build capacity is currently full. Your request has been placed on our priority waitlist (estimated 3 to 5 business days turnaround). Our team will review your project details as soon as a slot opens."
-        : "Thank you! Our team has received your request and will prepare your free interactive mobile preview within 24 to 48 hours.",
+        ? "We are currently working on other projects, so your request has been placed on our waitlist (review typically within 3 to 5 business days). We will review your project details as soon as we can start."
+        : "Thank you! We have received your request and will prepare your free interactive mobile preview within 24 to 48 hours.",
     };
   });
 

@@ -274,7 +274,7 @@ const jsonLdGraph = {
           "@type": "SiteNavigationElement",
           position: 5,
           name: "FAQ",
-          description: "Common questions about turnaround, content and data ownership, and local SEO.",
+          description: "Common questions about turnaround, who owns your content and data, and local SEO.",
           url: "https://levelup-ecosystem.com/faq",
         },
         {
@@ -338,7 +338,7 @@ const jsonLdGraph = {
         "@id": "https://levelup-ecosystem.com/#org",
       },
       description:
-        "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio based in San Diego, California. He is a first-year cybersecurity student, originally from the Democratic Republic of Congo, and builds websites with AI-assisted development: he directs AI tools, tests every page and reviews security settings before launch.",
+        "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio founded in San Diego, California. He is a first-year cybersecurity student, originally from the Democratic Republic of Congo, and builds websites with AI-assisted development: he directs AI tools, tests every page and reviews security settings before launch.",
       url: "https://levelup-ecosystem.com/about",
       homeLocation: {
         "@type": "Place",

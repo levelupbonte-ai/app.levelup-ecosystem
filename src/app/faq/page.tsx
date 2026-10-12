@@ -60,7 +60,7 @@ const defaultFaqJsonLd = {
       name: "Can you help our business rank higher on Google Maps in San Diego?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "We can help. Every website we build is set up for local search: structured Schema.org markup, Google Business Profile linking, mobile-first pages and your business location, so nearby customers can find you. No one can guarantee a ranking on Google.",
+        text: "We can help. Every website we build is set up for local search: structured Schema.org markup, Google Business Profile linking, mobile-first pages and your business location, so nearby customers can find you. Rankings are decided by Google, so no one can promise you a position.",
       },
     },
     {

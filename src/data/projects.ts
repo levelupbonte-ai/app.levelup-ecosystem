@@ -31,7 +31,7 @@ export const defaultProjects: ProjectItem[] = [
     badge: "Client Project • Digital Experience",
     title: "Wedding Invitation",
     description:
-      "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and instant confirmation.",
+      "A bespoke digital experience crafted to celebrate an unforgettable union: interactive prestige invitation, real-time online RSVP management, ceremony & reception itinerary, and automatic confirmation.",
     image: "/projects/wedding-card.jpg",
     href: "/projects/wedding-invitation",
     external: false,

@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Web Services & Solutions | LevelUp Ecosystem",
     description:
-      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators, from an online studio based in San Diego, CA.",
+      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators, from an online studio founded in San Diego, CA.",
     url: "/services",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -103,7 +103,7 @@ export default function ServicesPage() {
                 <p className="text-muted-foreground leading-relaxed">
                   Tailored for barbershops, boutique hair salons, wellness clinics, personal trainers, and local contractors.
                   We replace endless phone tag and missed calls with a frictionless mobile booking flow connected directly
-                  to your calendar and payment provider (Square, Calendly, Acuity, or Stripe).
+                  to your calendar, with online payments if you need them.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/60">
@@ -131,7 +131,7 @@ export default function ServicesPage() {
                       <span>Google Maps Optimization</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Structured local business data to improve ranking on Google Maps and local search.
+                      Structured local business data to help you show up on Google Maps and in local search.
                     </p>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function ServicesPage() {
                       <span>Database &amp; API Key Isolation</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Ensures customer data and private credentials are never exposed in public frontend code.
+                      Checks that customer data and private credentials are not exposed in public frontend code.
                     </p>
                   </div>
                   <div className="space-y-1">
@@ -241,7 +241,7 @@ export default function ServicesPage() {
                       <span>Daily Offsite Backups</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Automatic snapshots taken every day so your site can be restored in minutes if needed.
+                      Automatic snapshots taken every day so your site can be restored if needed.
                     </p>
                   </div>
                   <div className="space-y-1">
@@ -259,7 +259,7 @@ export default function ServicesPage() {
                       <span>24/7 Uptime &amp; SSL Checks</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Continuous monitoring ensures your site remains accessible and secure around the clock.
+                      Automated uptime monitoring alerts us if your site goes down, so we can act quickly.
                     </p>
                   </div>
                 </div>
@@ -310,7 +310,7 @@ export default function ServicesPage() {
           <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
             Request a free interactive preview built for your phone within 24 to 48 hours. No upfront payment required.
           </p>
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
               <Link href="/contact">
                 Request free preview

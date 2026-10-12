@@ -111,7 +111,7 @@ const buildPlans: PlanItem[] = [
           { text: "Live 2-way calendar integration (Google, Apple, Square, Calendly)", included: true },
           { text: "Automated appointment email confirmations to reduce no-shows", included: true },
           { text: "Lead capture & notification pipeline", included: true },
-          { text: "Instant email notifications for new bookings", included: true },
+          { text: "Email notifications for new bookings", included: true },
           { text: "Google Business Profile setup & integration assistance", included: true },
           { text: "Advanced interactive contact/lead intake forms", included: true },
         ],
