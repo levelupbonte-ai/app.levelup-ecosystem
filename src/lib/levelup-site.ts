@@ -15,6 +15,7 @@ import "server-only";
 
 import { cache } from "react";
 
+import { neutralizeClaims } from "@/lib/marketing-claims";
 import { PLATFORM_CONFIGURED, callPlatform } from "@/lib/platform-api";
 
 import type { FaqCategory } from "@/components/blocks/faq";
@@ -98,7 +99,7 @@ function isObject(value: unknown): value is Json {
 function str(value: unknown, max = 4000): string | null {
   if (typeof value !== "string") return null;
   const trimmed = value.trim();
-  return trimmed ? trimmed.slice(0, max) : null;
+  return trimmed ? neutralizeClaims(trimmed).slice(0, max) : null;
 }
 
 function objects(value: unknown, max = 500): Json[] {

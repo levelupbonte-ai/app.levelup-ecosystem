@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Featured Projects & Case Studies | LevelUp Ecosystem",
     description:
-      "Explore real web design case studies and live client sites engineered for conversion, automated scheduling, and sub-2-second load times.",
+      "Explore real web design case studies and live client sites engineered for conversion, automated scheduling, and fast mobile performance.",
     url: "/projects",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -71,7 +71,7 @@ export default async function ProjectsPage() {
         {/* Animated Project Showcases (Final Stop & Le Dernier Retrouvailles with identical scroll animation) */}
         <div className="mt-4 space-y-12 sm:mt-6 md:-mt-24 md:space-y-0">
           {projects.map((project) => (
-            <ProjectShowcase key={project.id} item={project} showExploreButton={false} />
+            <ProjectShowcase key={project.id} item={project} showExploreButton={false} headingAs="h2" />
           ))}
         </div>
 

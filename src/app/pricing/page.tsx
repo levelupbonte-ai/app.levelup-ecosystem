@@ -10,7 +10,7 @@ import { getPricingContent } from "@/lib/levelup-site";
 export const metadata: Metadata = {
   title: "Transparent Pricing & Website Offers | LevelUp Ecosystem",
   description:
-    "Explore our 4 transparent web architecture plans: Starter ($850), Secure ($1,500), Secure + Care ($1,500 + $99/mo), and Custom Build ($3,000+). 100% code ownership.",
+    "Explore our 4 transparent web architecture plans: Starter ($850), Secure ($1,500), Secure + Care ($1,500 + $99/mo), and Custom Build ($3,000+). Your content, brand and data stay yours.",
   alternates: {
     canonical: "/pricing",
   },

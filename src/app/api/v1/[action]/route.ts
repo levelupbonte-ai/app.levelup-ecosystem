@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { allow, clientIp } from "@/lib/form-guard";
 import { callPlatform } from "@/lib/platform-api";
 
 /**
@@ -78,6 +79,7 @@ const ACTIONS: Record<string, Action> = {
   },
 };
 
+const WRITES = new Set(["forms", "appointments", "waitlist-join"]);
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_STRING = 10_000;
 const SITE_ID = /^ws_[a-z0-9]{8,32}$/;
@@ -145,6 +147,17 @@ export async function POST(
 
   if (typeof body.site !== "string" || !SITE_ID.test(body.site))
     return fail(request, "invalid");
+
+  // Writes: honeypot (`_hp`, a field real visitors never fill in) and a
+  // best-effort per-IP window; the platform enforces the authoritative limits.
+  if (WRITES.has(name)) {
+    if (typeof body._hp === "string" && body._hp.trim() !== "") {
+      return NextResponse.json({ ok: true }, { headers: cors(request) });
+    }
+    if (!allow(`v1:${name}:${clientIp(request.headers)}`, 30, 10 * 60 * 1000)) {
+      return fail(request, "PT429");
+    }
+  }
 
   const args: Record<string, unknown> = {};
   for (const [key, [arg, type]] of Object.entries(action.args)) {

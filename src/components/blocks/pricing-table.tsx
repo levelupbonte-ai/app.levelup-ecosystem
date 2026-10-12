@@ -34,7 +34,7 @@ const defaultBuildTablePlans: BuildTablePlan[] = [
     id: "starter",
     name: "Starter",
     buildPrice: "$850",
-    monthlyPrice: "No monthly fee",
+    monthlyPrice: "Hosted on a care plan",
     ctaText: "Choose Starter",
     ctaHref: "/contact?plan=starter",
   },
@@ -42,7 +42,7 @@ const defaultBuildTablePlans: BuildTablePlan[] = [
     id: "secure",
     name: "Secure",
     buildPrice: "$1,500",
-    monthlyPrice: "No monthly fee",
+    monthlyPrice: "Hosted on a care plan",
     badge: "Business Engine",
     ctaText: "Choose Secure",
     ctaHref: "/contact?plan=secure",
@@ -123,8 +123,8 @@ const defaultBuildComparisonData: ComparisonCategory[] = [
       },
       {
         name: "Monthly Care Commitment",
-        starter: "Optional Care",
-        secure: "Optional Care",
+        starter: "Care plan required",
+        secure: "Care plan required",
         care: "1 Year Included",
         custom: "Custom",
       },
@@ -157,7 +157,7 @@ const defaultBuildComparisonData: ComparisonCategory[] = [
         custom: true,
       },
       {
-        name: "100% Code Ownership",
+        name: "Your content, brand & data stay yours",
         starter: true,
         secure: true,
         care: true,
@@ -249,7 +249,7 @@ const defaultBuildComparisonData: ComparisonCategory[] = [
     category: "Security & Performance",
     rows: [
       {
-        name: "Sub-2s Speed Optimization",
+        name: "Mobile Speed Optimization",
         starter: true,
         secure: true,
         care: true,

@@ -13,6 +13,7 @@ import {
   type ProjectRequestPayload,
 } from "@/lib/project-requests";
 import { TEAM_INBOX, sendBrandedEmail } from "@/lib/resend";
+import { clientIp, guardSubmission } from "@/lib/form-guard";
 import { registerSubmission } from "@/lib/supabase";
 
 // "Start a project" studio. The finished brief is:
@@ -45,6 +46,9 @@ const Body = z.object({
   eta_min: z.string().max(20).optional(),
   eta_max: z.string().max(20).optional(),
   locale: z.enum(["fr", "en"]).optional(),
+  // Anti-spam signals (see lib/form-guard): honeypot + when the studio opened.
+  hp: z.string().max(200).optional(),
+  started: z.number().optional(),
   answers: z
     .record(z.string().max(40), Answer)
     .refine((a) => Object.keys(a).length <= 70),
@@ -189,7 +193,19 @@ export async function POST(request: NextRequest) {
   const parsed = Body.safeParse(await request.json().catch(() => null));
   if (!parsed.success)
     return NextResponse.json({ error: "invalid" }, { status: 400 });
-  const brief = parsed.data;
+  const { hp, started, ...brief } = parsed.data;
+  // Bots get a normal-looking answer; nothing is stored or sent.
+  const guard = guardSubmission({
+    honeypot: hp,
+    startedAt: started,
+    ip: clientIp(request.headers),
+    bucket: "brief",
+    max: 8,
+    windowMs: 10 * 60 * 1000,
+  });
+  if (guard === "bot") return NextResponse.json({ ok: true, filtered: true });
+  if (guard === "rate_limited")
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   const payload = toPayload(brief);
   if (!z.string().email().max(254).safeParse(payload.email).success) {
     return NextResponse.json({ error: "invalid_email" }, { status: 400 });

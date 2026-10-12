@@ -9,7 +9,7 @@ import { LEVELSTUDIO_URL as STUDIO_URL } from "@/lib/levelup-login";
 export const metadata: Metadata = {
   title: "LevelStudio — AI Website Builder by LevelUp Ecosystem",
   description:
-    "LevelStudio turns a short brief into a real website draft in minutes: AI-guided questions, 50+ professional templates, live mobile preview, and a production build delivered by the LevelUp Ecosystem engineering team.",
+    "LevelStudio turns a short brief into a real website draft in minutes: AI-guided questions, professional templates, live mobile preview, and a production build delivered by the LevelUp Ecosystem engineering team.",
   alternates: { canonical: "/studio" },
   openGraph: {
     title: "LevelStudio — AI Website Builder by LevelUp Ecosystem",
@@ -39,7 +39,7 @@ const steps = [
 ];
 
 const features = [
-  "50+ professional templates (barbershops, salons, restaurants, stores, portfolios, events)",
+  "Professional templates (barbershops, salons, restaurants, stores, portfolios, events)",
   "AI-guided brief so the draft matches your brand",
   "Live desktop and mobile preview",
   "Share links for your team or clients",

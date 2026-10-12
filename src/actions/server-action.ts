@@ -1,20 +1,48 @@
 "use server";
 
+import { headers } from "next/headers";
+
 import { actionClient } from "./safe-action";
 
 import {
   getInternalLeadAlertHtml,
   getPreviewRequestEmailHtml,
 } from "@/lib/email-templates";
-import { formSchema } from "@/lib/form-schema";
+import {
+  FormError,
+  RATE_LIMITED_MESSAGE,
+  clientIp,
+  guardSubmission,
+} from "@/lib/form-guard";
+import { serverFormSchema } from "@/lib/form-schema";
 import { TEAM_INBOX, sendBrandedEmail } from "@/lib/resend";
 import { registerSubmission } from "@/lib/supabase";
 
 export const serverAction = actionClient
-  .inputSchema(formSchema)
+  .inputSchema(serverFormSchema)
   .action(async ({ parsedInput }) => {
     const isWaitlisted = false;
     const queuePosition = 1;
+
+    // Anti-spam: honeypot + time-to-submit + per-IP window (the database adds
+    // its own limits below). Bots get a normal-looking success, nothing is sent.
+    const guard = guardSubmission({
+      honeypot: parsedInput.hp,
+      startedAt: parsedInput.startedAt,
+      ip: clientIp(await headers()),
+      bucket: "contact",
+      max: 5,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (guard === "bot") {
+      return {
+        success: true,
+        isWaitlisted,
+        emailDelivered: false,
+        message: "Thank you! Our team has received your request.",
+      };
+    }
+    if (guard === "rate_limited") throw new FormError(RATE_LIMITED_MESSAGE);
 
     // Stored only through the rate-limited submit_form RPC (form_submissions).
     const gate = await registerSubmission({
@@ -32,9 +60,9 @@ export const serverAction = actionClient
     // Fail closed: no e-mail at all unless the submission was accepted (rate limits,
     // valid e-mail, feature enabled). Anything else could turn this into a mail relay.
     if (gate !== "ok") {
-      throw new Error(
+      throw new FormError(
         gate === "rate_limited"
-          ? "Too many requests. Please try again later."
+          ? RATE_LIMITED_MESSAGE
           : "Your request could not be sent. Please try again later.",
       );
     }

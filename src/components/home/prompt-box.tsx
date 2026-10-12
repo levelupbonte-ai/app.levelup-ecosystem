@@ -13,11 +13,12 @@ import {
 
 import { PreviewIcon } from "@/components/brand/preview-icon";
 import { loadLevelUpTransition } from "@/components/brand/levelup-transition";
+import { PROMPT_MAX, promptSchema } from "@/lib/form-schema";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
-const MAX = 500;
+const MAX = PROMPT_MAX;
 
 const COPY: Record<
   Locale,
@@ -82,8 +83,12 @@ export function PromptBox({ className }: { className?: string }) {
   const submit = (e?: FormEvent) => {
     e?.preventDefault();
     if (!text || sending) return;
+    // Same Zod rules as everywhere: control characters and < > removed,
+    // whitespace collapsed, 1 to 500 characters.
+    const parsed = promptSchema.safeParse(text);
+    if (!parsed.success) return;
     setSending(true);
-    void openStudio(text.slice(0, MAX)).finally(() => setSending(false));
+    void openStudio(parsed.data).finally(() => setSending(false));
   };
 
   return (

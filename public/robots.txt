@@ -1,18 +1,44 @@
+# LevelUp Ecosystem - https://levelup-ecosystem.com
+# Search engines and AI assistants are welcome on every public page.
+
 User-agent: *
 Allow: /
-Allow: /llms.txt
+Disallow: /api/
 
-# Explicit AI Agent & Web Search Bot access
+# AI search and assistant crawlers (explicitly allowed)
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /api/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /api/
+
+# Machine-readable summaries for AI assistants
+# /llms.txt (short) and /llms-full.txt (detailed)
 
 Sitemap: https://levelup-ecosystem.com/sitemap.xml

@@ -43,8 +43,8 @@ const COPY: Record<
     rows: [
       {
         title: "Custom websites",
-        body: "Designed from scratch around your brand, never a generic template. Fast on every phone, and the site is yours.",
-        points: ["Bespoke design", "Mobile-first", "Full ownership"],
+        body: "Designed around your brand, never a generic template. Built for speed on every phone, hosted and maintained by LevelUp. Your content, brand and data stay yours.",
+        points: ["Bespoke design", "Mobile-first", "Your data, exportable"],
       },
       {
         title: "Online booking",
@@ -71,8 +71,8 @@ const COPY: Record<
     rows: [
       {
         title: "Sites sur mesure",
-        body: "Conçus de zéro autour de votre marque, jamais un modèle générique. Rapides sur tous les téléphones, et le site vous appartient.",
-        points: ["Design sur mesure", "Mobile d’abord", "Propriété totale"],
+        body: "Conçus autour de votre marque, jamais un modèle générique. Pensés pour la vitesse sur tous les téléphones, hébergés et maintenus par LevelUp. Votre contenu, votre marque et vos données restent à vous.",
+        points: ["Design sur mesure", "Mobile d’abord", "Données exportables"],
       },
       {
         title: "Réservation en ligne",

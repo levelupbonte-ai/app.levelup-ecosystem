@@ -19,7 +19,7 @@ export const defaultProjects: ProjectItem[] = [
     title: "Final Stop Barber Shop",
     description:
       "A custom digital experience built to showcase the brand, simplify appointment booking, and turn local visitors into loyal clients on any device, anytime book appointments easily, and stay connected. Built with a seamless booking system.",
-    image: "/projects/final-stop.png",
+    image: "/projects/final-stop.webp",
     href: "https://finalstop.org",
     external: true,
     aspectRatio: "aspect-[639/298]",
@@ -94,9 +94,9 @@ export const defaultConcepts: ConceptItem[] = [
     title: "Concept Audio & Vinyl Store",
     badge: "Specialized E-Commerce",
     description:
-      "Lightweight, sub-2s mobile audio showcase with instant checkout, audio previews, and zero third-party builder bloat.",
+      "Lightweight, mobile-first audio showcase concept with checkout, audio previews, and no third-party builder bloat.",
     image: "/features/overview-card.svg",
-    tags: ["Sub-2s Mobile", "Instant Checkout", "Custom Catalog"],
+    tags: ["Mobile-first", "Checkout", "Custom Catalog"],
     ctaText: "Request preview like this",
     ctaHref: "/contact",
   },

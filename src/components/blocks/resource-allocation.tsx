@@ -38,7 +38,7 @@ const deliverables = [
     },
   },
   {
-    title: "Monthly care plan ($49/mo).",
+    title: "Monthly care plans.",
     description:
       "High-speed cloud hosting, automated daily backups, on-demand content edits, and active uptime monitoring.",
     image: {

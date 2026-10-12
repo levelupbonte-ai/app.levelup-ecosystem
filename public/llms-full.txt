@@ -1,0 +1,75 @@
+# LevelUp Ecosystem (full description)
+
+> LevelUp Ecosystem is a web design and development studio based in San Diego, California, United States, founded by Richelieu Bonte. English is the official language of the site and of the legal documents; French is provided as a translation.
+
+Official website: https://levelup-ecosystem.com
+Contact: contact@levelup-ecosystem.com (postal address available on request)
+Short version of this file: https://levelup-ecosystem.com/llms.txt
+
+This file describes what LevelUp Ecosystem offers so that assistants can answer questions accurately. It contains no prices on purpose: prices and plans change, and the pricing page is the only source of truth.
+
+## What LevelUp Ecosystem does
+
+LevelUp designs, builds, hosts and maintains websites for local businesses (for example barbershops, salons, restaurants, clinics, contractors), brands, creators and event hosts. Typical elements of a project:
+
+- Custom design around the client's brand, mobile-first, never a generic template.
+- Online booking, available 24/7, with confirmations and a dashboard to confirm, reschedule and follow up.
+- Google visibility: local SEO foundations, structured data, Google Maps integration and help with Google Business Profile setup.
+- Security basics: HTTPS, hardened settings, anti-spam protection, uptime monitoring, and website security checks (non-destructive reviews with a plain-language report).
+- Care plans (monthly): managed hosting, backups, security updates and a monthly amount of update time, depending on the plan.
+- One client dashboard for the website, bookings, requests, services, reviews and SEO.
+- Digital event experiences such as wedding invitations with online RSVP.
+
+Every project starts with a free preview: a functional, interactive draft of the site that the prospective client can test on their phone before committing.
+
+## Pricing
+
+Website projects have fixed prices and care plans are billed monthly. See https://levelup-ecosystem.com/pricing for the current plans and prices.
+
+## Ownership and licensing (summary of the Terms)
+
+- The client owns their content, logos and brand, and their customer data, and can export them.
+- LevelUp builds, hosts and maintains the site on its platform under a license; LevelUp keeps the code, templates and components and may reuse them for other clients (never the client's content, branding or data).
+- The site stays online while the client's care or platform plan is active. A code buy-out is available under a separate written agreement.
+- Read the full documents: https://levelup-ecosystem.com/terms and https://levelup-ecosystem.com/services-agreement
+
+## LevelStudio
+
+LevelStudio is the AI website builder of LevelUp Ecosystem (https://levelup-ecosystem.com/studio, app at https://studio.levelup-ecosystem.com). A user describes their business in a sentence, answers a few guided questions, and previews a website draft on desktop and mobile. A draft is a preview, not the final website: once approved, LevelUp's engineers deliver the production site with booking, SEO, security and hosting. AI output can contain mistakes and must be reviewed before publishing. Terms: https://levelup-ecosystem.com/levelstudio-terms
+
+## Templates (demo sites built by LevelUp, not client sites)
+
+- Miss Beauty: hair atelier and beauty, light editorial design with online booking. https://missbeauty.levelup-ecosystem.com/
+- Taste of Egypt Cafe: cafe and artisanal bakery, menu, custom sandwich builder, gallery and table reservations. https://resto.levelup-ecosystem.com/
+- LevelFlight: travel and visa advisory, destinations, visa services and consultation booking. https://travel.levelup-ecosystem.com/
+
+A template can be the starting point of a project: https://levelup-ecosystem.com/start-project
+
+## Selected client work
+
+- Final Stop Barber Shop (San Diego, CA): website with appointment booking. https://finalstop.org
+- Wedding invitation (San Diego, CA): interactive digital invitation with online RSVP. https://levelup-ecosystem.com/projects/wedding-invitation
+- Black_Pater: personal-brand portfolio. https://blackpater.com
+
+More: https://levelup-ecosystem.com/projects
+
+## Founder
+
+Richelieu Bonte founded LevelUp Ecosystem and directs architecture, security reviews and code reviews of the studio's projects. More: https://levelup-ecosystem.com/about
+
+## Privacy and cookies
+
+The site uses cookieless web analytics and no advertising trackers. LevelUp does not sell personal information. Details: https://levelup-ecosystem.com/privacy and https://levelup-ecosystem.com/cookies
+
+## Pages
+
+- Home: https://levelup-ecosystem.com
+- Services: https://levelup-ecosystem.com/services
+- Projects: https://levelup-ecosystem.com/projects
+- Pricing: https://levelup-ecosystem.com/pricing
+- LevelStudio: https://levelup-ecosystem.com/studio
+- Start a project: https://levelup-ecosystem.com/start-project
+- Contact: https://levelup-ecosystem.com/contact
+- About: https://levelup-ecosystem.com/about
+- FAQ: https://levelup-ecosystem.com/faq
+- Legal: /terms, /privacy, /acceptable-use, /services-agreement, /dpa, /cookies, /levelstudio-terms

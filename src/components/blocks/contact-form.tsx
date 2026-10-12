@@ -1,5 +1,9 @@
 "use client";
 
+import { useRef } from "react";
+
+import Link from "next/link";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Check, Clock } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -43,25 +47,56 @@ export function ContactForm() {
     } as unknown as Schema,
   });
 
+  // Anti-spam signals: when the form was displayed, and a honeypot field that
+  // people never see (bots fill it in). Both are checked again on the server.
+  const startedAt = useRef(Date.now());
+  const honeypot = useRef<HTMLInputElement>(null);
+
   const formAction = useAction(serverAction, {
     onSuccess: () => {
       form.reset();
+      startedAt.current = Date.now();
     },
   });
 
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
-    formAction.execute(data);
+    formAction.execute({
+      ...data,
+      hp: honeypot.current?.value ?? "",
+      startedAt: startedAt.current,
+    });
   });
 
   const { isExecuting, hasSucceeded, hasErrored, result } = formAction;
+  const errorMessage =
+    typeof result.serverError === "string" && result.serverError
+      ? result.serverError
+      : "An error occurred while submitting your request. Please check your connection and try again.";
   const isWaitlisted = result.data?.isWaitlisted;
 
   return (
     <Form {...form}>
       <form
         onSubmit={handleSubmit}
-        className="flex w-full flex-col gap-2 space-y-4 rounded-md"
+        className="relative flex w-full flex-col gap-2 space-y-4 rounded-md"
       >
+        {/* Honeypot: invisible to people, tempting to bots. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
+        >
+          <label>
+            Do not fill this field
+            <input
+              ref={honeypot}
+              type="text"
+              name="hp_url"
+              tabIndex={-1}
+              autoComplete="off"
+              defaultValue=""
+            />
+          </label>
+        </div>
         <FormField
           control={form.control}
           name="name"
@@ -204,7 +239,18 @@ export function ContactForm() {
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel>I agree to the terms and conditions</FormLabel>
+                <FormLabel>
+                  <span>
+                    I agree to the{" "}
+                    <Link href="/terms" className="underline underline-offset-4" target="_blank">
+                      Terms of Service
+                    </Link>{" "}
+                    and the{" "}
+                    <Link href="/privacy" className="underline underline-offset-4" target="_blank">
+                      Privacy Policy
+                    </Link>
+                  </span>
+                </FormLabel>
                 <FormMessage />
               </div>
             </FormItem>
@@ -219,10 +265,10 @@ export function ContactForm() {
 
         {/* INLINE STATUS ALERT AT THE BOTTOM OF FORM */}
         {hasSucceeded && isWaitlisted && (
-          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/10 p-3.5 text-xs text-amber-200/95 transition-all">
-            <Clock className="mt-0.5 size-4 shrink-0 text-amber-400" />
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/10 p-3.5 text-xs text-amber-900 transition-all dark:text-amber-200/95">
+            <Clock className="mt-0.5 size-4 shrink-0 text-amber-700 dark:text-amber-400" />
             <div className="space-y-1">
-              <p className="font-semibold text-amber-300">Priority Waitlist Active</p>
+              <p className="font-semibold text-amber-800 dark:text-amber-300">Priority Waitlist Active</p>
               <p className="leading-relaxed">
                 Immediate build capacity is currently full. Your request has been placed on our priority waitlist (estimated 3 to 5 business days turnaround). Our team will review your project details as soon as a development slot opens. A confirmation email has been sent to your inbox.
               </p>
@@ -231,10 +277,10 @@ export function ContactForm() {
         )}
 
         {hasSucceeded && !isWaitlisted && (
-          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-purple-500/25 bg-purple-500/10 p-3.5 text-xs text-purple-200/95 transition-all">
-            <Check className="mt-0.5 size-4 shrink-0 text-purple-400" />
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-purple-500/25 bg-purple-500/10 p-3.5 text-xs text-purple-900 transition-all dark:text-purple-200/95">
+            <Check className="mt-0.5 size-4 shrink-0 text-purple-700 dark:text-purple-400" />
             <div className="space-y-1">
-              <p className="font-semibold text-purple-300">Preview Request Received</p>
+              <p className="font-semibold text-purple-800 dark:text-purple-300">Preview Request Received</p>
               <p className="leading-relaxed">
                 Thank you! Our team has received your submission. We will prepare your functional mobile preview within 24 to 48 hours. A confirmation email has been sent to your inbox.
               </p>
@@ -245,7 +291,7 @@ export function ContactForm() {
         {hasErrored && (
           <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400">
             <AlertCircle className="mt-0.5 size-4 shrink-0" />
-            <span>An error occurred while submitting your request. Please check your connection and try again.</span>
+            <span role="alert">{errorMessage}</span>
           </div>
         )}
       </form>

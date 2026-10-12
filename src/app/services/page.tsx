@@ -110,10 +110,10 @@ export default function ServicesPage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Smartphone className="size-4 text-foreground" />
-                      <span>Sub-2s Mobile Loading</span>
+                      <span>Built for Mobile Speed</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Zero slow plugins. Built with lightweight, modern code that loads instantly on cellular data.
+                      No heavy plugins. Lightweight, modern code and optimized images, so pages stay fast on cellular data.
                     </p>
                   </div>
                   <div className="space-y-1">
@@ -214,7 +214,7 @@ export default function ServicesPage() {
                     </div>
                     <div>
                       <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
-                        Service 03 • $49 / month
+                        Service 03 • Monthly plans
                       </span>
                       <h2 className="text-2xl font-bold tracking-tight">
                         Managed Website Care &amp; Maintenance
