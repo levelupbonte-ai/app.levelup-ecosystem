@@ -14,7 +14,7 @@ export interface TemplateItem {
   domain: string;
   /** Path prefix of the desktop capture (`-720.webp` / `-1440.webp`). */
   desktop: string;
-  /** Long mobile capture for the scrolling phone. */
+  /** Mobile capture: the top of the site (390 x 844 viewport, 2x). */
   mobile: string;
   copy: Record<
     Locale,
@@ -29,7 +29,7 @@ export const TEMPLATES: TemplateItem[] = [
     url: "https://missbeauty.levelup-ecosystem.com/",
     domain: "missbeauty.levelup-ecosystem.com",
     desktop: "/home/tpl-missbeauty-desktop",
-    mobile: "/home/tpl-missbeauty-mobile-long.webp",
+    mobile: "/home/tpl-missbeauty-mobile.webp",
     copy: {
       en: {
         industry: "Hair atelier & beauty",
@@ -55,7 +55,7 @@ export const TEMPLATES: TemplateItem[] = [
     url: "https://resto.levelup-ecosystem.com/",
     domain: "resto.levelup-ecosystem.com",
     desktop: "/home/tpl-resto-desktop",
-    mobile: "/home/tpl-resto-mobile-long.webp",
+    mobile: "/home/tpl-resto-mobile.webp",
     copy: {
       en: {
         industry: "Café & artisanal bakery",
@@ -85,7 +85,7 @@ export const TEMPLATES: TemplateItem[] = [
     url: "https://travel.levelup-ecosystem.com/",
     domain: "travel.levelup-ecosystem.com",
     desktop: "/home/tpl-travel-desktop",
-    mobile: "/home/tpl-travel-mobile-long.webp",
+    mobile: "/home/tpl-travel-mobile.webp",
     copy: {
       en: {
         industry: "Travel & visa advisory",
