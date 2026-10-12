@@ -495,7 +495,7 @@ export const Features = ({ projects }: { projects?: ProjectItem[] }) => {
           <div className="relative flex items-center justify-center">
             <DashedLine className="text-muted-foreground" />
             <span className="bg-muted text-muted-foreground absolute px-3 font-mono text-xs sm:text-sm font-medium tracking-widest max-md:hidden uppercase">
-              Bespoke Web Architecture • San Diego, CA
+              Custom Websites • Online Studio • San Diego, CA
             </span>
           </div>
         </ScrollReveal>

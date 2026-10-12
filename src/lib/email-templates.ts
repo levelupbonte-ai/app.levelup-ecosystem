@@ -2,7 +2,7 @@
  * Responsive, production-grade HTML email templates for LevelUp Ecosystem
  * Features:
  * - English copy across all templates
- * - Team signature: "The LevelUp Ecosystem Team"
+ * - Signature: "LevelUp Ecosystem"
  * - Faceted star logo at top header
  * - LevelUp Ecosystem wordmark branding in footer
  * - Simulation templates link directly to the consultation/order form (no studio link)
@@ -129,8 +129,8 @@ export function getWeddingSimulationEmailHtml({
                 LEVELUP ECOSYSTEM
               </p>
               <p style="margin:0;font-size:11px;color:#6d6458;line-height:1.5;">
-                Full-Stack Web Engineering, Online Booking Platforms &amp; Security Audits<br>
-                Headquartered in San Diego, CA • Serving Clients Worldwide
+                Websites, Online Booking &amp; Google Visibility<br>
+                Online web studio • San Diego, California
               </p>
             </td>
           </tr>
@@ -159,12 +159,12 @@ export function getPreviewRequestEmailHtml({
   name = escapeHtml(name) as typeof name;
   company = escapeHtml(company) as typeof company;
   const statusHeadline = isWaitlisted
-    ? `Priority Waitlist: Your Website Preview Request`
+    ? `Waitlist: Your Website Preview Request`
     : `We Received Your Preview Request`;
 
   const statusParagraph = isWaitlisted
-    ? `Due to high demand for our custom engineering slots, all immediate build tracks are currently active. <strong>Your project has been placed on our priority waitlist.</strong> Due to our current build volume, waitlist review typically takes 3 to 5 business days. Our team will review your requirements as soon as a development slot opens.`
-    : `Our team has received your submission and is reviewing your project details. We will build and share a <strong>functional interactive mobile prototype within 24 to 48 hours</strong> with zero financial commitment.`;
+    ? `We are currently working on other projects, so <strong>your request has been placed on our waitlist.</strong> Waitlist review typically takes 3 to 5 business days, and we will review your requirements as soon as we can start.`
+    : `We have received your submission and are reviewing your project details. We will build and share a <strong>functional interactive mobile prototype within 24 to 48 hours</strong> with zero financial commitment.`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -217,7 +217,7 @@ export function getPreviewRequestEmailHtml({
                           <span style="font-size:16px;font-weight:700;color:${
                             isWaitlisted ? "#fbbf24" : "#faf6ef"
                           };">
-                            ${isWaitlisted ? "Priority Waitlist (Estimated 3 to 5 business days)" : "24 to 48 Business Hours"}
+                            ${isWaitlisted ? "Waitlist (Estimated 3 to 5 business days)" : "24 to 48 Business Hours"}
                           </span>
                         </td>
                       </tr>
@@ -242,8 +242,8 @@ export function getPreviewRequestEmailHtml({
                 What to expect next:
               </h2>
               <ol style="margin:0 0 28px;padding-left:20px;font-size:13.5px;line-height:1.7;color:#b6aba0;">
-                <li>Our team verifies your current domain, branding, and booking requirements.</li>
-                <li>We architect a fast mobile-first prototype with 24/7 calendar integration.</li>
+                <li>We review your current domain, branding, and booking requirements.</li>
+                <li>We build a mobile-first prototype with 24/7 online booking.</li>
                 <li>We send you an interactive private link you can test directly on your smartphone.</li>
               </ol>
 
@@ -260,7 +260,7 @@ export function getPreviewRequestEmailHtml({
               </p>
 
               <p style="margin:20px 0 0;font-size:13px;color:#c0b7a8;text-align:center;font-weight:600;">
-                — The LevelUp Ecosystem Team
+                — LevelUp Ecosystem
               </p>
             </td>
           </tr>
@@ -272,8 +272,8 @@ export function getPreviewRequestEmailHtml({
                 LEVELUP ECOSYSTEM
               </p>
               <p style="margin:0;font-size:11px;color:#6d6458;line-height:1.5;">
-                Full-Stack Web Development, Booking Engines &amp; Cybersecurity Audits<br>
-                San Diego, California • Serving Clients Worldwide
+                Websites, Online Booking &amp; Google Visibility<br>
+                Online web studio • San Diego, California
               </p>
             </td>
           </tr>
@@ -474,8 +474,8 @@ export function getProjectRequestReceivedHtml({
           <h1 style="margin:0 0 14px;font-size:22px;line-height:1.3;color:#fafafa;">${fr ? `Merci ${n}, votre projet est entre de bonnes mains.` : `Thank you ${n}, your project is in good hands.`}</h1>
           <p style="margin:0 0 14px;font-size:15px;line-height:1.7;color:#c4c4d0;">${
             fr
-              ? "Notre équipe étudie votre demande et vous recontacte sous 48 heures ouvrées avec les prochaines étapes."
-              : "Our team is reviewing your request and will get back to you within 48 business hours with the next steps."
+              ? "Nous étudions votre demande et vous recontactons sous 48 heures ouvrées avec les prochaines étapes."
+              : "We are reviewing your request and will get back to you within 48 business hours with the next steps."
           }</p>
           <p style="margin:0;font-size:13px;line-height:1.7;color:#8a8a9a;">${
             fr
@@ -484,7 +484,7 @@ export function getProjectRequestReceivedHtml({
           }</p>
         </td></tr>
         <tr><td style="padding:18px 32px;border-top:1px solid #222232;font-size:12px;color:#6b6b7b;">
-          ${fr ? "L'équipe LevelUp Ecosystem" : "The LevelUp Ecosystem Team"} · <a href="https://levelup-ecosystem.com" style="color:#a78bfa;text-decoration:none;">levelup-ecosystem.com</a>
+          LevelUp Ecosystem · <a href="https://levelup-ecosystem.com" style="color:#a78bfa;text-decoration:none;">levelup-ecosystem.com</a>
         </td></tr>
       </table>
     </td></tr>

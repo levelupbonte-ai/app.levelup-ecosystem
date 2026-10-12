@@ -1,3 +1,8 @@
+/**
+ * Facts about LevelUp Ecosystem and its founder. Keep every public statement
+ * (pages, metadata, JSON-LD, llms.txt) consistent with this file, and keep it
+ * true: no invented credentials, team size, clients, metrics or experience.
+ */
 export interface StudioIdentity {
   personName: string;
   personRole: string;
@@ -6,6 +11,7 @@ export interface StudioIdentity {
   orgName: string;
   orgOneLiner: string;
   studioName: string;
+  studioOneLiner: string;
   location: string;
   contactEmail: string;
   phone?: string;
@@ -14,17 +20,19 @@ export interface StudioIdentity {
 
 export const IDENTITY: StudioIdentity = {
   personName: "Richelieu Bonte",
-  personRole: "Founder & Principal Engineer",
+  personRole: "Founder",
   personOneLiner:
-    "Richelieu Bonte is the founder of LevelUp Ecosystem, an independent web design studio building secure, AI-assisted websites with 24/7 online booking for local businesses and creators. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo.",
+    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio based in San Diego, California. He is a first-year cybersecurity student, originally from the Democratic Republic of Congo.",
   personBio:
-    "Richelieu Bonte founded LevelUp Ecosystem to deliver clean, lightweight digital infrastructure for service businesses and creators. Combining cybersecurity coursework with hands-on systems engineering, he directs architecture, security evaluations, and human code auditing for every project.",
+    "Richelieu is not a traditional software engineer: he builds with AI. He directs modern AI tools, tests every page and reviews security settings before launch, and brings what he learns in his cybersecurity studies into every project.",
   orgName: "LevelUp Ecosystem",
   orgOneLiner:
-    "LevelUp Ecosystem is an independent web design and development studio that builds fast, secure websites with 24/7 online booking for local businesses, creators, and portfolios.",
+    "LevelUp Ecosystem is an online web studio founded by Richelieu Bonte in San Diego, California. It designs, builds, hosts and maintains websites with 24/7 online booking for local businesses, brands and creators.",
   studioName: "LevelStudio",
+  studioOneLiner:
+    "LevelStudio is LevelUp's online AI website studio: describe your business and preview a website draft.",
   location: "San Diego, California",
-  contactEmail: "hello@levelup-ecosystem.com",
+  contactEmail: "contact@levelup-ecosystem.com",
   sameAs: [],
 };
 

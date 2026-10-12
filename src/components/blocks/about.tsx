@@ -10,14 +10,11 @@ import { cn } from "@/lib/utils";
 const About = async () => {
   const copy = await getSectionCopy("about", "story", aboutStoryCopy);
   return (
-    <section className="container mt-10 flex max-w-5xl flex-col-reverse gap-8 md:mt-14 md:gap-14 lg:mt-20 lg:flex-row lg:items-start">
+    <section id="founder" className="container mt-10 flex max-w-5xl flex-col-reverse gap-8 md:mt-14 md:gap-14 lg:mt-20 lg:flex-row lg:items-start">
       {/* Founder Section */}
       <div className="flex flex-col gap-8 lg:gap-14 flex-1">
         <ImageSection
-          images={[
-            { src: "/about/1.webp", alt: "LevelUp design architecture" },
-            { src: "/about/2.webp", alt: "Development workspace" },
-          ]}
+          images={[{ src: "/about/2.webp", alt: "Reviewing a website on a laptop" }]}
           className="xl:-translate-x-6"
         />
 
@@ -42,10 +39,7 @@ const About = async () => {
           }}
         />
         <ImageSection
-          images={[
-            { src: "/about/3.webp", alt: "San Diego web architecture" },
-            { src: "/about/4.webp", alt: "Client collaboration" },
-          ]}
+          images={[{ src: "/about/3.webp", alt: "A desk with a computer, ready to work" }]}
           className="hidden lg:flex xl:translate-x-6"
         />
       </div>

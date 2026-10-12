@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Featured Projects & Case Studies | LevelUp Ecosystem",
     description:
-      "Explore real web design case studies and live client sites engineered for conversion, automated scheduling, and fast mobile performance.",
+      "Explore real web design case studies and live client sites designed for conversion, online booking, and fast mobile pages.",
     url: "/projects",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Featured Projects & Case Studies | LevelUp Ecosystem",
     description:
-      "Explore real client websites and case studies engineered for conversion, automated scheduling, and performance nationwide and worldwide.",
+      "Explore real client websites and case studies designed for conversion, online booking, and fast mobile pages.",
     images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },

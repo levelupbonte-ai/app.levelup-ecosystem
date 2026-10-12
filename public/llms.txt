@@ -1,6 +1,6 @@
 # LevelUp Ecosystem
 
-> LevelUp Ecosystem is a web design and development studio based in San Diego, California, founded by Richelieu Bonte. It designs, builds, hosts and maintains custom websites for local businesses, brands and creators: mobile-first design, 24/7 online booking, Google visibility (local SEO, Google Maps) and security basics, all run from one client dashboard. It also operates LevelStudio, an AI-assisted website draft builder. English is the official language of the site; French is available as a translation.
+> LevelUp Ecosystem is an online web studio founded by Richelieu Bonte in San Diego, California. It is an online business: there is no physical studio or office open to visitors. It designs, builds, hosts and maintains custom websites for local businesses, brands and creators: mobile-first design, 24/7 online booking, Google visibility (local SEO, Google Maps) and security best practices, all run from one client dashboard. It also runs LevelStudio, its online AI website studio. English is the official language of the site; French is available as a translation.
 
 Contact: contact@levelup-ecosystem.com. Prices and plans change over time: always use the pricing page for current figures.
 
@@ -13,12 +13,12 @@ Contact: contact@levelup-ecosystem.com. Prices and plans change over time: alway
 
 ## LevelStudio and templates
 
-- [LevelStudio](https://levelup-ecosystem.com/studio): the AI website builder of LevelUp Ecosystem. Describe your business, answer a few guided questions and preview a website draft; LevelUp's engineers then deliver the production site. The app is at https://studio.levelup-ecosystem.com.
+- [LevelStudio](https://levelup-ecosystem.com/studio): LevelUp Ecosystem's online AI website studio. Describe your business, answer a few guided questions and preview a website draft; LevelUp then finishes, tests and launches the production site. The app is at https://studio.levelup-ecosystem.com.
 - [Projects and templates](https://levelup-ecosystem.com/projects): client work and three demo templates built by LevelUp: Miss Beauty (hair atelier, https://missbeauty.levelup-ecosystem.com/), Taste of Egypt Cafe (cafe and bakery, https://resto.levelup-ecosystem.com/) and LevelFlight (travel and visa advisory, https://travel.levelup-ecosystem.com/).
 
 ## Company
 
-- [About](https://levelup-ecosystem.com/about): the studio, its founder and its principles.
+- [About](https://levelup-ecosystem.com/about): who we are, how we build (AI-assisted, tested and reviewed by the founder), and the founder, Richelieu Bonte.
 - [FAQ](https://levelup-ecosystem.com/faq): how the free preview works, timelines, who owns what, care plans.
 
 ## Legal

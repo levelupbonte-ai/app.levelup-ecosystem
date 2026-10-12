@@ -180,7 +180,7 @@ function answerLines(brief: Brief, skip: string[]): string {
 async function recap(
   brief: Brief,
 ): Promise<{ text: string; target: AiTarget } | null> {
-  const prompt = `You are the project lead at LevelUp Ecosystem, a web engineering studio.
+  const prompt = `You are the project lead at LevelUp Ecosystem, an online web studio.
 A visitor just submitted this project brief. Write a short, warm recap for them
 in ${brief.locale === "fr" ? "French" : "the language of their answers (default English)"}: 3 to 5 sentences covering what
 we understood, the key pages/features we recommend, and one smart suggestion.

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { ArrowRight } from "lucide-react";
 
@@ -23,66 +24,6 @@ export interface TestimonialItem {
   image: string;
 }
 
-// Built-in fallback; the live list comes from the LevelUp database (reviews).
-const defaultItems: TestimonialItem[] = [
-  {
-    quote: "We're misusing LevelUp as a CRM and it still works!",
-    author: "Amy Chase",
-    role: "PM",
-    company: "Mercury Finance",
-    image: "/testimonials/amy-chase.webp",
-  },
-  {
-    quote: "I was able to replace 80% of my team with LevelUp bots.",
-    author: "Jonas Kotara",
-    role: "Lead Engineer",
-    company: "Mercury Finance",
-    image: "/testimonials/jonas-kotara.webp",
-  },
-  {
-    quote: "Founder Mode is hard enough without having a really nice PM app.",
-    author: "Kevin Yam",
-    role: "Founder",
-    company: "Mercury Finance",
-    image: "/testimonials/kevin-yam.webp",
-  },
-  {
-    quote: "I can use the tool as a substitute from my PM.",
-    author: "Kundo Marta",
-    role: "Founder",
-    company: "Mercury Finance",
-    image: "/testimonials/kundo-marta.webp",
-  },
-  {
-    quote: "We're misusing LevelUp as a CRM and it still works!",
-    author: "Amy Chase",
-    role: "PM",
-    company: "Mercury Finance",
-    image: "/testimonials/amy-chase.webp",
-  },
-  {
-    quote: "I was able to replace 80% of my team with LevelUp bots.",
-    author: "Jonas Kotara",
-    role: "Lead Engineer",
-    company: "Mercury Finance",
-    image: "/testimonials/jonas-kotara.webp",
-  },
-  {
-    quote: "Founder Mode is hard enough without having a really nice PM app.",
-    author: "Kevin Yam",
-    role: "Founder",
-    company: "Mercury Finance",
-    image: "/testimonials/kevin-yam.webp",
-  },
-  {
-    quote: "I can use the tool as a substitute from my PM.",
-    author: "Kundo Marta",
-    role: "Founder",
-    company: "Mercury Finance",
-    image: "/testimonials/kundo-marta.webp",
-  },
-];
-
 export const Testimonials = ({
   className,
   dashedLineClassName,
@@ -92,15 +33,12 @@ export const Testimonials = ({
   dashedLineClassName?: string;
   items?: TestimonialItem[];
 }) => {
-  // Published reviews from the database; none published → no section.
-  if (itemsProp && itemsProp.length === 0) return null;
-  // The carousel loops: short lists are shown twice, like the built-in list.
-  const items =
-    itemsProp && itemsProp.length > 0
-      ? itemsProp.length < 8
-        ? [...itemsProp, ...itemsProp]
-        : itemsProp
-      : defaultItems;
+  // Only real, published client reviews from the database are ever shown;
+  // there is no built-in list, so none published (or no database) hides the
+  // section.
+  if (!itemsProp || itemsProp.length === 0) return null;
+  // The carousel loops: short lists are shown twice.
+  const items = itemsProp.length < 8 ? [...itemsProp, ...itemsProp] : itemsProp;
 
   return (
     <>
@@ -109,15 +47,15 @@ export const Testimonials = ({
           <ScrollReveal yOffset={24} duration={0.7}>
             <div className="space-y-4">
               <h2 className="text-2xl tracking-tight md:text-4xl lg:text-5xl">
-                Trusted by product builders
+                What our clients say
               </h2>
               <p className="text-muted-foreground max-w-md leading-snug">
-                LevelUp is built on the habits that make the best product teams
-                successful: staying focused, moving quickly, and always aiming for
-                high-quality work.
+                Reviews from LevelUp clients, published with their permission.
               </p>
-              <Button variant="outline" className="shadow-md">
-                Read our Customer Stories <ArrowRight className="size-4" />
+              <Button asChild variant="outline" className="shadow-md">
+                <Link href="/projects">
+                  See our work <ArrowRight className="size-4" />
+                </Link>
               </Button>
             </div>
           </ScrollReveal>
