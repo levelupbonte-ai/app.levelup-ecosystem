@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+import { StudioFrame } from "@/components/start-project/studio-frame";
 
 export const metadata: Metadata = {
   title: "Project Studio — Build a Project | LevelUp Ecosystem",
@@ -7,6 +9,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/start-project",
   },
+};
+
+// Full-screen studio: drawn edge to edge (the studio pads itself with the
+// safe-area insets) and resized with the on-screen keyboard. Zoom stays allowed.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
 };
 
 export default async function StartProjectPage({
@@ -31,14 +42,5 @@ export default async function StartProjectPage({
   const src = query.size
     ? `/project-studio.html?${query.toString()}`
     : "/project-studio.html";
-  return (
-    <div className="fixed inset-0 z-[200] h-dvh w-screen overflow-hidden bg-[#07070b] select-none">
-      <iframe
-        src={src}
-        title="LevelUp Project Studio"
-        className="block h-full w-full border-0 bg-[#07070b]"
-        allow="clipboard-write"
-      />
-    </div>
-  );
+  return <StudioFrame src={src} />;
 }
