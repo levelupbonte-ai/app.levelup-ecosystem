@@ -22,7 +22,7 @@ export const IDENTITY: StudioIdentity = {
   personName: "Richelieu Bonte",
   personRole: "Founder",
   personOneLiner:
-    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio based in San Diego, California. He is a first-year cybersecurity student, originally from the Democratic Republic of Congo.",
+    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio founded in San Diego, California. He is a first-year cybersecurity student, originally from the Democratic Republic of Congo.",
   personBio:
     "Richelieu is not a traditional software engineer: he builds with AI. He directs modern AI tools, tests every page and reviews security settings before launch, and brings what he learns in his cybersecurity studies into every project.",
   orgName: "LevelUp Ecosystem",

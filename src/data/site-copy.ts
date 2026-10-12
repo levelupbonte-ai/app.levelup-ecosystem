@@ -41,7 +41,7 @@ export const aboutHeroCopy = {
 export const aboutStoryCopy = {
   founder_title: "About Richelieu Bonte",
   founder_paragraphs: [
-    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio based in San Diego, California. Originally from the Democratic Republic of Congo, he is a first-year cybersecurity student in California.",
+    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio founded in San Diego, California. Originally from the Democratic Republic of Congo, he is a first-year cybersecurity student in California.",
     "Richelieu is not a traditional software engineer: he builds with AI. Before LevelUp Ecosystem, he explored AI assistants through personal projects such as Bonté IA and LevelUp IA. That curiosity became LevelUp Ecosystem, an online studio that helps local service businesses and independent creators get a professional website.",
     "Today, Richelieu directs modern AI tools to build each website, tests every page on phone and desktop, and reviews the security settings before launch. His cybersecurity studies shape the habits he applies to every project.",
   ],
@@ -50,7 +50,7 @@ export const aboutStoryCopy = {
     "1. Direct contact: no account reps, no ticket queues, no call centers. You talk directly with the founder, from the first preview to launch and maintenance.",
     "2. AI-assisted, human-reviewed: AI tools help us build faster. A person reviews and tests what they produce, including forms, bookings and access settings, before anything goes live.",
     "3. Your Content, Your Brand, Your Data: Your domain, text, photos, logos and customer data always belong to you and stay exportable. We design, host and maintain your site on our platform under a clear license, with lightweight, clean code and plain-language terms, so you are never held hostage over your content.",
-    "4. Online by design: LevelUp Ecosystem is an online business based in San Diego, California. Every project runs remotely, wherever our clients are.",
+    "4. Online by design: LevelUp Ecosystem is an online business founded in San Diego, California. Every project runs remotely, wherever our clients are.",
   ],
 };
 

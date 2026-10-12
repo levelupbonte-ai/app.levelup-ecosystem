@@ -116,7 +116,7 @@ const REPLACEMENTS: [RegExp, string][] = [
   ],
   [
     /^Richelieu Bonte is the founder and principal engineer of LevelUp Ecosystem/,
-    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio based in San Diego, California. Originally from the Democratic Republic of Congo, he is a first-year cybersecurity student in California.",
+    "Richelieu Bonte is the founder of LevelUp Ecosystem, an online web studio founded in San Diego, California. Originally from the Democratic Republic of Congo, he is a first-year cybersecurity student in California.",
   ],
   [
     /^Richelieu developed his engineering expertise/,
@@ -136,7 +136,7 @@ const REPLACEMENTS: [RegExp, string][] = [
   ],
   [
     /^4\. California Roots, Global Delivery/,
-    "4. Online by design: LevelUp Ecosystem is an online business based in San Diego, California. Every project runs remotely, wherever our clients are.",
+    "4. Online by design: LevelUp Ecosystem is an online business founded in San Diego, California. Every project runs remotely, wherever our clients are.",
   ],
   [
     /^Fast, secure digital infrastructure engineered for/,

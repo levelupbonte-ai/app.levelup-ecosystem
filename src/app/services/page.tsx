@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Web Services & Solutions | LevelUp Ecosystem",
     description:
-      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators, from an online studio based in San Diego, CA.",
+      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators, from an online studio founded in San Diego, CA.",
     url: "/services",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -310,7 +310,7 @@ export default function ServicesPage() {
           <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
             Request a free interactive preview built for your phone within 24 to 48 hours. No upfront payment required.
           </p>
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
               <Link href="/contact">
                 Request free preview
