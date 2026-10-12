@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       openGraph: {
         title: "Final Stop Barber Shop — Fast Mobile Booking System",
         description:
-          "Engineered by LevelUp Ecosystem: 24/7 calendar appointment booking, portfolio gallery, and local San Diego SEO.",
+          "Designed by LevelUp Ecosystem: 24/7 calendar appointment booking, portfolio gallery, and local San Diego SEO.",
         url: `https://levelup-ecosystem.com/projects/final-stop`,
         siteName: "LevelUp Ecosystem",
         locale: "en_US",
@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   if (id === "blackpater" || id === "black-pater" || id === "03") {
     const title = "BLACK_PATER — Jean-Pierre Lofumbwa · Le Prof | Cinematic Portfolio";
     const description =
-      "Bespoke digital experience for Congolese educator, entrepreneur, and cultural ambassador Jean-Pierre Lofumbwa (Le Prof). Engineered by LevelUp Ecosystem.";
+      "Bespoke digital experience for Congolese educator, entrepreneur, and cultural ambassador Jean-Pierre Lofumbwa (Le Prof). Designed by LevelUp Ecosystem.";
     const imageUrl = "https://levelup-ecosystem.com/projects/blackpater-card.jpg";
 
     return {

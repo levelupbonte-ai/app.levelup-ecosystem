@@ -18,7 +18,7 @@ export default async function Contact() {
   const contactInfo = [
     {
       icon: MapPin,
-      title: "Studio Location",
+      title: "Based in",
       content: (
         <div className="text-muted-foreground mt-2 text-sm leading-relaxed">
           <p className="font-semibold text-foreground">{copy.location}</p>
@@ -28,7 +28,7 @@ export default async function Contact() {
     },
     {
       icon: Mail,
-      title: "Direct Studio Email",
+      title: "Email",
       content: (
         <div className="mt-2 text-sm">
           <Link

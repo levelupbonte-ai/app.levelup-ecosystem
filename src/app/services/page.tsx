@@ -25,14 +25,14 @@ import { Card, CardContent } from "@/components/ui/card";
 export const metadata: Metadata = {
   title: "Web Services & Solutions | LevelUp Ecosystem",
   description:
-    "Fast, secure websites for businesses and creators: 24/7 online booking, Google Maps setup, security audits, and monthly care plans.",
+    "Custom websites for businesses and creators: 24/7 online booking, Google Maps setup, website security checks, and monthly care plans.",
   alternates: {
     canonical: "/services",
   },
   openGraph: {
     title: "Web Services & Solutions | LevelUp Ecosystem",
     description:
-      "Bespoke web architecture, 24/7 online booking, local SEO, and cybersecurity audits for businesses and creators in San Diego, CA.",
+      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators, from an online studio based in San Diego, CA.",
     url: "/services",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "LevelUp Ecosystem - Bespoke Web Services & Systems",
+        alt: "LevelUp Ecosystem - Web Services",
       },
     ],
   },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Web Services & Solutions | LevelUp Ecosystem",
     description:
-      "Bespoke web architecture, 24/7 online booking, local SEO, and cybersecurity audits for businesses in San Diego, CA.",
+      "Custom websites, 24/7 online booking, local SEO, and website security checks for businesses and creators.",
     images: ["/og-image.jpg"],
     creator: "@levelupecosystem",
   },
@@ -63,13 +63,13 @@ export default function ServicesPage() {
         {/* Header */}
         <section className="container max-w-4xl text-center space-y-4">
           <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
-            Bespoke Architecture & Engineering
+            Websites • Booking • Visibility • Security
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Our Web Services
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Lightweight, high-converting digital infrastructure engineered for businesses, service providers, and independent creators in San Diego and beyond.
+            Custom websites, online booking, Google visibility and security best practices for businesses, service providers and independent creators, in San Diego and beyond.
           </p>
         </section>
 
@@ -153,7 +153,7 @@ export default function ServicesPage() {
                         Service 02
                       </span>
                       <h2 className="text-2xl font-bold tracking-tight">
-                        Website Security Checks &amp; Vulnerability Audits
+                        Website Security Checks
                       </h2>
                     </div>
                   </div>
@@ -165,8 +165,8 @@ export default function ServicesPage() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  Conducted by our cybersecurity engineering team, our security check is a strictly non-destructive review
-                  of your live website. Automated internet bots scan small business websites every single day looking for unpatched
+                  Our security check is a strictly non-destructive review of your live website, based on common security best
+                  practices (it is not a professional penetration test). Automated internet bots scan small business websites every single day looking for unpatched
                   vulnerabilities, exposed database keys, and unprotected admin logins.
                 </p>
 
@@ -229,7 +229,7 @@ export default function ServicesPage() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  Never worry about website updates, broken plugins, or hosting outages again. We provide fast cloud hosting,
+                  We take care of website updates, hosting and backups for you. We provide managed cloud hosting,
                   automated daily backups, proactive security monitoring, and on-demand content edits whenever you change
                   prices, hours, staff, or photos.
                 </p>
@@ -293,7 +293,7 @@ export default function ServicesPage() {
                 </div>
 
                 <p className="text-muted-foreground leading-relaxed">
-                  Engineered for digital media creators, podcasters, visual artists, and architects. We craft elegant personal brand websites,
+                  Designed for digital media creators, podcasters, visual artists, and architects. We craft elegant personal brand websites,
                   interactive portfolio decks, and custom link hubs with zero third-party branding.
                 </p>
               </CardContent>

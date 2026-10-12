@@ -11,7 +11,7 @@ import { getFaqCategories, getTestimonialItems } from "@/lib/levelup-site";
 export const metadata: Metadata = {
   title: "Frequently Asked Questions | LevelUp Ecosystem",
   description:
-    "Common questions about our web design process, 24-48h free mobile previews, Google Maps setup, security audits, and monthly care plans in San Diego.",
+    "Common questions about our web design process, free mobile previews, Google Maps setup, website security checks, and monthly care plans.",
   alternates: {
     canonical: "/faq",
   },
@@ -60,7 +60,7 @@ const defaultFaqJsonLd = {
       name: "Can you help our business rank higher on Google Maps in San Diego?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Every website we build is configured for local search visibility: structured Schema.org markup, localized Google Business Profile linking, mobile-first performance, and exact geographic coordinates so nearby customers find you first.",
+        text: "We can help. Every website we build is set up for local search: structured Schema.org markup, Google Business Profile linking, mobile-first pages and your business location, so nearby customers can find you. No one can guarantee a ranking on Google.",
       },
     },
     {
@@ -68,7 +68,7 @@ const defaultFaqJsonLd = {
       name: "How fast is the turnaround time?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Most client websites launch within 7 to 14 days of prototype approval. Because our engineering stack is built on lightweight Next.js rather than heavy templates, we build rapidly without sacrificing security or performance.",
+        text: "Most client websites launch within 7 to 14 days of preview approval. We build with AI-assisted development, then test every page and review the security settings before launch.",
       },
     },
     {
@@ -84,7 +84,7 @@ const defaultFaqJsonLd = {
       name: "What is included in a Care Plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "A Care Plan covers managed cloud hosting, daily automated backups, 24/7 uptime monitoring, security patches, SSL certificate renewals, and monthly content updates, with the amount of update time depending on the plan you choose.",
+        text: "A Care Plan covers managed hosting, daily automated backups, uptime monitoring, security updates, SSL certificate renewals, and monthly content updates, with the amount of update time depending on the plan you choose.",
       },
     },
   ],

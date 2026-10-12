@@ -112,7 +112,7 @@ export interface ComparisonCategory {
 
 const defaultBuildComparisonData: ComparisonCategory[] = [
   {
-    category: "Core Deliverables & Architecture",
+    category: "Core Deliverables",
     rows: [
       {
         name: "One-Time Investment",
@@ -270,7 +270,7 @@ const defaultBuildComparisonData: ComparisonCategory[] = [
         custom: true,
       },
       {
-        name: "Database Security Rules & Audit",
+        name: "Database Security Rules & Review",
         starter: false,
         secure: true,
         care: true,

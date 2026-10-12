@@ -21,17 +21,17 @@ export const defaultFaqCategories: FaqCategory[] = [
       {
         question: "What is LevelUp Ecosystem?",
         answer:
-          "LevelUp Ecosystem is an independent web architecture and development studio based in San Diego, California. The studio builds fast, secure websites with 24/7 online booking, local SEO, and cybersecurity basics for businesses, barbershops, salons, and creators.",
+          "LevelUp Ecosystem is an online web studio founded by Richelieu Bonte in San Diego, California. We design, build, host and maintain websites for local businesses, barbershops, salons, brands and creators: custom design, 24/7 online booking, Google visibility, security best practices and one client dashboard. We work online, with no office open to visitors.",
       },
       {
         question: "Who is Richelieu Bonte?",
         answer:
-          "Richelieu Bonte is the founder and principal engineer of LevelUp Ecosystem, an independent web design studio building secure, AI-assisted websites for local businesses and creators. He is a cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo.",
+          "Richelieu Bonte is the founder of LevelUp Ecosystem. He is a first-year cybersecurity student based in San Diego, California, originally from the Democratic Republic of Congo. He is not a traditional software engineer: he builds with AI, directing modern AI tools, testing every page and reviewing security settings before launch.",
       },
       {
         question: "What is LevelStudio?",
         answer:
-          "LevelStudio is LevelUp Ecosystem's automated AI preview generator, allowing clients to test website concepts and interactive mobile prototypes on their phone before human engineering and deployment.",
+          "LevelStudio is LevelUp Ecosystem's online AI studio. You describe your business, answer a few guided questions and preview a website draft on your phone. Once you approve a draft, LevelUp finishes, tests and launches the production site.",
       },
     ],
   },
@@ -110,9 +110,9 @@ export const FAQ = ({
               </h2>
             )}
             <p className="text-muted-foreground max-w-md leading-relaxed lg:mx-auto">
-              Have questions about our San Diego web design, 24/7 online booking, or cybersecurity audits?{" "}
+              Have questions about our websites, 24/7 online booking, or website security checks?{" "}
               <Link href="/contact" className="text-foreground underline underline-offset-4 font-semibold">
-                Get in touch with our team
+                Get in touch
               </Link>
               .
             </p>

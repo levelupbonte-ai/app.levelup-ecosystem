@@ -5,7 +5,7 @@ import { StudioFrame } from "@/components/start-project/studio-frame";
 export const metadata: Metadata = {
   title: "Project Studio — Build a Project | LevelUp Ecosystem",
   description:
-    "Interactive LevelUp Project Studio. Configure your website, booking system, e-commerce store, AI automation, or custom architecture in minutes.",
+    "Interactive LevelUp Project Studio. Configure your website, booking system, e-commerce store, AI automation, or custom project in minutes.",
   alternates: {
     canonical: "/start-project",
   },
