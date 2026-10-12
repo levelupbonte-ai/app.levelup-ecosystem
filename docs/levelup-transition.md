@@ -99,7 +99,7 @@ import {
 * New and optional: the module dispatches `lu-transition` events on `document`
   (`detail.phase` is `"cover"` or `"reveal"`), and reads three CSS variables
   from `<html>` when the host page defines them: `--foreground` (panel),
-  `--background` (pen), `--lu-edge` (accent of the edge, the swash, the halo
+  `--background` (pen), `--lu-edge` (accent of the edge, the swash
   and the progress hairline; LevelUp violet `#8B5CF6` when absent). Other apps
   need no change.
 * Modified clicks, `target="_blank"`, `download`, hash-only links and anything

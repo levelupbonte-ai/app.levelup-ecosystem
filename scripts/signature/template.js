@@ -73,7 +73,6 @@ let root = null;
 let panel = null;
 let glint = null;
 let sign = null; // the <svg> signature
-let halo = null;
 let status = null; // the status line at the foot of the panel
 let statusText = null;
 let statusBar = null;
@@ -217,23 +216,12 @@ function build() {
     color: FALLBACK_INK,
     willChange: "transform, opacity",
   });
-  halo = style(document.createElement("div"), {
-    position: "absolute",
-    inset: "-45% -30%",
-    borderRadius: "50%",
-    opacity: "0",
-    background:
-      "radial-gradient(closest-side, color-mix(in srgb, var(--lu-accent, " +
-      VIOLET +
-      ") 30%, transparent) 0%, transparent 100%)",
-  });
   const wrap = style(document.createElement("div"), {
     position: "absolute",
     inset: "0",
   });
   wrap.innerHTML = signatureMarkup();
   sign = wrap;
-  glint.appendChild(halo);
   glint.appendChild(wrap);
   penMasks = Array.from(wrap.querySelectorAll("[data-pen]"));
 
@@ -316,7 +304,7 @@ function show() {
 }
 
 function cancelAll() {
-  for (const el of [panel, glint, halo, sign, status, statusText, statusBar, ...penMasks]) {
+  for (const el of [panel, glint, sign, status, statusText, statusBar, ...penMasks]) {
     if (!el) continue;
     for (const a of el.getAnimations()) a.cancel();
   }
@@ -374,12 +362,6 @@ function startPen(at, total) {
       fill: "both",
     });
   });
-  halo.animate([{ opacity: 0 }, { opacity: 1 }], {
-    duration: total * 0.7,
-    delay: at,
-    easing: "ease-out",
-    fill: "forwards",
-  });
   // Ink settle: when the last stroke lands the word relaxes a hair.
   const mine = gen;
   Promise.all(penAnimations().map(finished)).then(() => {
@@ -395,7 +377,6 @@ function startPen(at, total) {
 /** Jumps the pen to the end (signature complete). */
 function finishPenNow() {
   for (const a of penMasks.flatMap((m) => m.getAnimations())) a.finish();
-  halo.style.opacity = "1";
 }
 
 function penAnimations() {

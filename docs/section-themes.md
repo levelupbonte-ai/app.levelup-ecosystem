@@ -38,9 +38,9 @@ route). Layout and copy never change; only the accent moves.
   scroll progress bar, the nav underline, focus rings (`ring-sec-ring`), the
   page eyebrows, the pricing highlights, the legal summary box, the footer
   accents and the cursor lens (a whisper of accent in the disc) all follow.
-  `.lu-section-glow` (a fixed, non-interactive wash of the section's aurora
-  tints at the top of the page) is shown on every page but home, whose hero
-  carries its own aurora.
+  `.lu-section-glow` (a faint, uniform 280 px wash of the section accent along
+  the top edge, no blobs) is shown on every page but home, whose hero carries
+  its own aurora.
 * Brand marks never change: the logo star, the intro, the particle star, the
   orbit star and the LevelStudio icon use fixed violet (`--lu-violet`, hex).
   LevelStudio / dashboard product replicas keep their own palettes.

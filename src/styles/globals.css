@@ -1075,23 +1075,21 @@ html.lu-intro .lu-enter-soft {
   color: var(--foreground);
 }
 
-/* Fixed wash under the page: the section's aurora tints at the top edge.
-   Hidden on the home page (the hero carries its own aurora). Never affects
-   layout (fixed, behind everything, no pointer events). */
+/* A very faint, uniform wash of the section accent along the top edge of the
+   page (no blobs, nothing behind the logo in particular). Hidden on the home
+   page, whose hero carries its own aurora. Fixed, behind everything, no
+   pointer events, never affects layout. */
 .lu-section-glow {
   position: fixed;
   inset: 0 0 auto 0;
-  height: min(70vh, 640px);
+  height: 280px;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(60% 85% at 15% -12%, var(--sec-a1), transparent 72%),
-    radial-gradient(60% 85% at 15% -12%, var(--sec-a1), transparent 72%),
-    radial-gradient(55% 80% at 90% -15%, var(--sec-a3), transparent 72%),
-    radial-gradient(55% 80% at 90% -15%, var(--sec-a3), transparent 72%),
-    radial-gradient(45% 65% at 55% -22%, var(--sec-a2), transparent 72%);
-  -webkit-mask-image: linear-gradient(to bottom, black 35%, transparent);
-  mask-image: linear-gradient(to bottom, black 35%, transparent);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--sec-accent) 8%, transparent),
+    transparent
+  );
   opacity: 1;
   transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
