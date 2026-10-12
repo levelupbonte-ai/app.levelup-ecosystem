@@ -10,14 +10,14 @@ import { getPricingContent } from "@/lib/levelup-site";
 export const metadata: Metadata = {
   title: "Transparent Pricing & Website Offers | LevelUp Ecosystem",
   description:
-    "Explore our 4 transparent web architecture plans: Starter ($850), Secure ($1,500), Secure + Care ($1,500 + $99/mo), and Custom Build ($3,000+). Your content, brand and data stay yours.",
+    "Fixed website prices and monthly care plans: Starter, Secure, Secure + Care and Custom projects. Every project starts with a free preview, and your content, brand and data stay yours.",
   alternates: {
     canonical: "/pricing",
   },
   openGraph: {
     title: "Transparent Pricing & Website Offers | LevelUp Ecosystem",
     description:
-      "Starter ($850), Secure ($1,500 with 24/7 booking), Secure + Care ($1,500 + $99/mo managed care), and Custom Builds ($3,000+). Free mobile preview in 24-48h.",
+      "Fixed website prices and monthly care plans, with a free mobile preview before you commit. See the current plans and prices.",
     url: "/pricing",
     siteName: "LevelUp Ecosystem",
     locale: "en_US",
