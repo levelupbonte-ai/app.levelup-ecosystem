@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Headline, Hero, M } from "@/components/motion/primitives";
 import { cn } from "@/lib/utils";
 
 export interface FaqCategory {
@@ -97,31 +98,29 @@ export const FAQ = ({
         <div className={cn("mx-auto grid gap-16 lg:grid-cols-12 items-start relative", className2)}>
           {/* Left Column: Stays sticky on PC while right side scrolls */}
           <div className="lg:col-span-5 lg:sticky lg:top-28 xl:top-32 lg:self-start space-y-4">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
+            <Hero as="span" kind="fade" className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
               Answers & Insights
-            </span>
-            {headerTag === "h1" ? (
-              <h1 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Frequently Asked Questions
-              </h1>
-            ) : (
-              <h2 className="text-2xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                Frequently Asked Questions
-              </h2>
-            )}
-            <p className="text-muted-foreground max-w-md leading-relaxed lg:mx-auto">
+            </Hero>
+            <Headline
+              hero={headerTag === "h1"}
+              as={headerTag}
+              className="text-2xl font-bold tracking-tight md:text-4xl lg:text-5xl"
+            >
+              Frequently Asked Questions
+            </Headline>
+            <Hero as="p" delay={260} className="text-muted-foreground max-w-md leading-relaxed lg:mx-auto">
               Have questions about our websites, 24/7 online booking, or website security checks?{" "}
               <Link href="/contact" className="text-foreground underline underline-offset-4 font-semibold">
                 Get in touch
               </Link>
               .
-            </p>
+            </Hero>
           </div>
 
           {/* Right Column: Original minimalist design that scrolls smoothly */}
           <div className="lg:col-span-7 grid gap-6 text-start">
             {categories.map((category, categoryIndex) => (
-              <div key={category.title} className="">
+              <M key={category.title} className="">
                 {headerTag === "h1" ? (
                   <h2 className="text-foreground border-b py-3 font-semibold text-sm">
                     {category.title}
@@ -143,7 +142,7 @@ export const FAQ = ({
                     </AccordionItem>
                   ))}
                 </Accordion>
-              </div>
+              </M>
             ))}
           </div>
         </div>

@@ -3,6 +3,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import { type Locale, useLocale } from "@/lib/locale";
+import { mPar } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 import { Aurora } from "./aurora";
@@ -220,11 +221,14 @@ export function HomeHero() {
         className="lu-enter-soft pointer-events-none absolute top-10 -right-[40%] -z-10 aspect-square w-[96vw] opacity-30 sm:-right-[18%] sm:w-[70vw] sm:opacity-60 lg:top-[47%] lg:-right-[3%] lg:w-[min(50vw,760px)] lg:-translate-y-1/2 lg:opacity-100"
         style={delay(250)}
       >
-        <ParticleStar className="h-full w-full" />
+        <div className="h-full w-full" {...mPar(90)}>
+          <ParticleStar className="h-full w-full" />
+        </div>
       </div>
 
       <div
         ref={inViewRef}
+        data-out=""
         className="mx-auto max-w-[1400px] px-4 pt-28 pb-14 sm:px-6 lg:px-12 lg:pt-36 lg:pb-16"
       >
         <div className="lu-enter-fade mb-6 lg:mb-8" style={delay(0)}>

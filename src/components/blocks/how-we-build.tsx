@@ -1,5 +1,6 @@
 "use client";
 
+import { M, Statement } from "@/components/motion/primitives";
 import { type Locale, useLocale } from "@/lib/locale";
 
 const COPY: Record<
@@ -60,19 +61,19 @@ export function HowWeBuild() {
   const t = COPY[useLocale()];
   return (
     <section id="how-we-build" className="container max-w-5xl py-12">
-      <span className="text-brand-ink font-mono text-xs font-bold tracking-widest uppercase">
+      <M as="span" className="text-brand-ink block font-mono text-xs font-bold tracking-widest uppercase">
         {t.eyebrow}
-      </span>
-      <h2 className="text-foreground mt-3 text-2xl font-bold tracking-tight md:text-3xl">
+      </M>
+      <Statement as="h2" className="text-foreground mt-3 text-2xl font-bold tracking-tight md:text-3xl">
         {t.title}
-      </h2>
-      <p className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">{t.intro}</p>
+      </Statement>
+      <M as="p" className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">{t.intro}</M>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {t.items.map((item) => (
-          <div key={item.title} className="border-border/80 bg-card/60 rounded-2xl border p-5">
+          <M kind="tilt" key={item.title} className="border-border/80 bg-card/60 rounded-2xl border p-5">
             <h3 className="text-foreground font-semibold">{item.title}</h3>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{item.body}</p>
-          </div>
+          </M>
         ))}
       </div>
     </section>

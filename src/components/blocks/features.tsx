@@ -12,7 +12,6 @@ import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
 import { allProjects, type ProjectItem } from "@/data/projects";
-import { useRevisit } from "@/lib/play-once";
 import { cn } from "@/lib/utils";
 
 export { allProjects, type ProjectItem };
@@ -89,7 +88,7 @@ function DesktopPinnedBarberShopShowcase({
   const buttonY = useTransform(smoothProgress, [0.72, 0.86, 1], [22, 0, 0]);
 
   return (
-    <div ref={containerRef} className="relative h-[200svh] hidden md:block">
+    <div ref={containerRef} data-scrubbed="" className="relative h-[200svh] hidden md:block">
       {/* Pinned for one screen of scroll, centred in the viewport under the
           header, so the frame never leaves a large empty band below it. */}
       <div className="sticky top-0 h-svh w-full flex items-center justify-center overflow-hidden px-4 pt-20 pb-6 lg:px-8 lg:pt-24">
@@ -316,7 +315,6 @@ function MobileScaleOnScrollItem({
   headingAs?: "h2" | "h3";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const revisit = useRevisit();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -338,10 +336,8 @@ function MobileScaleOnScrollItem({
   return (
     <motion.div
       ref={containerRef}
-      initial={revisit ? { opacity: 1, y: 0 } : { opacity: 0, y: 35 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      data-m="up"
+      data-scrubbed=""
       className="md:hidden relative w-full max-w-4xl mx-auto px-0 sm:px-4"
     >
       {/* 1. Zoomable Image Showcase with horizontal pan */}

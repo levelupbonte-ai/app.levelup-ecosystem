@@ -361,7 +361,7 @@ html.lu-js .m-count[data-in='run'] .m-count-live {
       animation-range: exit 0% exit 100%;
     }
     html.lu-js [data-sheet] {
-      animation: m-sheet-in linear both, m-sheet-out linear both;
+      animation: m-sheet-in linear both, m-sheet-out linear forwards;
       animation-timeline: view(), view();
       animation-range: entry 0% entry 100%, exit 0% exit 100%;
     }
@@ -504,6 +504,7 @@ html.lu-js .m-count[data-in='run'] .m-count-live {
   }
   html.lu-js .m-band-track {
     display: flex;
+    flex: none;
     width: calc(var(--n) * 100%);
     border: 0;
     transform: translate3d(calc(var(--p, 0) * (var(--n) - 1) / var(--n) * -100%), 0, 0);
@@ -523,6 +524,14 @@ html.lu-js .m-count[data-in='run'] .m-count-live {
 }
 .m-band-bar {
   display: none;
+}
+
+/* Scroll-scrubbed blocks written with motion values (inline styles): without
+   the motion class (no JavaScript, reduced motion) they show their end state. */
+html:not(.lu-js) [data-scrubbed] [style] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
 }
 
 /* --------------------------------------------------------------------------

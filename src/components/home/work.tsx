@@ -132,18 +132,22 @@ export function Work({ cases }: { cases: WorkCase[] }) {
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
         <div className="mb-14 flex flex-col gap-8 lg:mb-24 lg:flex-row lg:items-end lg:justify-between">
-          <Reveal>
-            <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+          <div>
+            <Reveal>
+              <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+            </Reveal>
+            {/* The statement of the page: lit word by word by the scroll. */}
             <LensText
               as="h2"
               id="work-title"
+              motion="stmt"
               className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
             >
               {t.title}
               <br />
               <span className="text-muted-foreground">{t.titleMuted}</span>
             </LensText>
-          </Reveal>
+          </div>
           <Reveal delay={120}>
             <Link
               href="/projects"
@@ -212,6 +216,7 @@ export function Work({ cases }: { cases: WorkCase[] }) {
                   </a>
                 </Reveal>
                 <Reveal
+                  kind="tilt"
                   delay={120}
                   className={cn(
                     "lg:col-span-7",

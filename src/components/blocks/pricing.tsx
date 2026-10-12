@@ -6,6 +6,7 @@ import { ArrowRight, Check, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { Count } from "@/components/motion/primitives";
 import { PremiumTextSectionReveal } from "@/components/scroll/premium-reveal";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -492,7 +493,7 @@ export const Pricing = ({
         </div>
 
         <div id="pricing-plans-container" className="scroll-mt-28">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             {!activeExpandedPlan ? (
               /* ========================================================================= */
               /* COMPACT OVERVIEW CARDS                                                    */
@@ -516,6 +517,7 @@ export const Pricing = ({
                   return (
                     <div
                       key={plan.id}
+                      data-m="tilt"
                       className={cn(
                         "relative flex flex-col justify-between rounded-3xl p-5 sm:p-6 transition-all duration-200 border text-start",
                         isRecommended
@@ -556,7 +558,7 @@ export const Pricing = ({
                         <div className="mt-3.5 mb-2.5 pt-3 border-t border-border/50">
                           <div className="flex items-baseline gap-1.5 flex-wrap">
                             <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-                              {plan.price}
+                              <Count value={plan.price} />
                             </span>
                             <span className="text-xs text-muted-foreground font-medium">
                               {plan.pricePeriod}

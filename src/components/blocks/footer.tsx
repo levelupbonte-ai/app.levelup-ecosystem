@@ -180,7 +180,7 @@ export function Footer() {
     <footer className="font-editorial border-hairline relative overflow-hidden border-t">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-2 gap-x-6 gap-y-12 py-16 md:grid-cols-5 lg:gap-8 lg:pt-24 lg:pb-16">
-          <div className="col-span-2">
+          <div className="col-span-2" data-m="up">
             <Link
               href="/"
               className="focus-visible:ring-sec-ring inline-flex items-center gap-2.5 rounded-md focus-visible:ring-2 focus-visible:outline-none"
@@ -210,7 +210,7 @@ export function Footer() {
           </div>
 
           {t.columns.map((column) => (
-            <div key={column.title}>
+            <div key={column.title} data-m="up">
               <h2 className="font-label text-muted-foreground mb-5 text-xs font-normal tracking-tight">
                 {column.title}
               </h2>
@@ -249,7 +249,10 @@ export function Footer() {
             aria-hidden="true"
             className="absolute top-[-1px] left-0 h-px w-16 bg-[linear-gradient(90deg,var(--sec-grad-a),var(--sec-grad-b))]"
           />
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5 lg:gap-8">
+          <div
+            className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5 lg:gap-8"
+            data-m="up"
+          >
             <nav aria-labelledby="footer-agreements">
               <h2
                 id="footer-agreements"
@@ -318,7 +321,9 @@ export function Footer() {
       </div>
 
       {/* The LevelUp Ecosystem lockup of the intro, built by the star's particles */}
-      <FooterWordmark className="mt-2 md:mt-4" />
+      <div data-m="fade">
+        <FooterWordmark className="mt-2 md:mt-4" />
+      </div>
     </footer>
   );
 }

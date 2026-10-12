@@ -1,3 +1,4 @@
+import { mPar } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const BLOBS = [
@@ -46,18 +47,23 @@ export function Aurora({
         className,
       )}
     >
-      {BLOBS.map((blob, i) => (
-        <span
-          key={i}
-          className={cn("lu-blob lu-loop", blob.className)}
-          style={{
-            ["--c" as string]: blob.c,
-            animation: `${blob.anim} ease-in-out infinite alternate`,
-          }}
-        />
-      ))}
+      {/* Two depths that drift against the scroll (docs/motion.md). */}
+      <div className="absolute inset-0" {...mPar(70)}>
+        {BLOBS.map((blob, i) => (
+          <span
+            key={i}
+            className={cn("lu-blob lu-loop", blob.className)}
+            style={{
+              ["--c" as string]: blob.c,
+              animation: `${blob.anim} ease-in-out infinite alternate`,
+            }}
+          />
+        ))}
+      </div>
       {grid ? (
-        <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)] opacity-80" />
+        <div className="absolute inset-0" {...mPar(-26)}>
+          <div className="grid-lines absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)] opacity-80" />
+        </div>
       ) : null}
     </div>
   );

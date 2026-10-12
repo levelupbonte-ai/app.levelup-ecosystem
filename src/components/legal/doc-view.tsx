@@ -65,7 +65,7 @@ export function LegalDocView({
 
   return (
     <div lang={locale} className="mx-auto max-w-[1180px] px-4 pt-28 pb-24 sm:px-6 lg:px-12 lg:pt-40 lg:pb-32">
-      <header className="max-w-3xl">
+      <header className="max-w-3xl" data-hero="fade" style={{ ["--m-hero-d" as string]: "140ms" }}>
         <Eyebrow>{t.eyebrow}</Eyebrow>
         <h1 className="font-editorial mt-5 text-[2.1rem] leading-[1.08] tracking-[-0.03em] text-balance sm:text-5xl">
           {doc.title}
@@ -89,6 +89,7 @@ export function LegalDocView({
 
       {doc.summary ? (
         <aside
+          data-m="fade"
           aria-label={doc.summaryTitle}
           className="border-brand/30 bg-brand/[0.07] relative mt-10 max-w-3xl overflow-hidden rounded-2xl border p-6 sm:p-8 dark:bg-brand/10"
         >
@@ -140,6 +141,7 @@ export function LegalDocView({
       </div>
 
       <nav
+        data-m="rule-top"
         aria-label={t.others}
         className="border-hairline mt-16 max-w-3xl border-t pt-10 lg:mt-20 lg:max-w-none"
       >

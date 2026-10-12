@@ -7,6 +7,7 @@ import { Mail, MapPin } from "lucide-react";
 import { PreviewIcon } from "@/components/brand/preview-icon";
 import { ContactForm } from "@/components/blocks/contact-form";
 import { DashedLine } from "@/components/dashed-line";
+import { Headline, Hero, M } from "@/components/motion/primitives";
 import { contactCopy } from "@/data/site-copy";
 import { getSectionCopy } from "@/lib/levelup-site";
 
@@ -56,28 +57,28 @@ export default async function Contact() {
     <section className="py-28 lg:py-32 lg:pt-44">
       <div className="container max-w-3xl">
         <div className="text-center space-y-3">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
+          <Hero as="span" kind="fade" className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             {copy.eyebrow}
-          </span>
-          <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">
+          </Hero>
+          <Headline hero as="h1" className="text-3xl font-extrabold tracking-tight md:text-5xl">
             {copy.title}
-          </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed text-sm md:text-base">
+          </Headline>
+          <Hero as="p" delay={260} className="text-muted-foreground max-w-xl mx-auto leading-relaxed text-sm md:text-base">
             {copy.subtitle}
-          </p>
+          </Hero>
         </div>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           {contactInfo.map((info, index) => {
             const Icon = info.icon;
             return (
-              <div key={index} className="p-5 rounded-2xl border border-border/80 bg-card/60 space-y-2">
+              <M key={index} kind="tilt" className="p-5 rounded-2xl border border-border/80 bg-card/60 space-y-2">
                 <div className="flex items-center gap-2">
                   <Icon className="size-4 text-foreground" />
                   <h2 className="font-semibold text-sm text-foreground">{info.title}</h2>
                 </div>
                 {info.content}
-              </div>
+              </M>
             );
           })}
         </div>
@@ -85,7 +86,7 @@ export default async function Contact() {
         <DashedLine className="my-12" />
 
         {/* Inquiry Form */}
-        <div className="mx-auto max-w-xl">
+        <M className="mx-auto max-w-xl">
           <div className="mb-6 space-y-1 text-center md:text-left">
             <h2 className="text-xl font-bold tracking-tight">{copy.form_title}</h2>
             <p className="text-xs text-muted-foreground">
@@ -93,7 +94,7 @@ export default async function Contact() {
             </p>
           </div>
           <ContactForm />
-        </div>
+        </M>
       </div>
     </section>
   );

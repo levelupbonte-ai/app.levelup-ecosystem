@@ -13,6 +13,7 @@ export const DashedLine = ({
 
   return (
     <div
+      data-m={isHorizontal ? "line" : "line-v"}
       className={cn(
         "text-muted-foreground relative",
         isHorizontal ? "h-px w-full" : "h-full w-px",

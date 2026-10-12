@@ -380,7 +380,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
     <section className="pb-24 pt-4 lg:py-24">
       <div className="container max-w-6xl px-4 sm:px-6">
         {/* Header */}
-        <div className="mb-8 text-center space-y-2">
+        <div className="mb-8 text-center space-y-2" data-m="up">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
             Detailed Deliverables Matrix
           </span>
@@ -496,7 +496,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
             </div>
 
             {/* Desktop View */}
-            <div className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
+            <div data-m="up" className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
               <div className="grid grid-cols-5 p-6 border-b border-border/80 bg-muted/20 items-end">
                 <div className="col-span-1 pr-4">
                   <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
@@ -608,7 +608,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
             </div>
 
             {/* Desktop View */}
-            <div className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
+            <div data-m="up" className="hidden md:block rounded-3xl border border-border/90 bg-card overflow-hidden shadow-xs">
               <div className="grid grid-cols-4 p-6 border-b border-border/80 bg-muted/20 items-end">
                 <div className="col-span-1 pr-4">
                   <span className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">

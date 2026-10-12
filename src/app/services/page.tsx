@@ -17,6 +17,7 @@ import {
 
 import { Background } from "@/components/background";
 import { DashedLine } from "@/components/dashed-line";
+import { Headline, Hero, M, Statement } from "@/components/motion/primitives";
 import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
@@ -62,21 +63,21 @@ export default function ServicesPage() {
       <div className="py-28 lg:py-32 lg:pt-44">
         {/* Header */}
         <section className="container max-w-4xl text-center space-y-4">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
+          <Hero as="span" kind="fade" className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             Websites • Booking • Visibility • Security
-          </span>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+          </Hero>
+          <Headline hero as="h1" className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Our Web Services
-          </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          </Headline>
+          <Hero as="p" delay={260} className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Custom websites, online booking, Google visibility and security best practices for businesses, service providers and independent creators, in San Diego and beyond.
-          </p>
+          </Hero>
         </section>
 
         {/* Services List */}
         <section className="container max-w-5xl mt-16 space-y-16">
           {/* 1. Local Business Websites with Online Booking */}
-          <div id="local-business" className="scroll-mt-32">
+          <M id="local-business" kind="tilt" className="scroll-mt-32">
             <Card className="rounded-3xl overflow-hidden border border-border/80 shadow-md">
               <CardContent className="p-8 sm:p-12 space-y-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -107,7 +108,7 @@ export default function ServicesPage() {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/60">
-                  <div className="space-y-1">
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Smartphone className="size-4 text-foreground" />
                       <span>Built for Mobile Speed</span>
@@ -115,8 +116,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       No heavy plugins. Lightweight, modern code and optimized images, so pages stay fast on cellular data.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Clock className="size-4 text-foreground" />
                       <span>24/7 Automated Sync</span>
@@ -124,8 +125,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Clients choose their preferred staff member, service, and time slot without calling.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <MapPin className="size-4 text-foreground" />
                       <span>Google Maps Optimization</span>
@@ -133,14 +134,14 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Structured local business data to help you show up on Google Maps and in local search.
                     </p>
-                  </div>
+                  </M>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </M>
 
           {/* 2. Website Security Checks */}
-          <div id="security" className="scroll-mt-32">
+          <M id="security" kind="tilt" className="scroll-mt-32">
             <Card className="rounded-3xl overflow-hidden border border-border/80 shadow-md">
               <CardContent className="p-8 sm:p-12 space-y-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -171,7 +172,7 @@ export default function ServicesPage() {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/60">
-                  <div className="space-y-1">
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <ShieldAlert className="size-4 text-foreground" />
                       <span>Database &amp; API Key Isolation</span>
@@ -179,8 +180,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Checks that customer data and private credentials are not exposed in public frontend code.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Check className="size-4 text-foreground" />
                       <span>2FA Account Hardening</span>
@@ -188,8 +189,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Walkthrough and implementation of two-factor authentication on hosting, email, and registrar.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Zap className="size-4 text-foreground" />
                       <span>Plain-English Report</span>
@@ -197,14 +198,14 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Prioritized into Critical, Recommended, and Best Practices with actionable steps.
                     </p>
-                  </div>
+                  </M>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </M>
 
           {/* 3. Monthly Website Care Plans */}
-          <div id="care-plans" className="scroll-mt-32">
+          <M id="care-plans" kind="tilt" className="scroll-mt-32">
             <Card className="rounded-3xl overflow-hidden border border-border/80 shadow-md">
               <CardContent className="p-8 sm:p-12 space-y-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -235,7 +236,7 @@ export default function ServicesPage() {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-border/60">
-                  <div className="space-y-1">
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Check className="size-4 text-foreground" />
                       <span>Daily Offsite Backups</span>
@@ -243,8 +244,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Automatic snapshots taken every day so your site can be restored if needed.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Clock className="size-4 text-foreground" />
                       <span>On-Demand Content Edits</span>
@@ -252,8 +253,8 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Simply email us your new prices or announcements and we publish them within 24-48 business hours.
                     </p>
-                  </div>
-                  <div className="space-y-1">
+                  </M>
+                  <M className="space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-sm">
                       <Globe className="size-4 text-foreground" />
                       <span>24/7 Uptime &amp; SSL Checks</span>
@@ -261,14 +262,14 @@ export default function ServicesPage() {
                     <p className="text-xs text-muted-foreground">
                       Automated uptime monitoring alerts us if your site goes down, so we can act quickly.
                     </p>
-                  </div>
+                  </M>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </M>
 
           {/* 4. Creator & Portfolio Sites */}
-          <div id="creators" className="scroll-mt-32">
+          <M id="creators" kind="tilt" className="scroll-mt-32">
             <Card className="rounded-3xl overflow-hidden border border-border/80 shadow-md">
               <CardContent className="p-8 sm:p-12 space-y-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -298,19 +299,19 @@ export default function ServicesPage() {
                 </p>
               </CardContent>
             </Card>
-          </div>
+          </M>
         </section>
 
         {/* CTA Banner */}
         <section className="container max-w-4xl mt-20 text-center">
           <DashedLine className="mb-12" />
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          <Statement as="h2" className="text-2xl sm:text-3xl font-bold tracking-tight">
             Ready to test your new website concept?
-          </h2>
-          <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
+          </Statement>
+          <M as="p" className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
             Request a free interactive preview built for your phone within 24 to 48 hours. No upfront payment required.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
+          </M>
+          <M className="mt-6 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
               <Link href="/contact">
                 Request free preview
@@ -321,7 +322,7 @@ export default function ServicesPage() {
                 View package pricing
               </Link>
             </Button>
-          </div>
+          </M>
         </section>
       </div>
     </Background>

@@ -1,11 +1,15 @@
 "use client";
 
+import type { CSSProperties } from "react";
+
 import Link from "next/link";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
+
+import { Headline } from "@/components/motion/primitives";
 
 import { DeviceMockup } from "./device-mockup";
 import { Eyebrow } from "./eyebrow";
@@ -80,12 +84,15 @@ export function Templates() {
       className="font-editorial border-hairline relative border-t py-24 lg:py-36"
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <Reveal className="mb-14 grid gap-8 lg:mb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-end lg:gap-16">
+        <div className="mb-14 grid gap-8 lg:mb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-end lg:gap-16">
           <div>
-            <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+            <Reveal>
+              <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+            </Reveal>
             <LensText
               as="h2"
               id="templates-title"
+              motion="words"
               className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
             >
               {t.title}
@@ -93,17 +100,28 @@ export function Templates() {
               <span className="text-muted-foreground">{t.titleMuted}</span>
             </LensText>
           </div>
-          <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
-            {t.lead}
-          </p>
-        </Reveal>
+          <Reveal delay={160}>
+            <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
+              {t.lead}
+            </p>
+          </Reveal>
+        </div>
 
-        <ol className="border-hairline border-t">
+        {/* Desktop: the three templates are pulled across a pinned stage as you
+            scroll (the horizontal band, docs/motion.md); a plain vertical
+            list on phones, tablets, short windows and without motion. */}
+        <div
+          className="m-band"
+          data-scrub="pin"
+          style={{ "--n": TEMPLATES.length } as CSSProperties}
+        >
+          <div className="m-band-stage">
+        <ol className="m-band-track border-hairline border-t">
           {TEMPLATES.map((item, i) => {
             const c = item.copy[locale];
             const flip = i % 2 === 1;
             return (
-              <li key={item.slug} className="border-hairline border-b">
+              <li key={item.slug} className="m-band-slide border-hairline border-b">
                 <article className="grid items-center gap-10 py-14 lg:grid-cols-12 lg:gap-16 lg:py-24">
                   <Reveal
                     className={cn(
@@ -153,6 +171,7 @@ export function Templates() {
                     </div>
                   </Reveal>
                   <Reveal
+                    kind="tilt"
                     delay={120}
                     className={cn(
                       "lg:col-span-7",
@@ -173,6 +192,18 @@ export function Templates() {
             );
           })}
         </ol>
+            <div
+              aria-hidden="true"
+              className="m-band-bar bg-hairline absolute bottom-9 h-px"
+              style={{
+                left: "max(3rem, calc((100vw - 1400px) / 2 + 3rem))",
+                right: "max(3rem, calc((100vw - 1400px) / 2 + 3rem))",
+              }}
+            >
+              <i className="m-bar-fill bg-brand block h-full w-full" />
+            </div>
+          </div>
+        </div>
       </div>
     </LiveRegion>
   );
@@ -189,24 +220,33 @@ export function TemplateCards() {
       className="font-editorial container mt-24 max-w-6xl"
     >
       <div className="mb-10 text-center">
-        <Eyebrow center className="mb-4">
-          {t.eyebrow}
-        </Eyebrow>
-        <h2
+        <Reveal>
+          <Eyebrow center className="mb-4">
+            {t.eyebrow}
+          </Eyebrow>
+        </Reveal>
+        <Headline
+          as="h2"
           id="project-templates-title"
           className="font-editorial text-3xl font-normal tracking-[-0.03em] sm:text-4xl"
         >
           {t.title}
-        </h2>
-        <p className="text-muted-foreground mx-auto mt-3 max-w-2xl leading-relaxed">
-          {t.lead}
-        </p>
+        </Headline>
+        <Reveal delay={150}>
+          <p className="text-muted-foreground mx-auto mt-3 max-w-2xl leading-relaxed">
+            {t.lead}
+          </p>
+        </Reveal>
       </div>
       <ul className="bg-hairline border-hairline grid gap-px border md:grid-cols-3">
         {TEMPLATES.map((item) => {
           const c = item.copy[locale];
           return (
-            <li key={item.slug} className="bg-background flex flex-col p-5">
+            <li
+              key={item.slug}
+              data-m="tilt"
+              className="bg-background flex flex-col p-5"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element -- responsive capture via srcSet */}
               <img
                 src={`${item.desktop}-720.webp`}

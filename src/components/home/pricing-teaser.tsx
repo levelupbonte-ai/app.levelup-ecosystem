@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ArrowRight, Check } from "lucide-react";
 
+import { Count } from "@/components/motion/primitives";
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
@@ -124,11 +125,14 @@ export function PricingTeaser({
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
         <div className="grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
-          <Reveal>
-            <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+          <div>
+            <Reveal>
+              <Eyebrow className="mb-6">{t.eyebrow}</Eyebrow>
+            </Reveal>
             <LensText
               as="h2"
               id="pricing-title"
+              motion="words"
               className="font-editorial text-[clamp(2.5rem,6vw,5.25rem)] leading-[0.98] font-normal tracking-[-0.04em]"
             >
               {t.title}
@@ -139,27 +143,32 @@ export function PricingTeaser({
             </LensText>
             <LensText
               as="p"
+              motion="up"
+              delay={200}
               className="text-muted-foreground mt-6 max-w-md text-lg leading-relaxed text-pretty"
             >
               {t.lead}
             </LensText>
-            <Link
-              href="/pricing"
-              className="group hover:text-brand-ink mt-8 inline-flex items-center gap-2 text-[15px] underline decoration-current/25 underline-offset-[6px] transition-colors"
-            >
-              {t.details}
-              <ArrowRight
-                aria-hidden="true"
-                className="size-4 transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-          </Reveal>
+            <Reveal delay={300}>
+              <Link
+                href="/pricing"
+                className="group hover:text-brand-ink mt-8 inline-flex items-center gap-2 text-[15px] underline decoration-current/25 underline-offset-[6px] transition-colors"
+              >
+                {t.details}
+                <ArrowRight
+                  aria-hidden="true"
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+            </Reveal>
+          </div>
 
           <div>
             <div className="bg-hairline border-hairline grid gap-px border sm:grid-cols-2">
               {t.cards.map((card, i) => (
                 <div key={card.name} className="bg-background">
                   <Reveal
+                    kind="tilt"
                     delay={i * 90}
                     className="flex h-full flex-col p-7 lg:p-10"
                   >
@@ -178,7 +187,7 @@ export function PricingTeaser({
                       </span>
                       <span className="mt-1 flex items-baseline gap-2">
                         <span className="text-[3.5rem] leading-none tracking-[-0.045em] lg:text-[4.25rem]">
-                          {prices[i]}
+                          <Count value={prices[i]} />
                         </span>
                         <span className="text-muted-foreground">
                           {card.period}

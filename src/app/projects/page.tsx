@@ -8,8 +8,10 @@ import { ArrowUpRight } from "lucide-react";
 import { Background } from "@/components/background";
 import { ProjectShowcase } from "@/components/blocks/features";
 import { DashedLine } from "@/components/dashed-line";
+import { Headline, Hero, M, Statement } from "@/components/motion/primitives";
 import { TemplateCards } from "@/components/home/templates";
 import { Button } from "@/components/ui/button";
+import { mPar } from "@/lib/motion";
 import { getConcepts, getLiveProjects } from "@/lib/levelup-site";
 
 export const metadata: Metadata = {
@@ -57,15 +59,15 @@ export default async function ProjectsPage() {
       <div className="py-28 lg:py-32 lg:pt-44">
         {/* Header */}
         <section className="container max-w-4xl text-center space-y-4">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
+          <Hero as="span" kind="fade" className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             Client Work &amp; Case Studies
-          </span>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+          </Hero>
+          <Headline hero as="h1" className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Recent Work
-          </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          </Headline>
+          <Hero as="p" delay={260} className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Explore a selection of custom websites built to elevate brands, simplify customer journeys, and turn visitors into clients.
-          </p>
+          </Hero>
         </section>
 
         {/* Animated Project Showcases (Final Stop & Le Dernier Retrouvailles with identical scroll animation) */}
@@ -81,18 +83,19 @@ export default async function ProjectsPage() {
         {/* Additional Concepts Section */}
         <section className="container max-w-5xl mt-20 space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
+            <M as="span" className="block text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
               Design &amp; Technology Concepts
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            </M>
+            <Headline as="h2" className="text-2xl sm:text-3xl font-bold tracking-tight">
               More Work &amp; Prototypes
-            </h2>
+            </Headline>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {concepts.map((concept, index) => (
-              <div
+              <M
                 key={index}
+                kind="tilt"
                 className="p-5 rounded-3xl border border-border/80 bg-card/60 flex flex-col justify-between space-y-4 hover:border-foreground/40 transition-all shadow-sm hover:shadow-md"
               >
                 <div className="space-y-3.5">
@@ -102,6 +105,7 @@ export default async function ProjectsPage() {
                       src={concept.image}
                       alt={concept.title}
                       fill
+                      {...mPar(10, { img: true })}
                       className="object-cover"
                       referrerPolicy="no-referrer"
                       sizes="(max-width: 768px) 100vw, 350px"
@@ -139,7 +143,7 @@ export default async function ProjectsPage() {
                     <ArrowUpRight className="size-3.5" />
                   </Link>
                 </div>
-              </div>
+              </M>
             ))}
           </div>
         </section>
@@ -147,19 +151,19 @@ export default async function ProjectsPage() {
         {/* CTA Footer */}
         <section className="container max-w-4xl mt-20 text-center">
           <DashedLine className="mb-12" />
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          <Statement as="h2" className="text-2xl sm:text-3xl font-bold tracking-tight">
             Want to see how your site would look and perform?
-          </h2>
-          <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
+          </Statement>
+          <M as="p" className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm sm:text-base">
             We build a functional mobile preview in 24 to 48 hours for free. Test it before deciding.
-          </p>
-          <div className="mt-6">
+          </M>
+          <M className="mt-6">
             <Button size="lg" asChild>
               <Link href="/contact">
                 Request your free preview
               </Link>
             </Button>
-          </div>
+          </M>
         </section>
       </div>
     </Background>

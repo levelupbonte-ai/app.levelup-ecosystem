@@ -1,3 +1,4 @@
+import { mPar } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -36,18 +37,21 @@ export function DeviceMockup({
             {domain}
           </span>
         </div>
-        {/* eslint-disable-next-line @next/next/no-img-element -- responsive capture via srcSet */}
-        <img
-          src={`${desktop}-1440.webp`}
-          srcSet={`${desktop}-720.webp 720w, ${desktop}-1440.webp 1440w`}
-          sizes={sizes}
-          width={1440}
-          height={900}
-          alt={alt}
-          loading="lazy"
-          decoding="async"
-          className="block aspect-[16/10] w-full object-cover object-top"
-        />
+        <div className="overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element -- responsive capture via srcSet */}
+          <img
+            src={`${desktop}-1440.webp`}
+            srcSet={`${desktop}-720.webp 720w, ${desktop}-1440.webp 1440w`}
+            sizes={sizes}
+            width={1440}
+            height={900}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            className="block aspect-[16/10] w-full object-cover object-top"
+            {...mPar(16, { img: true })}
+          />
+        </div>
       </div>
 
       <div
@@ -56,6 +60,7 @@ export function DeviceMockup({
           "absolute bottom-0 w-[30%] max-w-[210px] min-w-[112px]",
           flip ? "-left-2 sm:-left-6" : "-right-2 sm:-right-6",
         )}
+        {...mPar(-34)}
       >
         <div className="border-foreground/85 bg-foreground rounded-[1.6rem] border-[5px] shadow-[0_24px_60px_-20px_rgb(0_0_0/0.5)] sm:rounded-[2rem] sm:border-[6px]">
           <div className="relative aspect-[9/19] overflow-hidden rounded-[1.25rem] bg-black sm:rounded-[1.6rem]">

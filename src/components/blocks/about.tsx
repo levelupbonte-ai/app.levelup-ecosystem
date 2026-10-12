@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Headline, M } from "@/components/motion/primitives";
+import { mPar } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { aboutStoryCopy } from "@/data/site-copy";
 import { LEVELSTUDIO_URL } from "@/lib/levelup-login";
@@ -58,8 +60,9 @@ export function ImageSection({ images, className }: ImageSectionProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       {images.map((image, index) => (
-        <div
+        <M
           key={index}
+          kind="clip"
           className="relative aspect-[2/1.5] overflow-hidden rounded-2xl border border-border/60 shadow-sm"
         >
           <Image
@@ -67,8 +70,9 @@ export function ImageSection({ images, className }: ImageSectionProps) {
             alt={image.alt}
             fill
             className="object-cover"
+            {...mPar(18, { img: true })}
           />
-        </div>
+        </M>
       ))}
     </div>
   );
@@ -91,21 +95,23 @@ export function TextSection({
   return (
     <section className="flex-1 space-y-4 text-base md:space-y-5">
       {title && (
-        <h2 className="text-foreground text-2xl md:text-3xl font-bold tracking-tight">
+        <Headline as="h2" className="text-foreground text-2xl md:text-3xl font-bold tracking-tight">
           {title}
-        </h2>
+        </Headline>
       )}
       <div className="text-muted-foreground space-y-4 leading-relaxed">
         {paragraphs.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+          <M as="p" key={index}>
+            {paragraph}
+          </M>
         ))}
       </div>
       {ctaButton && (
-        <div className="mt-6">
+        <M className="mt-6">
           <Link href={ctaButton.href}>
             <Button size="lg">{ctaButton.text}</Button>
           </Link>
-        </div>
+        </M>
       )}
     </section>
   );

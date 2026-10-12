@@ -150,13 +150,16 @@ export function Ecosystem() {
       className="font-editorial border-hairline relative border-t py-24 lg:py-36"
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <Reveal className="mx-auto mb-14 max-w-3xl text-center lg:mb-20">
-          <Eyebrow center className="mb-6">
-            {t.eyebrow}
-          </Eyebrow>
+        <div className="mx-auto mb-14 max-w-3xl text-center lg:mb-20">
+          <Reveal>
+            <Eyebrow center className="mb-6">
+              {t.eyebrow}
+            </Eyebrow>
+          </Reveal>
           <LensText
             as="h2"
             id="ecosystem-title"
+            motion="words"
             className="font-editorial text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
           >
             {t.title}
@@ -165,11 +168,13 @@ export function Ecosystem() {
           </LensText>
           <LensText
             as="p"
+            motion="up"
+            delay={200}
             className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty"
           >
             {t.lead}
           </LensText>
-        </Reveal>
+        </div>
 
         <ul className="bg-hairline border-hairline grid grid-cols-1 gap-px border sm:grid-cols-2 lg:grid-cols-4">
           {t.items.map((item, i) => {
@@ -177,6 +182,7 @@ export function Ecosystem() {
             return (
               <li key={item.name} className="bg-background">
                 <Reveal
+                  kind="tilt"
                   delay={(i % 4) * 70}
                   className="group relative h-full p-7 lg:p-9"
                 >

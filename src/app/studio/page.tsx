@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Background } from "@/components/background";
 import { DashedLine } from "@/components/dashed-line";
+import { Headline, Hero, M } from "@/components/motion/primitives";
 import { Button } from "@/components/ui/button";
 import { LEVELSTUDIO_URL as STUDIO_URL } from "@/lib/levelup-login";
 
@@ -94,24 +95,24 @@ export default function StudioPage() {
       />
       <div className="py-28 lg:py-32 lg:pt-44">
         <section className="container max-w-5xl">
-          <span className="text-brand-ink font-mono text-xs font-bold uppercase tracking-widest">
+          <Hero as="span" kind="fade" className="text-brand-ink font-mono text-xs font-bold uppercase tracking-widest">
             LevelStudio • Online AI studio
-          </span>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+          </Hero>
+          <Headline hero as="h1" className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
             From a one-line brief to a real website draft
-          </h1>
-          <p className="text-foreground/90 mt-5 max-w-3xl text-xl leading-snug font-medium md:text-2xl">
+          </Headline>
+          <Hero as="p" delay={260} className="text-foreground/90 mt-5 max-w-3xl text-xl leading-snug font-medium md:text-2xl">
             LevelStudio is the online AI website studio of LevelUp Ecosystem. Describe your business, answer a few
             guided questions, and preview your new site in minutes.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          </Hero>
+          <Hero delay={400} className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
               <a href={STUDIO_URL}>Open LevelStudio</a>
             </Button>
             <Button asChild size="lg" variant="outline">
               <Link href="/start-project">Start a project</Link>
             </Button>
-          </div>
+          </Hero>
         </section>
 
         <div className="pt-20 lg:pt-28">
@@ -119,35 +120,35 @@ export default function StudioPage() {
         </div>
 
         <section className="container max-w-5xl pt-16">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">How it works</h2>
+          <Headline as="h2" className="text-2xl font-bold tracking-tight md:text-3xl">How it works</Headline>
           <ol className="mt-8 grid gap-6 md:grid-cols-2">
             {steps.map((s, i) => (
-              <li key={s.title} className="rounded-xl border p-6">
+              <M as="li" kind="tilt" key={s.title} className="rounded-xl border p-6">
                 <span className="text-muted-foreground font-mono text-xs">0{i + 1}</span>
                 <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
                 <p className="text-muted-foreground mt-2 leading-relaxed">{s.body}</p>
-              </li>
+              </M>
             ))}
           </ol>
         </section>
 
         <section className="container max-w-5xl pt-16">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">What you get</h2>
+          <Headline as="h2" className="text-2xl font-bold tracking-tight md:text-3xl">What you get</Headline>
           <ul className="text-muted-foreground mt-6 list-disc space-y-2 pl-5 leading-relaxed">
             {features.map((f) => (
-              <li key={f}>{f}</li>
+              <M as="li" key={f}>{f}</M>
             ))}
           </ul>
         </section>
 
         <section className="container max-w-5xl pt-16">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Questions</h2>
+          <Headline as="h2" className="text-2xl font-bold tracking-tight md:text-3xl">Questions</Headline>
           <dl className="mt-6 space-y-6">
             {faq.map((f) => (
-              <div key={f.q}>
+              <M key={f.q}>
                 <dt className="font-semibold">{f.q}</dt>
                 <dd className="text-muted-foreground mt-1 leading-relaxed">{f.a}</dd>
-              </div>
+              </M>
             ))}
           </dl>
         </section>

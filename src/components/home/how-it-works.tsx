@@ -212,24 +212,34 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       aria-labelledby="how-title"
-      className="font-editorial bg-ink text-ink-foreground relative overflow-clip py-24 lg:py-36 dark:border-y dark:border-white/10"
+      className="font-editorial text-ink-foreground relative isolate overflow-clip py-24 lg:py-36"
     >
+      {/* The ink panel opens as the section arrives and closes as it leaves
+          (a scroll-driven clip-path on this layer, docs/motion.md). */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, transparent, transparent 40px, currentColor 40px, currentColor 41px)",
-        }}
-      />
+        data-sheet=""
+        className="bg-ink pointer-events-none absolute inset-0 -z-10 dark:border-y dark:border-white/10"
+      >
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, transparent, transparent 40px, currentColor 40px, currentColor 41px)",
+          }}
+        />
+      </div>
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <Reveal className="mb-14 lg:mb-20">
-          <Eyebrow tone="inverted" className="mb-6">
-            {t.eyebrow}
-          </Eyebrow>
+        <div className="mb-14 lg:mb-20">
+          <Reveal>
+            <Eyebrow tone="inverted" className="mb-6">
+              {t.eyebrow}
+            </Eyebrow>
+          </Reveal>
           <LensText
             as="h2"
             tone="inverted"
+            motion="words"
             id="how-title"
             className="font-editorial text-ink-foreground text-[clamp(2.25rem,5.4vw,4.5rem)] leading-[1.02] font-normal tracking-[-0.035em]"
           >
@@ -237,7 +247,7 @@ export function HowItWorks() {
             <br />
             <span className="text-ink-foreground/50">{t.titleMuted}</span>
           </LensText>
-        </Reveal>
+        </div>
 
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
           <ol className="min-w-0">
@@ -256,7 +266,7 @@ export function HowItWorks() {
                     active === i ? "lg:opacity-100" : "lg:opacity-35",
                   )}
                 >
-                  <div className="flex w-full items-start gap-6">
+                  <div className="flex w-full items-start gap-6" data-m="up">
                     <span className="font-editorial text-ink-foreground/30 hidden w-12 shrink-0 text-3xl sm:block">
                       {ROMAN[i]}
                     </span>

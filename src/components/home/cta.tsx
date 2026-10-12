@@ -51,7 +51,7 @@ export function HomeCta() {
       className="font-editorial relative py-16 lg:py-28"
     >
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <Reveal>
+        <Reveal kind="tilt">
           <div
             ref={liveRef}
             data-live={live ? "true" : "false"}
@@ -72,6 +72,7 @@ export function HomeCta() {
                 <LensText
                   as="h2"
                   id="cta-title"
+                  motion="words"
                   className="font-editorial text-[clamp(2.5rem,6.4vw,5.5rem)] leading-[0.96] font-normal tracking-[-0.04em]"
                 >
                   {t.title[0]}
@@ -80,6 +81,8 @@ export function HomeCta() {
                 </LensText>
                 <LensText
                   as="p"
+                  motion="up"
+                  delay={250}
                   className="text-muted-foreground mt-7 max-w-xl text-lg leading-relaxed text-pretty lg:text-xl"
                 >
                   {t.body}
