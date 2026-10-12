@@ -10,6 +10,7 @@ import { FooterWordmark } from "@/components/brand/footer-wordmark";
 import { LanguageSwitch } from "@/components/language-switch";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LEVELSTUDIO_URL, levelUpLoginUrl } from "@/lib/levelup-login";
+import { LEGAL_DOC_BY_SLUG } from "@/lib/legal-docs";
 import { type Locale, useLocale } from "@/lib/locale";
 
 type FooterLink = {
@@ -26,7 +27,14 @@ const COPY: Record<
     tagline: string;
     columns: { title: string; links: FooterLink[] }[];
     email: string;
+    company: string;
     rights: string;
+    legalNav: {
+      agreements: string;
+      privacy: string;
+      preferences: string;
+      cookieSettings: string;
+    };
     language: string;
     theme: string;
   }
@@ -64,22 +72,16 @@ const COPY: Record<
           },
         ],
       },
-      {
-        title: "Legal",
-        links: [
-          { label: "Terms of Service", href: "/terms" },
-          { label: "Privacy Policy", href: "/privacy" },
-          { label: "Acceptable Use", href: "/acceptable-use" },
-          { label: "Services Agreement", href: "/services-agreement" },
-          { label: "Data Processing (DPA)", href: "/dpa" },
-          { label: "Cookie Policy", href: "/cookies" },
-          { label: "LevelStudio Terms", href: "/levelstudio-terms" },
-          { label: "Cookie settings", href: "/cookies", cookieSettings: true },
-        ],
-      },
     ],
     email: "contact@levelup-ecosystem.com",
-    rights: "LevelUp Ecosystem. All rights reserved.",
+    company: "LevelUp Ecosystem",
+    rights: "All rights reserved.",
+    legalNav: {
+      agreements: "Agreements",
+      privacy: "Privacy & data",
+      preferences: "Preferences",
+      cookieSettings: "Cookie settings",
+    },
     language: "Language",
     theme: "Theme",
   },
@@ -116,26 +118,29 @@ const COPY: Record<
           },
         ],
       },
-      {
-        title: "Légal",
-        links: [
-          { label: "Conditions d'utilisation", href: "/terms" },
-          { label: "Confidentialité", href: "/privacy" },
-          { label: "Utilisation acceptable", href: "/acceptable-use" },
-          { label: "Contrat de services", href: "/services-agreement" },
-          { label: "Traitement des données (DPA)", href: "/dpa" },
-          { label: "Politique des cookies", href: "/cookies" },
-          { label: "Conditions LevelStudio", href: "/levelstudio-terms" },
-          { label: "Paramètres des cookies", href: "/cookies", cookieSettings: true },
-        ],
-      },
     ],
     email: "contact@levelup-ecosystem.com",
-    rights: "LevelUp Ecosystem. Tous droits réservés.",
+    company: "LevelUp Ecosystem",
+    rights: "Tous droits réservés.",
+    legalNav: {
+      agreements: "Contrats",
+      privacy: "Confidentialité et données",
+      preferences: "Préférences",
+      cookieSettings: "Paramètres des cookies",
+    },
     language: "Langue",
     theme: "Thème",
   },
 };
+
+const LINK =
+  "group relative -mx-1.5 inline-flex min-h-11 items-center rounded-sm px-1.5 text-[14px] leading-snug text-muted-foreground transition-colors duration-200 hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-sec-ring focus-visible:outline-none md:min-h-8";
+/* Quiet underline that draws in the section accent. */
+const LINK_RULE =
+  "bg-brand pointer-events-none absolute inset-x-1.5 bottom-2 h-px origin-left scale-x-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100 md:bottom-0.5";
+
+const AGREEMENTS = ["terms", "services-agreement", "levelstudio-terms", "acceptable-use"] as const;
+const PRIVACY = ["privacy", "cookies", "dpa"] as const;
 
 function isHidden(pathname: string | null) {
   if (!pathname) return false;
@@ -155,14 +160,30 @@ export function Footer() {
 
   if (isHidden(pathname)) return null;
 
+  const legalLink = (slug: (typeof AGREEMENTS)[number] | (typeof PRIVACY)[number]) => {
+    const doc = LEGAL_DOC_BY_SLUG[slug];
+    return (
+      <li key={slug}>
+        <Link
+          href={doc.path}
+          aria-current={pathname === doc.path ? "page" : undefined}
+          className={LINK}
+        >
+          {doc.label[locale]}
+          <span aria-hidden="true" className={LINK_RULE} />
+        </Link>
+      </li>
+    );
+  };
+
   return (
     <footer className="font-editorial border-hairline relative overflow-hidden border-t">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-12">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 py-16 md:grid-cols-6 lg:gap-8 lg:py-24">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 py-16 md:grid-cols-5 lg:gap-8 lg:pt-24 lg:pb-16">
           <div className="col-span-2">
             <Link
               href="/"
-              className="focus-visible:ring-brand/50 inline-flex items-center gap-2.5 rounded-md focus-visible:ring-2 focus-visible:outline-none"
+              className="focus-visible:ring-sec-ring inline-flex items-center gap-2.5 rounded-md focus-visible:ring-2 focus-visible:outline-none"
             >
               <Image
                 src="/icon.svg"
@@ -196,19 +217,7 @@ export function Footer() {
               <ul className="space-y-3.5">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    {link.cookieSettings ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          window.dispatchEvent(
-                            new CustomEvent("levelup_open_cookie_settings"),
-                          )
-                        }
-                        className="text-foreground/80 hover:text-foreground cursor-pointer text-left text-[15px] transition-colors"
-                      >
-                        {link.label}
-                      </button>
-                    ) : link.external ? (
+                    {link.external ? (
                       <a
                         href={link.href}
                         className="group text-foreground/80 hover:text-foreground inline-flex items-center gap-1 text-[15px] transition-colors"
@@ -234,19 +243,82 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="border-hairline flex flex-col gap-5 border-t py-7 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-muted-foreground text-sm">© {t.rights}</p>
-          <div className="flex items-center gap-4">
-            <span className="sr-only">{t.language}</span>
-            <LanguageSwitch />
-            <span className="sr-only">{t.theme}</span>
-            <ThemeToggle />
+        {/* Legal zone: the same five columns as the links above. */}
+        <div className="border-hairline relative border-t pt-10 pb-12 lg:pt-12 lg:pb-14">
+          <span
+            aria-hidden="true"
+            className="absolute top-[-1px] left-0 h-px w-16 bg-[linear-gradient(90deg,var(--sec-grad-a),var(--sec-grad-b))]"
+          />
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-5 lg:gap-8">
+            <nav aria-labelledby="footer-agreements">
+              <h2
+                id="footer-agreements"
+                className="font-label text-muted-foreground mb-3 text-xs font-normal tracking-tight md:mb-4"
+              >
+                {t.legalNav.agreements}
+              </h2>
+              <ul>{AGREEMENTS.map(legalLink)}</ul>
+            </nav>
+
+            <nav aria-labelledby="footer-privacy">
+              <h2
+                id="footer-privacy"
+                className="font-label text-muted-foreground mb-3 text-xs font-normal tracking-tight md:mb-4"
+              >
+                {t.legalNav.privacy}
+              </h2>
+              <ul>
+                {PRIVACY.map(legalLink)}
+                <li>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.dispatchEvent(
+                        new CustomEvent("levelup_open_cookie_settings"),
+                      )
+                    }
+                    className={`${LINK} cursor-pointer text-left`}
+                  >
+                    {t.legalNav.cookieSettings}
+                    <span aria-hidden="true" className={LINK_RULE} />
+                  </button>
+                </li>
+              </ul>
+            </nav>
+
+            <div className="col-span-2 md:col-span-1">
+              <h2 className="font-label text-muted-foreground mb-1 text-xs font-normal tracking-tight md:mb-2">
+                {t.legalNav.preferences}
+              </h2>
+              <ul className="divide-hairline divide-y">
+                <li className="flex min-h-12 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2 md:min-h-11">
+                  <span className="text-muted-foreground text-[14px]">
+                    {t.language}
+                  </span>
+                  <LanguageSwitch />
+                </li>
+                <li className="flex min-h-12 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2 md:min-h-11">
+                  <span className="text-muted-foreground text-[14px]">
+                    {t.theme}
+                  </span>
+                  <ThemeToggle className="-mr-1.5" />
+                </li>
+              </ul>
+            </div>
+
+            <p className="order-last col-span-2 text-[14px] leading-relaxed md:order-first md:row-start-1 md:col-span-2 md:col-start-1">
+              <span className="text-foreground block">
+                © <span suppressHydrationWarning>{new Date().getFullYear()}</span>{" "}
+                {t.company}
+              </span>
+              <span className="text-muted-foreground block">{t.rights}</span>
+            </p>
           </div>
         </div>
       </div>
 
       {/* The LevelUp Ecosystem lockup of the intro, built by the star's particles */}
-      <FooterWordmark className="mt-8 md:mt-12" />
+      <FooterWordmark className="mt-2 md:mt-4" />
     </footer>
   );
 }

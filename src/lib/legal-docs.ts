@@ -67,7 +67,7 @@ export const LEGAL_DOCS: LegalDocMeta[] = [
   {
     slug: "dpa",
     path: "/dpa",
-    label: { en: "Data Processing Addendum", fr: "Traitement des données (DPA)" },
+    label: { en: "Data Processing Addendum", fr: "Avenant de traitement des données" },
     description: {
       en: "Processor terms for the personal data of your customers and visitors that flows through your LevelUp website.",
       fr: "Les conditions de sous-traitance pour les données personnelles de vos clients et visiteurs traitées via votre site LevelUp."
