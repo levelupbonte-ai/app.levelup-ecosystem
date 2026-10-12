@@ -428,7 +428,7 @@ export function getProjectRequestAlertHtml({
       ${row("Site", p.website)}
       ${row("Réseaux", p.social_links)}
       ${row("Immatriculation", p.registration_number)}
-      ${row("Preuves", p.proof_links)}
+      ${row("Liens cités", p.proof_links)}
       ${row("Budget", p.budget)}
       ${row("Délai", p.timeline)}
     </table>
