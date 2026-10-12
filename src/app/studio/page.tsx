@@ -94,7 +94,7 @@ export default function StudioPage() {
       />
       <div className="py-28 lg:py-32 lg:pt-44">
         <section className="container max-w-5xl">
-          <span className="text-muted-foreground font-mono text-xs font-bold uppercase tracking-widest">
+          <span className="text-brand-ink font-mono text-xs font-bold uppercase tracking-widest">
             LevelStudio • AI website builder
           </span>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">

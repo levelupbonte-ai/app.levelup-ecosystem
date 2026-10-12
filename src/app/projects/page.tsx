@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
       <div className="py-28 lg:py-32 lg:pt-44">
         {/* Header */}
         <section className="container max-w-4xl text-center space-y-4">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             Client Work &amp; Case Studies
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
@@ -81,7 +81,7 @@ export default async function ProjectsPage() {
         {/* Additional Concepts Section */}
         <section className="container max-w-5xl mt-20 space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
               Design &amp; Technology Concepts
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">

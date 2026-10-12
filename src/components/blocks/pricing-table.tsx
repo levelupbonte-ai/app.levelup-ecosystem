@@ -486,7 +486,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                   </span>
                 </div>
                 {buildTablePlans.map((plan) => (
-                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-violet-500/5 border border-violet-500/20")}>
+                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-brand/5 border border-brand/20")}>
                     {plan.badge && (
                       <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1 border border-border bg-muted text-muted-foreground">
                         {plan.badge}
@@ -519,7 +519,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                         <div className="col-span-1 pr-4 text-xs sm:text-sm font-medium text-foreground/90">{row.name}</div>
                         <div className="col-span-1 text-center">{renderCell(row.starter)}</div>
                         <div className="col-span-1 text-center">{renderCell(row.secure)}</div>
-                        <div className="col-span-1 text-center py-0.5 bg-violet-500/5 rounded-lg">{renderCell(row.care)}</div>
+                        <div className="col-span-1 text-center py-0.5 bg-brand/5 rounded-lg">{renderCell(row.care)}</div>
                         <div className="col-span-1 text-center">{renderCell(row.custom)}</div>
                       </div>
                     ))}
@@ -597,7 +597,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                   </span>
                 </div>
                 {careTablePlans.map((plan) => (
-                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-violet-500/5 border border-violet-500/20")}>
+                  <div key={plan.id} className={cn("col-span-1 text-center px-2 py-3 rounded-2xl", plan.isPopular && "bg-brand/5 border border-brand/20")}>
                     {plan.badge && (
                       <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-1 border border-border bg-muted text-muted-foreground">
                         {plan.badge}
@@ -620,7 +620,7 @@ export const PricingTable = ({ comparison }: { comparison?: PricingComparison })
                   <div key={rowIdx} className="grid grid-cols-4 px-6 py-3 items-center hover:bg-muted/15 transition-colors">
                     <div className="col-span-1 pr-4 text-xs sm:text-sm font-medium text-foreground/90">{row.name}</div>
                     <div className="col-span-1 text-center">{renderCell(row.essential)}</div>
-                    <div className="col-span-1 text-center py-0.5 bg-violet-500/5 rounded-lg">{renderCell(row.pro)}</div>
+                    <div className="col-span-1 text-center py-0.5 bg-brand/5 rounded-lg">{renderCell(row.pro)}</div>
                     <div className="col-span-1 text-center">{renderCell(row.premium)}</div>
                   </div>
                 ))}

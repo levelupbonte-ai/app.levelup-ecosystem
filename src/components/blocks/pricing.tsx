@@ -519,7 +519,7 @@ export const Pricing = ({
                       className={cn(
                         "relative flex flex-col justify-between rounded-3xl p-5 sm:p-6 transition-all duration-200 border text-start",
                         isRecommended
-                          ? "bg-card border-violet-500/50 dark:border-violet-500/40 shadow-md ring-1 ring-violet-500/20"
+                          ? "bg-card border-brand/50 shadow-md ring-1 ring-brand/20"
                           : "bg-card/70 border-border/80 hover:border-foreground/30 shadow-xs",
                       )}
                     >
@@ -535,7 +535,7 @@ export const Pricing = ({
                               className={cn(
                                 "inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border",
                                 isRecommended
-                                  ? "border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-300"
+                                  ? "border-brand/40 bg-brand/10 text-brand-ink"
                                   : "border-border bg-muted/60 text-foreground/80",
                               )}
                             >
@@ -615,7 +615,7 @@ export const Pricing = ({
                 className={cn(
                   "relative w-full rounded-3xl p-6 sm:p-8 lg:p-10 border transition-all shadow-xl text-start max-w-4xl mx-auto",
                   activeExpandedPlan.isRecommended
-                    ? "bg-card border-violet-500/50 dark:border-violet-500/40 ring-1 ring-violet-500/25"
+                    ? "bg-card border-brand/50 ring-1 ring-brand/25"
                     : "bg-card border-border/90 shadow-md",
                 )}
               >
@@ -631,7 +631,7 @@ export const Pricing = ({
                           className={cn(
                             "inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border",
                             activeExpandedPlan.isRecommended
-                              ? "border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-300"
+                              ? "border-brand/40 bg-brand/10 text-brand-ink"
                               : "border-border bg-muted/60 text-foreground/80",
                           )}
                         >
@@ -674,7 +674,7 @@ export const Pricing = ({
                             <button
                               type="button"
                               onClick={() => setIsCareModalOpen((prev) => !prev)}
-                              className="text-[11px] font-bold text-violet-500 hover:underline flex items-center gap-0.5 cursor-pointer"
+                              className="text-[11px] font-bold text-brand-ink hover:underline flex items-center gap-0.5 cursor-pointer"
                             >
                               <span>
                                 {selectedCareTier === "essential"
@@ -741,14 +741,14 @@ export const Pricing = ({
                                 className={cn(
                                   "w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between",
                                   selectedCareTier === "pro"
-                                    ? "bg-violet-500/10 border-violet-500/40 shadow-2xs"
+                                    ? "bg-brand/10 border-brand/40 shadow-2xs"
                                     : "border-border/60 hover:bg-muted/40",
                                 )}
                               >
                                 <div>
                                   <div className="text-xs font-bold text-foreground flex items-center gap-1">
                                     <span>Pro Care</span>
-                                    <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-full bg-violet-500/20 text-violet-500">
+                                    <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-full bg-brand/20 text-brand-ink">
                                       Recommended
                                     </span>
                                   </div>
@@ -756,7 +756,7 @@ export const Pricing = ({
                                     2h updates, SEO tuning, priority support
                                   </div>
                                 </div>
-                                <span className="text-xs font-black text-violet-600 dark:text-violet-400">
+                                <span className="text-xs font-black text-brand-ink">
                                   $99/mo
                                 </span>
                               </button>

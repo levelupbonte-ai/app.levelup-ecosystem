@@ -75,13 +75,13 @@ function DestinationCard({
       className={cn(
         "group relative flex items-center gap-4 overflow-hidden rounded-xl border p-4 text-left outline-none",
         "border-border/70 bg-background/40 transition-[border-color,background-color,transform,box-shadow] duration-200",
-        "hover:border-[#8B5CF6]/55 hover:bg-[#8B5CF6]/[0.06] hover:shadow-[0_8px_30px_-12px_rgba(139,92,246,0.45)]",
-        "focus-visible:border-[#8B5CF6] focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/40",
+        "hover:border-brand/55 hover:bg-brand/[0.06] hover:shadow-[0_8px_30px_-12px_color-mix(in_oklab,var(--brand)_45%,transparent)]",
+        "focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-sec-ring",
         "motion-safe:active:scale-[0.99]",
         className,
       )}
     >
-      <span className="border-border/60 bg-muted/40 relative flex size-12 shrink-0 items-center justify-center rounded-xl border transition-colors duration-200 group-hover:border-[#8B5CF6]/40">
+      <span className="border-border/60 bg-muted/40 relative flex size-12 shrink-0 items-center justify-center rounded-xl border transition-colors duration-200 group-hover:border-brand/40">
         <Image
           src={destination.logo}
           alt=""
@@ -100,7 +100,7 @@ function DestinationCard({
         </span>
       </span>
       <ArrowUpRight
-        className="text-muted-foreground size-4 shrink-0 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#8B5CF6] group-focus-visible:text-[#8B5CF6]"
+        className="text-muted-foreground size-4 shrink-0 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-ink group-focus-visible:text-brand-ink"
         aria-hidden="true"
       />
     </a>
@@ -114,7 +114,7 @@ function SignUpLine({ locale }: { locale: Locale }) {
       {t.signUpLead}{" "}
       <a
         href={levelUpLoginUrl("sign-up")}
-        className="text-foreground rounded-sm font-medium underline-offset-4 outline-none hover:text-[#8B5CF6] hover:underline focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/40"
+        className="text-foreground rounded-sm font-medium underline-offset-4 outline-none hover:text-brand-ink hover:underline focus-visible:ring-2 focus-visible:ring-sec-ring"
       >
         {t.signUp}
       </a>
@@ -210,7 +210,7 @@ export function LoginMenu({
         }}
         className={cn(
           "text-muted-foreground hover:text-foreground inline-flex cursor-pointer items-center gap-1 rounded-lg font-medium transition-colors duration-200",
-          "focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/40 focus-visible:outline-none",
+          "focus-visible:ring-2 focus-visible:ring-sec-ring focus-visible:outline-none",
           compact ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
           open && "text-foreground",
         )}
@@ -261,7 +261,7 @@ export function LoginMenu({
               {/* Violet hairline accent. */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[#8B5CF6]/70 to-transparent"
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand/70 to-transparent"
               />
               <div
                 aria-hidden="true"
@@ -285,7 +285,7 @@ export function LoginMenu({
                     setOpen(false);
                     triggerRef.current?.focus();
                   }}
-                  className="text-muted-foreground hover:text-foreground hover:bg-muted/60 -mt-1 -mr-1.5 inline-flex size-8 cursor-pointer items-center justify-center rounded-lg transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/40"
+                  className="text-muted-foreground hover:text-foreground hover:bg-muted/60 -mt-1 -mr-1.5 inline-flex size-8 cursor-pointer items-center justify-center rounded-lg transition-colors outline-none focus-visible:ring-2 focus-visible:ring-sec-ring"
                 >
                   <span className="sr-only">{t.close}</span>
                   <svg

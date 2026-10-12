@@ -97,7 +97,7 @@ export const FAQ = ({
         <div className={cn("mx-auto grid gap-16 lg:grid-cols-12 items-start relative", className2)}>
           {/* Left Column: Stays sticky on PC while right side scrolls */}
           <div className="lg:col-span-5 lg:sticky lg:top-28 xl:top-32 lg:self-start space-y-4">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
               Answers & Insights
             </span>
             {headerTag === "h1" ? (

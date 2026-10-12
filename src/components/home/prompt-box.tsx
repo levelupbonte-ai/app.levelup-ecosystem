@@ -64,7 +64,7 @@ async function openStudio(prompt: string) {
 }
 
 const pill =
-  "lu-press lu-glass group inline-flex h-11 items-center gap-2 rounded-full px-4 text-[14px] text-foreground/85 transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:outline-none";
+  "lu-press lu-glass group inline-flex h-11 items-center gap-2 rounded-full px-4 text-[14px] text-foreground/85 transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-sec-ring focus-visible:outline-none";
 
 /**
  * Hero prompt: a glass box where visitors describe their business; sending
@@ -122,7 +122,7 @@ export function PromptBox({ className }: { className?: string }) {
         />
         <div className="flex items-center justify-between gap-3 px-2 pb-1">
           <span className="font-label text-muted-foreground inline-flex items-center gap-2 text-[11px] sm:text-xs">
-            <PreviewIcon className="text-brand size-3.5" />
+            <PreviewIcon className="text-lu-violet size-3.5" />
             {t.hint}
           </span>
           <button
@@ -130,7 +130,7 @@ export function PromptBox({ className }: { className?: string }) {
             disabled={!text || sending}
             aria-label={t.send}
             title={t.send}
-            className="lu-press bg-brand focus-visible:ring-brand/40 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-white shadow-[0_8px_20px_-8px_rgb(139_92_246/0.8)] transition-[opacity,transform] hover:scale-105 focus-visible:ring-4 focus-visible:outline-none active:scale-95 disabled:cursor-default disabled:opacity-45 disabled:hover:scale-100"
+            className="lu-press bg-brand focus-visible:ring-sec-ring/70 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-brand-contrast shadow-[0_8px_20px_-8px_color-mix(in_oklab,var(--brand)_80%,transparent)] transition-[opacity,transform] hover:scale-105 focus-visible:ring-4 focus-visible:outline-none active:scale-95 disabled:cursor-default disabled:opacity-45 disabled:hover:scale-100"
           >
             <ArrowUp aria-hidden="true" className="size-5" strokeWidth={2.2} />
           </button>
@@ -140,7 +140,7 @@ export function PromptBox({ className }: { className?: string }) {
       <div className="mt-5 flex flex-wrap items-center gap-2.5">
         <Link
           href="/start-project"
-          className="lu-press group bg-foreground text-background focus-visible:ring-brand/50 inline-flex h-11 items-center gap-2 rounded-full px-5 text-[14px] font-medium transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="lu-press group bg-foreground text-background focus-visible:ring-sec-ring inline-flex h-11 items-center gap-2 rounded-full px-5 text-[14px] font-medium transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           {t.start}
           <ArrowRight
@@ -149,7 +149,7 @@ export function PromptBox({ className }: { className?: string }) {
           />
         </Link>
         <a href={LEVELSTUDIO_URL} className={pill}>
-          <PreviewIcon className="text-brand size-4" />
+          <PreviewIcon className="text-lu-violet size-4" />
           {t.preview}
         </a>
         <Link href="/contact" className={pill}>

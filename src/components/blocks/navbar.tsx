@@ -161,7 +161,7 @@ export const Navbar = () => {
             <Link
               href="/"
               aria-label={t.home}
-              className="focus-visible:ring-brand/50 justify-self-start rounded-md focus-visible:ring-2 focus-visible:outline-none"
+              className="focus-visible:ring-sec-ring justify-self-start rounded-md focus-visible:ring-2 focus-visible:outline-none"
             >
               <Wordmark />
             </Link>
@@ -176,7 +176,7 @@ export const Navbar = () => {
                       href={link.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "group focus-visible:ring-brand/50 relative inline-flex rounded-sm py-1 text-[15px] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none",
+                        "group focus-visible:ring-sec-ring relative inline-flex rounded-sm py-1 text-[15px] transition-colors duration-300 focus-visible:ring-2 focus-visible:outline-none",
                         active
                           ? "text-foreground"
                           : "text-foreground/65 hover:text-foreground",
@@ -205,7 +205,7 @@ export const Navbar = () => {
                 <LoginMenu />
                 <Link
                   href="/start-project"
-                  className="group bg-foreground text-background focus-visible:ring-brand/50 inline-flex h-10 items-center gap-1.5 rounded-full px-5 text-sm font-medium transition-opacity duration-300 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  className="group bg-foreground text-background focus-visible:ring-sec-ring inline-flex h-10 items-center gap-1.5 rounded-full px-5 text-sm font-medium transition-opacity duration-300 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   {t.cta}
                   <ArrowRight
@@ -223,7 +223,7 @@ export const Navbar = () => {
                 aria-expanded={isMenuOpen}
                 aria-controls="lu-mobile-menu"
                 aria-label={isMenuOpen ? t.close : t.open}
-                className="lu-press text-foreground focus-visible:ring-brand/50 relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
+                className="lu-press text-foreground focus-visible:ring-sec-ring relative flex size-11 cursor-pointer items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none xl:hidden"
               >
                 <span className="relative block h-3 w-5" aria-hidden="true">
                   <span

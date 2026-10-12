@@ -9,11 +9,13 @@ import { CookieBanner } from "@/components/cookie-banner";
 import { ErrorSensor } from "@/components/error-sensor";
 import { NavigationTransition } from "@/components/navigation-transition";
 import { Preloader } from "@/components/preloader";
+import { SectionGlow, SectionTheme } from "@/components/section-theme";
 import { ScrollProgressBar } from "@/components/scroll/scroll-progress-bar";
 import { TopScrollDissolver } from "@/components/scroll/top-scroll-dissolver";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { WebAnalytics } from "@/components/web-analytics";
+import { SECTION_THEME_SCRIPT } from "@/lib/section-theme";
 import "@/styles/globals.css";
 
 import { instrumentSans, jetbrainsMono } from "./fonts";
@@ -371,6 +373,8 @@ export default function RootLayout({
               "(function(){try{var d=document.documentElement;if(sessionStorage.getItem('levelup_preloader_intro_seen_v4')!=='true'||location.search.indexOf('intro')>-1){d.classList.add('lu-intro');setTimeout(function(){d.classList.remove('lu-intro')},4000)}}catch(e){}})();",
           }}
         />
+        {/* Section theme: the accent palette of the route, set before the first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: SECTION_THEME_SCRIPT }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var o=JSON.stringify;JSON.stringify=function(v,r,s){try{return o(v,r,s);}catch(e){if(e instanceof TypeError&&String(e.message).indexOf("circular")!==-1){var seen=new WeakSet();return o(v,function(k,val){if(typeof Node!=="undefined"&&val instanceof Node){return val.nodeName||"Node";}if(typeof val==="object"&&val!==null){if(seen.has(val)){return"[Circular]";}seen.add(val);}return typeof r==="function"?r(k,val):val;},s);}throw e;};};}catch(_){}})();`,
@@ -396,6 +400,8 @@ export default function RootLayout({
           <ErrorSensor />
           <Preloader />
           <NavigationTransition />
+          <SectionTheme />
+          <SectionGlow />
           <StyleGlideProvider />
           <ScrollProgressBar />
           {/* Subtle top dissolution gradient mask that only reveals once scrolled */}

@@ -8,7 +8,7 @@ export async function AboutHero() {
     <section className="">
       <div className="container flex max-w-5xl flex-col justify-between gap-8 md:gap-20 lg:flex-row lg:items-center lg:gap-24 xl:gap-24">
         <div className="flex-[1.5]">
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
+          <span className="text-xs font-mono font-bold uppercase tracking-widest text-brand-ink">
             {copy.eyebrow}
           </span>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">

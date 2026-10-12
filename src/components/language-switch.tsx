@@ -72,7 +72,7 @@ export function LanguageSwitch({
               dismissHint();
             }}
             className={cn(
-              "cursor-pointer rounded-full px-2 py-1 leading-none transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]/40",
+              "cursor-pointer rounded-full px-2 py-1 leading-none transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-sec-ring",
               locale === o.value
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground",

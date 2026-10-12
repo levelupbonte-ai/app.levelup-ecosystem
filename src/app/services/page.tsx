@@ -62,7 +62,7 @@ export default function ServicesPage() {
       <div className="py-28 lg:py-32 lg:pt-44">
         {/* Header */}
         <section className="container max-w-4xl text-center space-y-4">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             Bespoke Architecture & Engineering
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">

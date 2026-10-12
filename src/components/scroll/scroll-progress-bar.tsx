@@ -20,7 +20,7 @@ export function ScrollProgressBar() {
   return (
     <motion.div
       style={{ scaleX }}
-      className="bg-brand pointer-events-none fixed top-0 right-0 left-0 z-[120] h-[2px] origin-left"
+      className="pointer-events-none fixed top-0 right-0 left-0 z-[120] h-[2px] origin-left bg-[linear-gradient(90deg,var(--sec-grad-a),var(--sec-grad-b))]"
     />
   );
 }

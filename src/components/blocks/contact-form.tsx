@@ -277,10 +277,10 @@ export function ContactForm() {
         )}
 
         {hasSucceeded && !isWaitlisted && (
-          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-purple-500/25 bg-purple-500/10 p-3.5 text-xs text-purple-900 transition-all dark:text-purple-200/95">
-            <Check className="mt-0.5 size-4 shrink-0 text-purple-700 dark:text-purple-400" />
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-brand/25 bg-brand/10 p-3.5 text-xs text-foreground/90 transition-all">
+            <Check className="mt-0.5 size-4 shrink-0 text-brand-ink" />
             <div className="space-y-1">
-              <p className="font-semibold text-purple-800 dark:text-purple-300">Preview Request Received</p>
+              <p className="font-semibold text-brand-ink">Preview Request Received</p>
               <p className="leading-relaxed">
                 Thank you! Our team has received your submission. We will prepare your functional mobile preview within 24 to 48 hours. A confirmation email has been sent to your inbox.
               </p>

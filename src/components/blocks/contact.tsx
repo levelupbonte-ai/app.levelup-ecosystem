@@ -56,7 +56,7 @@ export default async function Contact() {
     <section className="py-28 lg:py-32 lg:pt-44">
       <div className="container max-w-3xl">
         <div className="text-center space-y-3">
-          <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+          <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
             {copy.eyebrow}
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight md:text-5xl">

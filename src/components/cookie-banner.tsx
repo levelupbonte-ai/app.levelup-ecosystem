@@ -246,7 +246,7 @@ export function CookieBanner() {
                 <Switch
                   checked={analyticsEnabled}
                   onCheckedChange={setAnalyticsEnabled}
-                  className="data-[state=checked]:bg-[#8B5CF6]"
+                  className="data-[state=checked]:bg-brand"
                   aria-label="Toggle analytics cookies"
                 />
               </div>
@@ -266,7 +266,7 @@ export function CookieBanner() {
                 <Switch
                   checked={personalizationEnabled}
                   onCheckedChange={setPersonalizationEnabled}
-                  className="data-[state=checked]:bg-[#8B5CF6]"
+                  className="data-[state=checked]:bg-brand"
                   aria-label="Toggle personalization cookies"
                 />
               </div>
@@ -421,7 +421,7 @@ export function CookieBanner() {
                   <Switch
                     checked={analyticsEnabled}
                     onCheckedChange={setAnalyticsEnabled}
-                    className="data-[state=checked]:bg-[#8B5CF6]"
+                    className="data-[state=checked]:bg-brand"
                     aria-label="Toggle analytics cookies"
                   />
                 </div>
@@ -439,7 +439,7 @@ export function CookieBanner() {
                   <Switch
                     checked={personalizationEnabled}
                     onCheckedChange={setPersonalizationEnabled}
-                    className="data-[state=checked]:bg-[#8B5CF6]"
+                    className="data-[state=checked]:bg-brand"
                     aria-label="Toggle personalization cookies"
                   />
                 </div>

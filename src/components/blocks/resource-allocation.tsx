@@ -59,7 +59,7 @@ export const ResourceAllocation = () => {
       <div className="container max-w-7xl">
         <ScrollReveal yOffset={24} duration={0.7}>
           <div className="text-center space-y-3 mb-12">
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-muted-foreground">
+            <span className="text-xs font-mono font-bold tracking-widest uppercase text-brand-ink">
               Everything Included • Built For Growth
             </span>
             <h2 className="text-3xl tracking-tight text-balance sm:text-4xl md:text-5xl lg:text-6xl font-bold">
