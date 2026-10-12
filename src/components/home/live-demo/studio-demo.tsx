@@ -109,7 +109,7 @@ const COPY: Record<Locale, Copy> = {
     url: "studio.levelup-ecosystem.com",
     status: "Drafting your preview",
     alt: "LevelStudio: a brief is typed, the studio answers and asks one question, the visitor picks an answer and the website draft builds in the preview.",
-    brief: "A website for my hair salon in Lyon, with online booking.",
+    brief: "A website for my hair salon in San Diego, with online booking.",
     projects: "Projects",
     templates: "Templates",
     signIn: "Sign in",
@@ -130,7 +130,7 @@ const COPY: Record<Locale, Copy> = {
     tabs: ["Chat", "Preview"],
     reading: "Reading your request and what you attached…",
     question: {
-      text: "A hair salon in Lyon with online booking: I have what I need for the structure. One choice will shape the whole look, so I would rather ask than guess.",
+      text: "A hair salon in San Diego with online booking: I have what I need for the structure. One choice will shape the whole look, so I would rather ask than guess.",
       label: "Which mood should the site have?",
       options: [
         "Warm and editorial",
@@ -148,7 +148,7 @@ const COPY: Record<Locale, Copy> = {
           segs: [
             { t: "Warm and editorial it is. I’m building " },
             { t: "Salon Aurore", b: true },
-            { t: ", a hair salon in Lyon, in three pages:" },
+            { t: ", a hair salon in San Diego, in three pages:" },
           ],
         },
         {
@@ -162,7 +162,7 @@ const COPY: Record<Locale, Copy> = {
           kind: "li",
           segs: [
             { t: "Services", b: true },
-            { t: ": cuts, colour and balayage, with prices" },
+            { t: ": cuts, color and balayage, with prices" },
           ],
         },
         {
@@ -176,7 +176,7 @@ const COPY: Record<Locale, Copy> = {
     },
     narration: [
       "Setting the identity: Playfair Display and DM Sans type. Then the home page: a calm hero, signature services, booking.",
-      "Writing the Services page: cuts, colour and balayage with prices.",
+      "Writing the Services page: cuts, color and balayage with prices.",
       "Writing the Book page: day and time picker, opening hours.",
       "Proofreading every page like a demanding client: copy, consistency, links.",
       "The site is ready.",
@@ -206,7 +206,7 @@ const COPY: Record<Locale, Copy> = {
     status: "Aperçu en préparation",
     alt: "LevelStudio : un brief est saisi, le studio répond et pose une seule question, le visiteur choisit une réponse et le brouillon du site se construit dans l’aperçu.",
     brief:
-      "Un site pour mon salon de coiffure à Lyon, avec réservation en ligne.",
+      "Un site pour mon salon de coiffure à San Diego, avec réservation en ligne.",
     projects: "Projets",
     templates: "Modèles",
     signIn: "Se connecter",
@@ -228,7 +228,7 @@ const COPY: Record<Locale, Copy> = {
     tabs: ["Discussion", "Aperçu"],
     reading: "Je lis votre demande et ce que vous avez joint…",
     question: {
-      text: "Un salon de coiffure à Lyon avec réservation en ligne : j’ai de quoi poser la structure. Un seul choix va déterminer tout le style, alors je préfère demander plutôt que deviner.",
+      text: "Un salon de coiffure à San Diego avec réservation en ligne : j’ai de quoi poser la structure. Un seul choix va déterminer tout le style, alors je préfère demander plutôt que deviner.",
       label: "Quelle ambiance pour le site ?",
       options: [
         "Chaleureuse et éditoriale",
@@ -246,7 +246,7 @@ const COPY: Record<Locale, Copy> = {
           segs: [
             { t: "Chaleureux et éditorial, c’est noté. Je construis " },
             { t: "Salon Aurore", b: true },
-            { t: ", un salon de coiffure à Lyon, en trois pages :" },
+            { t: ", un salon de coiffure à San Diego, en trois pages :" },
           ],
         },
         {
@@ -1481,33 +1481,35 @@ function build(c: Copy, locale: Locale, compact: boolean): DemoBuild {
     ? [
         { t: 0, z: 1, f: mid },
         { t: 700, z: 1, f: mid },
-        { t: 1500, z: 1.05, f: "composer-hero" },
-        { t: tl.sendClick + 300, z: 1.05, f: "composer-hero" },
+        { t: 1500, z: 1, f: "composer-hero" },
+        { t: tl.sendClick + 300, z: 1, f: "composer-hero" },
         { t: tl.S + 1200, z: 1, f: mid },
-        { t: tl.panel + 300, z: 1.05, f: "panel" },
-        { t: tl.chipClick + 700, z: 1.05, f: "panel" },
+        { t: tl.panel + 300, z: 1, f: "panel" },
+        { t: tl.chipClick + 700, z: 1, f: "panel" },
         { t: tl.G + 1600, z: 1, f: mid },
-        { t: tl.R + 600, z: 1.05, f: "tab-preview" },
+        { t: tl.R + 600, z: 1, f: "tab-preview" },
         { t: tl.siteAt + 700, z: 1, f: mid },
         { t: tl.scrollTo + 900, z: 1, f: mid },
       ]
     : [
         { t: 0, z: 1, f: mid },
         { t: 600, z: 1, f: mid },
-        { t: 1700, z: 1.28, f: "composer-hero" },
-        { t: tl.sendClick + 250, z: 1.28, f: "composer-hero" },
+        { t: 1700, z: 1.2, f: "composer-hero" },
+        { t: tl.sendClick + 250, z: 1.2, f: "composer-hero" },
         { t: tl.S + 900, z: 1, f: mid },
         { t: tl.S + 1000, z: 1, f: mid },
         { t: tl.S + 1900, z: 1.6, f: "chat" },
         { t: tl.panel - 300, z: 1.6, f: "chat" },
         { t: tl.panel + 700, z: 1.6, f: "panel" },
         { t: tl.chipClick + 700, z: 1.6, f: "panel" },
-        { t: tl.G + 1700, z: 1, f: mid },
-        { t: tl.R - 200, z: 1, f: mid },
+        { t: tl.G + 600, z: 1.45, f: "chat" },
+        { t: tl.G + 1900, z: 1.45, f: "chat" },
+        { t: tl.G + 2800, z: 1.75, f: [0.72, 0.35] },
+        { t: tl.R - 300, z: 1.75, f: [0.72, 0.35] },
         { t: tl.R + 400, z: 1.55, f: "delivery" },
         { t: tl.R + 1500, z: 1.55, f: "delivery" },
-        { t: tl.R + 2500, z: 1.7, f: "canvas" },
-        { t: tl.scrollTo + 800, z: 1.7, f: "canvas" },
+        { t: tl.R + 2500, z: 1.75, f: [0.72, 0.35] },
+        { t: tl.scrollTo + 800, z: 1.75, f: [0.72, 0.35] },
         { t: tl.end - 1200, z: 1, f: mid },
       ];
   const cursor: CursorStop[] = compact

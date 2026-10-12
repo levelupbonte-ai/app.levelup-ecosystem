@@ -25,7 +25,7 @@ import {
   TbSend,
   TbSettings,
   TbSlash,
-  TbSparkles,
+  TbLayoutDashboard,
   TbTrendingUp,
   TbUsers,
   TbWorld,
@@ -178,9 +178,9 @@ const COPY: Record<Locale, Copy> = {
       applying: "Saving…",
       appliedBadge: "Applied",
       toast: "Change saved.",
-      seoTitle: "Hair Salon in Lyon: Cuts, Colour & Booking | Salon Aurore",
+      seoTitle: "Hair Salon in San Diego: Cuts, Color, Booking | Salon Aurore",
       seoDescription:
-        "Salon Aurore is a hair salon in Lyon’s Croix-Rousse. Precision cuts, colour and balayage by appointment. Book your visit online, day or night.",
+        "Salon Aurore is a hair salon in North Park, San Diego. Precision cuts, color and balayage by appointment. Book your visit online, day or night.",
     },
     seo: {
       title: "SEO",
@@ -259,9 +259,9 @@ const COPY: Record<Locale, Copy> = {
       applying: "Enregistrement…",
       appliedBadge: "Appliqué",
       toast: "Modification enregistrée.",
-      seoTitle: "Coiffeur à Lyon : coupe, couleur et RDV | Salon Aurore",
+      seoTitle: "Coiffeur à San Diego : coupe, couleur et RDV | Salon Aurore",
       seoDescription:
-        "Salon Aurore, salon de coiffure à la Croix-Rousse, à Lyon. Coupes précises, couleur et balayage sur rendez-vous. Réservez en ligne, de jour comme de nuit.",
+        "Salon Aurore, salon de coiffure à North Park, San Diego. Coupes précises, couleur et balayage sur rendez-vous. Réservez en ligne, de jour comme de nuit.",
     },
     seo: {
       title: "SEO",
@@ -297,6 +297,24 @@ const LEVELUP_STAR: [string, string][] = [
   ["256,278 168,280 28,204", "#8941F7"],
   ["256,278 28,204 202,192", "#A974FE"],
 ];
+
+const MONO_OPACITY = [1, 0.78, 0.62, 0.42, 0.3, 0.4, 0.55, 0.65, 0.82, 0.92];
+
+/** Small monochrome LevelUp star: the AI assistant's icon. */
+function StarIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="20 30 472 448"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      {LEVELUP_STAR.map(([points], i) => (
+        <polygon key={points} points={points} opacity={MONO_OPACITY[i]} />
+      ))}
+    </svg>
+  );
+}
 
 function Star({ className }: { className?: string }) {
   return (
@@ -335,7 +353,7 @@ function NavItem({
   hover,
   cue,
 }: {
-  icon: typeof TbWorld;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   active?: boolean;
   hover?: boolean;
@@ -386,7 +404,7 @@ function SidebarBody({ c, page, hoverSeo, cueSeo }: NavProps) {
           <ul className="flex w-full min-w-0 flex-col gap-1">
             <NavItem icon={TbWorld} label={n.siteOverview} />
             <NavItem
-              icon={TbSparkles}
+              icon={StarIcon}
               label={n.assistant}
               active={page === "assistant"}
             />
@@ -425,7 +443,7 @@ function SidebarBody({ c, page, hoverSeo, cueSeo }: NavProps) {
             {c.group.overview}
           </div>
           <ul className="flex w-full min-w-0 flex-col gap-1">
-            <NavItem icon={TbSparkles} label={n.dashboard} />
+            <NavItem icon={TbLayoutDashboard} label={n.dashboard} />
             <NavItem icon={TbUsers} label={n.organizations} />
           </ul>
         </div>
@@ -633,7 +651,7 @@ function AssistantPage({
             >
               <div className="grid items-start gap-1 px-(--card-spacing)">
                 <div className="flex items-center gap-2 text-base leading-snug font-medium">
-                  <TbSparkles className="size-5" />
+                  <StarIcon className="size-5" />
                   {a.cardTitle}
                 </div>
               </div>
@@ -683,7 +701,7 @@ function AssistantPage({
                   >
                     <div className="grid items-start gap-1 px-4">
                       <div className="flex items-center gap-2 text-sm leading-snug font-medium">
-                        <TbSparkles className="size-4" aria-hidden="true" />
+                        <StarIcon className="size-4" />
                         {a.proposal}
                         {applied && (
                           <span className="bg-secondary text-secondary-foreground ld-pop inline-flex h-5 w-fit shrink-0 items-center justify-center overflow-hidden rounded-4xl px-2 py-0.5 text-xs font-medium whitespace-nowrap">
@@ -1011,31 +1029,29 @@ function build(c: Copy, compact: boolean): DemoBuild {
     ? [
         { t: 0, z: 1, f: c0 },
         { t: 1300, z: 1, f: c0 },
-        { t: 2300, z: 1.05, f: "chat" },
-        { t: 5600, z: 1.05, f: "chat" },
-        { t: 6500, z: 1.05, f: "card" },
-        { t: 8600, z: 1.05, f: "card" },
-        { t: 9400, z: 1.05, f: "nav-seo" },
-        { t: 10500, z: 1.05, f: "nav-seo" },
-        { t: tl.page + 900, z: 1.05, f: "seo-card" },
-        { t: tl.focusDesc + 600, z: 1.05, f: "seo-desc" },
+        { t: 2300, z: 1, f: "chat" },
+        { t: 5600, z: 1, f: "chat" },
+        { t: 6500, z: 1, f: "card" },
+        { t: 8600, z: 1, f: "card" },
+        { t: 9400, z: 1, f: "nav-seo" },
+        { t: 10500, z: 1, f: "nav-seo" },
+        { t: tl.page + 900, z: 1, f: "seo-card" },
+        { t: tl.focusDesc + 600, z: 1, f: "seo-desc" },
         { t: tl.focusDesc + 2300, z: 1, f: c0 },
       ]
     : [
         { t: 0, z: 1, f: c0 },
         { t: 900, z: 1, f: c0 },
-        { t: 2000, z: 1.34, f: "intro" },
-        { t: 3000, z: 1.34, f: "intro" },
-        { t: 4000, z: 1.32, f: "chat" },
-        { t: 5400, z: 1.32, f: "chat" },
-        { t: 6000, z: 1.4, f: "card" },
-        { t: 7700, z: 1.4, f: "card" },
-        { t: 8300, z: 1.3, f: "toast" },
-        { t: 8800, z: 1.3, f: "toast" },
+        { t: 2000, z: 1.3, f: "intro" },
+        { t: 3000, z: 1.3, f: "intro" },
+        { t: 4000, z: 1.3, f: "chat" },
+        { t: 7700, z: 1.3, f: "chat" },
+        { t: 8300, z: 1.3, f: [0.62, 0.38] },
+        { t: 8800, z: 1.3, f: [0.62, 0.38] },
         { t: 9350, z: 1.5, f: "nav-seo" },
         { t: 10150, z: 1.5, f: "nav-seo" },
-        { t: tl.page + 800, z: 1.36, f: "seo-card" },
-        { t: tl.focusDesc + 400, z: 1.5, f: "seo-desc" },
+        { t: tl.page + 800, z: 1.3, f: "seo-card" },
+        { t: tl.focusDesc + 400, z: 1.3, f: "seo-card" },
         { t: tl.focusDesc + 2000, z: 1, f: c0 },
       ];
   const cursor: CursorStop[] = compact
