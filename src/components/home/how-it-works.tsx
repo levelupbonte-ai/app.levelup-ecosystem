@@ -1,13 +1,15 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { type Locale, useLocale } from "@/lib/locale";
 import { cn } from "@/lib/utils";
 
+import { LazyDashboardDemo, LazyStudioDemo } from "./live-demo/lazy-demo";
 import { Eyebrow } from "./eyebrow";
 import { LensText } from "./lens";
 import { Reveal } from "./reveal";
+import { WindowFrame } from "./window-frame";
 
 type Panel = "brief" | "studio" | "dashboard";
 
@@ -19,16 +21,6 @@ const COPY: Record<
     titleMuted: string;
     steps: { title: string; body: string; panel: Panel; tag: string }[];
     brief: { file: string; lines: [string, string][]; status: string };
-    studio: { url: string; alt: string; status: string };
-    dashboard: {
-      url: string;
-      nav: string[];
-      heading: string;
-      slots: { time: string; state: "ok" | "todo" }[];
-      confirmed: string;
-      toConfirm: string;
-      status: string;
-    };
   }
 > = {
   en: {
@@ -67,33 +59,6 @@ const COPY: Record<
       ],
       status: "Ready to build",
     },
-    studio: {
-      url: "studio.levelup-ecosystem.com",
-      alt: "LevelStudio drafting a hair salon website with online booking from a one-line brief.",
-      status: "Drafting your preview",
-    },
-    dashboard: {
-      url: "dashboard.levelup-ecosystem.com",
-      nav: [
-        "Overview",
-        "Appointments",
-        "Waitlist",
-        "Requests",
-        "Services",
-        "Reviews",
-        "SEO",
-      ],
-      heading: "Appointments",
-      slots: [
-        { time: "09:00", state: "ok" },
-        { time: "10:30", state: "todo" },
-        { time: "13:00", state: "ok" },
-        { time: "15:45", state: "todo" },
-      ],
-      confirmed: "Confirmed",
-      toConfirm: "To confirm",
-      status: "Live",
-    },
   },
   fr: {
     eyebrow: "Comment ça marche",
@@ -131,76 +96,10 @@ const COPY: Record<
       ],
       status: "Prêt à construire",
     },
-    studio: {
-      url: "studio.levelup-ecosystem.com",
-      alt: "LevelStudio prépare le site d’un salon de coiffure avec réservation en ligne à partir d’une phrase.",
-      status: "Aperçu en préparation",
-    },
-    dashboard: {
-      url: "dashboard.levelup-ecosystem.com",
-      nav: [
-        "Vue d’ensemble",
-        "Rendez-vous",
-        "File d’attente",
-        "Demandes",
-        "Services",
-        "Avis",
-        "SEO",
-      ],
-      heading: "Rendez-vous",
-      slots: [
-        { time: "09:00", state: "ok" },
-        { time: "10:30", state: "todo" },
-        { time: "13:00", state: "ok" },
-        { time: "15:45", state: "todo" },
-      ],
-      confirmed: "Confirmé",
-      toConfirm: "À confirmer",
-      status: "En ligne",
-    },
   },
 };
 
 const ROMAN = ["I", "II", "III"];
-
-function WindowFrame({
-  label,
-  status,
-  children,
-}: {
-  label: string;
-  status: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="border-ink-foreground/12 bg-ink overflow-hidden border">
-      <div className="border-ink-foreground/12 flex items-center justify-between gap-4 border-b px-5 py-3.5">
-        <div className="flex gap-2" aria-hidden="true">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="bg-ink-foreground/20 size-2.5 rounded-full"
-            />
-          ))}
-        </div>
-        <span className="font-label text-ink-foreground/45 truncate text-xs">
-          {label}
-        </span>
-      </div>
-      <div className="relative">{children}</div>
-      <div className="border-ink-foreground/12 flex items-center gap-3 border-t px-5 py-3.5">
-        <span
-          aria-hidden="true"
-          className="bg-brand-soft lu-loop size-2 rounded-full"
-          style={{ animation: "lu-pulse 2s ease-in-out infinite" }}
-        />
-        <span className="font-label text-ink-foreground/50 text-xs">
-          {status}
-        </span>
-      </div>
-    </div>
-  );
-}
 
 function BriefPanel({
   t,
@@ -245,94 +144,6 @@ function BriefPanel({
   );
 }
 
-function StudioPanel({
-  t,
-  locale,
-}: {
-  t: (typeof COPY)["en"]["studio"];
-  locale: Locale;
-}) {
-  return (
-    <WindowFrame label={t.url} status={t.status}>
-      <div className="aspect-[16/11] overflow-hidden bg-[#0b0b0e]">
-        {/* eslint-disable-next-line @next/next/no-img-element -- fixed-size capture, no optimizer */}
-        <img
-          src={`/home/studio-chat-${locale}-1040.webp`}
-          width={1040}
-          height={656}
-          alt={t.alt}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover object-left-top"
-        />
-      </div>
-    </WindowFrame>
-  );
-}
-
-function DashboardPanel({ t }: { t: (typeof COPY)["en"]["dashboard"] }) {
-  return (
-    <WindowFrame label={t.url} status={t.status}>
-      <div
-        className="grid aspect-[16/11] grid-cols-[38%_1fr] text-[12px] sm:grid-cols-[34%_1fr] sm:text-[13px]"
-        role="img"
-        aria-label={`${t.heading}: ${t.slots.map((s) => `${s.time} ${s.state === "ok" ? t.confirmed : t.toConfirm}`).join(", ")}`}
-      >
-        <ul
-          className="border-ink-foreground/12 space-y-1 border-r p-3 sm:p-4"
-          aria-hidden="true"
-        >
-          {t.nav.map((item, i) => (
-            <li
-              key={item}
-              className={cn(
-                "truncate rounded-md px-2.5 py-1.5",
-                i === 1
-                  ? "bg-ink-foreground/10 text-ink-foreground"
-                  : "text-ink-foreground/45",
-              )}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-        <div className="p-4 sm:p-6" aria-hidden="true">
-          <p className="text-ink-foreground text-base tracking-tight sm:text-lg">
-            {t.heading}
-          </p>
-          <div className="bg-ink-foreground/10 mt-2 h-1.5 w-24 rounded-full" />
-          <ul className="mt-5 space-y-2.5">
-            {t.slots.map((slot, i) => (
-              <li
-                key={slot.time}
-                className="border-ink-foreground/10 flex items-center gap-3 rounded-md border px-3 py-2.5"
-              >
-                <span className="font-label text-ink-foreground/60 w-11 shrink-0">
-                  {slot.time}
-                </span>
-                <span
-                  className="bg-ink-foreground/15 h-1.5 rounded-full"
-                  style={{ width: `${34 + ((i * 17) % 30)}%` }}
-                />
-                <span
-                  className={cn(
-                    "font-label ml-auto shrink-0 rounded-full px-2 py-0.5 text-[10px] sm:text-[11px]",
-                    slot.state === "ok"
-                      ? "bg-brand/25 text-brand-soft"
-                      : "border-ink-foreground/20 text-ink-foreground/60 border",
-                  )}
-                >
-                  {slot.state === "ok" ? t.confirmed : t.toConfirm}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </WindowFrame>
-  );
-}
-
 export function HowItWorks() {
   const locale = useLocale();
   const t = COPY[locale];
@@ -362,9 +173,9 @@ export function HowItWorks() {
     panel === "brief" ? (
       <BriefPanel t={t.brief} active={isActive} />
     ) : panel === "studio" ? (
-      <StudioPanel t={t.studio} locale={locale} />
+      <LazyStudioDemo active={isActive} />
     ) : (
-      <DashboardPanel t={t.dashboard} />
+      <LazyDashboardDemo active={isActive} />
     );
 
   return (
@@ -401,7 +212,7 @@ export function HowItWorks() {
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
           <ol className="min-w-0">
             {t.steps.map((step, i) => (
-              <li key={step.title}>
+              <li key={step.panel}>
                 <div
                   ref={(el) => {
                     stepRefs.current[i] = el;
