@@ -1126,3 +1126,39 @@ html.lu-intro .lu-enter-soft {
 .lu-link:hover {
   text-decoration-color: currentColor;
 }
+
+/* ==========================================================================
+   Light/dark switch: circular reveal from the toggle (View Transitions API,
+   the same effect as the LevelUp dashboard; see lib/theme-transition.ts).
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+  animation: lu-theme-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes lu-theme-reveal {
+  from {
+    clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+  }
+}
+/* The section-colour morph must not run inside the reveal. */
+html.lu-theme-switching {
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}

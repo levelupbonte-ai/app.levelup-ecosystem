@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
+import { startThemeTransition } from "@/lib/theme-transition";
 import { cn } from "@/lib/utils";
 
 interface ThemeToggleProps {
@@ -38,21 +40,22 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      const nextTheme = isDark ? "light" : "dark";
-      setTheme(nextTheme);
-      if (typeof document !== "undefined") {
-        if (nextTheme === "dark") {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
+    const nextTheme = isDark ? "light" : "dark";
+    // Circular reveal from the toggle (keyboard activations have no pointer
+    // position, so the button's centre is the origin).
+    const rect = e.currentTarget.getBoundingClientRect();
+    const origin =
+      e.clientX || e.clientY
+        ? { x: e.clientX, y: e.clientY }
+        : { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    startThemeTransition(() => {
+      try {
+        flushSync(() => setTheme(nextTheme));
+      } catch {
+        /* fall through to the class toggle */
       }
-    } catch {
-      if (typeof document !== "undefined") {
-        document.documentElement.classList.toggle("dark");
-      }
-    }
+      document.documentElement.classList.toggle("dark", nextTheme === "dark");
+    }, origin);
   };
 
   return (
