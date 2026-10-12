@@ -15,6 +15,7 @@ import { TopScrollDissolver } from "@/components/scroll/top-scroll-dissolver";
 import { StyleGlideProvider } from "@/components/styleglide-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { WebAnalytics } from "@/components/web-analytics";
+import { PlayOnceMain } from "@/lib/play-once";
 import { SECTION_THEME_SCRIPT } from "@/lib/section-theme";
 import "@/styles/globals.css";
 
@@ -416,7 +417,7 @@ export default function RootLayout({
           {/* Subtle top dissolution gradient mask that only reveals once scrolled */}
           <TopScrollDissolver />
           <Navbar />
-          <main className="">{children}</main>
+          <PlayOnceMain>{children}</PlayOnceMain>
           <Footer />
           <CookieBanner />
         </ThemeProvider>

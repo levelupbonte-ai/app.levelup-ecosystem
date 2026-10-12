@@ -9,6 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion, type Variants } from "motion/react";
+import { useRevisit } from "@/lib/play-once";
 import { cn } from "@/lib/utils";
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -68,6 +69,7 @@ export function PremiumServiceBlock({
   className,
 }: PremiumServiceBlockProps) {
   const yOffset = useResponsiveYOffset(20, 10);
+  const revisit = useRevisit();
   const blockDelay = delay !== undefined ? delay : index * 0.12;
 
   const containerVariants: Variants = {
@@ -100,7 +102,7 @@ export function PremiumServiceBlock({
 
   return (
     <motion.div
-      initial="hidden"
+      initial={revisit ? "visible" : "hidden"}
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
       variants={containerVariants}
@@ -170,6 +172,7 @@ export function PremiumTextSectionReveal({
   align = "center",
 }: PremiumTextSectionRevealProps) {
   const yOffset = useResponsiveYOffset(20, 10);
+  const revisit = useRevisit();
 
   const containerVariants: Variants = {
     hidden: {},
@@ -198,7 +201,7 @@ export function PremiumTextSectionReveal({
 
   return (
     <motion.div
-      initial="hidden"
+      initial={revisit ? "visible" : "hidden"}
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={containerVariants}

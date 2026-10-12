@@ -12,6 +12,7 @@ import { DashedLine } from "@/components/dashed-line";
 import { ScrollReveal } from "@/components/scroll/scroll-reveal";
 import { SplitText } from "@/components/scroll/split-text";
 import { allProjects, type ProjectItem } from "@/data/projects";
+import { useRevisit } from "@/lib/play-once";
 import { cn } from "@/lib/utils";
 
 export { allProjects, type ProjectItem };
@@ -315,6 +316,7 @@ function MobileScaleOnScrollItem({
   headingAs?: "h2" | "h3";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const revisit = useRevisit();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -336,7 +338,7 @@ function MobileScaleOnScrollItem({
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, y: 35 }}
+      initial={revisit ? { opacity: 1, y: 0 } : { opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}

@@ -4,6 +4,7 @@ import React from "react";
 
 import { motion, type Variants } from "motion/react";
 
+import { useRevisit } from "@/lib/play-once";
 import { cn } from "@/lib/utils";
 
 interface SplitTextProps {
@@ -32,6 +33,7 @@ export function SplitText({
   once = true,
   waitPreloader = false,
 }: SplitTextProps) {
+  const revisit = useRevisit();
   const [isReady, setIsReady] = React.useState(false);
 
   React.useEffect(() => {
@@ -88,7 +90,7 @@ export function SplitText({
       <motion.span
         className="inline-flex flex-wrap gap-x-[0.28em] gap-y-1"
         style={{ perspective: 1000 }}
-        initial="hidden"
+        initial={revisit ? "visible" : "hidden"}
         animate={isReady ? "visible" : "hidden"}
         whileInView="visible"
         viewport={{ once, margin: "0px", amount: 0.05 }}

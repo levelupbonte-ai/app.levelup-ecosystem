@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 
+import { useRevisit } from "@/lib/play-once";
 import { cn } from "@/lib/utils";
 
 interface ScrollRevealProps {
@@ -30,14 +31,19 @@ export function ScrollReveal({
   scale = 0.99,
   once = true,
 }: ScrollRevealProps) {
+  const revisit = useRevisit();
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: yOffset,
-        x: xOffset,
-        scale,
-      }}
+      initial={
+        revisit
+          ? { opacity: 1, y: 0, x: 0, scale: 1 }
+          : {
+              opacity: 0,
+              y: yOffset,
+              x: xOffset,
+              scale,
+            }
+      }
       whileInView={{
         opacity: 1,
         y: 0,
@@ -73,9 +79,10 @@ export function ScrollStagger({
   staggerDelay = 0.1,
   once = true,
 }: ScrollStaggerProps) {
+  const revisit = useRevisit();
   return (
     <motion.div
-      initial="hidden"
+      initial={revisit ? "visible" : "hidden"}
       whileInView="visible"
       viewport={{ once, margin: "0px", amount: 0.05 }}
       variants={{

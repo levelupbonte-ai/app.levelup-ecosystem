@@ -28,7 +28,7 @@ const COPY: Record<
   }
 > = {
   en: {
-    eyebrow: "Web studio for local businesses & brands",
+    eyebrow: "LevelUp your online presence",
     lead: "Websites built",
     pre: "to",
     words: ["impress", "book", "rank", "last"],
@@ -48,7 +48,7 @@ const COPY: Record<
     ],
   },
   fr: {
-    eyebrow: "Studio web pour commerces locaux et marques",
+    eyebrow: "Élevez votre présence en ligne",
     lead: "Des sites faits",
     pre: "pour",
     words: ["séduire", "réserver", "être vus", "durer"],

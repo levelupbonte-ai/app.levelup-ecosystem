@@ -649,6 +649,19 @@ html.lu-intro .lu-enter-soft {
   animation-play-state: paused;
 }
 
+/* A route already shown during this page load (see lib/play-once.tsx):
+   entrances and reveals render their final state at once, no replay. */
+[data-revisit] .lu-reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+[data-revisit] :is(.lu-enter, .lu-enter-slide, .lu-enter-fade, .lu-enter-soft, .lu-char) {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lu-enter,
   .lu-enter-slide,
