@@ -11,6 +11,24 @@ export const LEGAL_UPDATED: Record<Locale, string> = {
   fr: "11 octobre 2026"
 };
 
+type LegalDate = { iso: string } & Record<Locale, string>;
+
+/** Documents revised after the common effective date. */
+const REVISED: Partial<Record<LegalSlug, LegalDate>> = {
+  "services-agreement": {
+    iso: "2026-10-12",
+    en: "October 12, 2026",
+    fr: "12 octobre 2026"
+  }
+};
+
+/** Effective date shared by the whole pack. */
+export const LEGAL_EFFECTIVE: LegalDate = { iso: LEGAL_UPDATED_ISO, ...LEGAL_UPDATED };
+
+/** "Last updated" date of one document. */
+export const legalUpdated = (slug: LegalSlug): LegalDate =>
+  REVISED[slug] ?? LEGAL_EFFECTIVE;
+
 export type LegalSlug =
   | "terms"
   | "privacy"

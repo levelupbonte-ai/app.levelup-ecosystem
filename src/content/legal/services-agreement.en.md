@@ -2,7 +2,7 @@
 
 **LevelUp Ecosystem**
 Effective date: October 11, 2026
-Last updated: October 11, 2026
+Last updated: October 12, 2026
 
 ---
 
@@ -174,13 +174,12 @@ Sections 15 (Dispute resolution — arbitration and class-action waiver) and 16 
 
 ## 12. General
 
-12.1 **Non-solicitation.** During an Order and for 12 months after, neither party will directly solicit for employment any employee or individual contractor of the other who worked on the Services, except through general advertisements.
-12.2 **Subcontractors.** LevelUp may use subcontractors and sub-processors, remaining responsible for their performance.
-12.3 **Publicity.** As described in Section 3.9 of the Terms.
-12.4 **Entire agreement; amendments.** This Agreement, the Orders and incorporated documents are the entire agreement. Orders may be amended only in writing signed (including electronically) by both parties. Updates to this Agreement apply to new Orders and, for existing recurring plans, from the next renewal after at least 30 days' notice.
-12.5 **Language.** English is the official and governing version. Translations are for convenience only.
-12.6 **Counterparts and e-signature.** This Agreement and Orders may be accepted electronically or signed in counterparts.
-12.7 **Notices.** As described in Section 18.6 of the Terms.
+12.1 **Subcontractors.** LevelUp may use subcontractors and sub-processors, remaining responsible for their performance.
+12.2 **Publicity.** As described in Section 3.9 of the Terms.
+12.3 **Entire agreement; amendments.** This Agreement, the Orders and incorporated documents are the entire agreement. Orders may be amended only in writing signed (including electronically) by both parties. Updates to this Agreement apply to new Orders and, for existing recurring plans, from the next renewal after at least 30 days' notice.
+12.4 **Language.** English is the official and governing version. Translations are for convenience only.
+12.5 **Counterparts and e-signature.** This Agreement and Orders may be accepted electronically or signed in counterparts.
+12.6 **Notices.** As described in Section 18.6 of the Terms.
 
 ## 13. Contact
 

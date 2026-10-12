@@ -7,7 +7,8 @@ import { Eyebrow } from "@/components/home/eyebrow";
 import type { LegalDoc } from "@/lib/legal";
 import {
   LEGAL_DOCS,
-  LEGAL_UPDATED,
+  LEGAL_EFFECTIVE,
+  legalUpdated,
   type LegalSlug
 } from "@/lib/legal-docs";
 import type { Locale } from "@/lib/locale";
@@ -60,7 +61,7 @@ export function LegalDocView({
   children?: React.ReactNode;
 }) {
   const t = CHROME[locale];
-  const date = LEGAL_UPDATED[locale];
+  const updated = legalUpdated(slug);
 
   return (
     <div lang={locale} className="mx-auto max-w-[1180px] px-4 pt-28 pb-24 sm:px-6 lg:px-12 lg:pt-40 lg:pb-32">
@@ -71,10 +72,11 @@ export function LegalDocView({
         </h1>
         <p className="font-label text-muted-foreground mt-5 flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
           <span>
-            {t.effective} <time dateTime="2026-10-11">{date}</time>
+            {t.effective}{" "}
+            <time dateTime={LEGAL_EFFECTIVE.iso}>{LEGAL_EFFECTIVE[locale]}</time>
           </span>
           <span>
-            {t.updated} <time dateTime="2026-10-11">{date}</time>
+            {t.updated} <time dateTime={updated.iso}>{updated[locale]}</time>
           </span>
         </p>
         {doc.notice ? (
