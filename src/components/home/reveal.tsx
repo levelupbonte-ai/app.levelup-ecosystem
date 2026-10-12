@@ -1,31 +1,32 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
+import { M } from "@/components/motion/primitives";
+import type { MKind } from "@/lib/motion";
 
 import { useInView } from "./use-in-view";
 
-/** Fades and lifts its content in the first time it scrolls into view. */
+/**
+ * Reveals its content the first time it scrolls into view (the scroll motion
+ * system, docs/motion.md): by default it fades and rises; `kind` picks
+ * another (tilt, clip, ...). `delay` is in milliseconds.
+ */
 export function Reveal({
   children,
   className,
   delay = 0,
+  kind = "up",
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  kind?: Exclude<MKind, "words">;
 }) {
-  const [ref, inView] = useInView<HTMLDivElement>({ once: true });
   return (
-    <div
-      ref={ref}
-      data-inview={inView ? "true" : "false"}
-      className={cn("lu-reveal", className)}
-      style={{ "--d": `${delay}ms` } as CSSProperties}
-    >
+    <M kind={kind} delay={delay} className={className}>
       {children}
-    </div>
+    </M>
   );
 }
 

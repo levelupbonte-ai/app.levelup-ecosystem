@@ -7,6 +7,8 @@ import { Footer } from "@/components/blocks/footer";
 import { Navbar } from "@/components/blocks/navbar";
 import { CookieBanner } from "@/components/cookie-banner";
 import { ErrorSensor } from "@/components/error-sensor";
+import { MotionRoot } from "@/components/motion/motion-root";
+import { Universe } from "@/components/motion/primitives";
 import { NavigationTransition } from "@/components/navigation-transition";
 import { Preloader } from "@/components/preloader";
 import { SectionGlow, SectionTheme } from "@/components/section-theme";
@@ -371,6 +373,16 @@ export default function RootLayout({
         />
         {/* Section theme: the accent palette of the route, set before the first paint. */}
         <script dangerouslySetInnerHTML={{ __html: SECTION_THEME_SCRIPT }} />
+        {/* Scroll motion (docs/motion.md): content is only hidden-before-reveal
+            once this class is set, so the page is fully visible without
+            JavaScript and under reduced motion; the controller confirms
+            within 8 s or the class is dropped again. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var d=document.documentElement;if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('lu-js');setTimeout(function(){if(!window.__luM)d.classList.remove('lu-js')},8000)}}catch(e){}})();",
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var o=JSON.stringify;JSON.stringify=function(v,r,s){try{return o(v,r,s);}catch(e){if(e instanceof TypeError&&String(e.message).indexOf("circular")!==-1){var seen=new WeakSet();return o(v,function(k,val){if(typeof Node!=="undefined"&&val instanceof Node){return val.nodeName||"Node";}if(typeof val==="object"&&val!==null){if(seen.has(val)){return"[Circular]";}seen.add(val);}return typeof r==="function"?r(k,val):val;},s);}throw e;};};}catch(_){}})();`,
@@ -398,6 +410,8 @@ export default function RootLayout({
           <NavigationTransition />
           <SectionTheme />
           <SectionGlow />
+          <Universe />
+          <MotionRoot />
           <StyleGlideProvider />
           <ScrollProgressBar />
           {/* Subtle top dissolution gradient mask that only reveals once scrolled */}

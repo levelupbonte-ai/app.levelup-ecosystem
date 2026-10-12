@@ -1,115 +1,38 @@
-"use client";
-
-import React from "react";
-
-import { motion, type Variants } from "motion/react";
-
-import { useRevisit } from "@/lib/play-once";
+import { Headline } from "@/components/motion/primitives";
 import { cn } from "@/lib/utils";
 
 interface SplitTextProps {
   text: string;
   className?: string;
+  /** Seconds. */
   delay?: number;
   stagger?: number;
   duration?: number;
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
   once?: boolean;
+  /** Kept for compatibility: heroes play with the page (held by the intro). */
   waitPreloader?: boolean;
 }
 
 /**
- * SplitText Typography Reveal:
- * Words emerge from an invisible overflow mask with high-precision physics.
- * Can synchronize with the preloader curtain lift for the hero headline.
+ * Words rise out of a mask (docs/motion.md). With `waitPreloader` it is the
+ * entrance of the top of a page, otherwise it plays when scrolled into view.
  */
 export function SplitText({
   text,
   className,
   delay = 0,
-  stagger = 0.045,
-  duration = 0.75,
-  as: Component = "h1",
-  once = true,
+  as = "h1",
   waitPreloader = false,
 }: SplitTextProps) {
-  const revisit = useRevisit();
-  const [isReady, setIsReady] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    if (!waitPreloader || (window as unknown as { __site_ready?: boolean }).__site_ready) {
-      setIsReady(true);
-      return;
-    }
-
-    const handleReady = () => setIsReady(true);
-    window.addEventListener("site-ready", handleReady);
-    const timeout = setTimeout(() => setIsReady(true), 1200);
-
-    return () => {
-      window.removeEventListener("site-ready", handleReady);
-      clearTimeout(timeout);
-    };
-  }, [waitPreloader]);
-
-  const words = text.split(" ");
-
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: stagger,
-        delayChildren: delay,
-      },
-    },
-  };
-
-  const wordVariants: Variants = {
-    hidden: {
-      y: "115%",
-      opacity: 0,
-      rotateX: 45,
-      filter: "blur(4px)",
-    },
-    visible: {
-      y: "0%",
-      opacity: 1,
-      rotateX: 0,
-      filter: "blur(0px)",
-      transition: {
-        duration,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
-
   return (
-    <Component className={cn("inline-block", className)}>
-      <motion.span
-        className="inline-flex flex-wrap gap-x-[0.28em] gap-y-1"
-        style={{ perspective: 1000 }}
-        initial={revisit ? "visible" : "hidden"}
-        animate={isReady ? "visible" : "hidden"}
-        whileInView="visible"
-        viewport={{ once, margin: "0px", amount: 0.05 }}
-        variants={containerVariants}
-      >
-        {words.map((word, i) => (
-          <span
-            key={`${word}-${i}`}
-            className="inline-block overflow-hidden pb-1 pt-0.5 leading-tight"
-          >
-            <motion.span
-              variants={wordVariants}
-              className="inline-block origin-bottom transform-gpu"
-            >
-              {word}
-            </motion.span>
-          </span>
-        ))}
-      </motion.span>
-    </Component>
+    <Headline
+      as={as}
+      hero={waitPreloader}
+      delay={Math.round(delay * 1000)}
+      className={cn("inline-block", className)}
+    >
+      {text}
+    </Headline>
   );
 }

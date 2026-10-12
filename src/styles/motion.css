@@ -1,0 +1,590 @@
+/* ==========================================================================
+   Scroll motion system. Documented in docs/motion.md.
+
+   Markup is plain HTML with data attributes (see src/lib/motion.tsx):
+     data-m="up|fade|left|right|scale|tilt|clip|line|line-v|rule|words|count"
+                  one-shot reveals; <MotionRoot /> sets data-in="run" (then
+                  "done") the first time the element scrolls into view.
+     data-hero    entrance of the top of a page (pure CSS animation).
+     data-par     parallax; data-stmt statement text; data-sheet ink panel
+                  (CSS scroll-driven animations, view() timelines).
+     data-scrub   progress (--p) written by <MotionRoot /> for what CSS cannot
+                  do alone (pinned chapters, the horizontal band, the
+                  fallback of the statement text).
+
+   Nothing is hidden until <html class="lu-js"> is set by the inline script in
+   the layout (not set under prefers-reduced-motion): without JavaScript the
+   page is fully visible. Only transform, opacity, clip-path and filter move.
+   ========================================================================== */
+
+:root {
+  --m-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --m-dur: 1000ms;
+  --m-y: 40px;
+  --m-word: 60ms;
+  --m-par: 1;
+  --m-tilt: 9deg;
+  --m-sheet-x: 3.2%;
+  --m-sheet-r: 56px;
+}
+@media (max-width: 767px) {
+  :root {
+    --m-dur: 760ms;
+    --m-y: 22px;
+    --m-word: 42ms;
+    --m-par: 0.4;
+    --m-tilt: 0deg;
+    --m-sheet-x: 1.5%;
+    --m-sheet-r: 28px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1. One-shot reveals
+   -------------------------------------------------------------------------- */
+html.lu-js [data-m]:not([data-in='done']) {
+  --m-t: calc(var(--m-d, 0ms) + var(--m-s, 0ms));
+  transition-property: opacity, transform, clip-path;
+  transition-duration: var(--m-dur);
+  transition-timing-function: var(--m-ease);
+  transition-delay: var(--m-t);
+}
+
+html.lu-js [data-m='up']:not([data-in]) {
+  opacity: 0;
+  transform: translate3d(0, var(--m-y), 0);
+}
+html.lu-js [data-m='fade']:not([data-in]) {
+  opacity: 0;
+}
+html.lu-js [data-m='left']:not([data-in]) {
+  opacity: 0;
+  transform: translate3d(calc(var(--m-y) * -1.6), 0, 0);
+}
+html.lu-js [data-m='right']:not([data-in]) {
+  opacity: 0;
+  transform: translate3d(calc(var(--m-y) * 1.6), 0, 0);
+}
+html.lu-js [data-m='scale']:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.94);
+}
+html.lu-js [data-m='tilt']:not([data-in]) {
+  opacity: 0;
+  transform: perspective(1200px) translate3d(0, var(--m-y), 0) rotateX(var(--m-tilt)) scale(0.965);
+  transform-origin: 50% 100%;
+}
+html.lu-js [data-m='clip']:not([data-in]) {
+  clip-path: inset(0 -64px 100% -64px);
+}
+html.lu-js [data-m='line']:not([data-in]) {
+  transform: scaleX(0);
+}
+html.lu-js [data-m='line-v']:not([data-in]) {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* Final state of the transitions. */
+html.lu-js [data-m][data-in='run'] {
+  opacity: 1;
+  transform: none;
+  will-change: transform, opacity;
+}
+html.lu-js [data-m='tilt'][data-in='run'] {
+  transform: perspective(1200px) translate3d(0, 0, 0) rotateX(0deg) scale(1);
+}
+html.lu-js [data-m='clip'][data-in='run'] {
+  clip-path: inset(0 -64px -64px -64px);
+  will-change: clip-path;
+}
+html.lu-js [data-m='line'][data-in='run'],
+html.lu-js [data-m='line-v'][data-in='run'] {
+  transform: none;
+}
+
+/* The wipe also settles the first child (the picture) from a slight zoom. */
+html.lu-js [data-m='clip']:not([data-in='done']) > :first-child {
+  transition: transform calc(var(--m-dur) * 1.5) var(--m-ease) var(--m-t);
+}
+html.lu-js [data-m='clip']:not([data-in]) > :first-child {
+  transform: scale(1.12);
+}
+html.lu-js [data-m='clip'][data-in='run'] > :first-child {
+  transform: none;
+}
+html.lu-js [data-m='clip'][data-in='done'] {
+  clip-path: none;
+}
+
+/* Hairlines (a border drawn from the left instead of appearing). */
+html.lu-js [data-m='rule'],
+html.lu-js [data-m='rule-top'] {
+  position: relative;
+}
+html.lu-js [data-m='rule'] {
+  border-bottom-color: transparent;
+}
+html.lu-js [data-m='rule-top'] {
+  border-top-color: transparent;
+}
+html.lu-js [data-m='rule']::after,
+html.lu-js [data-m='rule-top']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hairline);
+  transform-origin: left;
+  pointer-events: none;
+}
+html.lu-js [data-m='rule']::after {
+  bottom: -1px;
+}
+html.lu-js [data-m='rule-top']::before {
+  top: -1px;
+}
+html.lu-js [data-m='rule']:not([data-in='done'])::after,
+html.lu-js [data-m='rule-top']:not([data-in='done'])::before {
+  transition: transform calc(var(--m-dur) * 1.4) var(--m-ease) var(--m-t);
+}
+html.lu-js [data-m='rule']:not([data-in])::after,
+html.lu-js [data-m='rule-top']:not([data-in])::before {
+  transform: scaleX(0);
+}
+
+/* --------------------------------------------------------------------------
+   2. Headlines: words rise out of a mask
+   -------------------------------------------------------------------------- */
+.m-w {
+  display: inline-block;
+  vertical-align: top;
+  /* Room for ascenders, descenders and italics, cancelled by the margins so
+     the line box is the one of the unsplit text. */
+  padding: 0.12em 0.12em 0.26em;
+  margin: -0.12em -0.12em -0.26em;
+}
+.m-w > span {
+  display: inline-block;
+}
+html.lu-js [data-m='words']:not([data-in='done']) .m-w,
+[data-hero='words'] .m-w {
+  overflow: clip;
+}
+html.lu-js [data-m='words']:not([data-in]) .m-w > span {
+  transform: translate3d(0, 118%, 0) rotate(5deg);
+}
+html.lu-js [data-m='words']:not([data-in='done']) .m-w > span {
+  transform-origin: 0 100%;
+  transition: transform calc(var(--m-dur) * 1.15) var(--m-ease) calc(var(--m-t) + var(--wi, 0) * var(--m-word));
+}
+html.lu-js [data-m='words'][data-in='run'] .m-w > span {
+  transform: none;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   3. Top of a page: entrance that plays with the page (no JavaScript, no
+   opacity on the headline so it never delays the largest paint)
+   -------------------------------------------------------------------------- */
+@keyframes m-hero-word {
+  from {
+    transform: translate3d(0, 118%, 0) rotate(5deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes m-hero-up {
+  from {
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes m-hero-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-hero='words'] .m-w > span {
+  transform-origin: 0 100%;
+  animation: m-hero-word 1.15s var(--m-ease) both;
+  animation-delay: calc(var(--m-hero-d, 0ms) + var(--wi, 0) * 70ms);
+}
+[data-hero='up'] {
+  animation: m-hero-up 1s var(--m-ease) both;
+  animation-delay: var(--m-hero-d, 0ms);
+}
+[data-hero='fade'] {
+  animation: m-hero-fade 1s var(--m-ease) both;
+  animation-delay: var(--m-hero-d, 0ms);
+}
+/* Held while the first-visit intro or a page transition covers the screen. */
+html.lu-intro [data-hero],
+html.lu-intro [data-hero] .m-w > span,
+html.lu-covering [data-hero],
+html.lu-covering [data-hero] .m-w > span {
+  animation-play-state: paused;
+}
+
+/* --------------------------------------------------------------------------
+   4. Numbers that count in (only real figures; the final text is in the DOM)
+   -------------------------------------------------------------------------- */
+.m-count {
+  position: relative;
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+.m-count-live {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+  visibility: hidden;
+}
+html.lu-js .m-count[data-m]:not([data-in]) .m-count-final {
+  opacity: 0;
+}
+html.lu-js .m-count[data-in='run'] .m-count-final {
+  visibility: hidden;
+}
+html.lu-js .m-count[data-in='run'] .m-count-live {
+  visibility: visible;
+}
+
+/* --------------------------------------------------------------------------
+   5. Scroll-driven (CSS scroll timelines; transform / clip-path only)
+   -------------------------------------------------------------------------- */
+[data-stmt] {
+  view-timeline: --stmt block;
+}
+@keyframes m-par-y {
+  from {
+    transform: translate3d(0, calc(var(--par, 30px) * var(--m-par) * -1), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--par, 30px) * var(--m-par)), 0);
+  }
+}
+@keyframes m-par-img {
+  from {
+    transform: translate3d(0, calc(var(--par, 30px) * var(--m-par) * -1), 0) scale(1.1);
+  }
+  to {
+    transform: translate3d(0, calc(var(--par, 30px) * var(--m-par)), 0) scale(1.1);
+  }
+}
+@keyframes m-lag {
+  to {
+    transform: translate3d(0, var(--lag, 12vh), 0);
+  }
+}
+@keyframes m-sheet-in {
+  from {
+    clip-path: inset(0 var(--m-sheet-x) round var(--m-sheet-r));
+  }
+  to {
+    clip-path: inset(0 0 round 0);
+  }
+}
+@keyframes m-sheet-out {
+  from {
+    clip-path: inset(0 0 round 0);
+  }
+  to {
+    clip-path: inset(0 var(--m-sheet-x) round var(--m-sheet-r));
+  }
+}
+@keyframes m-stmt {
+  from {
+    opacity: 0.18;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes m-stmt-blur {
+  from {
+    opacity: 0.18;
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes m-uni-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(34vw, 52vh, 0) scale(1.3);
+  }
+}
+@keyframes m-uni-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.15);
+  }
+  to {
+    transform: translate3d(-30vw, -34vh, 0) scale(0.9);
+  }
+}
+@keyframes m-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html.lu-js [data-par] {
+      animation: m-par-y linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    html.lu-js [data-par='img'] {
+      animation-name: m-par-img;
+    }
+    html.lu-js [data-out] {
+      animation: m-lag linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+    html.lu-js [data-sheet] {
+      animation: m-sheet-in linear both, m-sheet-out linear both;
+      animation-timeline: view(), view();
+      animation-range: entry 0% entry 100%, exit 0% exit 100%;
+    }
+    html.lu-js [data-stmt] .m-sw {
+      animation: m-stmt linear both;
+      animation-timeline: --stmt;
+      animation-range: cover calc(var(--a) * 1%) cover calc(var(--b) * 1%);
+    }
+    @media (min-width: 768px) {
+      html.lu-js [data-stmt] .m-sw {
+        animation-name: m-stmt-blur;
+      }
+    }
+  }
+}
+/* No scroll timelines: the statement is lit by the progress that
+   <MotionRoot /> writes (--p); the other effects are decorative and simply
+   stay still. */
+@supports not (animation-timeline: view()) {
+  html.lu-js [data-stmt] .m-sw {
+    --k: clamp(0, (var(--p, 1) * 100 - var(--a)) * var(--r), 1);
+    opacity: calc(0.18 + 0.82 * var(--k));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Atmosphere: two soft glows in the section colours drift with the page,
+   so the sections read as one continuous universe.
+   -------------------------------------------------------------------------- */
+.lu-universe {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.lu-universe i {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--c), transparent);
+}
+.lu-universe i:nth-child(1) {
+  --c: var(--sec-a1);
+  width: 80vmax;
+  height: 80vmax;
+  left: -30vmax;
+  top: -34vmax;
+}
+.lu-universe i:nth-child(2) {
+  --c: var(--sec-a3);
+  width: 70vmax;
+  height: 70vmax;
+  right: -28vmax;
+  bottom: -40vmax;
+  opacity: 0.8;
+}
+@media (max-width: 767px) {
+  .lu-universe i:nth-child(2) {
+    display: none;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lu-universe i {
+      animation: m-uni-a linear both;
+      animation-timeline: scroll(root);
+    }
+    .lu-universe i:nth-child(2) {
+      animation-name: m-uni-b;
+    }
+  }
+}
+[data-theme-section='home'] .lu-universe {
+  opacity: 0.55;
+}
+
+/* --------------------------------------------------------------------------
+   7. Pinned chapters and the horizontal band (desktop; the same markup is a
+   plain vertical list on phones, tablets, short windows and without motion)
+   -------------------------------------------------------------------------- */
+.m-pin-only {
+  display: none;
+}
+.m-pin {
+  position: relative;
+  height: calc(100svh + (var(--n) - 1) * var(--m-step, 80svh));
+}
+.m-pin-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+.m-i {
+  --d: calc(var(--p, 0) * (var(--n) - 1) - var(--i));
+}
+/* Chapter slides crossfade and drift as --p goes from 0 to 1. */
+.m-slide {
+  --d: calc(var(--p, 0) * (var(--n) - 1) - var(--i));
+  position: absolute;
+  inset: 0;
+  opacity: clamp(0, calc((0.5 - abs(var(--d))) * 4), 1);
+  transform: translate3d(0, calc(var(--d) * -72px), 0);
+  pointer-events: none;
+}
+.m-rail-item {
+  opacity: clamp(0.32, calc(1.25 - abs(var(--d)) * 1.5), 1);
+}
+.m-rail-fill {
+  transform: scaleY(var(--p, 0));
+  transform-origin: top;
+}
+.m-bar-fill {
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+}
+
+@media (min-width: 1024px) and (min-height: 640px) {
+  html.lu-js .m-pin-only {
+    display: block;
+  }
+  html.lu-js .m-pin-off {
+    display: none;
+  }
+}
+/* The horizontal band: slides side by side, pulled across the pinned stage. */
+@media (min-width: 1024px) and (min-height: 720px) {
+  html.lu-js .m-band {
+    height: calc(100svh + (var(--n) - 1) * var(--m-step, 85svh));
+  }
+  html.lu-js .m-band-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow: clip;
+    display: flex;
+    align-items: center;
+  }
+  html.lu-js .m-band-track {
+    display: flex;
+    width: calc(var(--n) * 100%);
+    border: 0;
+    transform: translate3d(calc(var(--p, 0) * (var(--n) - 1) / var(--n) * -100%), 0, 0);
+    will-change: transform;
+  }
+  html.lu-js .m-band-slide {
+    flex: 0 0 calc(100% / var(--n));
+    border: 0;
+    padding-inline: max(3rem, calc((100vw - 1400px) / 2 + 3rem));
+  }
+  html.lu-js .m-band-slide > article {
+    padding-block: 3.5rem 2rem;
+  }
+  html.lu-js .m-band-bar {
+    display: block;
+  }
+}
+.m-band-bar {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Already seen / reduced motion: everything is in its final state
+   -------------------------------------------------------------------------- */
+[data-revisit] [data-m] {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+  transition: none !important;
+}
+[data-revisit] [data-m='clip'] > :first-child {
+  transform: none !important;
+  transition: none !important;
+}
+[data-revisit] [data-m='words'] .m-w > span,
+[data-revisit] [data-hero] .m-w > span {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+[data-revisit] [data-m='rule']::after,
+[data-revisit] [data-m='rule-top']::before {
+  transform: none !important;
+  transition: none !important;
+}
+[data-revisit] [data-hero] {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+[data-revisit] .m-count-final {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+[data-revisit] .m-count-live {
+  visibility: hidden !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-m],
+  [data-m='clip'] > :first-child,
+  [data-m] .m-w > span,
+  [data-hero],
+  [data-hero] .m-w > span,
+  [data-par],
+  [data-out],
+  [data-sheet],
+  [data-stmt] .m-sw,
+  .lu-universe i {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+  .lu-universe i {
+    opacity: 1 !important;
+  }
+  [data-m='rule']::after,
+  [data-m='rule-top']::before {
+    transform: none !important;
+  }
+}

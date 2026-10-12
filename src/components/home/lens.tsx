@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 
+import { countWords, m, splitWords, type MKind } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const MAX_RADIUS = 42; // px: an 84px lens on display headings
@@ -98,6 +99,8 @@ export function LensText({
   children,
   overlay,
   tone = "default",
+  motion,
+  delay,
 }: {
   as?: ElementType;
   id?: string;
@@ -109,6 +112,14 @@ export function LensText({
   overlay?: ReactNode;
   /** "inverted" for text on the dark ink sections. */
   tone?: "default" | "inverted";
+  /**
+   * Scroll motion (docs/motion.md): "words" (headline, words rise out of a
+   * mask), "stmt" (statement lit up by the scroll) or any reveal kind. The lens
+   * copy is split the same way, so both stay in step.
+   */
+  motion?: "words" | "stmt" | Exclude<MKind, "words">;
+  /** Milliseconds, added to the automatic stagger. */
+  delay?: number;
 }) {
   const ref = useRef<HTMLElement>(null);
   const overlayRef = useRef<HTMLSpanElement>(null);
@@ -221,9 +232,21 @@ export function LensText({
     };
   }, [enabled]);
 
+  const split = motion === "words" ? "mask" : motion === "stmt" ? "stmt" : null;
+  const body = split ? splitWords(children, split) : children;
+  const copy = split ? splitWords(overlay ?? children, split) : (overlay ?? children);
+  const attrs =
+    motion === "words"
+      ? { ...m("words", { delay, style }), "data-mw": countWords(children) }
+      : motion === "stmt"
+        ? { "data-stmt": "", "data-scrub": "view", style }
+        : motion
+          ? m(motion, { delay, style })
+          : { style };
+
   return (
-    <Tag ref={ref} id={id} className={cn("relative", className)} style={style}>
-      {children}
+    <Tag ref={ref} id={id} className={cn("relative", className)} {...attrs}>
+      {body}
       {enabled ? (
         <span
           ref={overlayRef}
@@ -235,7 +258,7 @@ export function LensText({
               : "bg-foreground text-background",
           )}
         >
-          {overlay ?? children}
+          {copy}
         </span>
       ) : null}
     </Tag>

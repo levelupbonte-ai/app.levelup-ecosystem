@@ -2,6 +2,7 @@
 
 @import "tw-animate-css";
 @import "./section-themes.css";
+@import "./motion.css";
 @plugin '@tailwindcss/typography';
 
 @variant dark (&:is(.dark *));
